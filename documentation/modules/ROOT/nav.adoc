@@ -1,7 +1,13 @@
-* xref:01-setup.adoc[1. Setup]
-** xref:01-setup.adoc#prerequisite[Prerequisites]
-** xref:01-setup.adoc#minikube[Setup Minikube]
+* xref:01-setup.adoc[Setup]
+ 
+* 1. OpenShift Pipeline Lab
+** xref:10-pipeline-install.adoc[OpenShift Pipelines インストール]
+** xref:11-pipelines.adoc[1. Pipelines -1/2]
+** xref:12-add-task.adoc[2. Pipelines -2/2]
+** xref:13-triggers.adoc[3. Tekton Triggers]
 
-* xref:02-deploy.adoc[2. Deploy Service]
-** xref:02-deploy.adoc#package[Build Service]
-** xref:02-deploy.adoc#deploy[Deploy Dervice]
+* 2. OpenShift GitOps Lab
+** xref:20-GitOps-install.adoc[OpenShift GitOps インストール]
+** xref:21-GitOps.adoc[1. OpenShift GitOps]
+** xref:22-Kustomize.adoc[2. Kustomizeインテグレーション]
+** xref:23-Helm.adoc[3. Helmインテグレーション]

@@ -1,0 +1,240 @@
+= OpenShift GitOps Lab - OpenShift GitOps インストール
+:navtitle: gitops
+include::_attributes.adoc[]
+
+このセクションでは、OpenShiftのGitOps演習を行うためのOperatorとツール群のインストールを行います。
+
+各ツールの説明は、後続のラボにて行います。
+
+
+== OpenShift Web コンソールへの接続
+OpenShift WebコンソールのアクセスURLをコマンドで確認し、Webコンソールへadmin権限のユーザで接続を行います。
+
+アクセス情報を把握している場合は、ログインを行い <<GitOps-Operatorのインストール>> に進んでください。
+
+最初に、OpenShift Webコンソールのpodの準備が整っているか確認します。
+
+[.console-input]
+[source,sh]
+----
+oc get pods -n openshift-console | grep console
+----
+
+次のようにコンソールのpodが1つ、Running状態になっていることを確認してください。
+
+[source,sh]
+----
+console-68d76dd66b-9s8j8     1/1     Running   0          90m
+----
+
+podの準備が整うまで、数分ほど待たなければならない場合があります。Pod の準備ができたら、次のコマンドを実行して、OpenShift Webコンソールへのルートを見つけます。
+
+[.console-input]
+[source,sh]
+----
+oc get routes console -n openshift-console
+----
+
+* 出力例（値は環境ごとに異なります）
+
+[source,sh]
+----
+NAME      HOST/PORT                                                                   PATH   SERVICES   PORT    TERMINATION          WILDCARD
+console   console-openshift-console.crc-dzk9v-master-0.crc.n63fbx0mnicn.instruqt.io          console    https   reencrypt/Redirect   None
+----
+
+「HOST/PORT」列の下のリンクをコピーしWebブラウザーでアクセスを行います。
+
+OpenShiftのログイン画面が表示されるので、OpenShiftのAdminユーザ権限を持ったアカウントでログインします。
+
+ログイン後は、左側のメニューを確認してください。次の図のように、 Administrator パースペクティブになっています。
+
+image::gitops/gitops/gitops-004.png[]
+
+OpenShiftの Webコンソールは、既定ではブラウザの表示言語に合わせた言語での表示になります。
+言語を変更したい場合には、下記の手順で変更を行なってください（本ラボガイドは日本語UI準拠で記載しています）。
+
+. Webコンソール画面右上のユーザ名 (admin) をクリックして [ユーザー設定] のメニューを開きます。
+. 次に表示される画面で [言語] メニューを選択すると、「Use the default browser language setting.」のチェックボックスにチェックが入っています。
+. このチェックボックスのチェックを外し、[言語の設定] のドロップダウンリストから、変更後の言語を選択します。
+. 最後にブラウザで再読み込みすると、Webコンソールの表示言語が変更されます。
+
+image::gitops/gitops/gitops-005.png[]
+
+image::gitops/gitops/gitops-006.png[]
+
+image::gitops/gitops/gitops-007.png[]
+
+image::gitops/gitops/gitops-008.png[]
+
+== GitOps-Operatorのインストール
+Administratorパースペクティブから OperatorHub をクリックし、"OpenShift GitOps" operatorを検索し、見つかったカードをクリックします。
+
+image::gitops/gitops/gitops-009.png[]
+
+image::gitops/gitops/gitops-010.png[]
+
+インストール用の画面が表示されるので[インストール]ボタンをクリックします。
+
+image::gitops/gitops/gitops-011.png[]
+
+インストールに関する設定が表示されるため、既定の設定のまま[インストール]ボタンをクリックしてインストールします。
+
+image::gitops/gitops/gitops-012.png[]
+
+image::gitops/gitops/gitops-013.png[]
+
+インストール途中の遷移をWebコンソールで見ることができます。
+
+* インストール中
+
+image::gitops/gitops/gitops-014.png[]
+
+* インストール完了
+
+image::gitops/gitops/gitops-015.png[]
+
+インストールされると[インストール済みのOperator]に表示されます。
+
+image::gitops/gitops/gitops-016.png[]
+
+また、GUIではなく、CLIを用いて、インストールされたものを確認するためには、以下のコマンドを実行します。
+
+[.console-input]
+[source,sh]
+----
+oc get operators
+----
+
+次のような出力が得られます。
+
+[source,sh]
+----
+NAME                                                  AGE
+openshift-gitops-operator.openshift-operators         25m
+----
+
+次のコマンドを実行して起動していることを確認します。
+
+[.console-input]
+[source,sh]
+----
+oc get pods -n openshift-gitops
+----
+
+次のような出力が得られます。
+
+[source,sh]
+----
+NAME                                                          READY   STATUS    RESTARTS   AGE
+cluster-b5798d6f9-p9mt5                                       1/1     Running   0          12m
+kam-69866d7c48-hr92f                                          1/1     Running   0          12m
+openshift-gitops-application-controller-0                     1/1     Running   0          12m
+openshift-gitops-applicationset-controller-6447b8dfdd-2xqw2   1/1     Running   0          12m
+openshift-gitops-redis-74bd8d7d96-72fmd                       1/1     Running   0          12m
+openshift-gitops-repo-server-c999f75d5-7jfc8                  1/1     Running   0          12m
+openshift-gitops-server-6ff4fbc8f6-fpfdp                      1/1     Running   0          7m47s
+----
+
+すべてのpodがRunningであれば、次に進みます。
+
+== ArgoCD CLIのインストール
+
+続けて、ArgoCDのCLIツールのインストールを行います。以下のコマンドを実行します。
+
+[.console-input]
+[source,sh]
+----
+curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+rm argocd-linux-amd64
+----
+
+インストール結果の確認には下記のコマンドを実行します。
+
+[.console-input]
+[source,sh]
+----
+argocd version
+----
+
+下記のようにバージョン情報が表示されればインストールは成功です。
+
+  * "Argo CD server address unspecified" と表示されますが、これは現時点ではArgo CDにログインしていないためです。後続のラボでログインを行います
+
+[source,sh]
+----
+argocd: v2.7.2+cbee7e6
+  BuildDate: 2023-05-12T14:06:49Z
+  GitCommit: cbee7e6011407ed2d1066c482db74e97e0cc6bdb
+  GitTreeState: clean
+  GoVersion: go1.19.9
+  Compiler: gc
+  Platform: linux/amd64
+FATA[0000] Argo CD server address unspecified
+----
+
+== Kustomize CLIのインストール
+
+続けて、KustomizeのCLIツールのインストールを行います。以下のコマンドを実行します。
+
+[.console-input]
+[source,sh]
+----
+cd ~
+curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+----
+
+パス指定せずコマンド実行できるよう、Kustomizeのパスを追加します。
+
+[.console-input]
+[source,sh]
+----
+export PATH=`pwd`:$PATH
+source ~/.bash_profile
+----
+
+インストール結果の確認には下記のコマンドを実行します。
+
+[.console-input]
+[source,sh]
+----
+kustomize version
+----
+
+下記のようにバージョン情報が表示されればインストールは成功です。
+
+[.console-output]
+[source,sh]
+----
+v5.0.3
+----
+
+== Helm CLIのインストール
+続けて、HelmのCLIツールのインストールを行います。以下のコマンドを実行します。
+
+[.console-input]
+[source,sh]
+----
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+----
+
+インストール結果の確認には下記のコマンドを実行します。
+
+[.console-input]
+[source,sh]
+----
+helm version
+----
+
+下記のようにバージョン情報が表示されればインストールは成功です。
+
+[.console-output]
+[source,sh]
+----
+version.BuildInfo{Version:"v3.12.0", GitCommit:"c9f554d75773799f72ceef38c51210f1842a1dea", GitTreeState:"clean", GoVersion:"go1.20.3"}
+----
+
+以上で本演習は終了です。

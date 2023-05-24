@@ -1,0 +1,396 @@
+= OpenShift GitOps Lab - Helmインテグレーション
+:navtitle: helm
+include::_attributes.adoc[]
+
+== Helmインテグレーション
+
+https://helm.sh/[Helm]はKubernetesアプリケーションのパッケージマネージャーです。事前にパッケージ化されたアプリケーションを定義、インストール、更新することができます。ビルド済みのKubernetesアプリケーションをバンドルして提供する方法です。
+
+image::gitops/helm/helm-001.png[]
+
+https://argoproj.github.io/argo-cd/[Argo CD]は、Kubernetes用の宣言型GitOps継続的デリバリーツールです。Argo CDを使用すると、Helmチャートを使用してアプリケーションをデプロイおよび管理できます。
+この演習では、Argo CDを使用してHelm チャートをデプロイする方法を学習します。
+
+このトピックではArgo CD内のネイティブHelmインテグレーションについて説明します。
+
+=== 背景
+
+Helmはアプリケーションスタックをパッケージ化してKubernetesにデプロイするための方法です。 Helmは、Kubernetesのパッケージマネージャーのようなものと考えることができます。Helmの主なコンポーネントは次のとおりです。
+
+* Chart : アプリケーションやアプリケーションスタックなどのをデプロイするために使用される、関連するKubernetes YAMLファイルで構成されるパッケージ
+* Repository : チャートを保存、共有、配布できる場所
+* Release : Kubernetes クラスターにデプロイされた Chart の特定のインスタンス
+
+Helm は、ユーザーがCLIを介しHelmチャートに対して（ほとんどの場合YAMLファイルを介して）パラメーターを提供することによって機能します。
+これらのパラメーターはHelmテンプレートYAMLに挿入され、KubernetesクラスターにデプロイされるYAMLを生成します。
+
+image::gitops/helm/helm-002.png[]
+
+Argo CDにはHelmのネイティブサポートが組み込まれています。 Helmチャートリポジトリを呼び出し、値を直接 アプリケーションマニフェストに提供します。 さらに、UIまたはCLIを介して、直接、クラスター上のHelmリリースをArgoCDで操作や管理することができます。
+
+=== マニフェストを調べる
+
+Argo CDのApplicationマニフェストで Helmリポジトリ、チャート、および値を直接指定できます。
+例を見てみましょう。 quarkus-app.yamlファイルを確認します。
+このApplicationは、サンプルのQuarkusアプリケーションをデプロイします。ファイル全体は以下の通りです。
+
+[source,yaml]
+----
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo
+  labels:
+    argocd.argoproj.io/managed-by: openshift-gitops
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: quarkus-app
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: demo
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    helm:
+      parameters:
+        - name: build.enabled
+          value: "false"
+        - name: deploy.route.tls.enabled
+          value: "true"
+        - name: image.name
+          value: quay.io/ablock/gitops-helm-quarkus
+    chart: quarkus
+    repoURL: https://redhat-developer.github.io/redhat-helm-charts
+    targetRevision: 0.0.3
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+----
+
+内容を見ると、.spec.source.helmで特定の構成が設定されているのでセクションを少し細かく見てみます。
+
+[source,yaml]
+----
+spec:
+  source:
+    helm:
+      parameters:
+        - name: build.enabled
+          value: "false"
+        - name: deploy.route.tls.enabled
+          value: "true"
+        - name: image.name
+          value: quay.io/ablock/gitops-helm-quarkus
+    chart: quarkus
+    repoURL: https://redhat-developer.github.io/redhat-helm-charts
+    targetRevision: 0.0.3
+----
+
+* parameters - このセクションでは、Helmチャートに渡すパラメーターを入力します。これらはValues.yamlファイルにある値と同じです。
+* chart - Helmリポジトリからデプロイするチャートの名前です。
+* repoURL - HelmリポジトリのURLです。
+* targetRevision - デプロイしたいチャートのバージョンです。
+
+これらはhelm install ...を使用するのと同じように、Helmチャートをクラスターにデプロイするために使用できます。
+
+NOTE: 実際に起こることは、Argo CDが helm template ... | kubectl apply -f - を実行することです。それについては少し後で説明します。
+
+=== アプリケーションをデプロイする
+
+Argo CDインスタンスにGUIおよびCLI接続を行っていない場合、link:21-GitOps.html[GitOpsのラボ]を参照しインスタンスへの接続を行います。
+
+このトピックの最初の方に表示したArgo CD Applicationマニフェスト quarkus-app.yamlを適用して、Helmチャートをデプロイします。
+
+[.console-input]
+[source,sh]
+----
+oc apply -f https://raw.githubusercontent.com/redhat-developer-demos/openshift-gitops-examples/main/components/applications/quarkus-app.yaml
+----
+
+これによりquarkus-appアプリケーションが作成されます。Helmのアイコンに注意してください。アイコン ⎈ はHelmアプリケーションであることを示しています。
+
+image::gitops/helm/helm-002.png[]
+
+この"card"をクリックすると、アプリケーションの概要ページに移動します。"show hidden resources"をクリックすると"tree"ビューが展開されます。
+
+image::gitops/helm/helm-003.png[]
+
+image::gitops/helm/helm-004.png[]
+
+次のコマンドを実行してアプリケーションのURLを取得します。
+
+[.console-input]
+[source,sh]
+----
+oc get route/quarkus-app -n demo  -o jsonpath='{.spec.host}{"\n"}'
+----
+
+URLにアクセスすると、次のようなページが表示されます。quarkus-appはこのような表示を行うアプリケーションです。
+
+image::gitops/helm/helm-005.png[]
+
+argocd CLI を使用して、このApplicationを操作できるようになりました。 例えば、アプリケーションのスケールを2レプリカに変更したい場合は、
+argocd CLIを使用してその値を変更するだけです。
+まず、実行中のpodの数を確認します。
+
+[.console-input]
+[source,sh]
+----
+oc get pods -n demo
+----
+
+出力は次のようになり、1つのpodが稼働しています。
+
+[source,sh]
+----
+NAME                           READY   STATUS              RESTARTS   AGE
+quarkus-app-58f475cb86-rddz2   1/1     Running             0          14m
+----
+
+
+Helmのvaluesを変更してみましょう。
+
+[.console-input]
+[source,sh]
+----
+argocd app set quarkus-app -p deploy.replicas=2
+----
+
+このアプリケーションが2つのpodを利用するようにセットしました。podの数を再度確認します。
+
+[.console-input]
+[source,sh]
+----
+oc get pods -n demo
+----
+
+podが2つになります。
+
+[source,sh]
+----
+NAME                           READY   STATUS              RESTARTS   AGE
+quarkus-app-58f475cb86-rddz2   1/1     Running             0          15m
+quarkus-app-58f475cb86-s9llq   0/1     ContainerCreating   0          1s
+----
+
+Argo CDのUIには、2つのポッドがあり、アプリケーションが表示され、完全に正常に同期していることがわかります。
+
+これはArgo CDを使用してHelmチャートをデプロイする有効かつ完全にサポートされている方法です。
+しかし、これはGitOpsフレンドリーではありません。次のトピックでGitOpsワークフローでHelmを使用する方法を見てみましょう。
+次の演習のために Argo CD WebUI タブを開いたままにしておいてください。Helm チャートをデプロイする、よりGitOpsフレンドリーな方法を学びます。
+
+== Helm GitOps Deployment
+
+このトピックではHelmを利用したGitOpsデプロイメントパターンを学習します。
+
+=== 背景
+前のトピックでは、Argo CDを使用してHelmチャートをネイティブにデプロイする方法を見てきました。この方法では、コンフィグでHelm Repo、Chart、および Valuesを直接提供する必要がありました。前のトピックの最後に、この方法は有効ではあるものの、GitOpsフレンドリーではないと申し上げました。
+
+GitOpsワークフローでは、アプリケーションのデプロイの状態をSCMリポジトリ（GitHubなど）に保存する必要があります。これを行うには、values.yamlをgitリポジトリに保存し、何らかの方法でHelmリポジトリを参照する必要があります。
+
+ここで、Helm Subchart/Dependency デプロイ戦略の出番です。
+
+=== マニフェストを調べる
+
+link:22-Kustomize.html[Kustomizeのラボ] でクローンしたレポジトリ `examples repo` の中の `quarkus-subchart` ディレクトリをターゲットにします。
+
+レポジトリをクローンしていない場合は、下記のコマンドでクローンを実行します。
+
+[.console-input]
+[source,sh]
+----
+cd ~
+git clone https://github.com/redhat-developer-demos/openshift-gitops-examples
+cd openshift-gitops-examples
+----
+
+`quarkus-subchart` ディレクトリの構成を調べると次のような、Chart.yaml ファイルと values.yaml ファイルの2つのYAMLファイルのみで構成されています。
+
+[source,sh]
+----
+openshift-gitops-examples/apps/quarkus-subchart
+├── Chart.yaml
+└── values.yaml
+
+0 directories, 2 files
+----
+
+まずChart.yamlファイルを見てみましょう。
+
+[.console-input]
+[source,sh]
+----
+cat apps/quarkus-subchart/Chart.yaml
+----
+
+次のように表示されます。
+
+[source,yaml]
+----
+apiVersion: v2
+name: quarkus-subchart
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+dependencies:
+- name: quarkus
+  version: 0.0.3
+  repository: https://redhat-developer.github.io/redhat-helm-charts
+----
+
+このChart.yamlファイルは、空のHelmチャートを作成し、デプロイするHelmチャートに関する依存関係としてdependeciesセクションに追加しています。
+
+NOTE: この方法を使用して、複数のHelmチャートをデプロイできます。
+
+次にvalues.yamlファイルを見てみます。
+
+[.console-input]
+[source,sh]
+----
+cat apps/quarkus-subchart/values.yaml
+----
+
+次のように表示されます。
+
+[source,yaml]
+----
+quarkus:
+  build:
+    enabled: false
+  deploy:
+    route:
+      tls:
+        enabled: true
+    replicas: 1
+  image:
+    name: quay.io/ablock/gitops-helm-quarkus
+----
+
+ここでは、Helmチャートに渡す値を指定しています。
+デプロイの状態がgitリポジトリに保存されるようになり、よりGitOpsに適しています。たとえば、イメージやレプリカの数を変更する場合は、gitワークフローを使用してこのアプリケーションを更新できます。GitOpsワークフローの場合と同様に、このリポジトリにpull requestできるようになりました。
+
+Argo CDのApplicationは、通常のgitアプリケーションのように見えるはずです。
+
+[.console-input]
+[source,sh]
+----
+cat components/applications/quarkus-subchart.yaml
+----
+
+次のように表示されます。
+
+[source,yaml]
+----
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: quarkus-subchart
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: demo
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: apps/quarkus-subchart/
+    repoURL: https://github.com/redhat-developer-demos/openshift-gitops-examples
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+----
+
+sourceの部分を見ると、Helmリポジトリではなくgitリポジトリをターゲットにしていることがわかります。
+
+[source,yaml]
+----
+ source:
+    path: apps/quarkus-subchart/
+    repoURL: https://github.com/redhat-developer-demos/openshift-gitops-examples
+    targetRevision: main
+----
+
+=== アプリケーションのデプロイ
+このアプリケーションをデプロイする前に、Argo CDのWeb UIが開いていることを確認してください。
+前のステップと同様に、Argo CD Web UIを開き、アプリケーションが作成されるのを確認します。
+
+Argo CD Application マニフェスト quarkus-subchart.yaml を適用して、このHelmチャートをデプロイします。
+
+[.console-input]
+[source,sh]
+----
+oc apply -f https://raw.githubusercontent.com/redhat-developer-demos/openshift-gitops-examples/main/components/applications/quarkus-subchart.yaml
+----
+
+これにより、アプリケーションが作成されます。
+
+NOTE: Helmロゴ ⎈ は表示されません。 YAMLをロードしているだけなので、gitロゴになりました。
+
+image::gitops/helm/helm-006.png[]
+
+このカードをクリックすると、アプリケーションの概要ページに移動します。必要に応じて、"show hidden resources"をクリックして、"tree"ビューを展開します。
+
+image::gitops/helm/helm-007.png[]
+
+これで、Argo CDを使用して、GitOpsに適した方法でHelmチャートをデプロイしました。
+注意すべき重要な点が1つあります。このHelmチャートを2回デプロイしましたが、argocd CLIを使用してこれを確認できます。次のコマンドを実行します。
+
+[.console-input]
+[source,sh]
+----
+argocd app list -o name
+----
+
+これにより、次の出力が得られるはずです。
+
+[source,sh]
+----
+quarkus-app
+quarkus-subchart
+----
+
+これは、ocコマンドでも確認できます。
+
+[.console-input]
+[source,sh]
+----
+oc get applications -n openshift-gitops
+----
+
+ocコマンドにより次のような出力が得られるはずです。
+
+[source,sh]
+----
+NAME               SYNC STATUS   HEALTH STATUS
+quarkus-app        Synced        Healthy
+quarkus-subchart   Synced        Healthy
+----
+
+ただし、Helm CLIを使用してアプリケーションを一覧表示しようとしても、見ることができません。
+
+[.console-input]
+[source,sh]
+----
+helm ls --all-namespaces
+----
+
+次のように、Helmリリースは表示されません。
+
+[source,sh]
+----
+NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
+----
+
+これは、Argo CDがHelmチャートをデプロイする方法のためです。Argo CDがHelmチャートをデプロイするとき、helm templateを実行し、それを kubectl apply -f にパイプで渡すことによってデプロイします。これは、Argo CDがhelm template（提供された値を含む） を "raw" のKubernetes YAMLに変換することを意味します。
+
+この演習は以上になります。
