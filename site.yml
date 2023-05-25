@@ -3,7 +3,7 @@ runtime:
 
 site:
   title: OpenShift Handson
-  url: https://suzukiry.github.io/ocp-handson
+  url: https://rh-open.github.io/ocp-handson
   start_page: openshift-services::index.adoc
 
 content:
