@@ -21,14 +21,18 @@ image::pipelines/add-task-prep-2.png[align="center"]
 . trivy によるセキュリティ脆弱性評価レポートの作成
 . trivy による CRITICAL な脆弱性の有無
 
-最終的には、下記のステップがタスクで自動実行されます（ここでは実施不要です）。
+まず、タスクで実装するtrivyによる脆弱性チェックを手動で実行してみましょう。
 
 . OpenShiftのadmin user でログインし、image registry の default-route を取得します。
 +
 [.console-input]
 [source,bash]
 ----
-oc login -u admin -p <パスワード> <OpenShift API :6443>
+# OpenShift APIへログイン
+oc login -u admin -p <パスワード> <OpenShift API URL:6443>
+# OpenShift Image RegistryのdefaultRouteを有効化
+oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
+# Image Registryのrouteを取得
 export APISERVER=`oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}'`
 ----
 +
@@ -47,7 +51,7 @@ oc whoami --show-token
 ----
 export TEKTON_TRIVY_IMAGE='aquasec/trivy:0.41.0'
 export OCP_USER=admin
-export OCP_TOKEN=sha256~11hnNe5tef3GOD84R6hNZtzTNjqAERZ722l2KvDj4r8
+export OCP_TOKEN=`oc whoami --show-token`
 ----
 +
 それぞれのステップとなるコマンドを作成・実行し、Task に設定するコマンドを確定させます。
@@ -332,7 +336,9 @@ image::pipelines/add-task-pipelinerun-1.png[align="center"]
 +
 image::pipelines/add-task-pipelinerun-2.png[align="center"]
 
-[参考] 以下のようにCLIからも実行できます。
+[参考] TknツールによりCLIからパイプラインを実行する場合は、下記のような指定になります。
+
+* 指定のファイルを作成していないため、このままでは動作しません
 
 [.console-input]
 [source,bash]
