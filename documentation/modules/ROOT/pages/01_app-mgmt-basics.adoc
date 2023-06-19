@@ -1,5 +1,8 @@
 = アプリケーション管理の基礎
-:experimental:
+:navtitle: app-basics
+include::_attributes.adoc[]
+
+本コンテンツは、https://github.com/team-ohc-jp-place/openshift-cns-testdrive[MAD Workshop Ops Track] の内容と同じものになります。
 
 == 演習の概要
 このモジュールでは、`oc` ツールを使用してサンプルアプリケーションをデプロイし、OpenShift Container Platform上でのコアとなる概念、基本オブジェクト、アプリケーション管理の基本について学習します。
@@ -16,7 +19,8 @@ OpenShiftの管理者として、アプリケーションに関連するいく�
 
 この演習ではまず、いくつかのリソースを保持するProjectを作成します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc new-project app-management
 ----
@@ -27,7 +31,8 @@ oc new-project app-management
 
 次のようにQuay上に存在する特定のイメージを起動します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc new-app quay.io/openshiftroadshow/mapit
 ----
@@ -66,7 +71,8 @@ PodはOpenShiftでは *静的な* オブジェクトとして扱われ、実行�
 
 Podの一覧は次のように取得できます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get pods
 ----
@@ -82,7 +88,8 @@ NOTE: Pod名はデプロイプロセスの一部として動的に生成され�
 
 `oc describe` コマンドを使うと、Podの詳細を知ることができます。上記のPod名の場合、
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc describe pod -l deployment=mapit
 ----
@@ -195,7 +202,8 @@ https://docs.openshift.com/container-platform/4.9/architecture/understanding-dev
 
 それではProject内の *Service* のリストを見てみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get services
 ----
@@ -211,7 +219,8 @@ NOTE: *Service* のIPアドレスは作成時に動的に割り当てられま�
 
 *Pod* と同じように、*Service* も `describe` で説明を表示することができます。OpenShiftではほとんどのオブジェクトを `describe` で説明を表示することができます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc describe service mapit
 ----
@@ -246,7 +255,8 @@ etcdはデータをKeyとValueのペアとして格納し、このデータは�
 
 *Service* のYAML出力を見てみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get service mapit -o yaml
 ----
@@ -339,7 +349,8 @@ status:
 同様に *Pod* のYAMLも調べてみて、OpenShiftがコンポーネント同士を繋げている様子を理解するのも面白いことです。 +
 `mapit` Podの名前を探して、以下を実行します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get pod -l deployment=mapit -o jsonpath='{.items[*].metadata.labels}' | jq -r
 ----
@@ -391,7 +402,8 @@ documentation] を参照してください。
 *ReplicaSet* と *Deployment* が何かが分かったので、それらがどのように動作し、どのように関連しているかを探ってみましょう。 +
 OpenShiftに `mapit` イメージを立ち上げるように指示したときに作成された *Deployment* (deploy)を見てみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get deploy
 ----
@@ -407,7 +419,8 @@ mapit   1/1     1            1           76m
 
 OpenShiftに `mapit` イメージを立ち上げるように指示したときに作成された *ReplicaSet (RS)* を見てみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get rs
 ----
@@ -425,14 +438,16 @@ mapit-764c5bf8b8   1         1         1       77m
 
 `mapit` アプリケーションを2つのインスタンスまでスケールしてみましょう。これは scale コマンドで行うことができます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc scale --replicas=2 deploy/mapit
 ----
 
 以下のコマンドでレプリカの数が変更されたことを確認できます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get rs
 ----
@@ -449,7 +464,8 @@ NOTE: 古いバージョンのものが保持されています。これによ�
 
 これで 2つのレプリカができたことがわかります。`oc get pods` コマンドでPodの数を確認してみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get pods
 ----
@@ -464,7 +480,8 @@ mapit-764c5bf8b8-l49z7   1/1     Running   0          81m
 
 そして最後に、*Service* が2つのエンドポイントを正しく反映しているかを検証してみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc describe svc mapit
 ----
@@ -496,7 +513,8 @@ Events:            <none>
 
 *Service* のエンドポイントを見る別の方法としては、次のようなものがあります。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get endpoints mapit
 ----
@@ -526,7 +544,8 @@ OpenShiftの *RS* は、希望する数の *Pod* が実際に動いているか�
 
 現在2つの *Pod* が稼働しているので、1つを「誤って」killしてしまった場合にどうなるか見てみましょう。`oc get pods` コマンドをもう一度実行して、*Pod* 名を選択し、次のようにしてみます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get pods
 ----
@@ -541,14 +560,16 @@ mapit-764c5bf8b8-rscss   1/1     Running   0          2m54s
 
 *Deployment* `mapit` に属するPodを削除します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc delete pods -l deployment=mapit --wait=false
 ----
 
 再度 `oc get pods` コマンドを実行します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get pods
 ----
@@ -570,7 +591,8 @@ image::images/openshift_route.png[]
 Routerの設定を覚えていますか？おそらく覚えていないと思います。それは、OpenShiftのインストール中にRouter用のOperatorがデプロイされ、OperatorがRouterを作成したからです。 +
 Routerは `openshift-ingress` *Project* にあり、以下のコマンドでその情報を見ることができます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc describe deployment router-default -n openshift-ingress
 ----
@@ -580,7 +602,8 @@ RouterのOperatorについては、後続の演習で詳しく説明します。
 *Route* の作成は非常に簡単なプロセスです。コマンドラインから *Service* を `exporse` するだけです。 +
 先ほどの *Service* の名前は `mapit` となっています。*Service* 名があれば、*Route* の作成はコマンド1つで簡単にできます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc expose service mapit
 ----
@@ -593,7 +616,8 @@ route.route.openshift.io/mapit exposed
 
 次のコマンドで *Route* が作成されたことを確認します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get route
 ----
@@ -629,7 +653,8 @@ oc expose service mapit
 ### スケールダウン
 続ける前に、アプリケーションを1つのインスタンスにスケールダウンしてください。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc scale --replicas=1 deploy/mapit
 ----
@@ -656,7 +681,8 @@ Health] セクションを参照してください。
 `mapit` アプリケーションはエンドポイントを公開していますので、それが生きていて応答する準備ができているかどうかを確認することができます。
 次のように `curl` を使ってテストすることが可能です。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 curl mapit-app-management.{{ ROUTE_SUBDOMAIN }}/health
 ----
@@ -670,14 +696,16 @@ curl mapit-app-management.{{ ROUTE_SUBDOMAIN }}/health
 
 以下のコマンドを使用して、OpenShiftにこのエンドポイントが生きているかどうかを調べるように依頼することができます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc set probe deploy/mapit --liveness --get-url=http://:8080/health --initial-delay-seconds=30
 ----
 
 `oc describe` の出力からこのProbeが定義されていることがわかります。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc describe deploy mapit
 ----
@@ -702,7 +730,8 @@ oc describe deploy mapit
 
 Readyiness Probeも同様にできます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc set probe deploy/mapit --readiness --get-url=http://:8080/health --initial-delay-seconds=30
 ----
@@ -713,7 +742,8 @@ oc set probe deploy/mapit --readiness --get-url=http://:8080/health --initial-de
 
 次を実行して下さい。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get deployments
 ----
@@ -729,7 +759,8 @@ mapit   1/1     1            1           131m
 
 以下を実行して下さい。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get replicasets
 ----
