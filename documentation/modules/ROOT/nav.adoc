@@ -1,5 +1,5 @@
 
-* 01. OpenShift 基礎
+* 01. [WIP]OpenShift 基礎
 ** xref:01_app-mgmt-basics.adoc[1. コンテナデプロイと管理]
 ** xref:02_app-storage-basics.adoc[2. 永続ストレージ]
 ** xref:03_machinesets.adoc[3. ノードの動的管理]
@@ -12,8 +12,8 @@
 ** xref:10_taints-and-tolerations.adoc[10. Taint/Toleration]
 
 
-* 10. OpenShift Logging
-* 11. OpenShift Monitoring
+* 10. [WIP]OpenShift Logging
+* 11. [WIP]OpenShift Monitoring
 
 * 20. OpenShift Pipeline Lab
 ** xref:10-pipeline-install.adoc[インストール]
@@ -27,14 +27,11 @@
 ** xref:22-Kustomize.adoc[2. Kustomizeインテグレーション]
 ** xref:23-Helm.adoc[3. Helmインテグレーション]
 
-* 40. Data Streaming Lab
+* 70. [WIP]OpenShift Data Foundation
 
-* 70. OpenShift Data Foundation
-
-* 71. Advanced Cluster Management
+* 71. [WIP]Advanced Cluster Management
 ** xref:32_Deploying_And_Importing_Clusters_Lab.adoc[1. Cluster Deployment]
 ** xref:33_Pooling_And_Organizing_Clusters_Lab.adoc[2. Cluster management]
 ** xref:34_Application_Lab.adoc[3. App Deployment]
 ** xref:35_PoolSet_Optional_And_Cleanup.adoc[4. PoolSet]
 
-* 72. Advanced Cluster Security
