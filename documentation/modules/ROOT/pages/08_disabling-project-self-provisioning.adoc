@@ -1,5 +1,8 @@
 = Projectのセルフプロビジョニングの無効化
+:navtitle: app-basics
+include::_attributes.adoc[]
 
+本コンテンツは、link:https://github.com/team-ohc-jp-place/openshift-cns-testdrive[MAD Workshop Ops Track] の内容を利用しています。
 [Warning]
 ====
 続ける前に、LDAPの演習(「外部認証プロバイダ(LDAP)の設定」)を終了して下さい。

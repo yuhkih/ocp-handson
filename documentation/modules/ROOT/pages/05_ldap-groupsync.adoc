@@ -1,4 +1,8 @@
 = 外部認証プロバイダ(LDAP)の設定
+:navtitle: app-basics
+include::_attributes.adoc[]
+
+本コンテンツは、link:https://github.com/team-ohc-jp-place/openshift-cns-testdrive[MAD Workshop Ops Track] の内容を利用しています。
 
 == 演習の概要
 OpenShiftは多くの異なる認証プロバイダをサポートしています。完全なリストは link:https://docs.openshift.com/container-platform/4.5/authentication/understanding-identity-provider.html[understanding

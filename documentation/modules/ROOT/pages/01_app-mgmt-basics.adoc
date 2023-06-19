@@ -2,7 +2,7 @@
 :navtitle: app-basics
 include::_attributes.adoc[]
 
-本コンテンツは、https://github.com/team-ohc-jp-place/openshift-cns-testdrive[MAD Workshop Ops Track] の内容と同じものになります。
+本コンテンツは、link:https://github.com/team-ohc-jp-place/openshift-cns-testdrive[MAD Workshop Ops Track] の内容を利用しています。
 
 == 演習の概要
 このモジュールでは、`oc` ツールを使用してサンプルアプリケーションをデプロイし、OpenShift Container Platform上でのコアとなる概念、基本オブジェクト、アプリケーション管理の基本について学習します。
@@ -62,7 +62,7 @@ g one or more of the commands below:
 === Pods
 
 .OpenShift Pods
-image::images/openshift_pod.png[]
+image::basics/appmgmt/openshift_pod.png[]
 
 *Pod* とは、ホスト上に一緒にデプロイされた1つまたは複数のコンテナのことです。PodはOpenShiftで定義、デプロイ、管理できるコンピュートリソースの最小の単位です。 +
 各PodはSDN上で独自の内部IPアドレスを割り当てられ、ポート範囲全体を所有します。また、Pod内のコンテナはローカルストレージ領域とネットワークリソースを共有できます。
@@ -184,7 +184,7 @@ horaxe/mapit@sha256:8c7e0349b6a016e3436416f3c54debda4594ba09fd34b8a0dee0c4497102
 
 ### Services
 .OpenShift Service
-image::images/openshift_service.png[]
+image::basics/appmgmt/openshift_service.png[]
 
 *Services* はOpenShift内部でPodのようなグループを見つけるのに便利な抽象化レイヤーを提供します。 +
 *Service* はまた、それらのPodと、OpenShift環境内からPodにアクセスする必要のある他の何かとの間の内部プロキシ/ロードバランサーとしても機能します。 +
@@ -344,7 +344,7 @@ status:
   loadBalancer: {}
 ----
 
-ここで `selector` スタンザに注目し、これを覚えておきましょう。
+ここで `selector` に注目し、これを覚えておきましょう。
 
 同様に *Pod* のYAMLも調べてみて、OpenShiftがコンポーネント同士を繋げている様子を理解するのも面白いことです。 +
 `mapit` Podの名前を探して、以下を実行します。
@@ -366,7 +366,7 @@ NOTE: The `-o jsonpath` は特定のフィールドを選択します。この�
 }
 ----
 
-* *Service* には `deployment: mapit` を参照する `selector` スタンザがあります。
+* *Service* には `deployment: mapit` を参照する `selector` があります。
 * *Pod* には複数の *Label* があります。
 ** `deployment: mapit`
 ** `pod-template-hash: 764c5bf8b8`
@@ -580,7 +580,7 @@ oc get pods
 
 ### Routes
 .OpenShift Route
-image::images/openshift_route.png[]
+image::basics/appmgmt/openshift_route.png[]
 
 *Service* はOpenShift内で内部の抽象化と負荷分散を提供しますが、OpenShift**外**のクライアント(ユーザ、システム、デバイスなど)がアプリケーションにアクセスする必要がある場合もあります。 +
 外部クライアントがOpenShift内で実行されているアプリケーションにアクセスする方法は、OpenShiftのルーティングレイヤーを介して行われます。そしてその背後にあるオブジェクトが *Route* です。
