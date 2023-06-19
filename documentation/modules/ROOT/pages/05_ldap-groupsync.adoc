@@ -513,6 +513,7 @@ link:https://prometheus-k8s-openshift-monitoring.{{ ROUTE_SUBDOMAIN }}[Prometheu
 ログインすると、最初にauthプロキシのパーミッションの承認画面が表示されます。
 
 .Auth Proxy Acceptance.
+image::basics/appmgmt/openshift_pod.png[]
 image::images/prometheus-auth-proxy.png[]
 
 実際には、あなたとPrometheusコンテナの間のフローの中にOAuthプロキシが存在します。このプロキシは、あなたの認証(AuthenticatioN:AuthN)を確認するためと、また、何が許可されているかの認可(AuthoriZe:AuthZ)のためにに使用されます。ここでは、Prometheusへのアクセスの一部として使用される `fancyuser1` アカウントのパーミッションを明示的に承認しています。_Allow selected permissions_ をクリックします。

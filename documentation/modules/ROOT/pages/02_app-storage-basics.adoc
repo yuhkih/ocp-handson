@@ -1,4 +1,4 @@
-=  アプリケーションストレージの基礎
+=  永続ストレージ
 :navtitle: app-basics
 include::_attributes.adoc[]
 
@@ -16,7 +16,7 @@ OpenShiftの *Pod* がデータベースをホストするなど、信頼性の�
 === Persistent Volume Claims
 [WARNING]
 ====
-これらの演習を行うには、「アプリケーション管理の基礎」の演習で紹介されているアプリケーションがすでにデプロイされている必要があります。
+これらの演習を行うには、「コンテナデプロイと管理」の演習で紹介されているアプリケーションがすでにデプロイされている必要があります。
 ====
 
 `mapit` アプリケーションは現在、永続的なストレージを利用していません。*Pod* が消えると、コンテナ内のすべてのコンテンツも消えてしまいます。 +
@@ -33,14 +33,16 @@ writableなレイヤーは、コンテナが削除されると破棄されます
 
 前のラボで使用した `app-management` プロジェクトに入っているはずです。確認するために、次のコマンドを実行します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc project app-management
 ----
 
 OpenShiftに外部の永続ストレージを表す `PersistentVolume` オブジェクトを作成し、それをコンテナのファイルシステム内に *Mount* するよう指示する方法を以下に示します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc set volume deploy/mapit --add --name=mapit-storage -t pvc --claim-mode=ReadWriteOnce --claim-size=1Gi --claim-name=mapit-storage --mount-path=/app-storage
 ----
@@ -56,7 +58,8 @@ deployment.apps/mapit volume updated
 
 このように新しい `Deployment` が表示されます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get deploy mapit
 ----
@@ -70,7 +73,8 @@ mapit   1/1     1            1           14m
 
 タイミングによっては、新しい *Pod* が生成されていることがわかるかもしれません。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get pod
 ----
@@ -83,7 +87,8 @@ mapit-79975ccb98-hpw6m   1/1     Running             0          76s
 
 `Deployment` を見てみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc describe deploy mapit
 ----
@@ -107,7 +112,8 @@ oc describe deploy mapit
 ### Storage Classes
 OpenShift 4を最初にインストールしたときに、AWS EBS用のダイナミックストレージプロバイダが設定されていました。この `StorageClass` を見てみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get storageclass
 ----
@@ -115,9 +121,9 @@ oc get storageclass
 以下のように表示されます。
 
 ----
-NAME            PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
-gp2 (default)   kubernetes.io/aws-ebs   Delete          WaitForFirstConsumer   true                   47m
-gp2-csi         ebs.csi.aws.com         Delete          WaitForFirstConsumer   true                   47m
+NAME                PROVISIONER       RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+gp2-csi             ebs.csi.aws.com   Delete          WaitForFirstConsumer   true                   3h36m
+gp3-csi (default)   ebs.csi.aws.com   Delete          WaitForFirstConsumer   true                   3h36m
 ----
 
 `StorageClass` を指定していない `PersistentVolumeClaim` では、デフォルトの *StorageClass* が使用されます。この場合では、デフォルトはEBS Provisionerで、リクエストされたサイズ(この例では1Gi)のEBS GP2 Volumeを作成します。
@@ -135,7 +141,8 @@ Kubernetes環境のストレージは、Volume Claim と Volume のシステム�
 
 以下を実行します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get persistentvolume
 ----
@@ -144,12 +151,13 @@ oc get persistentvolume
 
 ----
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                          STORAGECLASS   REASON   AGE
-pvc-4397c6be-9f53-490e-960d-c1b77de6000c   1Gi        RWO            Delete           Bound    app-management/mapit-storage   gp2                     12m
+pvc-06b0184f-f4fe-4b7f-838b-33165d694f92   1Gi        RWO            Delete           Bound    app-management/mapit-storage   gp3-csi                 7m26s
 ----
 
 これは、先ほどのClaimの結果として作成された `Persistent Volume` です。この `app-management` Project に存在するClaimにBindされている(*Bound*)ことに注意してください。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get persistentvolumeclaim -n app-management
 ----
@@ -158,21 +166,23 @@ oc get persistentvolumeclaim -n app-management
 
 ----
 NAME            STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-mapit-storage   Bound    pvc-4397c6be-9f53-490e-960d-c1b77de6000c   1Gi        RWO            gp2            14m
+mapit-storage   Bound    pvc-06b0184f-f4fe-4b7f-838b-33165d694f92   1Gi        RWO            gp3-csi        7m53s
 ----
 
 ### 永続ストレージのテスト
 
 `oc get pods` を使って *Pod* の名前を取得してから、`oc` クライアントのリモートシェル機能で *Pod* にログインします。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc rsh $(oc get pods -l deployment=mapit -o name)
 ----
 
 *コンテナのシェルセッションにいる状態で*、コンテナの名前空間でルートディレクトリの内容をリストアップします。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 ls -ahl /
 ----
@@ -181,13 +191,13 @@ ls -ahl /
 
 ----
 total 20K
-drwxr-xr-x.   1 root  root         81 Apr 12 19:11 .
-drwxr-xr-x.   1 root  root         81 Apr 12 19:11 ..
+dr-xr-xr-x.   1 root  root         81 Jun 19 06:51 .
+dr-xr-xr-x.   1 root  root         81 Jun 19 06:51 ..
 -rw-r--r--.   1 root  root        16K Dec 14  2016 anaconda-post.log
-drwxrwsr-x.   3 root  1000570000 4.0K Apr 12 19:10 app-storage <1>
+drwxrwsr-x.   3 root  1000690000 4.0K Jun 19 06:50 app-storage
 lrwxrwxrwx.   1 root  root          7 Dec 14  2016 bin -> usr/bin
 drwxrwxrwx.   1 jboss root         45 Aug  4  2017 deployments
-drwxr-xr-x.   5 root  root        360 Apr 12 19:11 dev
+drwxr-xr-x.   5 root  root        360 Jun 19 06:51 dev
 drwxr-xr-x.   1 root  root         93 Jan 18  2017 etc
 drwxr-xr-x.   2 root  root          6 Nov  5  2016 home
 lrwxrwxrwx.   1 root  root          7 Dec 14  2016 lib -> usr/lib
@@ -196,13 +206,13 @@ drwx------.   2 root  root          6 Dec 14  2016 lost+found
 drwxr-xr-x.   2 root  root          6 Nov  5  2016 media
 drwxr-xr-x.   2 root  root          6 Nov  5  2016 mnt
 drwxr-xr-x.   1 root  root         19 Jan 18  2017 opt
-dr-xr-xr-x. 183 root  root          0 Apr 12 19:11 proc
+dr-xr-xr-x. 328 root  root          0 Jun 19 06:51 proc
 dr-xr-x---.   2 root  root        114 Dec 14  2016 root
-drwxr-xr-x.   1 root  root         21 Apr 12 19:11 run
+drwxr-xr-x.   1 root  root         42 Jun 19 06:51 run
 lrwxrwxrwx.   1 root  root          8 Dec 14  2016 sbin -> usr/sbin
 drwxr-xr-x.   2 root  root          6 Nov  5  2016 srv
-dr-xr-xr-x.  13 root  root          0 Apr 10 14:34 sys
-drwxrwxrwt.   1 root  root         92 Apr 12 19:11 tmp
+dr-xr-xr-x.  13 root  root          0 Jun 19 03:29 sys
+drwxrwxrwt.   1 root  root        120 Jun 19 06:51 tmp
 drwxr-xr-x.   1 root  root         69 Dec 16  2016 usr
 drwxr-xr-x.   1 root  root         41 Dec 14  2016 var
 ----
@@ -212,7 +222,8 @@ Amazon EBSのVolumeはRead-Write-Onceです。EBSはブロックストレージ�
 
 リモートシェルセッション内で以下を実行します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 echo "Hello World from OpenShift" > /app-storage/hello.txt
 exit
@@ -220,21 +231,24 @@ exit
 
 次に、ファイルが存在することを確認します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc rsh $(oc get pods -l deployment=mapit -o name) cat /app-storage/hello.txt
 ----
 
 ここで、永続ストレージが本当に動作するか確認するためにPodを削除してみます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc delete pods -l deployment=mapit && oc get pod
 ----
 
 しばらくすると、新しい *Pod* が準備され、実行できるようになります。その名前を探して、もう一度ファイルを確認してください。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc rsh $(oc get pods -l deployment=mapit -o name) cat /app-storage/hello.txt
 ----

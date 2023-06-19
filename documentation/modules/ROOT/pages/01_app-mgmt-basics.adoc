@@ -1,4 +1,4 @@
-= アプリケーション管理の基礎
+= コンテナデプロイと管理
 :navtitle: app-basics
 include::_attributes.adoc[]
 
@@ -728,7 +728,7 @@ oc describe deploy mapit
 ...
 ----
 
-Readyiness Probeも同様にできます。
+Readiness Probeも同様にできます。
 
 [.console-input]
 [source,sh]

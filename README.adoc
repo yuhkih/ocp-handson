@@ -1,3 +1,3 @@
 Check the build courseware https://redhat-scholars.github.io/build-course[documentation]  on how folder structure, how to use macros and other gotchas
 
-Pages : https://rh-open.github.io/ocp-handson/openshift-services/01-setup.html
+Pages : https://rh-open.github.io/ocp-handson/openshift-services
