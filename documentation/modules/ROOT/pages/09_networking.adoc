@@ -1,0 +1,219 @@
+= OpenShift の Network Policy ベースの SDN
+:experimental:
+
+== 演習の概要
+OpenShift は プラットフォーム内部に Open vSwitch をベースにしたOpenShiftSDN（Software Defined Network）を持っています。
+しかしこのラボで使用するクラスタではCNIとしてOVNKubernetes SDNを使用します。OVNKubernetesは Open Virtual Network をベースとしており、将来的にOpenShiftのデフォルトになることが計画されています。OVNKubernetes は OpenShiftSDN に対し後方互換性を持っています。より詳しく知りたい場合、link:https://docs.openshift.com/container-platform/4.9/networking/ovn_kubernetes_network_provider/about-ovn-kubernetes.html[公式ドキュメント]を参照して下さい。
+
+この SDN は OpenShift 環境内のアプリケーションコンポーネント間の接続性を提供するために使用されます。
+ネットワークにはデフォルトのネットワーク範囲があらかじめ設定されていますが、既存のインフラストラクチャと競合する場合やその他の理由で変更することも可能です。
+
+Kubernetesの `NetworkPolicy` により、OpenShiftのSDN内でProject間のネットワークを分離することができます。ここまでOpenShiftのRBACを通してProject内のリソースを分離する方法を見てきましたが、NetworkPolicy SDNプラグインは Pod とNamespaceのラベルセレクタを使って、各ProjectのPodを分離することができます。
+
+---
+
+### Project の切り替え
+続行する前に、クラスタ内に存在する**Project**を使用していることを確認してください。
+前の演習で最後に**Project**を削除した場合、この演習のスクリプトでエラーが発生します。
+
+[source,bash,role="execute"]
+----
+oc project default
+----
+
+### 生成スクリプトの実行
+**Project**またはクラスタ管理権限を持つユーザーのみが、**Project**のネットワークを操作できます。
+
+それでは、用意されているスクリプトを実行しましょう。
+2つの *Project* が作成され、 *Deployment* を使って、*Pod* が展開されます。
+
+[source,bash,role="execute"]
+----
+bash {{ HOME_PATH }}/support/create-net-projects.sh
+----
+
+### 作成されたリソースの確認
+`netproj-a` と `netproj-b` の 2 つの *Project* が作成されました。
+以下のコマンドを実行して、作成されたリソースを確認します。
+
+[source,bash,role="execute"]
+----
+oc get pods -n netproj-a
+----
+
+しばらくすると以下のようなものが表示されます。：
+
+```
+NAME           READY   STATUS              RESTARTS   AGE
+ose-1-66dz2    0/1     ContainerCreating   0          7s
+ose-1-deploy   1/1     Running             0          16s
+```
+
+同様に……:
+
+[source,bash,role="execute"]
+----
+oc get pods -n netproj-b
+----
+
+しばらくすると、以下のようなものが表示されます。：
+
+```
+NAME           READY   STATUS      RESTARTS   AGE
+ose-1-deploy   0/1     Completed   0          38s
+ose-1-vj2gn    1/1     Running     0          30s
+```
+
+`netproj-b` **Project**内の Pod の TCP ポート 5000 に接続するために、`netproj-a` **Project**内の Pod からコマンドを実行します。
+
+### 接続性のテスト #1 (動作するはず)
+いくつかの**Project**と Pod ができたので、`netproj-a` **Project**の Pod と `netproj-b` **Project**の Pod の接続性をテストしてみましょう。
+
+2つの Pod 間の接続性をテストするには、次のコマンドを実行します。:
+
+[source,bash,role="execute"]
+----
+bash {{ HOME_PATH }}/support/test-connectivity.sh
+----
+
+次のようなものが表示されます。:
+
+[source]
+----
+Getting Pod B's IP... 10.129.0.180
+Getting Pod A's Name... ose-1-66dz2
+Checking connectivity between Pod A and Pod B... worked
+----
+
+
+最後の行に `worked` と書いてあることに注意してください。
+これは、`netproj-a` **Project**の Pod が　`netproj-b` **Project**の Pod に接続できたことを意味します。
+
+これは、デフォルトのネットワークポリシーでは、すべての**Project**のすべての Pod がお互いに接続できるようになっているためです。
+
+### アクセスを制限する
+**Project**のアクセスを制限するには、`NetworkPolicy` カスタムリソース (CR) を作成します。
+
+例えば、以下は、この `NetworkPolicy` CR が適用された**Project**では、その他のすべての**Project**からのアクセスを制限します。
+これはファイアウォールにおける `DenyAll` のデフォルトルールに相当します。:
+
+[source,yaml]
+----
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: deny-by-default
+spec:
+  podSelector:
+  ingress: []
+----
+
+`podSelector` が空であることに注意してください。これは、このNetworkPolicyがプロジェクト内の全ての Pod に適用される事を意味しています。
+
+また、`ingress` リストが空である事に注意してください。これは、この `NetworkPolicy` CR において、許可された `ingress` ルールが存在しない事を意味しています。
+
+`netproj-b` **Project**の Pod へのアクセスを制限するには、上記の NetworkPolicy CR を適用します。:
+
+[source,bash,role="execute"]
+----
+oc create -n netproj-b -f {{ HOME_PATH }}/support/network-policy-block-all.yaml
+----
+
+### 接続性のテスト #2 (失敗する)
+全ての接続を遮断する `NetworkPolicy` CR が適用されたため、`netproj-a` *Project* の *Pod* と`netproj-b` **Project**の Pod 間の接続がブロックされるようになりました。
+
+次のコマンドでテストを行います。:
+
+[source,bash,role="execute"]
+----
+bash {{ HOME_PATH }}/support/test-connectivity.sh
+----
+
+次のようなものが表示されます。:
+
+[source]
+----
+Getting Pod B's IP... 10.129.0.180
+Getting Pod A's Name... ose-1-66dz2
+Checking connectivity between Pod A and Pod B............ FAILED!
+----
+
+最後の行が、 `FAILED!` である事に注意してください。
+これは、`netproj-a` **Project**の Pod が `netproj-b` **Project**の　Pod に接続できなかったことを意味します (期待通りの動作です)。
+
+適用されている `NetworkPolicy` を表示には以下を実行します。
+[source,bash,role="execute"]
+----
+oc get networkpolicy -n netproj-b
+----
+以下が表示されます。
+
+```
+NAME              POD-SELECTOR   AGE
+deny-by-default   <none>         3m19s
+```
+
+
+### アクセス許可
+複数の `NetworkPolicy` CR を作成することで、**Project**内の個別の Pod や　Pod のグループへアクセスを許可することができます。
+
+以下は、`run: ose` というラベルを持つ **Project** 内のすべての Pod に対して、TCP 上の 5000 番ポートへのアクセスを許可します。
+`netproj-b` **Project**の Pod はこのラベルを持っています。
+
+ingressセクションでは、ラベル `name: netproj-a` を持つすべての**Project**からのアクセスを許可しています。
+
+[source,yaml]
+----
+# allow access to TCP port 5000 for pods with the label "run: ose" specifically
+# from projects with the label "name: netproj-a".
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-tcp-5000-from-netproj-a-namespace
+spec:
+  podSelector:
+    matchLabels:
+      run: ose
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 5000
+    from:
+    - namespaceSelector:
+        matchLabels:
+          name: netproj-a
+----
+`podSelector` は、ローカル**Project**の Pod を特定のラベルセレクタを使ってマッチさせる箇所であることに注意してください。
+
+**Project**内に存在するすべての `NetworkPolicy` の条件を組み合わせて、**Project**内の Pod へのアクセス許可を作成しています。
+今回のケースでは、"deny all " ポリシーと "allow TCP 5000 " ポリシーが組み合わされています。
+
+`netproj-b` **Project**内の Pod へのアクセスを `netproj-a` **Project**内のすべての Pod から許可するには、上記の NetworkPolicy を以下のコマンドで適用します。:
+
+[source,bash,role="execute"]
+----
+oc create -n netproj-b -f {{ HOME_PATH }}/support/network-policy-allow-all-from-netproj-a.yaml
+----
+
+### 接続性のテスト #3 (再び成功するはず)
+"5000番ポートの `netproj-a` からのアクセスを許可する" という NetworkPolicy が適用されているので、`netproj-a` **Project**内の Pod と、`netproj-b` **Project**内の Pod の接続性は再び許可されるはずです。
+
+次を実行する事でテストします。:
+
+[source,bash,role="execute"]
+----
+bash {{ HOME_PATH }}/support/test-connectivity.sh
+----
+
+次のようなものが見えるはずです。：
+
+[source]
+----
+Getting Pod B's IP... 10.129.0.180
+Getting Pod A's Name... ose-1-66dz2
+Checking connectivity between Pod A and Pod B... worked
+----
+
+最後の行が、 `worked` になっている事に注目してください。
+これは、`netproj-a` **Project**の Pod が `netproj-b` **Project**の Pod に接続できたことを意味します (期待通りの動作です)。
+

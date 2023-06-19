@@ -1,0 +1,750 @@
+= アプリケーション管理の基礎
+:experimental:
+
+== 演習の概要
+このモジュールでは、`oc` ツールを使用してサンプルアプリケーションをデプロイし、OpenShift Container Platform上でのコアとなる概念、基本オブジェクト、アプリケーション管理の基本について学習します。
+
+---
+
+=== OpenShiftのコアとなる概念
+OpenShiftの管理者として、アプリケーションに関連するいくつかのコアとなるビルディングブロックを理解することは重要です。これらのビルディングブロックを理解することで、プラットフォーム上でのアプリケーション管理の全体像をよりよく理解することができます。
+
+=== Projects
+*Project* は一種の「バケツ」です。これは、すべてのユーザのリソースが存在するメタ構造です。 +
+管理の観点からは、各Projectはテナントのように考えることができます。そのためProjectにはアクセスできる複数のユーザがいるかもしれませんし、ユーザは複数のProjectにアクセスできるかもしれません。 +
+技術的に言えば、リソースはユーザが所有しているのではなく、Projectが所有しています。したがって、ユーザを削除しても作成されたリソースには影響しません。
+
+この演習ではまず、いくつかのリソースを保持するProjectを作成します。
+
+[source,bash,role="execute"]
+----
+oc new-project app-management
+----
+
+=== サンプルアプリケーションのデプロイ
+`new-app` コマンドは、OpenShiftでアプリケーションを実行するように指示するシンプルな方法です。
+ユーザはこのコマンドを使ってOpenShiftで既存のイメージを起動させたり、ソースコードをビルドしてデプロイしたり、テンプレートをインスタンス化したりするのが一般的です。 +
+
+次のようにQuay上に存在する特定のイメージを起動します。
+
+[source,bash,role="execute"]
+----
+oc new-app quay.io/openshiftroadshow/mapit
+----
+
+出力は以下のようになります。
+
+----
+--> Found container image 7ce7ade (3 years old) from quay.io for "quay.io/openshiftroadshow/mapit"
+
+    * An image stream tag will be created as "mapit:latest" that will track this image
+
+--> Creating resources ...
+    imagestream.image.openshift.io "mapit" created
+    deployment.apps "mapit" created
+    service "mapit" created
+--> Success
+    Application is not exposed. You can expose services to the outside world by executin
+g one or more of the commands below:
+     'oc expose service/mapit'
+    Run 'oc status' to view your app.
+----
+
+このコマンドの出力でOpenShiftがいくつかのリソースを自動的に作成したことがわかります。作成されたリソースを少し時間をかけて調べてみましょう。
+
+`new-app` の機能の詳細については、 `oc new-app -h` を実行して、そのヘルプメッセージを見てください。
+
+=== Pods
+
+.OpenShift Pods
+image::images/openshift_pod.png[]
+
+*Pod* とは、ホスト上に一緒にデプロイされた1つまたは複数のコンテナのことです。PodはOpenShiftで定義、デプロイ、管理できるコンピュートリソースの最小の単位です。 +
+各PodはSDN上で独自の内部IPアドレスを割り当てられ、ポート範囲全体を所有します。また、Pod内のコンテナはローカルストレージ領域とネットワークリソースを共有できます。
+
+PodはOpenShiftでは *静的な* オブジェクトとして扱われ、実行中にPodの定義を変更することはできません。
+
+Podの一覧は次のように取得できます。
+
+[source,bash,role="execute"]
+----
+oc get pods
+----
+
+以下のように出力されます。
+
+----
+NAME                     READY   STATUS    RESTARTS   AGE
+mapit-764c5bf8b8-l49z7   1/1     Running   0          2m53s
+----
+
+NOTE: Pod名はデプロイプロセスの一部として動的に生成されますが、これについては後ほど説明します。また表示される名前はこの表示とは少し異なります。
+
+`oc describe` コマンドを使うと、Podの詳細を知ることができます。上記のPod名の場合、
+
+[source,bash,role="execute"]
+----
+oc describe pod -l deployment=mapit
+----
+
+NOTE: `-l deployment=mapit` Podは後述する `Deployment` に関連しています。
+
+と実行すると、以下のような出力が表示されます。
+
+----
+Name:         mapit-764c5bf8b8-l49z7
+Namespace:    app-management
+Priority:     0
+Node:         ip-10-0-128-29.us-west-2.compute.internal/10.0.128.29
+Start Time:   Tue, 10 Nov 2020 21:01:09 +0000
+Labels:       deployment=mapit
+              pod-template-hash=764c5bf8b8
+Annotations:  k8s.v1.cni.cncf.io/network-status:
+                [{
+                    "name": "",
+                    "interface": "eth0",
+                    "ips": [
+                        "10.129.2.99"
+                    ],
+                    "default": true,
+                    "dns": {}
+                }]
+              k8s.v1.cni.cncf.io/networks-status:
+                [{
+                    "name": "",
+                    "interface": "eth0",
+                    "ips": [
+                        "10.129.2.99"
+                    ],
+                    "default": true,
+                    "dns": {}
+                }]
+              openshift.io/generated-by: OpenShiftNewApp
+              openshift.io/scc: restricted
+Status:       Running
+IP:           10.129.2.99
+IPs:
+  IP:           10.129.2.99
+Controlled By:  ReplicaSet/mapit-764c5bf8b8
+Containers:
+  mapit:
+    Container ID:   cri-o://fb708e659c19c6aaf8211bf7e3029f8adc8cf14959bcaefa5c7e6df17d37
+feaf
+    Image:          quay.io/openshiftroadshow/mapit@sha256:8c7e0349b6a016e3436416f3c54debda4594ba0
+9fd34b8a0dee0c4497102590d
+    Image ID:       quay.io/openshiftroadshow/mapit@sha256:8c7e0349b6a016e3436416f3c54debda4594ba0
+9fd34b8a0dee0c4497102590d
+    Ports:          9779/TCP, 8080/TCP, 8778/TCP
+    Host Ports:     0/TCP, 0/TCP, 0/TCP
+    State:          Running
+      Started:      Tue, 10 Nov 2020 21:01:29 +0000
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-v7fpq (ro)
+Conditions:
+  Type              Status
+  Initialized       True
+  Ready             True
+  ContainersReady   True
+  PodScheduled      True
+Volumes:
+  default-token-v7fpq:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-v7fpq
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason          Age    From               Message
+  ----    ------          ----   ----               -------
+  Normal  Scheduled       6m50s  default-scheduler  Successfully assigned app-management
+/mapit-764c5bf8b8-l49z7 to ip-10-0-128-29.us-west-2.compute.internal
+  Normal  AddedInterface  6m48s  multus             Add eth0 [10.129.2.99/23]
+  Normal  Pulling         6m48s  kubelet            Pulling image "quay.io/openshiftroadshow/mapit
+@sha256:8c7e0349b6a016e3436416f3c54debda4594ba09fd34b8a0dee0c4497102590d"
+  Normal  Pulled          6m31s  kubelet            Successfully pulled image "quay.io/t
+horaxe/mapit@sha256:8c7e0349b6a016e3436416f3c54debda4594ba09fd34b8a0dee0c4497102590d" in
+ 16.762028989s
+  Normal  Created         6m31s  kubelet            Created container mapit
+  Normal  Started         6m31s  kubelet            Started container mapit
+----
+
+これは、実行しているPodの詳細な説明です。Podがどのノードで動いているか、Podの内部IPアドレス、各種ラベル、その他何が起こっているかについての情報を見ることができます。
+
+### Services
+.OpenShift Service
+image::images/openshift_service.png[]
+
+*Services* はOpenShift内部でPodのようなグループを見つけるのに便利な抽象化レイヤーを提供します。 +
+*Service* はまた、それらのPodと、OpenShift環境内からPodにアクセスする必要のある他の何かとの間の内部プロキシ/ロードバランサーとしても機能します。 +
+例えば、負荷を処理するためにより多くの `mapit` インスタンスが必要な場合、より多くのPodを立ち上げることができますが、OpenShiftは自動的にそれらのPodを *Service* へのエンドポイントとしてマップします。これによってアプリケーションへのリクエストはこれまでと変わらず処理され、*Service* がリクエストをより適切に処理するようになったことを除いて、リクエストは何も変わりません。
+
+OpenShiftにイメージを実行するよう依頼することで、`new-app` コマンドが自動的に *Service* を作成しました。 +
+ここで覚えていただきたいことは、*Service* はOpenShift内部のためのものであるということです。「外の世界」から利用することはできません。これについてはあとで学習します。
+
+*Service* が一連のPodにマップされる方法は、*Labels* と *Selectors* を介して行われます。 +
+*Services* には固定IPアドレスが割り当てられ、多くのポートやプロトコルをマッピングすることができます。
+
+手作業で作成するためのYAML形式など、
+https://docs.openshift.com/container-platform/4.9/architecture/understanding-development.html#understanding-kubernetes-pods[Services]
+については公式ドキュメントに多くの情報があります。
+
+それではProject内の *Service* のリストを見てみましょう。
+
+[source,bash,role="execute"]
+----
+oc get services
+----
+
+下記のように表示されます。
+
+----
+NAME    TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+mapit   ClusterIP   172.30.167.160   <none>        8080/TCP,8778/TCP,9779/TCP   26
+----
+
+NOTE: *Service* のIPアドレスは作成時に動的に割り当てられますが、これは変わることはありません。*Service* のIPアドレスは *Service* が削除されるまで予約されます。
+
+*Pod* と同じように、*Service* も `describe` で説明を表示することができます。OpenShiftではほとんどのオブジェクトを `describe` で説明を表示することができます。
+
+[source,bash,role="execute"]
+----
+oc describe service mapit
+----
+
+以下のように表示されます。
+
+----
+Name:              mapit
+Namespace:         app-management
+Labels:            app=mapit
+                   app.kubernetes.io/component=mapit
+                   app.kubernetes.io/instance=mapit
+Annotations:       openshift.io/generated-by: OpenShiftNewApp
+Selector:          deployment=mapit
+Type:              ClusterIP
+IP:                172.30.167.160
+Port:              8080-tcp  8080/TCP
+TargetPort:        8080/TCP
+Endpoints:         10.129.2.99:8080
+Port:              8778-tcp  8778/TCP
+TargetPort:        8778/TCP
+Endpoints:         10.129.2.99:8778
+Port:              9779-tcp  9779/TCP
+TargetPort:        9779/TCP
+Endpoints:         10.129.2.99:9779
+Session Affinity:  None
+Events:            <none>
+----
+
+すべてのオブジェクトに関する情報(それらの定義、オブジェクトの状態など)は、etcdデータストアに格納されます。 +
+etcdはデータをKeyとValueのペアとして格納し、このデータはすべてシリアライズ可能なデータオブジェクト（JSON、YAML）として表すことができます。
+
+*Service* のYAML出力を見てみましょう。
+
+[source,bash,role="execute"]
+----
+oc get service mapit -o yaml
+----
+
+以下のように表示されます。
+
+----
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: "2020-11-10T21:01:09Z"
+  labels:
+    app: mapit
+    app.kubernetes.io/component: mapit
+    app.kubernetes.io/instance: mapit
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:openshift.io/generated-by: {}
+        f:labels:
+          .: {}
+          f:app: {}
+          f:app.kubernetes.io/component: {}
+          f:app.kubernetes.io/instance: {}
+      f:spec:
+        f:ports:
+          .: {}
+          k:{"port":8080,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+          k:{"port":8778,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+          k:{"port":9779,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+        f:selector:
+          .: {}
+          f:deployment: {}
+        f:sessionAffinity: {}
+        f:type: {}
+    manager: oc
+    operation: Update
+    time: "2020-11-10T21:01:09Z"
+  name: mapit
+  namespace: app-management
+  resourceVersion: "106194"
+  selfLink: /api/v1/namespaces/app-management/services/mapit
+  uid: 921c2e2c-a53e-4f83-8e76-9df962069314
+spec:
+  clusterIP: 172.30.167.160
+  ports:
+  - name: 8080-tcp
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: 8778-tcp
+    port: 8778
+    protocol: TCP
+    targetPort: 8778
+  - name: 9779-tcp
+    port: 9779
+    protocol: TCP
+    targetPort: 9779
+  selector:
+    deployment: mapit
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
+----
+
+ここで `selector` スタンザに注目し、これを覚えておきましょう。
+
+同様に *Pod* のYAMLも調べてみて、OpenShiftがコンポーネント同士を繋げている様子を理解するのも面白いことです。 +
+`mapit` Podの名前を探して、以下を実行します。
+
+[source,bash,role="execute"]
+----
+oc get pod -l deployment=mapit -o jsonpath='{.items[*].metadata.labels}' | jq -r
+----
+
+NOTE: The `-o jsonpath` は特定のフィールドを選択します。このケースではマニフェストの `labels` セクションを尋ねています。
+
+以下のように表示されているはずです。
+
+----
+{
+  "deployment": "mapit",
+  "pod-template-hash": "764c5bf8b8"
+}
+----
+
+* *Service* には `deployment: mapit` を参照する `selector` スタンザがあります。
+* *Pod* には複数の *Label* があります。
+** `deployment: mapit`
+** `pod-template-hash: 764c5bf8b8`
+
+*Labels* は単なるkey/valueのペアです。この *Project* 内で *Selector* に一致する *Label* を持つ *Pod* はすべて、 *Service* 関連付けられます。 +
+もう一度 `oc describe` の出力を見てみると、*Service* のエンドポイントが1つあることが分かります。これはつまり、既存の `mapit` *Pod* であることがわかります。
+
+`new-app` のデフォルトの動作は、リクエストされたアイテムのインスタンスを1つだけ作成することです。これを修正/調整する方法を見ていきますが、その前にいくつかの概念を学んでおきましょう。
+
+### Deployment と Replica Sets
+
+*Service* が *Pod* のルーティングとロードバランシングを提供するのに対し、 *ReplicaSets (RS)* は、必要な数の *Pod*(=レプリカ) を確実に存在させるために使用されます。 +
+例えば、アプリケーションを常に3つの *Pod* にスケールさせておきたい場合は、*ReplicaSet* が必要になります。*ReplicaSet* がないと、何らかの理由で停止・終了した *Pod* は自動的に再作成されません。*ReplicaSet* はOpenShiftが「自己修復」する方法を提供します。
+
+*Deployment* (deploy) はOpenShift内の何かをどのようにデプロイするかを定義します。以下は https://docs.openshift.com/container-platform/4.9/applications/deployments/what-deployments-are.html#deployments-kube-deployments_what-deployments-are[deployments documentation^] の抜粋です。
+
+----
+Deployments describe the desired state of a particular component of an
+application as a Pod template. Deployments create ReplicaSets, which
+orchestrate Pod lifecycles.
+----
+
+ほとんどの場合、*Pod* , *Service* , *ReplicaSet* , *Deployment* のリソースを一緒に使用することになります。そして、ほとんどの場合、OpenShiftがすべてのリソースを作成してくれます。
+
+*Deployment* や *Service* を必要としない *Pod* や *RS* が求められるエッジケースもありますが、これらはこの演習では説明しない高度なトピックです。
+
+NOTE: 以前のOpenShiftのバージョンでは *DeploymentConfig* と呼ばれるものが使用されていました。まだ有効なメカニズムですが、*Deployment* に移行しており、`oc new-app` コマンドによって何が作成されるのかは
+https://docs.openshift.com/container-platform/4.9/applications/deployments/what-deployments-are.html#deployments-comparing-deploymentconfigs_what-deployments-are[official
+documentation] を参照してください。
+
+### Deploymentに関連するオブジェクトの探索
+
+*ReplicaSet* と *Deployment* が何かが分かったので、それらがどのように動作し、どのように関連しているかを探ってみましょう。 +
+OpenShiftに `mapit` イメージを立ち上げるように指示したときに作成された *Deployment* (deploy)を見てみましょう。
+
+[source,bash,role="execute"]
+----
+oc get deploy
+----
+
+以下のように表示されます。
+
+----
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+mapit   1/1     1            1           76m
+----
+
+より詳しく知るために、*ReplicaSet (RS)* について調べることができます。
+
+OpenShiftに `mapit` イメージを立ち上げるように指示したときに作成された *ReplicaSet (RS)* を見てみましょう。
+
+[source,bash,role="execute"]
+----
+oc get rs
+----
+
+以下のように表示されます。
+
+----
+NAME               DESIRED   CURRENT   READY   AGE
+mapit-764c5bf8b8   1         1         1       77m
+----
+
+これより、1つの *Pod* がデプロイされることが希望され (Desired)、実際にデプロイされた *Pod* が1つあることがわかります (Current)。希望する *Pod* の数を変更することで、OpenShiftに *Pod* の数を増やしたいか減らしたいかを伝えることができます。
+
+### アプリケーションのスケーリング
+
+`mapit` アプリケーションを2つのインスタンスまでスケールしてみましょう。これは scale コマンドで行うことができます。
+
+[source,bash,role="execute"]
+----
+oc scale --replicas=2 deploy/mapit
+----
+
+以下のコマンドでレプリカの数が変更されたことを確認できます。
+
+[source,bash,role="execute"]
+----
+oc get rs
+----
+
+以下のように表示されます。
+
+----
+NAME               DESIRED   CURRENT   READY   AGE
+mapit-764c5bf8b8   2         2         2       79m
+mapit-8695cb9c67   0         0         0       79m
+----
+
+NOTE: 古いバージョンのものが保持されています。これにより、アプリケーションを以前のバージョンに "rollback"することができます。
+
+これで 2つのレプリカができたことがわかります。`oc get pods` コマンドでPodの数を確認してみましょう。
+
+[source,bash,role="execute"]
+----
+oc get pods
+----
+
+以下のように表示されます。
+
+----
+NAME                     READY   STATUS    RESTARTS   AGE
+mapit-764c5bf8b8-b4vpn   1/1     Running   0          112s
+mapit-764c5bf8b8-l49z7   1/1     Running   0          81m
+----
+
+そして最後に、*Service* が2つのエンドポイントを正しく反映しているかを検証してみましょう。
+
+[source,bash,role="execute"]
+----
+oc describe svc mapit
+----
+
+以下のように表示されます。
+
+----
+Name:              mapit
+Namespace:         app-management
+Labels:            app=mapit
+                   app.kubernetes.io/component=mapit
+                   app.kubernetes.io/instance=mapit
+Annotations:       openshift.io/generated-by: OpenShiftNewApp
+Selector:          deployment=mapit
+Type:              ClusterIP
+IP:                172.30.167.160
+Port:              8080-tcp  8080/TCP
+TargetPort:        8080/TCP
+Endpoints:         10.128.2.19:8080,10.129.2.99:8080
+Port:              8778-tcp  8778/TCP
+TargetPort:        8778/TCP
+Endpoints:         10.128.2.19:8778,10.129.2.99:8778
+Port:              9779-tcp  9779/TCP
+TargetPort:        9779/TCP
+Endpoints:         10.128.2.19:9779,10.129.2.99:9779
+Session Affinity:  None
+Events:            <none>
+----
+
+*Service* のエンドポイントを見る別の方法としては、次のようなものがあります。
+
+[source,bash,role="execute"]
+----
+oc get endpoints mapit
+----
+
+すると、以下のように表示されます。
+
+----
+NAME    ENDPOINTS                                                        AGE
+mapit   10.128.2.19:8080,10.129.2.99:8080,10.128.2.19:9779 + 3 more...   81m
+----
+
+各 *Pod* はOpenShift環境内で一意のIPアドレスを受信するため、IPアドレスは異なる可能性があります。エンドポイントのリストは、Serviceの背後にあるPodの数を確認する簡単な方法です。
+
+全体的に見ると、アプリケーション(*Service* 内の *Pod*)をスケーリングすることはこのように簡単なことがわかります。 +
+OpenShiftは既存のイメージの新しいインスタンスを起動しているだけなので、特にそのイメージがすでにノードにキャッシュされている場合は、アプリケーションのスケーリングは非常に早く行われることがあります。
+
+最後に注意すべきことは、この *Service* には実際にいくつかのポートが定義されているということです。 +
+先ほど、1つの *Pod* が1つのIPアドレスを取得し、そのIPアドレス上のポート空間全体を制御すると述べました。*Pod* 内で実行されている何かが複数のポートをリッスンすることがありますが(単一のコンテナが複数のポートを使用しているケース、個別のコンテナが個別のポートを使用しているケース、それらが混在しているケース、など)、*Service* は実際にはポートを異なる場所にプロキシ/マッピングすることができます。
+
+例えば、*Service* は(レガシーな理由で)80番ポートをリッスンすることができますが、*Pod* は8080や8888などの他のポートをリッスンしている可能性があります。
+
+この `mapit` の場合、私たちが実行したイメージは `Dockerfile` にいくつかの `EXPOSE` 文を持っていたので、OpenShiftは自動的に *Service* 上にポートを作成し、それらを *Pod* にマッピングしました。
+
+### アプリケーションの 「セルフヒーリング」
+
+OpenShiftの *RS* は、希望する数の *Pod* が実際に動いているかどうかを常に監視しています。そのため、何か正しくないことがあればOpenShiftが「修正」することも期待できます。
+
+現在2つの *Pod* が稼働しているので、1つを「誤って」killしてしまった場合にどうなるか見てみましょう。`oc get pods` コマンドをもう一度実行して、*Pod* 名を選択し、次のようにしてみます。
+
+[source,bash,role="execute"]
+----
+oc get pods
+----
+
+すると、以下のように表示されます。
+
+----
+NAME                     READY   STATUS    RESTARTS   AGE
+mapit-764c5bf8b8-lxnvw   1/1     Running   0          2m28s
+mapit-764c5bf8b8-rscss   1/1     Running   0          2m54s
+----
+
+*Deployment* `mapit` に属するPodを削除します。
+
+[source,bash,role="execute"]
+----
+oc delete pods -l deployment=mapit --wait=false
+----
+
+再度 `oc get pods` コマンドを実行します。
+
+[source,bash,role="execute"]
+----
+oc get pods
+----
+
+何か気づきましたか? そうです、もう新しいコンテナが作成されています。
+
+また、*Pod* の名前が変わっています。これは、OpenShiftが現在の状態が(削除したので *Pod* が0)、希望の状態(*Pod* が2)と一致していないことを即座に検出し、*Pod* をスケジューリングして修正したためです。
+
+### Routes
+.OpenShift Route
+image::images/openshift_route.png[]
+
+*Service* はOpenShift内で内部の抽象化と負荷分散を提供しますが、OpenShift**外**のクライアント(ユーザ、システム、デバイスなど)がアプリケーションにアクセスする必要がある場合もあります。 +
+外部クライアントがOpenShift内で実行されているアプリケーションにアクセスする方法は、OpenShiftのルーティングレイヤーを介して行われます。そしてその背後にあるオブジェクトが *Route* です。
+
+デフォルトのOpenShift Router(HAProxy)は、着信リクエストのHTTPヘッダを使用して、どこにプロキシするかを決定します。 +
+*Service*(ひいては *Pod*)に外部からアクセスできるようにしたい場合は、*Route* を作成する必要があります。オプションで *Route* に対してTLSなどのセキュリティを定義することができます。
+
+Routerの設定を覚えていますか？おそらく覚えていないと思います。それは、OpenShiftのインストール中にRouter用のOperatorがデプロイされ、OperatorがRouterを作成したからです。 +
+Routerは `openshift-ingress` *Project* にあり、以下のコマンドでその情報を見ることができます。
+
+[source,bash,role="execute"]
+----
+oc describe deployment router-default -n openshift-ingress
+----
+RouterのOperatorについては、後続の演習で詳しく説明します。
+
+### Route の作成
+*Route* の作成は非常に簡単なプロセスです。コマンドラインから *Service* を `exporse` するだけです。 +
+先ほどの *Service* の名前は `mapit` となっています。*Service* 名があれば、*Route* の作成はコマンド1つで簡単にできます。
+
+[source,bash,role="execute"]
+----
+oc expose service mapit
+----
+
+このように表示されます。
+
+----
+route.route.openshift.io/mapit exposed
+----
+
+次のコマンドで *Route* が作成されたことを確認します。
+
+[source,bash,role="execute"]
+----
+oc get route
+----
+
+以下のように表示されます。
+
+----
+NAME    HOST/PORT                                             PATH   SERVICES   PORT       TERMINATION   WILDCARD
+mapit   mapit-app-management.{{ ROUTE_SUBDOMAIN }}                   mapit      8080-tcp                 None
+----
+
+`HOST/PORT` 列を見ると、見慣れたFQDNが表示されています。OpenShiftはデフォルトで、定型的なホスト名で *Service* を `expose` します。
+
+`{SERVICENAME}-{PROJECTNAME}.{ROUTINGSUBDOMAIN}`
+
+後段のRouter Operatorラボでは、この設定とその他の設定オプションを探ります。
+
+Routerの構成では、Routerがリッスンするドメインを指定しますが、まず最初にRouterにこれらのドメインに対するリクエストを取得する必要があります +
+Routerが存在するホストに `+*.apps...+` を指すワイルドカードDNSエントリがあります。OpenShiftは *Service* 名、*Project* 名、そしてルーティングサブドメインを連結してこのFQDN/URLを作成します。
+
+このURLにはブラウザや `curl` などのツールを使ってアクセスできます。インターネット上のどこからでもアクセスできるようにしてください。
+
+*Route* は *Service* に関連付けられており、Routerは自動的に *Pod* に直接接続をプロキシします。Router自体は *Pod* として動作し、は「本当の」インターネットとSDNの橋渡しをします。
+
+これまでに行ったことを見返してみると、3つのコマンドでアプリケーションをデプロイし、スケールし、外部の世界からアクセスできるようにしました。
+
+----
+oc new-app quay.io/thoraxe/mapit
+oc scale --replicas=2 deploy/mapit
+oc expose service mapit
+----
+
+### スケールダウン
+続ける前に、アプリケーションを1つのインスタンスにスケールダウンしてください。
+
+[source,bash,role="execute"]
+----
+oc scale --replicas=1 deploy/mapit
+----
+
+### アプリケーションのProbe
+OpenShiftでは、アプリケーションインスタンスの活性度(liveness)や準備状態(readiness)をチェックするための初歩的な機能が提供されています。基本的なチェックでは不十分な場合は *Pod* およびコンテナ内でコマンドを実行してアプリケーションの死活をチェックすることも可能です。そのコマンドは、コンテナイメージ内に既にインストールされている任意の言語を使用した複雑なスクリプトであるかもしれません。 +
+
+定義できるアプリケーションProbeには2種類あります。
+
+*Liveness Probe*
+
+Liveness Probeは、設定されているコンテナが実行されているかどうかをチェックします。Liveness Probeが失敗した場合、コンテナはkillされ再起動ポリシーが適用されます
+
+*Readiness Probe*
+
+Readiness Probeは、コンテナがリクエストをサービスする準備ができているかどうかを判断します。Readiness Probeが失敗した場合、エンドポイントのコントローラは、コンテナのIPアドレスをマッチするはずのすべての *Service* のエンドポイントから削除します。Readiness Probeは、コンテナが実行中であっても、トラフィックを受信すべきではないことをエンドポイントのコントローラに知らせるために使用することができます。
+
+アプリケーションのProbeに関する詳細は、ドキュメントの
+https://docs.openshift.com/container-platform/4.9/applications/application-health.html[Application
+Health] セクションを参照してください。
+
+### アプリケーションへのProbeの追加
+`oc set` コマンドは、いくつかの異なる機能を実行するために使用することができますが、そのうちの1つにProbeの作成/編集があります。 +
+`mapit` アプリケーションはエンドポイントを公開していますので、それが生きていて応答する準備ができているかどうかを確認することができます。
+次のように `curl` を使ってテストすることが可能です。
+
+[source,bash,role="execute"]
+----
+curl mapit-app-management.{{ ROUTE_SUBDOMAIN }}/health
+----
+
+いくつかのJSONが得られます。
+
+[source,json]
+----
+{"status":"UP","diskSpace":{"status":"UP","total":10724835328,"free":10257825792,"threshold":10485760}}
+----
+
+以下のコマンドを使用して、OpenShiftにこのエンドポイントが生きているかどうかを調べるように依頼することができます。
+
+[source,bash,role="execute"]
+----
+oc set probe deploy/mapit --liveness --get-url=http://:8080/health --initial-delay-seconds=30
+----
+
+`oc describe` の出力からこのProbeが定義されていることがわかります。
+
+[source,bash,role="execute"]
+----
+oc describe deploy mapit
+----
+
+以下のようなセクションが表示されます。
+
+----
+...
+  Containers:
+   mapit:
+    Image:        quay.io/openshiftroadshow/mapit@sha256:8c7e0349b6a016e3436416f3c54debda
+4594ba09fd34b8a0dee0c4497102590d
+    Ports:        9779/TCP, 8080/TCP, 8778/TCP
+    Host Ports:   0/TCP, 0/TCP, 0/TCP
+    Liveness:     http-get http://:8080/health delay=30s timeout=1s period=10s
+#success=1 #failure=3
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+...
+----
+
+Readyiness Probeも同様にできます。
+
+[source,bash,role="execute"]
+----
+oc set probe deploy/mapit --readiness --get-url=http://:8080/health --initial-delay-seconds=30
+----
+
+### Deployment と ReplicaSets のテスト
+
+*Deployment* への各変更は、構成変更としてカウントされ、新しいデプロイメントのトリガーとなります。
+
+次を実行して下さい。
+
+[source,bash,role="execute"]
+----
+oc get deployments
+----
+
+以下のように表示されるはずです。
+
+----
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+mapit   1/1     1            1           131m
+----
+
+最初のdeploymentの後に2つの構成変更を行ったため、*Deployment* の4番目のリビジョンになっています。
+
+以下を実行して下さい。
+
+[source,bash,role="execute"]
+----
+oc get replicasets
+----
+
+次のように表示されるはずです。
+
+----
+NAME               DESIRED   CURRENT   READY   AGE
+mapit-5f695ff4b8   1         1         1       4m19s
+mapit-668f69cdd5   0         0         0       6m18s
+mapit-764c5bf8b8   0         0         0       133m
+mapit-8695cb9c67   0         0         0       133m
+----
+
+新しいdeploymentがトリガーされるたびに、新しい *ReplicaSet* が作成されます。 +
+*ReplicaSet* は *Pod* が存在することを保証する責任を持ちます。古い *RS* のスケールは0で、最新の *RS* のスケールは1であることに注意してください。
+
+これらの *RS* を、それぞれ `oc describe` すると、以前のバージョンにはProbeがなく、最新の実行中の *RS* にはそれぞれ新しいProbeがあることがわかります。

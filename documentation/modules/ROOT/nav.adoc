@@ -1,11 +1,39 @@
-* 1. OpenShift Pipeline Lab
-** xref:10-pipeline-install.adoc[OpenShift Pipelines インストール]
+
+* 01. OpenShift 基礎
+** xref:x.adoc[1. コンテナデプロイと管理]
+** xref:x.adoc[2. 永続ストレージ]
+** xref:x.adoc[3. ノードの動的管理]
+** xref:x.adoc[4. Infra ノードの作成]
+** xref:x.adoc[5. 外部認証プロバイダ設定]
+** xref:x.adoc[6. プロジェクトのクオータ設定]
+** xref:x.adoc[7. クラスタのクオータ設定]
+** xref:x.adoc[8. Project セルフプロビジョニング]
+** xref:x.adoc[9. Network Policy]
+** xref:x.adoc[10. Taint/Toleration]
+
+* 02. OpenShift Data Foundation
+* 03. Advanced Cluster Management
+** xref:32_Deploying_And_Importing_Clusters_Lab.adoc[1. Cluster Deployment]
+** xref:33_Pooling_And_Organizing_Clusters_Lab.adoc[2. Cluster management]
+** xref:34_Application_Lab.adoc[3. App Deployment]
+** xref:35_PoolSet_Optional_And_Cleanup.adoc[4. PoolSet]
+
+* 04. Advanced Cluster Security
+* 10. OpenShift Logging
+* 11. OpenShift Monitoring
+
+* 20. OpenShift Pipeline Lab
+** xref:10-pipeline-install.adoc[インストール]
 ** xref:11-pipelines.adoc[1. Pipelines -1/2]
 ** xref:12-add-task.adoc[2. Pipelines -2/2]
 ** xref:13-triggers.adoc[3. Tekton Triggers]
 
-* 2. OpenShift GitOps Lab
-** xref:20-GitOps-install.adoc[OpenShift GitOps インストール]
+* 21. OpenShift GitOps Lab
+** xref:20-GitOps-install.adoc[インストール]
 ** xref:21-GitOps.adoc[1. OpenShift GitOps]
 ** xref:22-Kustomize.adoc[2. Kustomizeインテグレーション]
 ** xref:23-Helm.adoc[3. Helmインテグレーション]
+
+* 40. Data Streaming Lab
+
+
