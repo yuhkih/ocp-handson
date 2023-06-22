@@ -1,4 +1,4 @@
-= MachineSets, Machines, Nodes
+= ノードの動的管理
 :navtitle: app-basics
 include::_attributes.adoc[]
 
@@ -18,7 +18,8 @@ Kubernetes `Node` はコンテナがオーケストレーションされ、`Pod`
 
 以下を実行します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get machineset -n openshift-machine-api
 ----
@@ -36,7 +37,8 @@ OpenShiftがインストールされると、インストーラはクラウド�
 
 ※演習で使用する環境によっては、`Node` の数が異なる場合があります。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get machine -n openshift-machine-api
 ----
@@ -44,13 +46,11 @@ oc get machine -n openshift-machine-api
 以下のように表示されます。
 
 ----
-NAME                                         INSTANCE              STATE     TYPE         REGION      ZONE         AGE
-cluster-f4a3-lpxbs-master-0                  i-04280885cafad3130   running   m4.xlarge    us-east-2   us-east-2a   47h
-cluster-f4a3-lpxbs-master-1                  i-0def910edcae51d11   running   m4.xlarge    us-east-2   us-east-2b   47h
-cluster-f4a3-lpxbs-master-2                  i-0beb5e40214d706fc   running   m4.xlarge    us-east-2   us-east-2c   47h
-cluster-f4a3-lpxbs-worker-us-east-2a-b94pr   i-0a922c0fe765caa3c   running   m5.2xlarge   us-east-2   us-east-2a   47h
-cluster-f4a3-lpxbs-worker-us-east-2b-m8gbx   i-0fb8d960b8a3a3343   running   m5.2xlarge   us-east-2   us-east-2b   47h
-cluster-f4a3-lpxbs-worker-us-east-2c-5tmg7   i-0151c72cd85f85038   running   m5.2xlarge   us-east-2   us-east-2c   47h
+NAME                                          PHASE     TYPE           REGION      ZONE         AGE
+cluster-zbwlg-cbgq7-master-0                  Running   c6in.2xlarge   us-east-2   us-east-2a   4h24m
+cluster-zbwlg-cbgq7-worker-us-east-2a-67kp2   Running   m5a.4xlarge    us-east-2   us-east-2a   4h21m
+cluster-zbwlg-cbgq7-worker-us-east-2a-87hb8   Running   m5a.4xlarge    us-east-2   us-east-2a   4h21m
+cluster-zbwlg-cbgq7-worker-us-east-2a-8zlm4   Running   m5a.4xlarge    us-east-2   us-east-2a   4h21m
 ----
 
 各 `Machine` には対応する `INSTANCE` があります。このIDに見覚えはないでしょうか?これはAWS EC2のインスタンスIDです。また、OpenShiftのMasterの `Machine` も表示されています。これらはある程度ステートフルであり、管理は別のOperatorが別のプロセスを介して処理するため、`MachineSet` の一部ではありません
@@ -62,7 +62,8 @@ cluster-f4a3-lpxbs-worker-us-east-2c-5tmg7   i-0151c72cd85f85038   running   m5.
 
 最後に以下を実行します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get nodes
 ----
@@ -70,13 +71,11 @@ oc get nodes
 以下のように表示されます。
 
 ----
-NAME                                         STATUS   ROLES    AGE   VERSION
-ip-10-0-133-191.us-east-2.compute.internal   Ready    worker   44m   v1.16.2
-ip-10-0-136-83.us-east-2.compute.internal    Ready    master   51m   v1.16.2
-ip-10-0-152-132.us-east-2.compute.internal   Ready    worker   44m   v1.16.2
-ip-10-0-157-139.us-east-2.compute.internal   Ready    master   51m   v1.16.2
-ip-10-0-167-9.us-east-2.compute.internal     Ready    worker   44m   v1.16.2
-ip-10-0-169-121.us-east-2.compute.internal   Ready    master   51m   v1.16.2
+NAME                                         STATUS   ROLES                  AGE     VERSION
+ip-10-0-148-190.us-east-2.compute.internal   Ready    control-plane,master   4h25m   v1.25.7+eab9cc9
+ip-10-0-190-107.us-east-2.compute.internal   Ready    worker                 4h9m    v1.25.7+eab9cc9
+ip-10-0-199-105.us-east-2.compute.internal   Ready    worker                 4h9m    v1.25.7+eab9cc9
+ip-10-0-210-82.us-east-2.compute.internal    Ready    worker                 4h9m    v1.25.7+eab9cc9
 ----
 
 各 `Machine` は、それぞれ `Node` に対応しています。IPIでは、Machine OperatorがEC2インスタンスを作成し、次にCoreOS内のIgnitionがOperatorから最初の命令を受け取る、bootstrapのプロセスが走ります。その結果、EC2インスタンスがOpenShift Nodeとして設定され、クラスタに参加することになります。
@@ -84,32 +83,42 @@ ip-10-0-169-121.us-east-2.compute.internal   Ready    master   51m   v1.16.2
 `oc describe` で様々な `Machine` オブジェクト、`Node` オブジェクトを調べれば、どれがどれと相関しているのかが分かるでしょう。
 
 ### クラスタのスケーリング
-`Operator` の「魔法」と、それを使った `Machine` と `Node` の管理のおかげで、OpenShift 4でのクラスタのスケーリングは非常に簡単に行えます。
+`Operator` による管理と、それを使った `Machine` と `Node` の管理のおかげで、OpenShift 4でのクラスタのスケーリングは非常に簡単に行えます。
 
 もう一度、`MachineSet` のリストを見てみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get machineset -n openshift-machine-api
 ----
 
 そのリストの中で。`MachineSet`のひとつを  oc scaleコマンドでスケールしてみましょう。あなたの `MachineSet` の名前はラボガイドの名前とは異なる可能性があるので、特に注意してください。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 CLUSTERNAME=$(oc get  infrastructures.config.openshift.io cluster  -o jsonpath='{.status.infrastructureName}')
 ZONENAME=$(oc get nodes -L topology.kubernetes.io/zone  --no-headers  | awk '{print $NF}' | tail -1)
-oc scale machineset ${CLUSTERNAME}-worker-${ZONENAME} -n openshift-machine-api --replicas=2
+oc scale machineset ${CLUSTERNAME}-worker-${ZONENAME} -n openshift-machine-api --replicas=4
 ----
 
 `MachineSet` が正常にスケーリングされたというメモが表示されているはずです。次に、`Machine` のリストを見てみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get machines -n openshift-machine-api
 ----
 
-おそらく、`STATE` が `Pending` となっている `Machine` の新しいエントリがすでに存在していると思います。しばらくすると、対応するEC2インスタンスIDが表示され、以下のように表示されます。
+
+
+おそらく、`STATE` が `Pending` となっている `Machine` の新しいエントリがすでに存在していると思います。
+----
+cluster-zbwlg-cbgq7-worker-us-east-2a-s7l7s   Provisioning   m5a.4xlarge    us-east-2   us-east-2a   7s
+----
+
+しばらくすると、対応するEC2インスタンスIDが表示され、以下のように表示されます。
 
 ----
 cluster-f4a3-lpxbs-worker-us-east-2c-h7gdt   i-0b9208ec47f0e206b   running   m5.2xlarge     us-east-2   us-east-2c   47s
@@ -117,7 +126,8 @@ cluster-f4a3-lpxbs-worker-us-east-2c-h7gdt   i-0b9208ec47f0e206b   running   m5.
 
 この時点では、バックグラウンドでは自動的にbootstrap処理が行われています。数分後(最大で5分程度)の出力を見てみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get nodes
 ----
@@ -125,7 +135,7 @@ oc get nodes
 `age` が非常に若いノードが見つかるはずです。
 
 ----
-ip-10-0-166-103.us-east-2.compute.internal   Ready    worker   1m   v1.22.8
+ip-10-0-210-82.us-east-2.compute.internal    Ready    worker                 4h37m   v1.25.7+eab9cc9
 ----
 
 [Note]
@@ -137,7 +147,9 @@ ip-10-0-166-103.us-east-2.compute.internal   Ready    worker   1m   v1.22.8
 
 ${CLUSTERNAME}と${ZONENAME}変数が、数ステップ前のスケールアップ時に設定されていることを確認してください。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
-oc scale machineset ${CLUSTERNAME}-worker-${ZONENAME} -n openshift-machine-api --replicas=1
+oc scale machineset ${CLUSTERNAME}-worker-${ZONENAME} -n openshift-machine-api --replicas=3
 ----
+
