@@ -11,10 +11,6 @@
 ** xref:09_networking.adoc[9. Network Policy]
 ** xref:10_taints-and-tolerations.adoc[10. Taint/Toleration]
 
-*            - - - 
-* 10. [WIP]OpenShift Logging
-* 11. [WIP]OpenShift Monitoring
-*            - - - 
 * 20. OpenShift Pipeline Lab
 ** xref:10-pipeline-install.adoc[インストール]
 ** xref:11-pipelines.adoc[1. Pipelines -1/2]
@@ -26,13 +22,4 @@
 ** xref:21-GitOps.adoc[1. OpenShift GitOps]
 ** xref:22-Kustomize.adoc[2. Kustomizeインテグレーション]
 ** xref:23-Helm.adoc[3. Helmインテグレーション]
-
-*            - - - 
-* 70. [WIP]OpenShift Data Foundation
-
-* 71. [WIP]Advanced Cluster Management
-** xref:32_Deploying_And_Importing_Clusters_Lab.adoc[1. Cluster Deployment]
-** xref:33_Pooling_And_Organizing_Clusters_Lab.adoc[2. Cluster management]
-** xref:34_Application_Lab.adoc[3. App Deployment]
-** xref:35_PoolSet_Optional_And_Cleanup.adoc[4. PoolSet]
 

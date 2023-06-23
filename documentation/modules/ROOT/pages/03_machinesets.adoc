@@ -1,5 +1,5 @@
 = ノードの動的管理
-:navtitle: app-basics
+:navtitle: machinesets
 include::_attributes.adoc[]
 
 本コンテンツは、link:https://github.com/team-ohc-jp-place/openshift-cns-testdrive[MAD Workshop Ops Track] の内容を利用しています。
