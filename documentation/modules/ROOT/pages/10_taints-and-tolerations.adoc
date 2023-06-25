@@ -38,14 +38,16 @@ Taint と Toleration は、協調して動作し、ワークロードが他の�
 #### Examine node labels
 ノードを調べるには、`kubeadmin` で実行していることを確認してください。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
 ----
 
 インフラノードとストレージノード以外の、ワーカーノードをリストします。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get nodes -l 'node-role.kubernetes.io/worker,!node-role.kubernetes.io/infra,!cluster.ocs.openshift.io/openshift-storage'
 ----
@@ -54,7 +56,8 @@ oc get nodes -l 'node-role.kubernetes.io/worker,!node-role.kubernetes.io/infra,!
 
 では、これらのワーカーノードに、何か Taint が設定されてないか見てみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc describe nodes -l 'node-role.kubernetes.io/worker,!node-role.kubernetes.io/infra,!cluster.ocs.openshift.io/openshift-storage' | grep Taint
 ----
@@ -68,7 +71,8 @@ oc describe nodes -l 'node-role.kubernetes.io/worker,!node-role.kubernetes.io/in
 このアプリをデプロイする前に、この演習の期間中はノードにラベルを付ける必要があります。
 アプリケーションは `appnode=welome-php` というラベルのついたノードにデプロイします。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get nodes -l 'node-role.kubernetes.io/worker,!node-role.kubernetes.io/infra,!cluster.ocs.openshift.io/openshift-storage' -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | xargs -I{} oc label node {} appnode=welcome-php
 ----
@@ -77,14 +81,16 @@ oc get nodes -l 'node-role.kubernetes.io/worker,!node-role.kubernetes.io/infra,!
 
 ノードの名前をメモしながら、ノードがラベル付けされていることを確認します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get nodes -l appnode=welcome-php
 ----
 
 ホームディレクトリで提供されているYAMLマニフェストを使ってアプリケーションをデプロイすることができます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc create -f ~/support/welcome-php.yaml
 ----
@@ -99,7 +105,8 @@ oc create -f ~/support/welcome-php.yaml
 
 ここから `tt-lab` プロジェクトで作業しますので、切り替えます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc project tt-lab
 ----
@@ -108,7 +115,8 @@ oc project tt-lab
 デフォルトのスケジューラは、アプリを均等に分散させようとします。
 また、ロールアウトが完了するのを待ちます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 NODE_NUMBER=$(oc get nodes --no-headers -l appnode=welcome-php | wc -l) 
 oc scale deploy welcome-php --replicas=${NODE_NUMBER}
@@ -117,7 +125,8 @@ oc rollout status deploy welcome-php
 
 アプリケーションがロールアウトされたら、すべてのノードでリバランスされるように Pod を削除してみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc delete pods --all
 oc rollout status deploy welcome-php
@@ -125,7 +134,8 @@ oc rollout status deploy welcome-php
 
 Pod がworkerに均等に広がっていることを確認してください。各ノードに1つの Pod があるはずです。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 clear
 oc get pods -o=custom-columns=NAME:.metadata.name,NODE:.spec.nodeName
@@ -169,7 +179,8 @@ Pod が均等に広がるようにするには、`oc delete pods --all` を何�
 
 構文は　oc adm taint node ${nodename} key=value:Effect　です。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 TTNODE=$(oc get nodes -l 'node-role.kubernetes.io/worker,!node-role.kubernetes.io/infra,!cluster.ocs.openshift.io/openshift-storage' -o jsonpath='{range .items[0]}{.metadata.name}')
 oc adm taint node ${TTNODE} welcome-php=run:NoSchedule
@@ -177,7 +188,8 @@ oc adm taint node ${TTNODE} welcome-php=run:NoSchedule
 
 デプロイしたノードを調べて、そのうちの1つのノードに Taint が適用されていることを確認します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc describe nodes -l appnode=welcome-php | grep Taint
 ----
@@ -185,14 +197,16 @@ oc describe nodes -l appnode=welcome-php | grep Taint
 `NoSchedule` を使用しているので、Podはまだそこにあるはずです。
 `NoSchedule` はノード上での新しいPodの生成を停止するだけであることを覚えておいてください（コマンドは `1` を返すはずです）。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get pods -o wide | grep -c ${TTNODE}
 ----
 
 Pod を削除して `replicaSet` が再配置するのを待ちましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc delete pods --all
 oc rollout status deploy welcome-php
@@ -201,14 +215,16 @@ oc rollout status deploy welcome-php
 このデプロイメントには Toleration がないので、スケジューラは、Taint されたノードを除いたすべてのノードに Pod をデプロイします。
 このコマンドは `0` を返すはずです。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get pods -o wide | grep -c ${TTNODE}
 ----
 
 Pod が実行されている場所を調べる。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 clear
 oc get pods -o=custom-columns=NAME:.metadata.name,NODE:.spec.nodeName
@@ -240,35 +256,40 @@ tolerations:
 
 Deployment の `spec.template.spec` セクションでこの Toleration を適用します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc patch deployment welcome-php --patch '{"spec":{"template":{"spec":{"tolerations":[{"key":"welcome-php","operator":"Equal","value":"run","effect":"NoSchedule"}]}}}}'
 ----
 
 パッチを当てると別の展開が始まるので、展開が終わるのを待つことにします。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc rollout status deploy welcome-php
 ----
 
 デプロイメントYAMLを見ることで、Toleration の設定を見ることができます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get deploy welcome-php -o yaml
 ----
 
 さて、Toleration を設定したので、Taint を持つノードで実行してみましょう (これは `1` を返すはずです)。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get pods -o wide | grep -c ${TTNODE}
 ----
 
 すべてのPodをリストアップすると、それらが均等に広がっているはずです
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 clear
 oc get pods -o=custom-columns=NAME:.metadata.name,NODE:.spec.nodeName
@@ -281,14 +302,16 @@ Taint と Toleration について、もっと良く知るには、https://docs.o
 
 次の演習では `kubeadmin` でログインしてください。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
 ----
 
 他の演習も Taint の影響を受ける可能性があるので、やったことを元に戻しておきましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc delete project tt-lab
 oc adm taint node ${TTNODE} welcome-php-
@@ -297,7 +320,8 @@ oc get nodes -l 'node-role.kubernetes.io/worker,!node-role.kubernetes.io/infra,!
 
 ノードの Taint が除去されていることを確認してください。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc describe nodes -l 'node-role.kubernetes.io/worker,!node-role.kubernetes.io/infra,!cluster.ocs.openshift.io/openshift-storage' | grep Taint
 ----
@@ -305,7 +329,8 @@ oc describe nodes -l 'node-role.kubernetes.io/worker,!node-role.kubernetes.io/in
 また、作業していたノードにラベルが存在しないことを確認してください。
 このコマンドはノードを返さないはずです。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get nodes -l appnode=welcome-php
 ----

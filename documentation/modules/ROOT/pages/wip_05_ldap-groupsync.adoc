@@ -1,8 +1,8 @@
-= 外部認証プロバイダ(LDAP)の設定
-:navtitle: app-basics
+= [WIP]外部認証プロバイダ(LDAP)の設定
+:navtitle: oauth
 include::_attributes.adoc[]
 
-本コンテンツは、link:https://github.com/team-ohc-jp-place/openshift-cns-testdrive[MAD Workshop Ops Track] の内容を利用しています。
+本コンテンツは、link:https://github.com/team-ohc-jp-place/openshift-cns-testdrive[MAD Workshop Ops Track] の内容をベースに、一部変更しています。
 
 == 演習の概要
 OpenShiftは多くの異なる認証プロバイダをサポートしています。完全なリストは link:https://docs.openshift.com/container-platform/4.5/authentication/understanding-identity-provider.html[understanding
@@ -13,6 +13,8 @@ OpenShiftはLDAPサーバーに対してユーザ認証を実行することが�
 ---
 
 ### 前提知識: LDAPの構造
+
+LDAP についてはすでに構築されているものを使います。講師から提供される ldapsearch コマンドを使って、どのようなユーザグループが作成されているか確認してください。　※確認①
 
 この環境では、以下のユーザグループでLDAPを提供しています。
 
@@ -30,9 +32,10 @@ OpenShiftはLDAPサーバーに対してユーザ認証を実行することが�
 ** 例: `teamuser1`, `teamuser2`
 
 #### OAuth の設定を調べる
-この環境は何も手を加えていない「バニラ」なOpenShift 4のインストールなので、デフォルトのOAuthリソースを持っています。そのOAuth設定を以下で調べることができます。
+この環境は何も手を加えていないOpenShift 4のインストールなので、デフォルトのOAuthリソースを持っています。そのOAuth設定を以下で調べることができます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get oauth cluster -o yaml
 ----
@@ -49,96 +52,28 @@ metadata:
     include.release.openshift.io/self-managed-high-availability: "true"
     include.release.openshift.io/single-node-developer: "true"
     release.openshift.io/create-only: "true"
-  creationTimestamp: "2022-02-09T23:06:59Z"
-  generation: 1
+  creationTimestamp: "2023-06-19T03:17:20Z"
+  generation: 2
   name: cluster
   ownerReferences:
   - apiVersion: config.openshift.io/v1
     kind: ClusterVersion
     name: version
-    uid: c9cbd13c-99bf-4e82-b2ad-690810a01f2f
-  resourceVersion: "1715"
-  uid: 1bedd82d-b235-4e39-af98-e40f411c3c8e
-spec: {}
-----
-
-ここで注意すべきことがいくつかあります。まず、ここには基本的に何もありません!では、`kubeadmin` ユーザはどのように動作するのでしょうか?OpenShift OAuthシステムは、`kube-system` *Namespace* にある`kubeadmin` *Secret* を探すことができます。次のように調べることができます。
-
-[source,bash,role="execute"]
-----
-oc get secret -n kube-system kubeadmin -o yaml
-----
-
-以下のように表示されます。
-
-[source,yaml]
-----
-apiVersion: v1
-data:
-  kubeadmin: JDJhJDEwJFYwcVBXRjZGTlNOOU1RYUN6SGtJVGV4T3I5Ym9DbGRTT0VmNS44UGl2cWZOUGdsTnkvb3hT
-kind: Secret
-metadata:
-  creationTimestamp: "2022-02-09T23:06:14Z"
-  name: kubeadmin
-  namespace: kube-system
-  resourceVersion: "576"
-  uid: 834a86fd-96e6-4d6a-8c16-6eca251b10f0
-type: Opaque
-----
-
-この `Secret` には、`kubeadmin` パスワードがエンコードされたハッシュが含まれています。このアカウントは、新しい `OAuth` を設定した後も動作します。このアカウントを無効にしたい場合は、Secretを削除する必要があります。
-
-実際の環境では、既存のID管理ソリューションと統合することをお勧めします。このラボでは、`identityProvider` としてLDAPを構成しています。以下はOAuth構成の例です。`identityProviders` で `type.LDAP` の要素に注目してみましょう。
-
-[source,yaml]
-----
-apiVersion: config.openshift.io/v1
-kind: OAuth
-metadata:
-  name: cluster
+    uid: f7ab1da3-d33b-4dc2-b9a6-792cfc6d2c94
+  resourceVersion: "21651"
+  uid: 999e83ec-6cfc-430a-b356-15ea390f4013
 spec:
   identityProviders:
-  - name: ldap <1>
-    challenge: false
-    login: true
-    mappingMethod: claim <2>
-    type: LDAP
-    ldap:
-      attributes: <3>
-        id:
-        - dn
-        email:
-        - mail
-        name:
-        - cn
-        preferredUsername:
-        - uid
-      bindDN: "uid=openshiftworkshop,ou=Users,o=5e615ba46b812e7da02e93b5,dc=jumpcloud,dc=com" <4>
-      bindPassword: <5>
-        name: ldap-secret
-      ca: <6>
-        name: ca-config-map
-      insecure: false
-      url: "ldaps://ldap.jumpcloud.com/ou=Users,o=5e615ba46b812e7da02e93b5,dc=jumpcloud,dc=com?uid?sub?(memberOf=cn=ose-user,ou=Users,o=5e615ba46b812e7da02e93b5,dc=jumpcloud,dc=com)" <7>
-  tokenConfig:
-    accessTokenMaxAgeSeconds: 86400
+  - htpasswd:
+      fileData:
+        name: htpasswd-secret
+    mappingMethod: claim
+    name: htpasswd_provider
+    type: HTPasswd
 ----
 
-`identityProviders:` 下にあるいくつかの注目すべきフィールド
-
-<1> `name`: プロバイダの一意のID。OpenShift環境では複数の認証プロバイダを持つことが可能で、OpenShiftはそれらを区別することができます。
-
-<2> `mappingMethod: claim`: このセクションは、複数のプロバイダが構成されている場合に、OpenShiftクラスタ内でユーザ名がどのように割り当てられるかに関係しています。詳細については、link:https://docs.openshift.com/container-platform/4.5/authentication/understanding-identity-provider.html#identity-provider-parameters-understanding-identity-provider[Identity provider parameters] のセクションを参照してください。
-
-<3> `attributes`: このセクションでは、OpenShiftユーザの「アカウント」のフィールドに反復して割り当てるLDAPフィールドを定義します。リストを検索する際に属性が見つからない場合や、属性が入力されていない場合は認証全体が失敗します。上の例の場合は、LDAP `dn` からidを、LDAP `mail` からemailアドレスを、LDAP `cn` からの名前を、LDAP `uid` からユーザ名を、それぞれ関連付けます。
-
-<4> `bindDN`: LDAPを検索する際に、このユーザとしてサーバーにバインドします。
-
-<5> `bindPassword`: 検索時にバインドする際に使用するパスワードを持つSecretを参照します。
-
-<6> `ca`: LDAPサーバーのSSL証明書を検証するために使用するCA証明書を含むConfigMapを参照します。
-
-<7> `url`: LDAPサーバーのURLです。
+すでに一つの 認証プロバイダが設定してあります。
+これに加えて、このラボでは、認証プロバイダである `identityProvider` としてLDAPを構成します。
 
 OpenShiftにおけるLDAP認証の具体的な詳細については、link:https://docs.openshift.com/container-platform/4.10/authentication/identity_providers/configuring-ldap-identity-provider.html[Configuring
 an LDAP identity provider]のドキュメントを参照してください。
@@ -151,45 +86,79 @@ LDAP IDプロバイダを設定するには、以下を行う必要がありま�
 
 `kubeadmin` ユーザとして `oc` で OAuth 設定を適用します。
 
-[source,bash,role="execute"]
-----
-oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
-----
-
 次のコマンドは、openshift-config ネームスペースに ldap-secret という名前の Kubernetes Secretを、1つのデータアイテムで作成します。データアイテムは "bindPassword" という名前で、その値は "b1ndP^ssword" に設定されています。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc create secret generic ldap-secret --from-literal=bindPassword=b1ndP^ssword -n openshift-config
 ----
 
 次のコマンドで、証明書をダウンロードし 'ca.crt' というファイルに保存します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
-wget https://certs.godaddy.com/repository/gd-class2-root.crt -O {{ HOME_PATH }}/support/ca.crt
+wget https://certs.godaddy.com/repository/gd-class2-root.crt -O ca.crt
 ----
 
 ----
 もし、`Unable to establish SSL connection.` と表示された場合は、上記のコマンドを再度クリックしてから先に進んでください。
 ----
 
-次のコマンドをクリックすると、openshift-config ネームスペースに ca-config-map という名前の新しい ConfigMap が作成されます。このConfigMapには、{{ HOME_PATH }}/support/ca.cltというファイルの内容が入力されます。そして、そのファイルを適用します。
+次のコマンドをクリックすると、openshift-config ネームスペースに ca-config-map という名前の新しい ConfigMap が作成されます。このConfigMapには、ca.cltというファイルの内容が入力されます。そして、そのファイルを適用します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
-oc create configmap ca-config-map --from-file={{ HOME_PATH }}/support/ca.crt -n openshift-config
-oc apply -f {{ HOME_PATH }}/support/oauth-cluster.yaml
+oc create configmap ca-config-map --from-file=ca.crt -n openshift-config
 ----
 
-[Note]
-====
-`apply` を使うのは既存の `OAuth` オブジェクトがあるためです。もし `create` を使用した場合、オブジェクトが既に存在しているというエラーが発生するでしょう。`apply` でも警告が表示されますが、それは問題ありません。
-====
+[.console-input]
+[source,sh]
+----
+vi oauth-cluster.yaml
+----
+
+identityProviders: 配下に以下をコピー＆ペーストします。
+bindDN: と、url: の情報は講師から取得してください。
+----
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+spec:
+  identityProviders:
+  - name: ldap
+    challenge: false
+    login: true
+    mappingMethod: claim
+    type: LDAP
+    ldap:
+      attributes:
+        id:
+        - dn
+        email:
+        - mail
+        name:
+        - cn
+        preferredUsername:
+        - uid
+      bindDN: "uid=openshiftworkshop,ou=Users,o=5e615ba46b812e7da02e93b5,dc=jumpcloud,dc=com"
+      bindPassword:
+        name: ldap-secret
+      ca:
+        name: ca-config-map
+      insecure: false
+      url: "ldaps://ldap.jumpcloud.com/ou=Users,o=5e615ba46b812e7da02e93b5,dc=jumpcloud,dc=com?uid?sub?(memberOf=cn=ose-user,ou=Users,o=5e615ba46b812e7da02e93b5,dc=jumpcloud,dc=com)"
+  tokenConfig:
+    accessTokenMaxAgeSeconds: 86400
+----
 
 これにより、oAuth Operatorの再デプロイが開始されます。次のコマンドでロールアウトを監視することができます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc rollout status deployment/oauth-openshift -n openshift-authentication
 ----
@@ -200,12 +169,39 @@ OpenShiftでは、グループを使用してユーザを管理し、複数の�
 
 このラボでは次のような `groupsync` の設定ファイルを提供しています。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
-cat {{ HOME_PATH }}/support/groupsync.yaml
+vi groupsync.yaml
 ----
 
-あまり詳細には触れませんが (ドキュメントを見ることができます)、`groupsync` 設定ファイルは以下のようなことをします。
+bindDN: 、bindPassword:、baseDN: の情報は講師から取得してください。
+
+----
+kind: LDAPSyncConfig
+apiVersion: v1
+url: ldaps://ldap.jumpcloud.com
+bindDN: uid=openshiftworkshop,ou=Users,o=5e615ba46b812e7da02e93b5,dc=jumpcloud,dc=com
+bindPassword: b1ndP^ssword
+rfc2307:
+  groupsQuery:
+    baseDN: ou=Users,o=5e615ba46b812e7da02e93b5,dc=jumpcloud,dc=com
+    derefAliases: never
+    filter: '(|(cn=ose-*))'
+  groupUIDAttribute: dn
+  groupNameAttributes:
+  - cn
+  groupMembershipAttributes:
+  - member
+  usersQuery:
+    baseDN: ou=Users,o=5e615ba46b812e7da02e93b5,dc=jumpcloud,dc=com
+    derefAliases: never
+  userUIDAttribute: dn
+  userNameAttributes:
+  - uid
+----
+
+`groupsync` 設定ファイルは以下のようなことをします。
 
 * 指定されたバインドユーザとパスワードを使って LDAPを検索する。
 * 名前が `ose-` で始まるLDAPグループに対してクエリを実行する。
@@ -215,9 +211,10 @@ cat {{ HOME_PATH }}/support/groupsync.yaml
 
 `groupsync` を実行します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
-oc adm groups sync --sync-config={{ HOME_PATH }}/support/groupsync.yaml --confirm
+oc adm groups sync --sync-config=groupsync.yaml --confirm
 ----
 
 以下のような出力になります。
@@ -233,7 +230,8 @@ group/ose-teamed-app
 
 作成された *Groups* を見たい場合は、以下を実行して下さい。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get groups
 ----
@@ -250,38 +248,18 @@ ose-user         fancyuser1, fancyuser2, normaluser1, teamuser1, teamuser2
 
 YAMLで特定のグループを見てみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get group ose-fancy-dev -o yaml
-----
-
-YAMLは以下のようになっています。
-
-[source,yaml]
-----
-aapiVersion: user.openshift.io/v1
-kind: Group
-metadata:
-  annotations:
-    openshift.io/ldap.sync-time: "2022-02-10T01:49:07Z"
-    openshift.io/ldap.uid: cn=ose-fancy-dev,ou=Users,o=5e615ba46b812e7da02e93b5,dc=jumpcloud,dc=com
-    openshift.io/ldap.url: ldap.jumpcloud.com:636
-  creationTimestamp: "2022-02-10T01:49:07Z"
-  labels:
-    openshift.io/ldap.host: ldap.jumpcloud.com
-  name: ose-fancy-dev
-  resourceVersion: "68628"
-  uid: 374c463a-bdd2-4da1-ae1a-619eca0994f6
-users:
-- fancyuser1
-- fancyuser2
 ----
 
 OpenShiftは自動的にいくつかのLDAPメタデータを *Group* に関連付け、グループに含まれるユーザーを一覧表示します。
 
 *Users* をリストアップするとどうなるでしょうか?
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get user
 ----
@@ -289,10 +267,11 @@ oc get user
 以下のように出てきます。
 
 ----
-No resources found.
+NAME    UID                                    FULL NAME   IDENTITIES
+admin   211b4143-f317-42a8-b3c6-252b9a63c7ec               htpasswd_provider:admin
 ----
 
-*Users* は *Group* の定義に明確にリストされているのに、なぜ *Users* が見つからないのでしょうか? 
+*Users* は *Group* の定義に明確にリストされているのに、なぜ LDAP の認証プロバイダの *Users* が見つからないのでしょうか? 
 
 *Users* は、最初にログインしようとするまで実際には作成されません。*Group* の定義に表示されているのは、OpenShiftがその特定のIDを持つ *User* に遭遇した場合、その *User* を *Group* に関連付けるべきであるとOpenShiftに伝えているだけのプレースホルダーです。
 
@@ -301,7 +280,8 @@ No resources found.
 
 `ose-fancy-dev` *Group* のポリシーを変更します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc adm policy add-cluster-role-to-group cluster-reader ose-fancy-dev
 ----
@@ -314,14 +294,16 @@ OpenShiftに付属するさまざまなロールに興味がある方は、link:
 #### cluster-reader ポリシーを調べる
 通常のユーザでログインしてみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc login -u normaluser1 -p Op#nSh1ft
 ----
 
 *Projects* をリストしてみると、
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get projects
 ----
@@ -334,7 +316,8 @@ No resources found.
 
 次に `ose-fancy-dev` のメンバーとしてログインします。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc login -u fancyuser1 -p Op#nSh1ft
 ----
@@ -355,17 +338,21 @@ NAME                                                    DISPLAY NAME            
 
 これで、OpenShift Container PlatformのRBACがどのように機能するか理解し始めているはずです。
 
-#### コラボレーションのためのProjectの作成
-cluster-admin としてログインしてください。
+cluster-admin としてログインし直しておきましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
-oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
+oc login -u admin -p <*** ivpn13A5E4t3GCKG のようなパスワード ***>
 ----
+
+
+#### コラボレーションのためのProjectの作成
 
 そして、複数の人で共同作業を行うためにいくつかの *Project* を作成してください。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc adm new-project app-dev --display-name="Application Development"
 oc adm new-project app-test --display-name="Application Testing"
@@ -388,7 +375,8 @@ oc adm new-project app-prod --display-name="Application Production"
 #### GroupsをProjectにマップする
 先ほど見たように、OpenShift内にはいくつかのロールがあらかじめ設定されています。 *Project* に関しても同様に、閲覧(View)、編集(Edit)、管理者アクセスを付与することができます。`ose-teamed-app` のユーザにDevelopment ProjectとTest Projectを編集するためのアクセス権を与えてみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc adm policy add-role-to-group edit ose-teamed-app -n app-dev
 oc adm policy add-role-to-group edit ose-teamed-app -n app-test
@@ -396,14 +384,16 @@ oc adm policy add-role-to-group edit ose-teamed-app -n app-test
 
 そして、Productionを閲覧するためのアクセス権を与えます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc adm policy add-role-to-group view ose-teamed-app -n app-prod
 ----
 
 次に、`ose-fancy-dev` グループにProduction Projectの編集アクセス権を与えます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc adm policy add-role-to-group edit ose-fancy-dev -n app-prod
 ----
@@ -411,7 +401,8 @@ oc adm policy add-role-to-group edit ose-fancy-dev -n app-prod
 #### Examine Group Access
 `normaluser1` としてログインし、どのような *Projects* が表示されるか確認します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc login -u normaluser1 -p Op#nSh1ft
 oc get projects
@@ -425,7 +416,8 @@ No resources found.
 
 次に `ose-teamed-app` グループの `teamuser1` で試してみます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc login -u teamuser1 -p Op#nSh1ft
 oc get projects
@@ -442,7 +434,8 @@ app-test   Application Testing       Active
 
 チームユーザにはProduction Projectへの編集アクセス権が付与されていません。次に、Production Projectに `teamuser1` として何かを作成してみてください。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc project app-prod
 oc new-app docker.io/siamaksade/mapit
@@ -477,19 +470,27 @@ See 'oc new-app -h' for examples.
 
 このエラーは想定通りのものです。
 
+
+
+
+
+
+
 #### Prometheus
 `cluster-reader` 権限を持つユーザ (クラスタ管理の多くの情報を閲覧することができるユーザ) ができたので、Prometheusをもう一度見てみましょう。
 
 `cluster-reader` 権限を持つユーザでログインします。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc login -u fancyuser1 -p Op#nSh1ft
 ----
 
 `prometheus` の `Route` を検索します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get route prometheus-k8s -n openshift-monitoring -o jsonpath='{.spec.host}{"\n"}'
 ----
@@ -497,16 +498,16 @@ oc get route prometheus-k8s -n openshift-monitoring -o jsonpath='{.spec.host}{"\
 以下のように表示されます。
 
 ----
-prometheus-k8s-openshift-monitoring.{{ ROUTE_SUBDOMAIN }}
+prometheus-k8s-openshift-monitoring.apps.cluster-vfg6m.vfg6m.sandbox2574.opentlc.com
 ----
 
 [Warning]
 ====
 先に進む前に、OpenShiftのWebコンソールに移動し、右上の`kube:admin` のドロップダウンメニューからログアウトしてください。そうしないと、Prometheusは認証を通過するためにあなたの `kubeadmin` ユーザを使用しようとします。もちろんこれは動作しますが、`cluster-reader` ロールのデモンストレーションにはなりません。
 ====
-インストーラは、デフォルトでPrometheus用の`Route`を設定しています。
-link:https://prometheus-k8s-openshift-monitoring.{{ ROUTE_SUBDOMAIN }}[Prometheus Link]
-をcontrol+クリックしてブラウザで開きます。ログイン画面が出てきたら *Log in with OpenShift* ボタンをクリックして `ldap` auth を選択し、先ほど `cluster-reader` 権限を付与した `fancyuser1` ユーザを使用します。
+
+https:// + 上記で取得した Link + /api をブラウザで開きます。
+ログイン画面が出てきたら *Log in with OpenShift* ボタンをクリックして `ldap` auth を選択し、先ほど `cluster-reader` 権限を付与した `fancyuser1` ユーザを使用します。
 
 より細かく言えば、`ose-fancy-dev` グループに `cluster-reader` 権限があり、`fancyuser1` がメンバーです。これらのユーザのパスワードはすべて `Op#nSh1ft` です。自己署名証明書のため、証明書エラーが出ると思います。必ず承諾するようにしましょう。
 
@@ -522,7 +523,8 @@ image::images/prometheus-auth-proxy.png[]
 
 これが終わったら、管理者ユーザーとして再度ログインしてください。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
 ----

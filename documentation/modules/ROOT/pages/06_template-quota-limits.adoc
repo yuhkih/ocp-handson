@@ -1,12 +1,10 @@
-= プロジェクト・リクエスト・テンプレートとクォータ/制限
-:navtitle: app-basics
+= Project のクオータ/制限
+:navtitle: project-quota-limit
 include::_attributes.adoc[]
 
 本コンテンツは、link:https://github.com/team-ohc-jp-place/openshift-cns-testdrive[MAD Workshop Ops Track] の内容を利用しています。
 
 == 演習の概要
-アプリケーション管理のベーシック・ラボでは、OpenShift の基本的なビルディング・ブロックを扱いましたが、これらはすべて *プロジェクト* 内に含まれています。
-
 OpenShiftでは、1つの *プロジェクト* 内で使用できるオブジェクトの数やリソース（CPU、メモリなど）を制限しません。
 さらに、ユーザーは無制限に *プロジェクト* を作成することができます。制約のない世界や POC(Proof Of Concept) の環境では、それはそれでいいでしょう。
 しかし、現実には少し制約をつける必要があります。
@@ -21,7 +19,8 @@ OpenShiftでは、1つの *プロジェクト* 内で使用できるオブジェ
 
 組み込みのデフォルトの *プロジェクト・リクエスト・テンプレート* を表示するには、以下のコマンドを実行します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc adm create-bootstrap-project-template -o yaml
 ----
@@ -43,7 +42,8 @@ parameters:
 
 次に、 `oc new-project` コマンドのヘルプ出力を見てみましょう:
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc new-project -h
 ----
@@ -52,8 +52,8 @@ oc new-project -h
 このオプションはデフォルトの *テンプレート* の出力で見た `PROJECT_DISPLAYNAME` パラメータに対応します。
 
 `new-project` ワークフローでは、ユーザーがプロジェクト・リクエストを満たすための情報を提供します。
-リクエストを受けるとOpenShiftはこの要求を許可すべきかどうかを決定します。（例えば、ユーザーは *プロジェクト* を作成する許可を持っているのか？このユーザーは *プロジェクト* を作りすぎてないか？)
-もし、要求が許可できる場合は、 *テンプレート* を処理します。　
+リクエストを受けるとOpenShiftはこの要求を許可すべきかどうかを決定します。（例えば、ユーザーは *プロジェクト* を作成する許可を持っているのか？ このユーザーは *プロジェクト* を作りすぎてないか？)
+もし、要求が許可できる場合は、 *テンプレート* を処理します。
 
 *テンプレート* で定義されているオブジェクトを見てみると、クォータや制限についての言及がないことに気づくでしょう。
 こちらを変更してみましょう。
@@ -62,10 +62,8 @@ NOTE: *テンプレート* は、ユーザーがパラメーターと共にOpenS
 これらはより複雑で関連性の高いコンポーネントを OpenShift に素早くデプロイする事に使う事ができ、
 ソフトウェアの開発ライフサイクル(SDLC: Software Development Lifecycle)においても有用な部品となりうるでしょう。
 詳細な情報は次のリンク先で確認できます。
-link:https://docs.openshift.com/container-platform/4.9/openshift_images/using-templates.html[template
+link:https://docs.openshift.com/container-platform/4.12/openshift_images/using-templates.html[template
 documentation^] 
-このエクササイズでは、*テンプレート* の更なる詳細については深掘りしません。
-
 
 #### プロジェクト・リクエスト・テンプレート を編集する
 このラボでは実際にテンプレートの変更を行う必要はありません。変更したものを既に作成済みです。
@@ -73,14 +71,133 @@ documentation^]
 
 *プロジェクト・リクエスト・テンプレート* :
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
-cat {{ HOME_PATH }}/support/project_request_template.yaml
+vi project_request_template.yaml
+----
+
+
+[.console-input]
+[source,sh]
+----
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: project-request-new
+objects:
+- apiVersion: v1
+  kind: Project
+  metadata:
+    annotations:
+      openshift.io/description: ${PROJECT_DESCRIPTION}
+      openshift.io/display-name: ${PROJECT_DISPLAYNAME}
+      openshift.io/requester: ${PROJECT_REQUESTING_USER}
+    creationTimestamp: null
+    name: ${PROJECT_NAME}
+  spec: {}
+  status: {}
+- apiVersion: v1
+  kind: ResourceQuota
+  metadata:
+    name: ${PROJECT_NAME}-quota
+  spec:
+    hard:
+      pods: 10
+      requests.cpu: 4000m
+      requests.memory: 8Gi
+      resourcequotas: 1
+      requests.storage: 50Gi
+      persistentvolumeclaims: 5
+- apiVersion: v1
+  kind: LimitRange
+  metadata:
+    name: ${PROJECT_NAME}-limits
+    creationTimestamp: null
+  spec:
+    limits:
+      -
+        type: Container
+        max:
+          cpu: 4000m
+          memory: 1024Mi
+        min:
+          cpu: 10m
+          memory: 5Mi
+        default:
+          cpu: 4000m
+          memory: 1024Mi
+        defaultRequest:
+          cpu: 100m
+          memory: 512Mi
+- apiVersion: v1
+  groupNames:
+  - system:serviceaccounts:${PROJECT_NAME}
+  kind: RoleBinding
+  metadata:
+    creationTimestamp: null
+    name: system:image-pullers
+    namespace: ${PROJECT_NAME}
+  roleRef:
+    name: system:image-puller
+  subjects:
+  - kind: SystemGroup
+    name: system:serviceaccounts:${PROJECT_NAME}
+  userNames: null
+- apiVersion: v1
+  groupNames: null
+  kind: RoleBinding
+  metadata:
+    creationTimestamp: null
+    name: system:image-builders
+    namespace: ${PROJECT_NAME}
+  roleRef:
+    name: system:image-builder
+  subjects:
+  - kind: ServiceAccount
+    name: builder
+  userNames:
+  - system:serviceaccount:${PROJECT_NAME}:builder
+- apiVersion: v1
+  groupNames: null
+  kind: RoleBinding
+  metadata:
+    creationTimestamp: null
+    name: system:deployers
+    namespace: ${PROJECT_NAME}
+  roleRef:
+    name: system:deployer
+  subjects:
+  - kind: ServiceAccount
+    name: deployer
+  userNames:
+  - system:serviceaccount:${PROJECT_NAME}:deployer
+- apiVersion: v1
+  groupNames: null
+  kind: RoleBinding
+  metadata:
+    creationTimestamp: null
+    name: admin
+    namespace: ${PROJECT_NAME}
+  roleRef:
+    name: admin
+  subjects:
+  - kind: User
+    name: ${PROJECT_ADMIN_USER}
+  userNames:
+  - ${PROJECT_ADMIN_USER}
+parameters:
+- name: PROJECT_NAME
+- name: PROJECT_DISPLAYNAME
+- name: PROJECT_DESCRIPTION
+- name: PROJECT_ADMIN_USER
+- name: PROJECT_REQUESTING_USER
 ----
 
 
 ### ResourceQuota
-link:https://docs.openshift.com/container-platform/4.9/applications/quotas/quotas-setting-per-project.html[quota
+link:https://docs.openshift.com/container-platform/4.12/applications/quotas/quotas-setting-per-project.html[quota
 documentation^] のリンク先に *ResourceQuota* についての詳細があります。:
 
 ----
@@ -217,14 +334,16 @@ quota^] を見て下さい。この演習の中では、複数プロジェクト
 
 次に以下を実行します。:
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
-oc create -f {{ HOME_PATH }}/support/project_request_template.yaml -n openshift-config
+oc create -f project_request_template.yaml -n openshift-config
 ----
 
 これで、`openshift-config` *プロジェクト* 内に *テンプレート* オブジェクトが作成されました。:
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get template -n openshift-config
 ----
@@ -232,8 +351,9 @@ oc get template -n openshift-config
 上記のコマンドを実行すると以下のようなが表示されます。:
 
 ----
-NAME              DESCRIPTION   PARAMETERS    OBJECTS
-project-request                 5 (5 blank)   7
+NAME                  DESCRIPTION   PARAMETERS    OBJECTS
+project-request                     5 (5 blank)   8
+project-request-new                 5 (5 blank)   7
 ----
 
 #### デフォルトのプロジェクト・リクエスト・テンプレートの設定
@@ -241,7 +361,8 @@ project-request                 5 (5 blank)   7
 この設定は最終的に `openshift-apiserver` プロジェクト内の *ConfigMap* に格納されます。
 API Server の構成は、以下のコマンドで表示できます。:
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get cm config -n openshift-apiserver -o jsonpath --template="{.data.config\.yaml}" | jq
 ----
@@ -266,7 +387,7 @@ metadata:
 spec:
   projectRequestMessage: ""
   projectRequestTemplate:
-    name: "project-request"
+    name: "project-request-new"
 ----
 
 *projectRequestTemplate* の名前が、以前に `openshift-config` プロジェクトで作成したテンプレートの名前と一致していることに注意してください。
@@ -275,7 +396,8 @@ spec:
 この *CR* が作成されると、OpenShift のオペレータは *CR* に気付き、構成の変更を適用します。
 この *CustomResource* を作成するには、次のコマンドを発行します。:
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc apply -f {{ HOME_PATH }}/support/cr_project_request.yaml -n openshift-config
 ----
@@ -283,7 +405,8 @@ oc apply -f {{ HOME_PATH }}/support/cr_project_request.yaml -n openshift-config
 このコマンドを実行すると、OpenShift API Server の設定が Operator によって更新されます。
 この更新には数分かかります。 `apiserver` のDeploymentの状況を見ることで更新状況を確認することができます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 sleep 30
 oc rollout status deploy apiserver -n openshift-apiserver
@@ -291,7 +414,8 @@ oc rollout status deploy apiserver -n openshift-apiserver
 
 ConfigMapを見ることで設定の更新を確認できます。:
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get cm config -n openshift-apiserver -o jsonpath --template="{.data.config\.yaml}" | jq
 ----
@@ -313,14 +437,16 @@ oc get cm config -n openshift-apiserver -o jsonpath --template="{.data.config\.y
 新しいプロジェクトを作成すると、 *Quota* と *LimitRange* が一緒に作成されているのがわかるはずです。
 `template-test` という新しいプロジェクトを作成します。:
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc new-project template-test
 ----
 
 そして、 `describe` を使って、この *プロジェクトの* 詳細を見てください:
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc describe project template-test
 ----
@@ -369,7 +495,8 @@ Quota と Resource limits のセクションが表示されていない場合は
 
 また、 *Quota* と *LimitRange* オブジェクトが作成されたことがわかります。：
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc describe quota -n template-test
 ----
@@ -391,7 +518,8 @@ resourcequotas          1     1
 
 そして:
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get limitrange -n template-test
 ----
@@ -412,7 +540,8 @@ NOTE: `project-request` テンプレートが `openshift-config` プロジェク
 
 他のラボに移る前に、先ほど作成した *プロジェクト* を削除してください:
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc delete project template-test
 ----

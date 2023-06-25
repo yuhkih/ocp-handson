@@ -44,14 +44,16 @@ ProjectはKubernetes Namespaceに直接マッピングされますが、内部�
 前のラボで使用した serviceaccount ユーザを使用することもできます。`kubeadmin` と service account user は両方とも `cluster-admin` ロールを持っているので、どちらでも構いません。
 ====
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
 ----
 
 `oc describe` コマンドを実行して、`self-provisioners` の `clusterrolebinding` の使用状況を確認して下さい。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc describe clusterrolebinding.rbac self-provisioners
 ----
@@ -81,7 +83,8 @@ Access Control (RBAC)] のドキュメントで詳しく説明されています
 
 設定を確認するには、以下を実行してYAMLを調査します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get clusterrolebinding.rbac self-provisioners -o yaml
 ----
@@ -112,21 +115,24 @@ subjects:
 #### Self-Provisionerロールの削除
 グループ `system:authenticated:oauth` から `self-provisioner` クラスタロールを削除するには、ロールバインディングからグループを削除する必要があります。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc patch clusterrolebinding.rbac self-provisioners -p '{"subjects": null}'
 ----
 
 自動更新が有効な場合は、クラスタロールをデフォルトの状態にリセットします。これを無効にするには、annotation `rbac.authorization.kubernetes.io/autoupdate` を `false` に設定して実行する必要があります。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc patch clusterrolebinding.rbac self-provisioners -p '{ "metadata": { "annotations": { "rbac.authorization.kubernetes.io/autoupdate": "false" } } }'
 ----
 
 新しい設定を表示します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get clusterrolebinding.rbac self-provisioners -o yaml
 ----
@@ -152,7 +158,8 @@ roleRef:
 
 `fancyuser1` としてログインして、Projectを作成できるかテストしてみましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc login -u fancyuser1 -p Op#nSh1ft
 oc new-project fancyuserproject
@@ -166,7 +173,8 @@ Error from server (Forbidden): You may not request a new project via this API.
 
 次の演習のために `kubeadmin` としてログインします。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
 ----
@@ -176,7 +184,8 @@ oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
 
 例えば、ユーザにProjectをリクエストするチケットを提出させることができます。これを行うには、以下のようにテキストを変更して、指示を含むようにすることができます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc patch --type=merge project.config.openshift.io cluster -p '{"spec":{"projectRequestMessage":"Please visit https://ticket.example.com to request a project"}}'
 ----
@@ -186,7 +195,8 @@ https://ticket.example.com to request a project` というValueを指定して�
 
 この新しいメッセージを表示する前に、`apiserver` アプリケーションが変更をロールアウトするのを待つ必要があります。これはロールアウトに時間がかかることがあり、特に忙しいクラスタではそうです。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 sleep 30
 oc rollout status -n openshift-apiserver deploy/apiserver
@@ -195,7 +205,8 @@ oc rollout status -n openshift-apiserver deploy/apiserver
 
 これで、ユーザはProjectを作成しようとするときにこのメッセージを受け取るようになります。`fancyuser1` になってProjectを作成してみてください。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc login -u fancyuser1 -p Op#nSh1ft
 oc new-project fancyuserproject
@@ -213,14 +224,16 @@ Operatorがmaster configを更新するまでに時間がかかることがあ�
 
 次のラボでは必ず `kubeadmin` でログインしてください。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
 ----
 
 他のラボでは `self-provisioners` ロールが必要になるかもしれないので、このラボでやったことを元に戻しましょう。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc patch clusterrolebinding.rbac self-provisioners -p '{"subjects":[{"apiGroup":"rbac.authorization.k8s.io","kind":"Group","name":"system:authenticated:oauth"}]}'
 oc patch clusterrolebinding.rbac self-provisioners -p '{"metadata":{"annotations":{"rbac.authorization.kubernetes.io/autoupdate":"true"}}}'

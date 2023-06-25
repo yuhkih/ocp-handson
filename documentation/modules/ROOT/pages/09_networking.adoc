@@ -5,10 +5,14 @@ include::_attributes.adoc[]
 本コンテンツは、link:https://github.com/team-ohc-jp-place/openshift-cns-testdrive[MAD Workshop Ops Track] の内容を利用しています。
 
 == 演習の概要
-OpenShift は プラットフォーム内部に Open vSwitch をベースにしたOpenShiftSDN（Software Defined Network）を持っています。
-しかしこのラボで使用するクラスタではCNIとしてOVNKubernetes SDNを使用します。OVNKubernetesは Open Virtual Network をベースとしており、将来的にOpenShiftのデフォルトになることが計画されています。OVNKubernetes は OpenShiftSDN に対し後方互換性を持っています。より詳しく知りたい場合、link:https://docs.openshift.com/container-platform/4.9/networking/ovn_kubernetes_network_provider/about-ovn-kubernetes.html[公式ドキュメント]を参照して下さい。
 
-この SDN は OpenShift 環境内のアプリケーションコンポーネント間の接続性を提供するために使用されます。
+OpenShift Container Platform クラスターは、Pod ネットワークに仮想化ネットワークを使用します。
+
+Red Hat OpenShift Networking の一部である OVN-Kubernetes ネットワークプラグインは、OpenShift Container Platform のデフォルトのネットワークプロバイダーです。OVN-Kubernetes は Open Virtual Network (OVN) に基づいており、オーバーレイベースのネットワーキング実装を提供します。OVN-Kubernetes プラグインを使用するクラスターでは、各ノードで Open vSwitch (OVS) も実行されます。OVNは各ノード上でOVSを設定し、宣言されたネットワーク構成を実装します。
+
+OpenShift は プラットフォーム内部に Open vSwitch をベースにしたOpenShiftSDN（Software Defined Network）が以前デフォルトでした。OVN-Kubernetes は OpenShiftSDN に対し後方互換性を持っています。より詳しく知りたい場合、link:https://docs.openshift.com/container-platform/4.12/networking/ovn_kubernetes_network_provider/about-ovn-kubernetes.html[公式ドキュメント]を参照して下さい。
+
+これらは OpenShift 環境内のアプリケーションコンポーネント間の接続性を提供するために使用されます。
 ネットワークにはデフォルトのネットワーク範囲があらかじめ設定されていますが、既存のインフラストラクチャと競合する場合やその他の理由で変更することも可能です。
 
 Kubernetesの `NetworkPolicy` により、OpenShiftのSDN内でProject間のネットワークを分離することができます。ここまでOpenShiftのRBACを通してProject内のリソースを分離する方法を見てきましたが、NetworkPolicy SDNプラグインは Pod とNamespaceのラベルセレクタを使って、各ProjectのPodを分離することができます。
@@ -19,7 +23,8 @@ Kubernetesの `NetworkPolicy` により、OpenShiftのSDN内でProject間のネ�
 続行する前に、クラスタ内に存在する**Project**を使用していることを確認してください。
 前の演習で最後に**Project**を削除した場合、この演習のスクリプトでエラーが発生します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc project default
 ----
@@ -30,7 +35,8 @@ oc project default
 それでは、用意されているスクリプトを実行しましょう。
 2つの *Project* が作成され、 *Deployment* を使って、*Pod* が展開されます。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 bash {{ HOME_PATH }}/support/create-net-projects.sh
 ----
@@ -39,7 +45,8 @@ bash {{ HOME_PATH }}/support/create-net-projects.sh
 `netproj-a` と `netproj-b` の 2 つの *Project* が作成されました。
 以下のコマンドを実行して、作成されたリソースを確認します。
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get pods -n netproj-a
 ----
@@ -54,7 +61,8 @@ ose-1-deploy   1/1     Running             0          16s
 
 同様に……:
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get pods -n netproj-b
 ----
@@ -74,7 +82,8 @@ ose-1-vj2gn    1/1     Running     0          30s
 
 2つの Pod 間の接続性をテストするには、次のコマンドを実行します。:
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 bash {{ HOME_PATH }}/support/test-connectivity.sh
 ----
@@ -117,7 +126,8 @@ spec:
 
 `netproj-b` **Project**の Pod へのアクセスを制限するには、上記の NetworkPolicy CR を適用します。:
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc create -n netproj-b -f {{ HOME_PATH }}/support/network-policy-block-all.yaml
 ----
@@ -127,7 +137,8 @@ oc create -n netproj-b -f {{ HOME_PATH }}/support/network-policy-block-all.yaml
 
 次のコマンドでテストを行います。:
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 bash {{ HOME_PATH }}/support/test-connectivity.sh
 ----
@@ -145,7 +156,8 @@ Checking connectivity between Pod A and Pod B............ FAILED!
 これは、`netproj-a` **Project**の Pod が `netproj-b` **Project**の　Pod に接続できなかったことを意味します (期待通りの動作です)。
 
 適用されている `NetworkPolicy` を表示には以下を実行します。
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc get networkpolicy -n netproj-b
 ----
@@ -193,7 +205,8 @@ spec:
 
 `netproj-b` **Project**内の Pod へのアクセスを `netproj-a` **Project**内のすべての Pod から許可するには、上記の NetworkPolicy を以下のコマンドで適用します。:
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 oc create -n netproj-b -f {{ HOME_PATH }}/support/network-policy-allow-all-from-netproj-a.yaml
 ----
@@ -203,7 +216,8 @@ oc create -n netproj-b -f {{ HOME_PATH }}/support/network-policy-allow-all-from-
 
 次を実行する事でテストします。:
 
-[source,bash,role="execute"]
+[.console-input]
+[source,sh]
 ----
 bash {{ HOME_PATH }}/support/test-connectivity.sh
 ----

@@ -1,15 +1,15 @@
 
-* 01. [WIP]OpenShift 基礎
+* 01. OpenShift 基礎
 ** xref:01_app-mgmt-basics.adoc[1. コンテナデプロイと管理]
 ** xref:02_app-storage-basics.adoc[2. 永続ストレージ]
 ** xref:03_machinesets.adoc[3. ノードの動的管理]
 ** xref:04_infra-nodes.adoc[4. Infra ノードの作成]
-** xref:05_ldap-groupsync.adoc[5. 外部認証プロバイダ設定]
-** xref:06_template-quota-limits.adoc[6. プロジェクトのクオータ設定]
-** xref:07_clusterresourcequota.adoc[7. クラスタのクオータ設定]
-** xref:08_disabling-project-self-provisioning.adoc[8. Project セルフプロビジョニング]
-** xref:09_networking.adoc[9. Network Policy]
-** xref:10_taints-and-tolerations.adoc[10. Taint/Toleration]
+
+** xref:06_template-quota-limits.adoc[wic 5. Project のクオータ/制限]
+** xref:07_clusterresourcequota.adoc[wic 6. クラスタのクオータ設定]
+# ** xref:08_disabling-project-self-provisioning.adoc[8. Project セルフプロビジョニング]
+# ** xref:09_networking.adoc[9. Network Policy]
+# ** xref:10_taints-and-tolerations.adoc[10. Taint/Toleration]
 
 * 20. OpenShift Pipeline Lab
 ** xref:10-pipeline-install.adoc[インストール]
