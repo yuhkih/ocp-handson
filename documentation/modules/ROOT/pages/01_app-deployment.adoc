@@ -1,0 +1,21 @@
+= Webコンソールを使ったデプロイ
+:navtitle: app-deploy
+include::_attributes.adoc[]
+
+== 演習の概要
+このモジュールでは、『コンテナデプロイと管理』でコマンドラインでデプロイしたアプリを、Webコンソールを用いてデプロイします。
+
+---
+
+=== Web コンソールを使ったデプロイ
+
+image::basics/appdeploy/deploy-1.png[]
+image::basics/appdeploy/deploy-2.png[]
+image::basics/appdeploy/deploy-3.png[]
+image::basics/appdeploy/deploy-4.png[]
+image::basics/appdeploy/deploy-5.png[]
+image::basics/appdeploy/deploy-6.png[]
+image::basics/appdeploy/deploy-7.png[]
+image::basics/appdeploy/deploy-8.png[]
+image::basics/appdeploy/deploy-9.png[]
+image::basics/appdeploy/deploy-10.png[]

@@ -1,0 +1,4 @@
+= Setup
+include::_attributes.adoc[]
+
+準備中。
