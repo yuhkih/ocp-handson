@@ -1,4 +1,4 @@
-= Webコンソールを使ったデプロイ
+= Webコンソールからのデプロイ
 :navtitle: app-deploy
 include::_attributes.adoc[]
 
@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 ---
 
-=== Web コンソールを使ったデプロイ
+=== Web コンソールを使ったデプロイ （コンテナイメージ）
 
 image::basics/appdeploy/deploy-1.png[]
 image::basics/appdeploy/deploy-2.png[]
@@ -19,3 +19,97 @@ image::basics/appdeploy/deploy-7.png[]
 image::basics/appdeploy/deploy-8.png[]
 image::basics/appdeploy/deploy-9.png[]
 image::basics/appdeploy/deploy-10.png[]
+
+
+=== Web コンソールを使ったデプロイ （レポジトリ）
+==== Developer パースペクティブ
+
+OpenShift Container PlatformのWebコンソールには、Administrator パースペクティブとDeveloperパースペクティブの2つのパースペクティブがあります。Developerパースペクティブでは、開発者のユースケースに特化したワークフローを提供します。
+
+* Developerパースペクティブに切り替えます。
+
+アプリケーションを作成するためのオプションを持つTopologyビューが表示されます。
+
+image::basics/appdeploy/s2i_1.png[]
+
+==== Project 作成
+プロジェクトによって、あるユーザーのコミュニティが他のコミュニティから切り離された状態でコンテンツを整理・管理できます。プロジェクトはKubernetesネームスペースに対するOpenShiftの拡張で、ユーザーのセルフプロビジョニングを可能にする機能を追加したものです。 ほとんどの場合に互換性があります。
+
+* Project ドロップダウンメニューをクリック -> Create Project を選択します。
+
+image::basics/appdeploy/s2i_2.png[]
+
+[Note]
+====
+異なるプロジェクトはそれぞれに対応した異なるユーザー権限とクォータを持つことができます
+====
+
+Name を <英字氏名>-test として、プロジェクトを作成します。 例） yamadataro-test
+プロジェクトが <英字氏名>-test に切り替わったことを確認します。
+
+==== アプリケーションデプロイメント
+Web コンソールの Developer パースペクティブでは、Add ビューからアプリケーションおよび関連サービスを作成できます。OpenShift Container Platform にデプロイするためにはいくつかのオプションがあります（例 Dockerfile、Git、Catalog、YAMLなど）。
+
+本手順では、GitHub にある既存のコードベースを利用して、OpenShift Container Platform上でアプリケーションを作成、構築、デプロイします。Developerパースペクティブでアプリケーションを作成するための Import from git オプションを使います。
+
+===== アプリケーションの作成
+
+* Add ビューで Import From Git をクリックし、Import from Git フォームを表示します。
+
+image::basics/appdeploy/s2i_3.png[]
+
+* Git セクションで、アプリケーションの作成に使用するコードベースの Git リポジトリー URL を入力します。
+
+
+[.console-input]
+[source,sh]
+----
+https://github.com/sclorg/nodejs-ex.git
+----
+
+* Edit Import Strategy をあえて選択し、適切なビルダーイメージが検出されているかを確認します。
+** Builder セクションで、URL の検証後に、自動的に選択されます（スターのマークが付きます）。
+** ビルダーイメージが自動検出されていない場合は、ビルダーイメージを選択します。必要に応じて、Builder Image Version のドロップダウンリストを使用してバージョンを変更できます。
+
+* General セクションで、以下を確認します（特に変更不要です）。
+** Application ：アプリケーションを分類するために一意の名前 (nodejs-ex-app など) を入力します。
+** Name ：このアプリケーション用に作成されたリソースを分類するために一意な名前を入力します。これは Git リポジトリー URL をベースとして自動的に設定されます。
+* Resources セクションで、デフォルトのリソース Deployment を選択します
+* その他の設定は変更せず、Create をクリックします。
+
+[Note]
+====
+Knative Service オプションは、Serverless Operator がクラスターにインストールされている場合にのみ、Import from git 形式で表示されます。
+====
+
+==== Topology ビュー
+
+* Web コンソールのDeveloperパースペクティブにあるTopologyビューでは、プロジェクト内のすべてのアプリケーション、そのビルドステータス、およびそれらに関連するコンポーネントとサービスを視覚的に表示します。
+
+image::basics/appdeploy/s2i_4.png[Topology ビュー]
+image::basics/appdeploy/s2i_5.png[Topology ビューの切り替え]
+
+* アプリケーションをビルドすると、Runningと表示されます。
+
+image::basics/appdeploy/s2i_6.png[]
+
+以下のように、異なるタイプのリソースオブジェクトのインジケーターと共に、アプリケーションリソース名が追加されます。
+
+D: Deployment
+DC: Deployment Configs
+SS: StatefulSet
+DS: Daemonset
+
+注: OpenShift Deployment Configsに加えて、Kubernetes Deployments もサポートされていることに注意します。 Kubernetes Deploymentは、Deployment Configs で利用可能な機能の多くを共有しており、OpenShift Container Platform 4.5からはデフォルトのデプロイメントリソースオブジェクトとなっています。
+
+* アプリケーションの中心のロゴをクリックすると、右側から詳細画面が表示され、関連するリソースを閲覧することができます。
+
+image::basics/appdeploy/s2i_7.png[]
+
+* 右上の URL を開く アイコンをクリックして、アプリケーションのルートにアクセスしてみてください。
+
+image::basics/appdeploy/s2i_8.png[]
+image::basics/appdeploy/s2i_9.png[]
+image::basics/appdeploy/s2i_10.png[]
+
+
