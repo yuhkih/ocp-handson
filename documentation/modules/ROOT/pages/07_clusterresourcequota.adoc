@@ -1,12 +1,12 @@
 = クラスタリソースのクォータ
-:navtitle: app-basics
+:navtitle: cluster-quota
 include::_attributes.adoc[]
 
 本コンテンツは、link:https://github.com/team-ohc-jp-place/openshift-cns-testdrive[MAD Workshop Ops Track] の内容を利用しています。
 
 [Warning]
 ====
-ユーザを一つ用意してください。
+ユーザをclusteradminとは別に一つ用意してください。
 ====
 
 == 演習の概要
@@ -20,20 +20,22 @@ include::_attributes.adoc[]
 
 ### ユースケース
 
-*Project* ベースの `quota` の代わりに `clusterresourcequota` を使用する主なユースケースは2つあります。そのうちの一つは、特定のユーザにクォータを設定したい場合です。これは、ユーザに必要なだけの *Project* を作成させ(これによりマルチテナンシーを実現します)、またそこで消費できるリソースの量を制限することができます。
+*Project* ベースの `quota` の代わりに `clusterresourcequota` を使用する主なユースケースは2つあります。
 
-もう一つのユースケースは、アプリケーションごとにクォータを設定したい場合です。この場合、アプリケーションスタックは複数のOpenShift *Project* にまたがっている可能性があります。
+一つは、特定のユーザにクォータを設定したい場合です。これは、ユーザに必要なだけの *Project* を作成させ(これによりマルチテナンシーを実現します)、またそこで消費できるリソースの量を制限することができます。
+
+もう一つのユースケースは、アプリケーションごとにクォータを設定したい場合です。この場合、アプリケーションスタックは複数の *Project* にまたがっている可能性があります。
 
 この演習では、両方のユースケースを調査します。
 
 #### ユーザーごとのクォータの設定
 
-`clusterresourcequota` をユーザに設定するには、`kubeadmin` である必要があります。
+`clusterresourcequota` をユーザに設定するには、clusteradmin権限を持つアカウントが必要です。（`admin`を使います。）
 
 [.console-input]
 [source,sh]
 ----
-oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
+oc login -u admin -p <*** パスワード ***>
 ----
 
 では、`user1` にクォータを設定します。`openshift.io/requester=` の `annotation` キーを使用して、これらのクォータが適用される *Project* を指定します。この演習では、10個より多くの *Pod* を作成することを禁止するハードクォータを設定します。
@@ -45,11 +47,6 @@ oc create clusterquota for-user-user1 \
     --project-annotation-selector openshift.io/requester=user1 \
     --hard pods=10
 ----
-
-[Note]
-====
-構文は `openshift.io/requester=<username>` です。
-====
 
 設定を表示します。
 
@@ -66,11 +63,11 @@ oc get clusterresourcequotas for-user-user1 -o yaml
 apiVersion: quota.openshift.io/v1
 kind: ClusterResourceQuota
 metadata:
-  creationTimestamp: "2022-02-15T00:17:49Z"
+  creationTimestamp: "2023-06-26T00:06:40Z"
   generation: 1
   name: for-user-user1
-  resourceVersion: "59411"
-  uid: 6ab015c7-fd19-4867-9ef3-0b23b60b2efd
+  resourceVersion: "44857"
+  uid: 53217fca-8c3f-49a4-8a1c-bc6585447eb2
 spec:
   quota:
     hard:
@@ -79,25 +76,6 @@ spec:
     annotations:
       openshift.io/requester: user1
     labels: null
-status:
-  namespaces:
-  - namespace: welcome1
-    status:
-      hard:
-        pods: "10"
-      used:
-        pods: "1"
-  - namespace: welcome2
-    status:
-      hard:
-        pods: "10"
-      used:
-        pods: "1"
-  total:
-    hard:
-      pods: "10"
-    used:
-      pods: "2"
 ----
 
 ユーザ `user1` は、自身が作成したすべての *Project* で10個以下の *Pod* を作成することができます。これはこのユーザが作成した *Project* (`openshift.io/requester: user1` annotationに基づく) にのみ適用され、このユーザがアクセスできるその他の**Project**には適用されません。これについては後ほど説明します。
@@ -107,8 +85,11 @@ status:
 [.console-input]
 [source,sh]
 ----
-oc login -u user1 -p Op#nSh1ft
+oc login -u user1 -p <*** パスワード ***>
 ----
+
+oc login -u admin -p 73IgRQzKEbbjowfz
+oc login -u user1 -p i60zZVXH277teZyH
 
 現在の *Project* をリストアップします。
 
@@ -167,8 +148,9 @@ php2-1-ljw9w   1/1     Running   0          4m20s
 [.console-input]
 [source,sh]
 ----
-oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
+oc login -u kubeadmin -p <*** パスワード ***>
 ----
+
 
 `oc describe clusterresourcequotas for-user-user1` を実行してクォータの状態を確認します。
 
@@ -182,11 +164,11 @@ oc describe clusterresourcequotas for-user-user1
 
 ----
 Name:		for-user-user1
-Created:	22 minutes ago
+Created:	4 minutes ago
 Labels:		<none>
 Annotations:	<none>
 Namespace Selector: ["welcome1" "welcome2"]
-Label Selector: 
+Label Selector:
 AnnotationSelector: map[openshift.io/requester:user1]
 Resource	Used	Hard
 --------	----	----
@@ -212,15 +194,19 @@ metadata:
     openshift.io/description: ""
     openshift.io/display-name: ""
     openshift.io/requester: user1
-    openshift.io/sa.scc.mcs: s0:c27,c9
-    openshift.io/sa.scc.supplemental-groups: 1000720000/10000
-    openshift.io/sa.scc.uid-range: 1000720000/10000
-  creationTimestamp: "2022-02-15T00:18:30Z"
+    openshift.io/sa.scc.mcs: s0:c26,c20
+    openshift.io/sa.scc.supplemental-groups: 1000690000/10000
+    openshift.io/sa.scc.uid-range: 1000690000/10000
+  creationTimestamp: "2023-06-26T00:08:42Z"
   labels:
     kubernetes.io/metadata.name: welcome1
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/audit-version: v1.24
+    pod-security.kubernetes.io/warn: restricted
+    pod-security.kubernetes.io/warn-version: v1.24
   name: welcome1
-  resourceVersion: "59245"
-  uid: 75612ea5-aa5d-4c99-a28c-0604efe0f457
+  resourceVersion: "45450"
+  uid: 6f17c5ef-eeb9-4e4e-9cd4-9bb3ae32e132
 spec:
   finalizers:
   - kubernetes
@@ -233,11 +219,10 @@ status:
 [.console-input]
 [source,sh]
 ----
-oc login -u user1 -p Op#nSh1ft
+oc login -u user1 -p <*** パスワード ***>
 oc scale deploy/php1 -n welcome1 --replicas=5
 oc scale deploy/php2 -n welcome2 --replicas=6
 ----
-
 実行中の *Pod* の数に注意して見てみましょう。
 
 [.console-input]
@@ -263,12 +248,12 @@ oc get events -n welcome2 | grep "quota" | head -1
 den: exceeded quota: for-user-user1, requested: pods=1, used: pods=10, limited: pods=10
 ----
 
-ステータスを確認するには、`kubeadmin` になって先程の `describe` コマンドを実行します。
+ステータスを確認するには、`admin` になって先程の `describe` コマンドを実行します。
 
 [.console-input]
 [source,sh]
 ----
-oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
+oc login -u admin -p <*** パスワード ***>
 oc describe clusterresourcequotas for-user-user1
 ----
 
@@ -288,12 +273,12 @@ pods            10      10
 ----
 
 #### Labelによるクォータ
-複数の *Project* にまたがる可能性のあるアプリケーションスタックでクォータを設定するには、Labelを使って *Project* を識別する必要があります。まず、`kubeadmin` でログインします。
+複数の *Project* にまたがる可能性のあるアプリケーションスタックでクォータを設定するには、Labelを使って *Project* を識別する必要があります。まず、`admin` でログインします。
 
 [.console-input]
 [source,sh]
 ----
-oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
+oc login -u admin -p <*** パスワード ***>
 ----
 
 Labelに基づいてクォータを設定します。この演習では *Project* を識別するために `appstack=pricelist` のLabelを使用します。
@@ -361,17 +346,17 @@ pods            0       5
 [.console-input]
 [source,sh]
 ----
-oc login -u user1 -p Op#nSh1ft
+oc login -u user1 -p <*** パスワード ***>
 oc new-app -n pricelist-frontend --name frontend quay.io/redhatworkshops/pricelist:frontend
 oc new-app -n pricelist-backend --name backend quay.io/redhatworkshops/pricelist:backend
 ----
 
-`kubeadmin` でログインし、`describe` コマンドを実行して、クォータの状態を確認してください。
+`admin` でログインし、`describe` コマンドを実行して、クォータの状態を確認してください。
 
 [.console-input]
 [source,sh]
 ----
-oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
+oc login -u admin -p <*** パスワード ***>
 oc describe clusterresourcequotas for-pricelist
 ----
 
@@ -392,7 +377,7 @@ pods            2       5
 
 [Note]
 ====
-`user1` は、`kubeadmin` によって `pricelist-frontend` と `pricelist-backend` のユーザとして割り当てられているため、決められた数の *Pod* を作成することができます。`user1` は *Project* を作成していないので、`openshift.io/requester=user1` annotationはありません。あなたの環境に合わせてクォータポリシーをミックスしたり、マッチさせたりすることができることがわかります。
+`user1` は、`admin` によって `pricelist-frontend` と `pricelist-backend` のユーザとして割り当てられているため、決められた数の *Pod* を作成することができます。`user1` は *Project* を作成していないので、`openshift.io/requester=user1` annotationはありません。あなたの環境に合わせてQuotar のポリシーを設定させたりすることができます。
 ====
 
 `user1` でログインして、合計5つの *Pod* を超えてアプリケーションをスケールしてみてください。
@@ -400,7 +385,7 @@ pods            2       5
 [.console-input]
 [source,sh]
 ----
-oc login -u user1 -p Op#nSh1ft
+oc login -u user1 -p <*** パスワード ***>
 oc scale -n pricelist-frontend deploy/frontend --replicas=3
 oc scale -n pricelist-backend deploy/backend --replicas=3
 ----
@@ -423,12 +408,12 @@ oc get events -n pricelist-backend | grep "quota" | head -1
 
 #### クリーンアップ
 
-`kubeadmin` で行った作業をクリーンアップします。
+`admin` で行った作業をクリーンアップします。
 
 [.console-input]
 [source,sh]
 ----
-oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
+oc login -u admin -p <*** パスワード ***>
 ----
 
 これらのクォータは他の演習と干渉する可能性があるので、この演習で作成した `clusterresourcequota` の両方を削除してください。
@@ -447,11 +432,11 @@ oc delete clusterresourcequotas for-pricelist for-user-user1
 oc delete projects pricelist-backend pricelist-frontend welcome1 welcome2
 ----
 
-次の演習では必ず `kubeadmin` でログインしてください。
+次の演習では必ず `admin` でログインしてください。
 
 [.console-input]
 [source,sh]
 ----
-oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
+oc login -u admin -p <*** パスワード ***>
 oc project default
 ----

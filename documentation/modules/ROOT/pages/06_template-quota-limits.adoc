@@ -17,6 +17,13 @@ OpenShiftでは、1つの *プロジェクト* 内で使用できるオブジェ
 
 #### デフォルトの プロジェクト・リクエスト・テンプレート を見てみる
 
+新しいプロジェクトのテンプレートを作成します。
+[.console-input]
+[source,sh]
+----
+oc get template -n openshift-config
+----
+
 組み込みのデフォルトの *プロジェクト・リクエスト・テンプレート* を表示するには、以下のコマンドを実行します。
 
 [.console-input]
@@ -371,9 +378,7 @@ oc get cm config -n openshift-apiserver -o jsonpath --template="{.data.config\.y
 
 言い換えれば、 その OpenShift オペレーターは *ConfigMap* の作成/変更に最終的な責任を持っています。
 
-`jq` の出力を見ると、 `projectRequestMessage` はありますが、`projectRequestTemplate` は定義されていません。
-
-現在のところ CR には何も指定されていないので、オペレータはクラスタを標準の設定で設定しています。
+`jq` の出力を見ると、 `projectRequestMessage` はありますが、`projectRequestTemplate` は "project-request" が定義されています。
 
 デフォルトのプロジェクト・リクエスト・テンプレートの設定を追加するには、CR を作成する必要があります。 *CustomResource* は次のようになります。:
 
@@ -399,7 +404,27 @@ spec:
 [.console-input]
 [source,sh]
 ----
-oc apply -f {{ HOME_PATH }}/support/cr_project_request.yaml -n openshift-config
+vi cr_project_request.yaml
+----
+
+[.console-input]
+[source,sh]
+----
+apiVersion: "config.openshift.io/v1"
+kind: "Project"
+metadata:
+  name: "cluster"
+  namespace: ""
+spec:
+  projectRequestMessage: ""
+  projectRequestTemplate:
+    name: "project-request-new"
+----
+
+[.console-input]
+[source,sh]
+----
+oc apply -f cr_project_request.yaml -n openshift-config
 ----
 
 このコマンドを実行すると、OpenShift API Server の設定が Operator によって更新されます。
@@ -428,7 +453,7 @@ oc get cm config -n openshift-apiserver -o jsonpath --template="{.data.config\.y
   "kind": "OpenShiftAPIServerConfig",
   "projectConfig": {
     "projectRequestMessage": "",
-    "projectRequestTemplate": "openshift-config/project-request"
+    "projectRequestTemplate": "openshift-config/project-request-new"
   },
 ...
 ----
@@ -528,7 +553,7 @@ oc get limitrange -n template-test
 
 ----
 NAME                   CREATED AT
-template-test-limits   2020-12-16T00:16:39Z
+template-test-limits   2023-06-26T00:02:47Z
 ----
 
 NOTE: `project-request` テンプレートが `openshift-config` プロジェクト内に作成されていることを確認してください。
