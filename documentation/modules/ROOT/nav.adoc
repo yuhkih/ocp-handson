@@ -1,7 +1,7 @@
 
 * 01. OpenShift 基礎
 ** xref:01_app-mgmt-basics.adoc[1. コンテナデプロイと管理]
-** xref:01_app-deployment.adoc[2. Web コンソールによるデプロイ]
+** xref:01_app-deployment.adoc[2. Web コンソールの利用]
 ** xref:02_app-storage-basics.adoc[3. 永続ストレージ]
 ** xref:03_machinesets.adoc[4. ノードの動的管理]
 ** xref:04_infra-nodes.adoc[5. Infra ノードの作成]
