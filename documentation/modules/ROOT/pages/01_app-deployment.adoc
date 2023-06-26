@@ -1,28 +1,15 @@
-= Webコンソールからのデプロイ
+= Webコンソールからのコンテナのデプロイ
 :navtitle: app-deploy
 include::_attributes.adoc[]
 
 == 演習の概要
-このモジュールでは、『コンテナデプロイと管理』でコマンドラインでデプロイしたアプリを、Webコンソールを用いてデプロイします。
+このモジュールでは、Webコンソールを用いてコンテナのデプロイを行います。
 
 ---
-
-=== Web コンソールを使ったデプロイ （コンテナイメージ）
-
-image::basics/appdeploy/deploy-1.png[]
-image::basics/appdeploy/deploy-2.png[]
-image::basics/appdeploy/deploy-3.png[]
-image::basics/appdeploy/deploy-4.png[]
-image::basics/appdeploy/deploy-5.png[]
-image::basics/appdeploy/deploy-6.png[]
-image::basics/appdeploy/deploy-7.png[]
-image::basics/appdeploy/deploy-8.png[]
-image::basics/appdeploy/deploy-9.png[]
-image::basics/appdeploy/deploy-10.png[]
-
-
-=== Web コンソールを使ったデプロイ （レポジトリ）
+=== Web コンソールを使ったコンテナのデプロイ （レポジトリ）
 ==== Developer パースペクティブ
+
+OpenShift の Web コンソールを活用することで、アプリケーションのデプロイメントを GUI から行うことができるようになります。
 
 OpenShift Container PlatformのWebコンソールには、Administrator パースペクティブとDeveloperパースペクティブの2つのパースペクティブがあります。Developerパースペクティブでは、開発者のユースケースに特化したワークフローを提供します。
 
@@ -111,5 +98,42 @@ image::basics/appdeploy/s2i_7.png[]
 image::basics/appdeploy/s2i_8.png[]
 image::basics/appdeploy/s2i_9.png[]
 image::basics/appdeploy/s2i_10.png[]
+
+
+=== Web コンソールを使ったコンテナのデプロイ （コンテナイメージ）
+
+ここでは、『コンテナデプロイと管理』でコマンドラインでデプロイしたアプリを、Webコンソールを用いてデプロイします。
+
+* Administrator パースペクティブ（管理者向け表示 ）から新しい Project を作成します。
+
+ここでは、Project 名に `app-management-2` としています。
+image::basics/appdeploy/deploy-1.png[]
+image::basics/appdeploy/deploy-2.png[]
+image::basics/appdeploy/deploy-3.png[]
+
+* Developer パースペクティブ（開発者向け表示）に切り替えます。
+image::basics/appdeploy/deploy-4.png[]
+image::basics/appdeploy/deploy-5.png[]
+
+* `+追加` -> `コンテナーイメージ` を選択します。
+
+image::basics/appdeploy/deploy-6.png[]
+
+* `外部レジストリーからのイメージ名` には、前回利用した以下のイメージを利用します。コピー＆ペースト後は `作成` をクリックします。
+
+[.console-input]
+[source,sh]
+----
+quay.io/openshiftroadshow/mapit
+----
+image::basics/appdeploy/deploy-7.png[]
+image::basics/appdeploy/deploy-8.png[]
+
+* 右上の矢印をクリックし、アプリケーションのURLにアクセスします。
+
+image::basics/appdeploy/deploy-9.png[]
+image::basics/appdeploy/deploy-10.png[]
+
+
 
 
