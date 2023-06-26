@@ -110,41 +110,33 @@ spec:
 ...
 ```
 
-デフォルトでは、インストーラが作成する `MachineSets` は、ノードに追加のラベルを適用しません。
+デフォルトでは、インストーラが作成する `MachineSets` は、ノードに追加のラベルを適用していません。
 
 ### カスタムMachineSetの定義
-既存の `MachineSet` を分析したところで、次は作成のルールを確認してみましょう。
+既存の `MachineSet` を分析したところで、次は Infra ノードの MachineSet のマニフェストを作成していきます。
 
-1. `providerSpec` の中では何も変更しない
-2. `machine.openshift.io/cluster-api-cluster: <clusterid>` のインスタンスを変更しない
-3. `MachineSet` にユニークな `name` を指定する
-4. `machine.openshift.io/cluster-api-machineset` のインスタンスが `name` と一致することを確認する
-5. ノードに必要なラベルを `.spec.template.spec.metadata.labels` に追加する
-6. `MachineSet` `name` の参照を変更する場合でも、`subnet` を変更しないように注意する
-
-一見複雑に見えますが、以下のように実行してみましょう。
-
-WARNING: 踏み台ホストにログインしている場合は、ログアウトして実行してください。
-
-
-[.console-input]
-[source,sh]
-----
-bash {{ HOME_PATH }}/support/machineset-generator.sh 1 infra 0 | oc create -f -
-----
-
-
-以下を置換してください。
+まずは必要なパラメータを取得します。
 [.console-input]
 [source,sh]
 ----
 export AMI=$(oc get machineset -n openshift-machine-api -l 'machine.openshift.io/os-id!=Windows' -o jsonpath='{.items[0].spec.template.spec.providerSpec.value.ami.id}')
 export CLUSTERID=$(oc get infrastructures.config.openshift.io cluster -o jsonpath='{.status.infrastructureName}')
 export REGION=$(oc get infrastructures.config.openshift.io cluster -o jsonpath='{.status.platformStatus.aws.region}')
+echo $CLUSTERID
+echo $REGION
+echo $AMI
 ----
-cluster-zbwlg-cbgq7　-> $CLUSTERID
-us-east-2 -> $REGION
-ami-01af87a6ecc18023d -> $AMI
+
+
+以下のテンプレートを、上記で取得した値に置換して、マニフェストを完成させます。
+
+* cluster-zbwlg-cbgq7-private-us-east-2a -> 既存の Worker 用 MachineSets から取得（ここでは cluster-8trtb-rlgsx-private-us-east-2b）
+
+* us-east-2a -> 既存の Worker 用 MachineSets から取得（ここでは us-east-2b）
+* us-east-2 -> $REGION
+* cluster-zbwlg-cbgq7　-> $CLUSTERID
+* us-east-2 -> $REGION
+* ami-01af87a6ecc18023d -> $AMI
 
 [.console-input]
 [source,sh]
@@ -221,8 +213,18 @@ spec:
     kubelet: ""
 ----
 
+編集したマニフェストを作成し、`oc create`  を実行します。
+[.console-input]
+[source,sh]
+----
+vi machineset-infra.yaml
+----
 
-
+[.console-input]
+[source,sh]
+----
+oc create -f machineset-infra.yaml
+----
 
 [.console-input]
 [source,sh]
@@ -232,7 +234,7 @@ export MACHINESET=$(oc get machineset -n openshift-machine-api -l machine.opensh
 
 oc patch machineset $MACHINESET -n openshift-machine-api --type='json' -p='[{"op": "add", "path": "/spec/template/spec/metadata/labels", "value":{"node-role.kubernetes.io/worker":"", "node-role.kubernetes.io/infra":""} }]'
 
-oc scale machineset $MACHINESET -n openshift-machine-api --replicas=1
+oc scale machineset $MACHINESET -n openshift-machine-api --replicas=2
 ----
 
 
@@ -249,7 +251,7 @@ oc get machineset -n openshift-machine-api
 
 ```
 NAME                                    DESIRED   CURRENT   READY   AVAILABLE   AGE
-cluster-zbwlg-cbgq7-infra-us-east-2a    2         2         1       1           49m
+cluster-zbwlg-cbgq7-infra-us-east-2a    1         1         1       1           49m
 cluster-zbwlg-cbgq7-worker-us-east-2a   3         3         3       3           3d6h
 ```
 
@@ -318,170 +320,102 @@ Kubernetesで `Foo` オブジェクトを作成/読み込み/更新/削除でき
 Operator の場合、一般的なパターンとしては、Operator が `CRs` を見て設定を行い、Kubernetes 環境上で _operate_ を行い、設定で指定されたことを実行するというものです。ここでは、OpenShiftのインフラストラクチャオペレータのいくつかがどのように動作するかを見てみましょう。
 
 ## インフラストラクチャコンポーネントの移動
-これで特別なノードができたので、インフラストラクチャのコンポーネントをその上に移動させることができます。
+これで Infra ノードができたので、インフラストラクチャのコンポーネントをその上に移動させることができます。
 
-### ルータ
-OpenShift ルータは `openshift-ingress-operator` という `Operator` によって管理されています。その `Pod` は `openshift-ingress-operator` プロジェクトに存在します。
-
-[.console-input]
-[source,sh]
-----
-oc get pod -n openshift-ingress-operator
-----
-
-実際のデフォルトのルータのインスタンスは `openshift-ingress` プロジェクトにあります。 `Pods` を見てみましょう。
+## レジストリ
+レジストリは、オペレータが実際のレジストリPodをどのように展開するかを設定するために、同様の `CRD` メカニズムを使用します。
+このCRDは `configs.imageregistry.operator.openshift.io` です。
+このCRDに `nodeSelector` を追加するために `cluster` のCRDオブジェクトを編集します。まず、それを見てみましょう。
 
 [.console-input]
 [source,sh]
 ----
-oc get pods -n openshift-ingress -o wide
+oc get configs.imageregistry.operator.openshift.io/cluster -o yaml
 ----
 
 以下のように確認できます。
 
-```
-NAME                              READY   STATUS    RESTARTS   AGE     IP            NODE                                         NOMINATED NODE   READINESS GATES
-router-default-6475c64c48-7q8kz   1/1     Running   1          6h30m   10.130.0.7    ip-10-0-154-47.us-east-2.compute.internal    <none>           <none>
-router-default-6475c64c48-lb7bl   1/1     Running   4          3d6h    10.128.2.10   ip-10-0-153-230.us-east-2.compute.internal   <none>           <none>
-```
-
-ルータが動作している `Node` を確認します。
-
-[.console-input]
-[source,sh]
-----
-ROUTER_POD_NODE=$(oc get pods -n openshift-ingress -o jsonpath='{.items[0].spec.nodeName}')
-oc get node ${ROUTER_POD_NODE}
-----
-
-`worker` の役割が指定されていることが確認できます。
-
-```
-NAME                                        STATUS   ROLES    AGE   VERSION
-ip-10-0-144-70.us-east-2.compute.internal   Ready    worker   9h    v1.12.4+509916ce1
-```
-
-ルータオペレータのデフォルトの設定では、`worker` の役割を持つノードを見つけてルータを配置するようになっています。しかし、専用のインフラストラクチャノードを作成したので、ルータインスタンスを `infra` の役割を持つノードに配置するようにオペレータに指示します。
-
-OpenShiftのルーターオペレータは、`ingresses.config.openshift.io`という`CustomResourceDefinitions`(`CRD`)を使用して、クラスタのデフォルトルーティングサブドメインを定義します。
-
-[.console-input]
-[source,sh]
-----
-oc get ingresses.config.openshift.io cluster -o yaml
-----
-
-`cluster` オブジェクトはmasterだけでなくルータオペレータにも観測されます。以下のようなyamlになるでしょう。
-
 ```YAML
-apiVersion: config.openshift.io/v1
-kind: Ingress
+apiVersion: imageregistry.operator.openshift.io/v1
+kind: Config
 metadata:
-  creationTimestamp: "2023-06-19T03:16:35Z"
-  generation: 1
-  name: cluster
-  resourceVersion: "112433"
-  uid: c2c87e42-2d8e-46c7-82ff-05119d877697
-spec:
-  domain: apps.cluster-zbwlg.zbwlg.sandbox478.opentlc.com
-```
-
-個々のルータのデプロイは `ingresscontrollers.operator.openshift.io` CRD で管理されます。
-名前空間 `openshift-ingress-operator` に作成されたデフォルトのものがあります。
-
-
-[.console-input]
-[source,sh]
-----
-oc get ingresscontrollers.operator.openshift.io default -n openshift-ingress-operator -o yaml
-----
-
-以下のようになります。
-
-```YAML
-apiVersion: operator.openshift.io/v1
-kind: IngressController
-metadata:
-  creationTimestamp: "2023-06-19T03:20:37Z"
+  creationTimestamp: "2019-08-06T13:57:22Z"
   finalizers:
-  - ingresscontroller.operator.openshift.io/finalizer-ingresscontroller
+  - imageregistry.operator.openshift.io/finalizer
   generation: 2
-  name: default
-  namespace: openshift-ingress-operator
-  resourceVersion: "131344"
-  uid: c4e657a3-d449-484a-8267-2d2692a7aba1
-spec: {}
+  name: cluster
+  resourceVersion: "13218"
+  selfLink: /apis/imageregistry.operator.openshift.io/v1/configs/cluster
+  uid: 1cb6272a-b852-11e9-9a54-02fdf1f6ca7a
+spec:
+  defaultRoute: false
+  httpSecret: fff8bb0952d32e0aa56adf0ac6f6cf5267e0627f7b42e35c508050b5be426f8fd5e5108bea314f4291eeacc0b95a2ea9f842b54d7eb61522238f2a2dc471f131
+  logging: 2
+  managementState: Managed
+  proxy:
+    http: ""
+    https: ""
+    noProxy: ""
+  readOnly: false
+  replicas: 1
+  requests:
+    read:
+      maxInQueue: 0
+      maxRunning: 0
+      maxWaitInQueue: 0s
+    write:
+      maxInQueue: 0
+      maxRunning: 0
+      maxWaitInQueue: 0s
+  storage:
+    s3:
+      bucket: image-registry-us-east-2-0a598598fc1649d8b96ed91a902b982c-1cbd
+      encrypt: true
+      keyID: ""
+      region: us-east-2
+      regionEndpoint: ""
 status:
-  availableReplicas: 2
-  conditions:
-  - lastTransitionTime: "2023-06-19T03:20:39Z"
-    reason: Valid
-    status: "True"
-    type: Admitted
-  - lastTransitionTime: "2023-06-19T03:34:49Z"
-    status: "True"
-    type: PodsScheduled
-  ...
-  domain: apps.cluster-zbwlg.zbwlg.sandbox478.opentlc.com
-  endpointPublishingStrategy:
-    loadBalancer:
-      dnsManagementPolicy: Managed
-      providerParameters:
-        aws:
-          classicLoadBalancer:
-            connectionIdleTimeout: 0s
-          type: Classic
-        type: AWS
-      scope: External
-    type: LoadBalancerService
-  observedGeneration: 2
-  selector: ingresscontroller.operator.openshift.io/deployment-ingresscontroller=default
+...
 ```
 
-ルータPodがインフラストラクチャノードにヒットするように指示する `nodeSelector` を指定するには、以下の設定を適用します。
-[.console-input]
-[source,sh]
-----
-vi ingresscontroller.yaml
-----
+次のコマンドを実行します。
 
 [.console-input]
 [source,sh]
 ----
-apiVersion: operator.openshift.io/v1
-kind: IngressController
-metadata:
-  finalizers:
-  - ingresscontroller.operator.openshift.io/finalizer-ingresscontroller
-  name: default
-  namespace: openshift-ingress-operator
-spec:
-  nodePlacement:
-    nodeSelector:
-      matchLabels:
-        node-role.kubernetes.io/infra: ""
+oc patch configs.imageregistry.operator.openshift.io/cluster -p '{"spec":{"nodeSelector":{"node-role.kubernetes.io/infra": ""}}}' --type=merge
 ----
 
-[.console-input]
-[source,sh]
-----
-oc apply -f ingresscontroller.yaml
-----
-
-実行：
-[.console-input]
-[source,sh]
-----
-oc get pod -n openshift-ingress -o wide
-----
+上記コマンドによって、レジストリCRの `.spec` を修正し、`nodeSelector` を追加します。
 
 [Note]
 ====
-ルーターの移動中にセッションがタイムアウトすることがあります。
-ページを更新してセッションを取り戻してください。
-端末セッションが失われることはありませんが、手動でこのページに戻る必要があるかもしれません。
+この時点では、イメージレジストリは演算子のために別のプロジェクトを使用していません。
+演算子とオペランドは両方とも `openshift-image-registry` プロジェクトの中にあります。
 ====
 
-もし十分に手際が良ければ、`Terminating` か `ContainerCreating` のいずれかのPodを捕まえることができるかもしれません。
-`Terminating` Podはワーカーノードの1つで動作していました。
-実行中の `Running` Podは最終的に `infra` ロールを持つノードの1つで動作しています。
+パッチコマンドを実行すると、レジストリPodがinfraノードに移動しているのがわかるはずです。
+レジストリは `openshift-image-registry` プロジェクトにあります。
+
+以下をく実行してみてください。
+
+
+[.console-input]
+[source,sh]
+----
+oc get pod -n openshift-image-registry
+----
+
+古いレジストリPodが終了し、新しいレジストリPodが起動しているのがわかるかもしれません。
+レジストリはS3バケットによってバックアップされているので、新しいレジストリPodのインスタンスがどのノードにあるかは問題ではありません。
+これはAPI経由でオブジェクトストアと通信しているので、そこに保存されている既存のイメージはすべてアクセス可能なままです。
+
+また、デフォルトのレプリカ数は1であることにも注意してください。
+現実の環境では、可用性やネットワークのスループットなどの理由から、このレプリカ数を増やしたいと思うかもしれません。
+
+レジストリが着地したノード(ルータのセクションを参照)を見てみると、それが現在infraワーカー上で実行されていることに気づくでしょう。
+
+最後に、イメージレジストリの設定のための `CRD` が名前空間ではなく、クラスタスコープになっていることに注目してください。
+OpenShiftクラスタごとに内部/統合レジストリは1つしかありません。
+
+
