@@ -130,13 +130,19 @@ echo $AMI
 
 以下のテンプレートを、上記で取得した値に置換して、マニフェストを完成させます。
 
-* cluster-zbwlg-cbgq7-private-us-east-2a -> 既存の Worker 用 MachineSets から取得（ここでは cluster-8trtb-rlgsx-private-us-east-2b）
+* cluster-zbwlg-cbgq7-private-us-east-2a -> subnet情報。既存の Worker 用 MachineSets から取得（下図参照。ここでは cluster-8trtb-rlgsx-private-us-east-2b）
 
-* us-east-2a -> 既存の Worker 用 MachineSets から取得（ここでは us-east-2b）
-* us-east-2 -> $REGION
-* cluster-zbwlg-cbgq7　-> $CLUSTERID
-* us-east-2 -> $REGION
-* ami-01af87a6ecc18023d -> $AMI
+* `us-east-2a` -> AZ情報。既存の Worker 用 MachineSets から取得（ここでは us-east-2b）
+* `us-east-2` -> $REGION
+* `cluster-zbwlg-cbgq7` -> $CLUSTERID
+* `us-east-2` -> $REGION
+* `ami-01af87a6ecc18023d` -> $AMI
+
+.subnet情報
+image::basics/machinesets/machinesets-subnet.png[align="center"]
+
+.AZ情報
+image::basics/machinesets/machinesets-az.png[align="center"]
 
 [.console-input]
 [source,sh]
