@@ -129,9 +129,9 @@ echo $AMI
 
 
 以下のテンプレートを、上記で取得した値に置換して、マニフェストを完成させます。
+※Terapadなどテキストツールにコピー＆ペーストして、全て置換してください。
 
-* cluster-zbwlg-cbgq7-private-us-east-2a -> subnet情報。既存の Worker 用 MachineSets から取得（下図参照。ここでは cluster-8trtb-rlgsx-private-us-east-2b）
-
+* `cluster-zbwlg-cbgq7-private-us-east-2a` -> subnet情報。既存の Worker 用 MachineSets から取得（下図参照。ここでは cluster-8trtb-rlgsx-private-us-east-2b）
 * `us-east-2a` -> AZ情報。既存の Worker 用 MachineSets から取得（ここでは us-east-2b）
 * `us-east-2` -> $REGION
 * `cluster-zbwlg-cbgq7` -> $CLUSTERID
@@ -232,6 +232,12 @@ vi machineset-infra.yaml
 oc create -f machineset-infra.yaml
 ----
 
+Web コンソールから新しいMachinesetが作成されているか確認してみてください。
+
+.MachineSetの確認
+image::basics/machinesets/machinesets-1.png[align="center"]
+
+
 [.console-input]
 [source,sh]
 ----
@@ -257,7 +263,7 @@ oc get machineset -n openshift-machine-api
 
 ```
 NAME                                    DESIRED   CURRENT   READY   AVAILABLE   AGE
-cluster-zbwlg-cbgq7-infra-us-east-2a    1         1         1       1           49m
+cluster-zbwlg-cbgq7-infra-us-east-2a    2         2         2       2           49m
 cluster-zbwlg-cbgq7-worker-us-east-2a   3         3         3       3           3d6h
 ```
 
