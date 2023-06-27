@@ -413,11 +413,8 @@ oc patch configs.imageregistry.operator.openshift.io/cluster -p '{"spec":{"nodeS
 ----
 
 
-[Note]
-====
-この時点では、イメージレジストリは演算子のために別のプロジェクトを使用していません。
-演算子とオペランドは両方とも `openshift-image-registry` プロジェクトの中にあります。
-====
+NOTE: この時点では、イメージレジストリは演算子のために別のプロジェクトを使用していません。演算子とオペランドは両方とも `openshift-image-registry` プロジェクトの中にあります。
+
 
 パッチコマンドを実行すると、レジストリPodがinfraノードに移動しているのがわかるはずです。
 レジストリは `openshift-image-registry` プロジェクトにあります。

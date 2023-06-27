@@ -6,8 +6,7 @@ include::_attributes.adoc[]
 
 == 演習の概要
 OpenShiftでは、1つの *プロジェクト* 内で使用できるオブジェクトの数やリソース（CPU、メモリなど）を制限しません。
-さらに、ユーザーは無制限に *プロジェクト* を作成することができます。制約のない世界や POC(Proof Of Concept) の環境では、それはそれでいいでしょう。
-しかし、現実には少し制約をつける必要があります。
+さらに、ユーザーは無制限に *プロジェクト* を作成することができます。しかし、現実的には少し制約をつける必要があります。
 
 ---
 
@@ -58,23 +57,17 @@ oc new-project -h
 `oc new-project` に `--display-name` ディレクティブがあることに注意してください。
 このオプションはデフォルトの *テンプレート* の出力で見た `PROJECT_DISPLAYNAME` パラメータに対応します。
 
-`new-project` ワークフローでは、ユーザーがプロジェクト・リクエストを満たすための情報を提供します。
-リクエストを受けるとOpenShiftはこの要求を許可すべきかどうかを決定します。（例えば、ユーザーは *プロジェクト* を作成する許可を持っているのか？ このユーザーは *プロジェクト* を作りすぎてないか？)
-もし、要求が許可できる場合は、 *テンプレート* を処理します。
-
-*テンプレート* で定義されているオブジェクトを見てみると、クォータや制限についての言及がないことに気づくでしょう。
-こちらを変更してみましょう。
+*テンプレート* で定義されているオブジェクトを見てみると、クォータや制限についての記載がまだありません。
+こちらを変更していきます。
 
 NOTE: *テンプレート* は、ユーザーがパラメーターと共にOpenShift のオブジェクト群を繰り返し作成可能とする強力なツールです。
 これらはより複雑で関連性の高いコンポーネントを OpenShift に素早くデプロイする事に使う事ができ、
-ソフトウェアの開発ライフサイクル(SDLC: Software Development Lifecycle)においても有用な部品となりうるでしょう。
-詳細な情報は次のリンク先で確認できます。
+ソフトウェアの開発ライフサイクルにおいても有用です。詳細な情報は次のリンク先で確認できます。
 link:https://docs.openshift.com/container-platform/4.12/openshift_images/using-templates.html[template
 documentation^] 
 
 #### プロジェクト・リクエスト・テンプレート を編集する
 このラボでは実際にテンプレートの変更を行う必要はありません。変更したものを既に作成済みです。
-`cat`、`less` もしくは、好きなエディターを使って、変更を確認します。
 
 *プロジェクト・リクエスト・テンプレート* :
 
@@ -214,7 +207,7 @@ documentation^] のリンク先に *ResourceQuota* についての詳細があ�
 
 ----
 
-私たちの場合は、CPU, memory, storage, persistentvolumeclaims と Pods に特定のクォータを設定しています。
+今回は、CPU, memory, storage, persistentvolumeclaims と Pods に特定のクォータを設定しています。
 `project_request_template.yaml` ファイルの `ResourceQuota` セクションを見てみましょう。
 
 [source,yaml]
@@ -248,7 +241,7 @@ documentation^] を参照してください。
 ### LimitRange
 LimitRangeの概要については
 link:https://docs.openshift.com/container-platform/4.9/nodes/clusters/nodes-cluster-limit-ranges.html[limit
-range documentation^] のリンクに良い情報があります。:
+range documentation^] のリンクに情報があります。:
 
 ----
 
@@ -288,25 +281,19 @@ ResourceQuota はプロジェクト内の総リソース消費量の上限を設
           memory: 512Mi
 ----
 
-リクエストとデフォルトのリミットの違いは重要で、それについては次のリンク中で説明しています。
-link:https://docs.openshift.com/container-platform/4.9/nodes/clusters/nodes-cluster-limit-ranges.html[limit
-range documentation^]. 
+Request と Limit の違いは重要で、それについては次のリンク中で説明しています。
 
 上記のyamlの例では:
 
 <1> `max` は limits や requests に指定できる最高の値です。
-<2> `min` は limits と requests に指定できる最低の値です。
+<2> `min` は limits や requests に指定できる最低の値です。
 <3> `default` は、何も指定されていない場合に、コンテナが消費できる最大量（制限）です。
 <4> `defaultRequest` は何も指定されてない場合に、コンテナが消費する最小量です。
 
-これらのトピックに加えて、 *Quality of Service* や *Limit* : *Request* の比率 のようなものがあります。
-link:https://docs.openshift.com/container-platform/4.9/nodes/clusters/nodes-cluster-limit-ranges.html[limit
-range documentation^]で確認してみて下さい。
+詳しくは、link:https://docs.openshift.com/container-platform/4.12/nodes/clusters/nodes-cluster-limit-ranges.html[limit
+range documentation^]を参考してください. 
 
-簡潔に言うと、OpenShiftにはサービス品質とリソース管理の複雑で強力なシステムが存在します。
-クラスタで実行されるワークロードの種類を理解することは、これらすべての設定に賢明な値を設定するために重要です。
-
-適切な設定を行うことで、以下のようにプロジェクトを制限することができます。：
+以下のようにプロジェクトを制限することができます。：
 
 * 合計の CPU が4 core (`4000m`) のクォータで
 ** 個々のコンテナーは、
@@ -326,11 +313,11 @@ range documentation^]で確認してみて下さい。
 
 ResourceQuotaと組み合わせることで、ユーザーが OpenShift の様々なリソースを要求し、利用する方法について、非常に細かいコントロールを作成することができます。
 
-NOTE: Quota と Limits は、*プロジェクト* レベルで適用されることを覚えておいてください。
+NOTE: Quota と Limits は、*プロジェクト* レベルで適用されます。
 *ユーザー* は複数の *プロジェクト* にアクセスすることができますが、Quota と Limits は *ユーザー* には直接適用されません。
 複数の *プロジェクト* に1つの Quota を適用したい場合は、
 link:https://docs.openshift.com/container-platform/4.9/applications/quotas/quotas-setting-across-multiple-projects.html[multi-project
-quota^] を見て下さい。この演習の中では、複数プロジェクトのクォータをカバーすることはありません。
+quota^] を参照して下さい。
 
 ### プロジェクト・リクエスト・テンプレートをインストールする
 この背景を踏まえて、実際に OpenShift にこの新しい *プロジェクト・リクエスト・テンプレート* を使用するように指示してみましょう。
