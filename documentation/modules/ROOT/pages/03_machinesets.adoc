@@ -123,7 +123,11 @@ cluster-zbwlg-cbgq7-worker-us-east-2a-s7l7s   Provisioning   m5a.4xlarge    us-e
 cluster-f4a3-lpxbs-worker-us-east-2c-h7gdt   i-0b9208ec47f0e206b   running   m5.2xlarge     us-east-2   us-east-2c   47s
 ----
 
-この時点では、バックグラウンドでは自動的にbootstrap処理が行われています。数分後(最大で5分程度)の出力を見てみましょう。
+この時点では、バックグラウンドでは自動的にbootstrap 処理が行われています。数分後(最大で5分程度)の出力を見てみましょう。また Web コンソールを除いて、ノードの作成状況なども見ても良いでしょう。
+
+
+image::basics/machinesets/machinesets-1.png[]
+
 
 [.console-input]
 [source,sh]
