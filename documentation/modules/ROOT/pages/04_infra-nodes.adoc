@@ -219,6 +219,12 @@ spec:
     kubelet: ""
 ----
 
+[Note]
+====
+今回のサンプルマニフェストは AWS 用のものです。環境に合わせたサンプルは link:https://docs.openshift.com/container-platform/4.12/machine_management/creating-infrastructure-machinesets.html
+[こちら]を参照しながら、適宜修正が必要です。
+====
+
 編集したマニフェストを作成し、`oc create`  を実行します。
 [.console-input]
 [source,sh]
@@ -283,12 +289,13 @@ oc get nodes
 ----
 
 ```
-NAME                                         STATUS   ROLES                  AGE    VERSION
-ip-10-0-148-190.us-east-2.compute.internal   Ready    control-plane,master   3d6h   v1.25.7+eab9cc9
-ip-10-0-153-230.us-east-2.compute.internal   Ready    worker                 3d1h   v1.25.7+eab9cc9
-ip-10-0-154-47.us-east-2.compute.internal    Ready    infra,worker           95m    v1.25.7+eab9cc9
-ip-10-0-190-107.us-east-2.compute.internal   Ready    worker                 3d5h   v1.25.7+eab9cc9
-ip-10-0-239-166.us-east-2.compute.internal   Ready    worker                 49m    v1.25.7+eab9cc9
+NAME                                         STATUS   ROLES                  AGE     VERSION
+ip-10-0-136-135.us-east-2.compute.internal   Ready    worker                 18h     v1.25.7+eab9cc9
+ip-10-0-141-135.us-east-2.compute.internal   Ready    infra,worker           3m31s   v1.25.7+eab9cc9
+ip-10-0-171-195.us-east-2.compute.internal   Ready    control-plane,master   28h     v1.25.7+eab9cc9
+ip-10-0-175-87.us-east-2.compute.internal    Ready    infra,worker           3m32s   v1.25.7+eab9cc9
+ip-10-0-178-255.us-east-2.compute.internal   Ready    worker                 28h     v1.25.7+eab9cc9
+ip-10-0-209-191.us-east-2.compute.internal   Ready    worker                 28h     v1.25.7+eab9cc9
 ```
 
 どのノードが新しいノードなのか分からなくて困っている場合は、`AGE` カラムを見てみてください。
