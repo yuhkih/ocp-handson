@@ -2,7 +2,7 @@
 :navtitle: cluster-quota
 include::_attributes.adoc[]
 
-本コンテンツは、link:https://github.com/team-ohc-jp-place/openshift-cns-testdrive[MAD Workshop Ops Track] の内容を利用しています。
+本コンテンツは、link:https://github.com/team-ohc-jp-place/openshift-cns-testdrive[MAD Workshop Ops Track] の内容をベースに、一部変更しています。
 
 [Warning]
 ====
@@ -14,7 +14,7 @@ include::_attributes.adoc[]
 
 前の演習では、*Project* にクォータを適用する方法を見ました。デフォルトのクォータを設定したので、誰かが新しい *Project* をリクエストしたときにはいつでもデフォルトのクォータが割り当てられます。このような *Project* クォータは、クラスタ内のリソースを制御するのに最適です。
 
-しかし、クォータを個々の *Project* ではなく、**Project**を跨って適用したい場合はどうでしょうか？
+しかし、クォータを個々の *Project* ではなく、**Project**を跨って適用したい場合には、別のやり方が必要です。それが、ClusterResourceQuota です。
 
 ---
 
@@ -48,6 +48,8 @@ oc create clusterquota for-user-user1 \
     --hard pods=10
 ----
 
+NOTE: `clusterquota` は、 `clusterresourcequotas` の略です (`oc api-resources | grep clusterresourcequotas` のコマンドで確認できます)。
+
 設定を表示します。
 
 [.console-input]
@@ -78,7 +80,7 @@ spec:
     labels: null
 ----
 
-ユーザ `user1` は、自身が作成したすべての *Project* で10個以下の *Pod* を作成することができます。これはこのユーザが作成した *Project* (`openshift.io/requester: user1` annotationに基づく) にのみ適用され、このユーザがアクセスできるその他の**Project**には適用されません。これについては後ほど説明します。
+ユーザ `user1` は、自身が作成したすべての *Project* で10個以下の *Pod* を作成することができます。これはこのユーザが作成した *Project* (`openshift.io/requester: user1` annotationに基づく) にのみ適用され、このユーザがアクセスできるその他の**Project**（他のユーザが作成したproject）には適用されません。これについては後ほど説明します。
 
 では `user1` でログインしてみましょう。
 
@@ -88,9 +90,6 @@ spec:
 oc login -u user1 -p <*** パスワード ***>
 ----
 
-oc login -u admin -p 73IgRQzKEbbjowfz
-oc login -u user1 -p i60zZVXH277teZyH
-
 現在の *Project* をリストアップします。
 
 [.console-input]
@@ -99,7 +98,7 @@ oc login -u user1 -p i60zZVXH277teZyH
 oc get projects
 ----
 
-このユーザは *Project* を持っていないはずなので、このような出力が表示されるはずです。(もし持っていても気にしなくて大丈夫です)
+このユーザは *Project* を持っていないはずなので、このような出力が表示されるはずです。
 
 ----
 No resources found.
@@ -143,12 +142,12 @@ NAME           READY   STATUS    RESTARTS   AGE
 php2-1-ljw9w   1/1     Running   0          4m20s
 ----
 
-`kubeadmin` ユーザーに変更してクォータを確認してみましょう。
+`admin` ユーザーに変更してクォータを確認してみましょう。
 
 [.console-input]
 [source,sh]
 ----
-oc login -u kubeadmin -p <*** パスワード ***>
+oc login -u admin -p <*** パスワード ***>
 ----
 
 
@@ -183,7 +182,7 @@ pods		2	10
 oc get ns welcome1 -o yaml
 ----
 
-出力は以下のようになるはずです。特にannotationに注意してください。
+出力は以下のようになるはずです。特にannotationに注意してください。`openshift.io/requester` が `user1`です。
 
 [source,yaml]
 ----
@@ -220,6 +219,11 @@ status:
 [source,sh]
 ----
 oc login -u user1 -p <*** パスワード ***>
+----
+
+[.console-input]
+[source,sh]
+----
 oc scale deploy/php1 -n welcome1 --replicas=5
 oc scale deploy/php2 -n welcome2 --replicas=6
 ----
@@ -254,6 +258,11 @@ den: exceeded quota: for-user-user1, requested: pods=1, used: pods=10, limited: 
 [source,sh]
 ----
 oc login -u admin -p <*** パスワード ***>
+----
+
+[.console-input]
+[source,sh]
+----
 oc describe clusterresourcequotas for-user-user1
 ----
 
@@ -347,6 +356,11 @@ pods            0       5
 [source,sh]
 ----
 oc login -u user1 -p <*** パスワード ***>
+----
+
+[.console-input]
+[source,sh]
+----
 oc new-app -n pricelist-frontend --name frontend quay.io/redhatworkshops/pricelist:frontend
 oc new-app -n pricelist-backend --name backend quay.io/redhatworkshops/pricelist:backend
 ----
@@ -357,6 +371,11 @@ oc new-app -n pricelist-backend --name backend quay.io/redhatworkshops/pricelist
 [source,sh]
 ----
 oc login -u admin -p <*** パスワード ***>
+----
+
+[.console-input]
+[source,sh]
+----
 oc describe clusterresourcequotas for-pricelist
 ----
 
@@ -377,7 +396,7 @@ pods            2       5
 
 [Note]
 ====
-`user1` は、`admin` によって `pricelist-frontend` と `pricelist-backend` のユーザとして割り当てられているため、決められた数の *Pod* を作成することができます。`user1` は *Project* を作成していないので、`openshift.io/requester=user1` annotationはありません。あなたの環境に合わせてQuotar のポリシーを設定させたりすることができます。
+`user1` は、`admin` によって `pricelist-frontend` と `pricelist-backend` のユーザとして割り当てられているため、決められた数の *Pod* を作成することができます。`user1` は *Project* を作成していないので、`openshift.io/requester=user1` annotationはありません。仕様に合わせてQuota のポリシーを設定することができます。
 ====
 
 `user1` でログインして、合計5つの *Pod* を超えてアプリケーションをスケールしてみてください。
@@ -386,6 +405,10 @@ pods            2       5
 [source,sh]
 ----
 oc login -u user1 -p <*** パスワード ***>
+----
+[.console-input]
+[source,sh]
+----
 oc scale -n pricelist-frontend deploy/frontend --replicas=3
 oc scale -n pricelist-backend deploy/backend --replicas=3
 ----

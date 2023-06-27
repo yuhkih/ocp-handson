@@ -2,7 +2,7 @@
 :navtitle: machinesets
 include::_attributes.adoc[]
 
-本コンテンツは、link:https://github.com/team-ohc-jp-place/openshift-cns-testdrive[MAD Workshop Ops Track] の内容を利用しています。
+本コンテンツは、link:https://github.com/team-ohc-jp-place/openshift-cns-testdrive[MAD Workshop Ops Track] の内容をベースに、一部変更しています。
 
 == 演習の概要
 Kubernetes `Node` はコンテナがオーケストレーションされ、`Pod` として実行される場所です。OpenShift 4は、`Operator` を使った自動化に重点を置いている点で、OpenShift 3とは根本的に異なります。`Node` に関しては、`Node` の作成と破壊を含め、クラスタサイズの状態を維持することに重点を置いた `Operator` とコントローラのセットがあります。
