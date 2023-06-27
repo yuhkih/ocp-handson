@@ -341,7 +341,7 @@ Operator の場合、一般的なパターンとしては、Operator が `CRs` �
 ## インフラストラクチャコンポーネントの移動
 これで Infra ノードができたので、インフラストラクチャのコンポーネントをその上に移動させることができます。
 
-## レジストリ
+### レジストリ
 レジストリは、オペレータが実際のレジストリPodをどのように展開するかを設定するために、同様の `CRD` メカニズムを使用します。
 このCRDは `configs.imageregistry.operator.openshift.io` です。
 このCRDに `nodeSelector` を追加するために `cluster` のCRDオブジェクトを編集します。まず、それを見てみましょう。
@@ -397,7 +397,14 @@ status:
 ...
 ```
 
-次のコマンドを実行します。
+次のコマンドを実行します。`image-registry-xxxxxxxxx-xxxxx` が、レジストリを指す Pod でこの Pod をInfra ノードへ移動させます。
+[.console-input]
+[source,sh]
+----
+oc get pod -n openshift-image-registry -o wide
+----
+
+それでは、以下のコマンドによって、レジストリCRの `.spec` を修正し、`nodeSelector` を追加します。
 
 [.console-input]
 [source,sh]
@@ -405,7 +412,6 @@ status:
 oc patch configs.imageregistry.operator.openshift.io/cluster -p '{"spec":{"nodeSelector":{"node-role.kubernetes.io/infra": ""}}}' --type=merge
 ----
 
-上記コマンドによって、レジストリCRの `.spec` を修正し、`nodeSelector` を追加します。
 
 [Note]
 ====
@@ -422,17 +428,16 @@ oc patch configs.imageregistry.operator.openshift.io/cluster -p '{"spec":{"nodeS
 [.console-input]
 [source,sh]
 ----
-oc get pod -n openshift-image-registry
+oc get pod -n openshift-image-registry -o wide
 ----
 
-古いレジストリPodが終了し、新しいレジストリPodが起動しているのがわかるかもしれません。
 レジストリはS3バケットによってバックアップされているので、新しいレジストリPodのインスタンスがどのノードにあるかは問題ではありません。
 これはAPI経由でオブジェクトストアと通信しているので、そこに保存されている既存のイメージはすべてアクセス可能なままです。
 
 また、デフォルトのレプリカ数は1であることにも注意してください。
 現実の環境では、可用性やネットワークのスループットなどの理由から、このレプリカ数を増やしたいと思うかもしれません。
 
-レジストリが着地したノード(ルータのセクションを参照)を見てみると、それが現在infraワーカー上で実行されていることに気づくでしょう。
+レジストリのPodが稼働しているノードを見てみると、それが現在infraワーカー上で実行されていることに気づくでしょう。
 
 最後に、イメージレジストリの設定のための `CRD` が名前空間ではなく、クラスタスコープになっていることに注目してください。
 OpenShiftクラスタごとに内部/統合レジストリは1つしかありません。
