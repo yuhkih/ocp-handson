@@ -315,12 +315,12 @@ ResourceQuotaと組み合わせることで、ユーザーが OpenShift の様�
 
 NOTE: Quota と Limits は、*プロジェクト* レベルで適用されます。
 *ユーザー* は複数の *プロジェクト* にアクセスすることができますが、Quota と Limits は *ユーザー* には直接適用されません。
-複数の *プロジェクト* に1つの Quota を適用したい場合は、
-link:https://docs.openshift.com/container-platform/4.9/applications/quotas/quotas-setting-across-multiple-projects.html[multi-project
+複数の *プロジェクト* に1つの Quota を適用したい場合は、ClusterReqoureQuotaの記載のある
+link:https://docs.openshift.com/container-platform/4.12/applications/quotas/quotas-setting-across-multiple-projects.html[multi-project
 quota^] を参照して下さい。
 
 ### プロジェクト・リクエスト・テンプレートをインストールする
-この背景を踏まえて、実際に OpenShift にこの新しい *プロジェクト・リクエスト・テンプレート* を使用するように指示してみましょう。
+この背景を踏まえて、実際に OpenShift にこの新しい *プロジェクト・リクエスト・テンプレート* を使用するように変更をしていきます。
 
 #### Template を作成する
 先ほど説明したように、 *テンプレート* はOpenShiftオブジェクトの一つのタイプにすぎません。　
@@ -361,9 +361,9 @@ API Server の構成は、以下のコマンドで表示できます。:
 oc get cm config -n openshift-apiserver -o jsonpath --template="{.data.config\.yaml}" | jq
 ----
 
-様々な *CustomResource* （CR）インスタンスを見て、定義したコンフィグレーションがクラスタに適用されていることを保証するための OpenShift オペレーター があります。
+様々な *CustomResource* （CR）インスタンスを見て、定義したコンフィグレーションがクラスタに適用されていることを保証するための OpenShift の Operator があります。
 
-言い換えれば、 その OpenShift オペレーターは *ConfigMap* の作成/変更に最終的な責任を持っています。
+言い換えれば、 その OpenShift Operator は *ConfigMap* の作成/変更に最終的な責任を持っています。
 
 `jq` の出力を見ると、 `projectRequestMessage` はありますが、`projectRequestTemplate` は "project-request" が定義されています。
 
@@ -381,8 +381,6 @@ spec:
   projectRequestTemplate:
     name: "project-request-new"
 ----
-
-*projectRequestTemplate* の名前が、以前に `openshift-config` プロジェクトで作成したテンプレートの名前と一致していることに注意してください。
 
 次にこの *CustomResource* を作成します。
 この *CR* が作成されると、OpenShift のオペレータは *CR* に気付き、構成の変更を適用します。
@@ -497,13 +495,11 @@ Resource limits:
         Container       memory          5Mi     1Gi     512Mi       1Gi     -
 ----
 
-[Note]
-====
-Quota と Resource limits のセクションが表示されていない場合は、コマンド実行が早すぎた可能性があります。
+NOTE: Quota と Resource limits のセクションが表示されていない場合は、コマンド実行が早すぎた可能性があります。
 オペレータは必要なことをすべて実行するのに多少の時間がかかることを覚えておいてください。
 マスターが新しい設定を読み込む前にプロジェクトを作成した可能性があります。
 その場合 `oc delete project template-test` を削除して、しばらくしてから再作成してください。
-====
+
 
 また、 *Quota* と *LimitRange* オブジェクトが作成されたことがわかります。：
 
