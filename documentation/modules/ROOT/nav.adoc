@@ -24,3 +24,6 @@
 ** xref:22-Kustomize.adoc[2. Kustomizeインテグレーション]
 ** xref:23-Helm.adoc[3. Helmインテグレーション]
 
+* 51. Red Hat OpenShift Service on AWS (ROSA) Lab
+** xref:50-rosa-hcp-create.adoc[(デモ) ROSA HCPクラスターの作成]
+
