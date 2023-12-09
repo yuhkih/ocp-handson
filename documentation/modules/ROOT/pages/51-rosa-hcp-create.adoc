@@ -133,7 +133,7 @@ $ terraform apply rosa.tfplan
 
 [Note]
 ====
-ここではAWSリージョンのシングルアベイラビリティーゾーン(Single-AZ)に、ROSA HCPクラスターのワーカーノードを作成することを前提として、VPCを作成しています。マルチアベイラビリティーゾーン(Multi-AZ)にワーカーノードを作成して、AZ単位で冗長性を確保したい場合は、`terraform plan` コマンド実行時に、リージョンにあるAZのIDを3つ指定します。
+ここではAWSリージョンのシングルアベイラビリティーゾーン(SingleAZ)に、ROSA HCPクラスターのワーカーノードを作成することを前提として、VPCを作成しています。マルチアベイラビリティーゾーン(MultiAZ)にワーカーノードを作成して、AZ単位で冗長性を確保したい場合は、`terraform plan` コマンド実行時に、リージョンにあるAZのIDを3つ指定します。
 ```
 $ terraform plan -out rosa.tfplan -var region=us-east-2 \
   -var single_az_only=false \
@@ -181,7 +181,7 @@ https://console.redhat.com/openshift[OpenShift Cluster Manager]に登録する�
 
 [Note]
 ====
-OpenShift Cluster Manager(OCM)は、OpenShiftクラスターのインストール、修正、操作、およびアップグレードを可能にする管理サービスです。OCMを使用すると、単一のダッシュボードからすべてのOpenShiftクラスターを操作できるようになります。詳細については、
+OpenShift Cluster Manager(OCM)は、OpenShiftクラスターのインストール、修正、操作、およびアップグレードを可能にするRed Hat提供の管理サービスです。OCMを使用すると、単一のダッシュボードからすべてのOpenShiftクラスターを操作できるようになります。詳細については、
 https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html-single/red_hat_openshift_cluster_manager/index[OCMの公式ドキュメント]もご参照ください。
 ====
 
@@ -200,12 +200,12 @@ I: Created OIDC provider with ARN 'arn:aws:iam::XXXXXXXXX:oidc-provider/rh-oidc.
 
 ROSA HCPクラスターの作成コマンドを実行します。`version` オプションを指定しない場合、自動的に最新版のOpenShiftが利用されます。`dry-run` オプションを付けると、正常に実行可能かどうかを事前確認できます。この `rosa create cluster` コマンドの実行例では、デフォルトのパラメーターを指定しています。
 
-Multi-AZ構成のパブリッククラスターにする場合は、`subnet-ids`オプションで、VPCのサブネットを4つまたは6つ指定します。
-
 [Note]
 ====
 ROSA HCPクラスターのワーカーノードの
-https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition/rosa-hcp-service-definition.html#rosa-sdpolicy-instance-types_rosa-hcp-service-definition[最小台数は2台、最大台数は51台]です。これは、Single-AZ, Multi-AZで共通しています。
+https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition/rosa-hcp-service-definition.html#rosa-sdpolicy-instance-types_rosa-hcp-service-definition[最小台数は2台、最大台数は51台]です。これは、SingleAZ, MultiAZで共通しています。
+
+MultiAZ構成のワーカーノードを利用する場合は、 `rosa create cluster` コマンド実行時に、 `subnet-ids` オプションで、利用するパブリック/プライベートサブネットを指定します。
 
 AWSリージョンで利用可能なEC2インスタンスのタイプにも依存しますが、最小で 4vCPU/RAM8GiB のインスタンスを、ワーカーノードとして利用できます。
 ====
@@ -350,3 +350,11 @@ $ rosa describe cluster -c hcp-01 |grep Console
 Console URL:                https://console-openshift-console.apps.rosa.hcp-01.240p.p3.openshiftapps.com
 ```
 
+[Note]
+====
+作成したROSAクラスターの情報は、OCMの画面からも確認できます。下記の画像は、SingleAZ構成(2台)とMultiAZ構成(2台と3台)の、ROSA HCPクラスターの例です。
+
+image::rosa/hcp-create/singleaz01.png[]
+image::rosa/hcp-create/multiaz01.png[]
+image::rosa/hcp-create/multiaz02.png[]
+====
