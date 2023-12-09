@@ -205,7 +205,7 @@ ROSA HCPクラスターの作成コマンドを実行します。`version` オ�
 ROSA HCPクラスターのワーカーノードの
 https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition/rosa-hcp-service-definition.html#rosa-sdpolicy-instance-types_rosa-hcp-service-definition[最小台数は2台、最大台数は51台]です。これは、SingleAZ, MultiAZで共通しています。
 
-MultiAZ構成のワーカーノードを利用する場合は、 `rosa create cluster` コマンド実行時に、 `subnet-ids` オプションで、利用するパブリック/プライベートサブネットを指定します。
+MultiAZ構成のワーカーノードを利用する場合は、SingleAZ構成の時と同様に、 `rosa create cluster` コマンド実行時に `subnet-ids` オプションで、MultiAZ構成を取るためのパブリック/プライベートサブネットを指定します。
 
 AWSリージョンで利用可能なEC2インスタンスのタイプにも依存しますが、最小で 4vCPU/RAM8GiB のインスタンスを、ワーカーノードとして利用できます。
 ====
