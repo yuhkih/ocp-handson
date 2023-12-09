@@ -352,7 +352,7 @@ Console URL:                https://console-openshift-console.apps.rosa.hcp-01.2
 
 [Note]
 ====
-作成したROSAクラスターの情報は、OCMの画面からも確認できます。下記の画像は、SingleAZ構成(ワーカーノード2台)とMultiAZ構成(ワーカーノード2台と3台)の、ROSA HCPクラスターの例です。
+作成したROSAクラスターの情報は、OCMの画面からも確認できます。下記の画像は、SingleAZ構成(ワーカーノード2台)とMultiAZ構成(ワーカーノード2台と3台)の例です。
 
 image::rosa/hcp-create/singleaz01.png[]
 image::rosa/hcp-create/multiaz01.png[]
