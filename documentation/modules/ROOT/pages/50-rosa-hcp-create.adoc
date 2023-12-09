@@ -10,11 +10,11 @@ include::_attributes.adoc[]
 
 === 前準備
 
-ROSAは、Red Hatによるお客様の既存AWSアカウントへのデプロイを可能にするモデルを提供します。Red Hatはセキュリティを考慮して、[AWS Secrity Token Service (STS)](https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/id_credentials_temp.html) を使用することを、ROSA HCPクラスター作成の前提条件としています。STSを使用したROSA HCPクラスター作成の前提条件は、次のドキュメントをご参照ください。
+ROSAは、Red Hatによるお客様の既存AWSアカウントへのデプロイを可能にするモデルを提供します。Red Hatはセキュリティを考慮して、https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/id_credentials_temp.html[AWS Secrity Token Service (STS)] を使用することを、ROSA HCPクラスター作成の前提条件としています。STSを使用したROSA HCPクラスター作成の前提条件は、次のドキュメントをご参照ください。
 
-- [第1章 STS を使用した ROSA の AWS 前提条件](https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html/prepare_your_environment/rosa-sts-aws-prereqs)
-- [第4章 STS を使用する ROSA クラスターの IAM リソースについて](https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html/introduction_to_rosa/rosa-sts-about-iam-resources)
-- [第5章 必要な AWS サービスクォータ](https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html/prepare_your_environment/rosa-sts-required-aws-service-quotas)
+* [第1章 STS を使用した ROSA の AWS 前提条件](https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html/prepare_your_environment/rosa-sts-aws-prereqs)
+* [第4章 STS を使用する ROSA クラスターの IAM リソースについて](https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html/introduction_to_rosa/rosa-sts-about-iam-resources)
+* [第5章 必要な AWS サービスクォータ](https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html/prepare_your_environment/rosa-sts-required-aws-service-quotas)
 
 ROSA HCPクラスターを作成するには、AWSアカウントと[Red Hatアカウント](https://cloud.redhat.com/)を利用します。アカウントがない場合は、アカウントを作成する必要があります。
 
