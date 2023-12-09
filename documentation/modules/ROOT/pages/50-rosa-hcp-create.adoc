@@ -55,15 +55,11 @@ AWSアカウントを利用してELBをインストールしたことがない�
 $ aws iam create-service-linked-role --aws-service-name "elasticloadbalancing.amazonaws.com"
 ```
 
-IAMロールが作成されると、次のような画面を確認できます。
-
-image::rosa/hcp-create/iam-elb-role.png[]
-
 AWSサービスクォータがROSA HCPクラスター用の要件を満たしており、ELB用のロールが作成されていると、次の画面が表示されます。ここから画面一番下にある「Red Hatに進む」ボタンをクリックして、AWSとRed Hatアカウントをリンクします。
 
 image::rosa/hcp-create/link01.png[]
 
-「Red Hatに進む」ボタンをクリックすると、次の画面が表示されます。このとき、Red Hatアカウントにログインしていない場合、ログイン画面が表示されますので、ログインしておきます。ここで「I have read and agreed to the terms and conditions」にチェックを入れて、「Connect accounts」ボタンをクリックすると、AWSとRed Hatアカウントのリンクが完了します。
+「Red Hatに進む」ボタンをクリックすると、次の画面が表示されます。ここで、Red Hatアカウントにログインしていない場合、ログイン画面が表示されますので、ログインしておきます。ここで「I have read and agreed to the terms and conditions」にチェックを入れて、「Connect accounts」ボタンをクリックすると、AWSとRed Hatアカウントのリンクが完了します。
 
 image::rosa/hcp-create/link02.png[]
 
@@ -137,14 +133,14 @@ $ terraform apply rosa.tfplan
 
 [Note]
 ====
-<font color="red">NOTE</font> ここではAWSリージョンのシングルアベイラビリティーゾーン(Single-AZ)に、ROSA HCPクラスターのワーカーノードを作成することを前提として、VPCを作成しています。マルチアベイラビリティーゾーン(Multi-AZ)にワーカーノードを作成して、AZ単位で冗長性を確保したい場合は、`terraform plan` コマンド実行時に、リージョンにあるAZのIDを3つ指定します。
+<b>NOTE:</b> ここではAWSリージョンのシングルアベイラビリティーゾーン(Single-AZ)に、ROSA HCPクラスターのワーカーノードを作成することを前提として、VPCを作成しています。マルチアベイラビリティーゾーン(Multi-AZ)にワーカーノードを作成して、AZ単位で冗長性を確保したい場合は、`terraform plan` コマンド実行時に、リージョンにあるAZのIDを3つ指定します。
 ```
 $ terraform plan -out rosa.tfplan -var region=us-east-2 \
   -var 'subnet_azs=["use2-az1", "use2-az2", "use2-az3"]'
 ```
 ====
 
-AWS VPCの作成が完了していることを、`terraform output` コマンドで確認します。このとき、作られるサブネットのIDがHCPクラスター作成に必要となるので、`export` コマンドで`SUBNET_IDS` 変数に代入しておきます。
+AWS VPCの作成が完了していることを、`terraform output` コマンドで確認します。このとき、作られるサブネットのIDがHCPクラスター作成に必要となるので、`export` コマンドで `SUBNET_IDS` 変数に代入しておきます。
 
 ```
 $ export SUBNET_IDS=$(terraform output -raw cluster-subnets-string)
@@ -184,7 +180,7 @@ https://console.redhat.com/openshift[OpenShift Cluster Manager]に登録する�
 
 [Note]
 ====
-<font color="red">NOTE</font> OpenShift Cluster Manager(OCM)は、OpenShiftクラスターのインストール、修正、操作、およびアップグレードを可能にする管理サービスです。OCMを使用すると、単一のダッシュボードからすべてのOpenShiftクラスターを操作できるようになります。詳細については、
+OpenShift Cluster Manager(OCM)は、OpenShiftクラスターのインストール、修正、操作、およびアップグレードを可能にする管理サービスです。OCMを使用すると、単一のダッシュボードからすべてのOpenShiftクラスターを操作できるようになります。詳細については、
 https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html-single/red_hat_openshift_cluster_manager/index[OCMの公式ドキュメント]もご参照ください。
 ====
 
@@ -201,11 +197,11 @@ I: Created OIDC provider with ARN 'arn:aws:iam::XXXXXXXXX:oidc-provider/rh-oidc.
 
 === ROSA HCPクラスターの作成
 
-ROSA HCPクラスターの作成コマンドを実行します。` --version` オプションを指定しない場合、自動的に最新版のOpenShiftが利用されます。` --dry-run` オプションを付けると、正常に実行可能かどうかを事前確認できます。この`rosa create cluster` コマンドの実行例では、デフォルトのパラメーターを指定しています。
+ROSA HCPクラスターの作成コマンドを実行します。`version` オプションを指定しない場合、自動的に最新版のOpenShiftが利用されます。`dry-run` オプションを付けると、正常に実行可能かどうかを事前確認できます。この `rosa create cluster` コマンドの実行例では、デフォルトのパラメーターを指定しています。
 
 [Note]
 ====
-<font color="red">NOTE</font> ワーカーノードの最小台数は、下記となります。
+ワーカーノードの最小台数は、下記となります。
 
 * Single-AZの場合: 2台
 * Multi-AZの場合: 3台
