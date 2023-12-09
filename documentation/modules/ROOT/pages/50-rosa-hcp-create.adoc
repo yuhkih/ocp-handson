@@ -309,7 +309,7 @@ I: To determine when your cluster is Ready, run 'rosa describe cluster -c hcp-01
 I: To watch your cluster installation logs, run 'rosa logs install -c hcp-01 --watch'.
 ```
 
-クラスターのデプロイ状態は、次のコマンドで確認できます。`STATE` が`installing` から`ready` に変更されるまで、大体10分ほど待ちます。
+クラスターのデプロイ状態は、次のコマンドで確認できます。`STATE` が `installing` から `ready` に変更されるまで、大体10分ほど待ちます。
 ```
 
 $ rosa list cluster
@@ -342,7 +342,7 @@ workers  No           2/2       m5.xlarge                          us-east-2a   
 
 ```
 
-ワーカーノードのデプロイが完了すると、ROSA HCPクラスターのコンソールにログインできるようになります。このコンソールのURLは、次のコマンドで確認できます。ユーザー名とパスワードは、`rosa create admin` コマンド実行時に表示されたものを使います。
+ワーカーノードのデプロイが完了すると、ROSA HCPクラスターのコンソールにログインできるようになります。このコンソールのURLは、次のコマンドで確認できます。ユーザー名とパスワードは、`rosa create admin` コマンド実行時に表示されたもの(ユーザー名は `cluster-admin` )を使います。
 
 ```
 $ rosa describe cluster -c hcp-01 |grep Console
