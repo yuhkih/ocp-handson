@@ -26,12 +26,12 @@ image::rosa/hcp-create/hcp-enable.png[]　
 
 AWS CLIを
 https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html[インストール]して、
-https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-chap-configure.html[設定]します。このとき、`~/.aws/credentials`で、次の情報を設定する必要があります。
+https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-chap-configure.html[設定]します。このとき、`~/.aws/credentials` で、次の情報を設定する必要があります。
 
 - aws_access_key_id
 - aws_secret_key
 
-また、デフォルトで利用するリージョンを指定する場合、`~/.aws/config`で設定できます。
+また、デフォルトで利用するリージョンを指定する場合、`~/.aws/config` で設定できます。
 
 ```
 $ cat ~/.aws/config 
@@ -124,7 +124,7 @@ I: Current OpenShift Client Version: 4.14.5
 
 === ROSA HCPクラスターに必要なAWS VPCやIAMロール/ポリシーの作成
 
-ROSA HCPクラスター作成に必要なAWS VPCを作成します。AWS VPCはAWSコンソールから作成できますが、TerraformでVPCを作成するためのテンプレートが用意されているので、それを利用することもできます。TerraformでVPCを作成するためには、次のコマンドを実行します。`terraform plan`コマンドでは、HCPクラスターが作成できるAWSリージョンのIDを指定する必要があります。
+ROSA HCPクラスター作成に必要なAWS VPCを作成します。AWS VPCはAWSコンソールから作成できますが、TerraformでVPCを作成するためのテンプレートが用意されているので、それを利用することもできます。TerraformでVPCを作成するためには、次のコマンドを実行します。`terraform plan` コマンドでは、HCPクラスターが作成できるAWSリージョンのIDを指定する必要があります。
 
 ```
 $ git clone https://github.com/openshift-cs/terraform-vpc-example
@@ -137,14 +137,14 @@ $ terraform apply rosa.tfplan
 
 [Note]
 ====
-Note: ここではAWSリージョンのシングルアベイラビリティーゾーン(Single-AZ)に、ROSA HCPクラスターのワーカーノードを作成することを前提として、VPCを作成しています。マルチアベイラビリティーゾーン(Multi-AZ)にワーカーノードを作成して、AZ単位で冗長性を確保したい場合は、`terraform plan`コマンド実行時に、リージョンにあるAZのIDを3つ指定します。
+<font color="red">NOTE</font> ここではAWSリージョンのシングルアベイラビリティーゾーン(Single-AZ)に、ROSA HCPクラスターのワーカーノードを作成することを前提として、VPCを作成しています。マルチアベイラビリティーゾーン(Multi-AZ)にワーカーノードを作成して、AZ単位で冗長性を確保したい場合は、`terraform plan` コマンド実行時に、リージョンにあるAZのIDを3つ指定します。
 ```
 $ terraform plan -out rosa.tfplan -var region=us-east-2 \
   -var 'subnet_azs=["use2-az1", "use2-az2", "use2-az3"]'
 ```
 ====
 
-AWS VPCの作成が完了していることを、`terraform output`コマンドで確認します。このとき、作られるサブネットのIDがHCPクラスター作成に必要となるので、`export`コマンドで`SUBNET_IDS`変数に代入しておきます。
+AWS VPCの作成が完了していることを、`terraform output` コマンドで確認します。このとき、作られるサブネットのIDがHCPクラスター作成に必要となるので、`export` コマンドで`SUBNET_IDS` 変数に代入しておきます。
 
 ```
 $ export SUBNET_IDS=$(terraform output -raw cluster-subnets-string)
@@ -184,8 +184,7 @@ https://console.redhat.com/openshift[OpenShift Cluster Manager]に登録する�
 
 [Note]
 ====
-Note: 
-OpenShift Cluster Manager(OCM)は、OpenShiftクラスターのインストール、修正、操作、およびアップグレードを可能にする管理サービスです。OCMを使用すると、単一のダッシュボードからすべてのOpenShiftクラスターを操作できるようになります。詳細については、
+<font color="red">NOTE</font> OpenShift Cluster Manager(OCM)は、OpenShiftクラスターのインストール、修正、操作、およびアップグレードを可能にする管理サービスです。OCMを使用すると、単一のダッシュボードからすべてのOpenShiftクラスターを操作できるようになります。詳細については、
 https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html-single/red_hat_openshift_cluster_manager/index[OCMの公式ドキュメント]もご参照ください。
 ====
 
@@ -202,11 +201,12 @@ I: Created OIDC provider with ARN 'arn:aws:iam::XXXXXXXXX:oidc-provider/rh-oidc.
 
 === ROSA HCPクラスターの作成
 
-ROSA HCPクラスターの作成コマンドを実行します。`--version`オプションを指定しない場合、自動的に最新版のOpenShiftが利用されます。`--dry-run`オプションを付けると、正常に実行可能かどうかを事前確認できます。この`rosa create cluster`コマンドの実行例では、デフォルトのパラメーターを指定しています。
+ROSA HCPクラスターの作成コマンドを実行します。` --version` オプションを指定しない場合、自動的に最新版のOpenShiftが利用されます。` --dry-run` オプションを付けると、正常に実行可能かどうかを事前確認できます。この`rosa create cluster` コマンドの実行例では、デフォルトのパラメーターを指定しています。
 
 [Note]
 ====
-Note: ワーカーノードの最小台数は、下記となります。
+<font color="red">NOTE</font> ワーカーノードの最小台数は、下記となります。
+
 * Single-AZの場合: 2台
 * Multi-AZの場合: 3台
 
@@ -313,7 +313,7 @@ I: To determine when your cluster is Ready, run 'rosa describe cluster -c hcp-01
 I: To watch your cluster installation logs, run 'rosa logs install -c hcp-01 --watch'.
 ```
 
-クラスターのデプロイ状態は、次のコマンドで確認できます。STATEが「installing」から「ready」に変更されるまで、大体10分ほど待ちます。
+クラスターのデプロイ状態は、次のコマンドで確認できます。`STATE` が`installing` から`ready` に変更されるまで、大体10分ほど待ちます。
 ```
 
 $ rosa list cluster
@@ -323,7 +323,7 @@ ID                                NAME    STATE       TOPOLOGY
 
 これによって、コントロールプレーンのデプロイが、Red Hat SREチームのAWSアカウントにデプロイされます。このコントロールプレーンは、ユーザーには見えず、かつ、AWSリソース利用料金も請求されません。
 
-コントロールプレーンのデプロイ完了後に、ROSA HCPクラスターにログインするための管理者権限を持つアカウントを作成しておきます。これには、`rosa create admin`コマンドを実行します。
+コントロールプレーンのデプロイ完了後に、ROSA HCPクラスターにログインするための管理者権限を持つアカウントを作成しておきます。これには、`rosa create admin` コマンドを実行します。
 
 ```
 $ rosa create admin --cluster hcp-01   
@@ -337,7 +337,7 @@ I: To login, run the following command:
 I: It may take several minutes for this access to become active.
 ```
 
-そしてワーカーノードのデプロイが完了されるまで待ちます。`rosa list machinepool`コマンドで、「REPLICAS」が指定した台数分デプロイされるのを確認できます。
+そしてワーカーノードのデプロイが完了されるまで待ちます。`rosa list machinepool` コマンドで、`REPLICAS` が指定した台数分デプロイされるのを確認できます。
 
 ```
 $ rosa list machinepool -c hcp-01
@@ -346,7 +346,7 @@ workers  No           2/2       m5.xlarge                          us-east-2a   
 
 ```
 
-ワーカーノードのデプロイが完了すると、ROSA HCPクラスターのコンソールにログインできるようになります。このコンソールのURLは、次のコマンドで確認できます。ユーザー名とパスワードは、`rosa create admin`コマンド実行時に表示されたものを使います。
+ワーカーノードのデプロイが完了すると、ROSA HCPクラスターのコンソールにログインできるようになります。このコンソールのURLは、次のコマンドで確認できます。ユーザー名とパスワードは、`rosa create admin` コマンド実行時に表示されたものを使います。
 
 ```
 $ rosa describe cluster -c hcp-01 |grep Console
