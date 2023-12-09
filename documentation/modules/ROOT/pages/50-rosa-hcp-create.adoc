@@ -133,7 +133,7 @@ $ terraform apply rosa.tfplan
 
 [Note]
 ====
-<b>NOTE:</b> ここではAWSリージョンのシングルアベイラビリティーゾーン(Single-AZ)に、ROSA HCPクラスターのワーカーノードを作成することを前提として、VPCを作成しています。マルチアベイラビリティーゾーン(Multi-AZ)にワーカーノードを作成して、AZ単位で冗長性を確保したい場合は、`terraform plan` コマンド実行時に、リージョンにあるAZのIDを3つ指定します。
+ここではAWSリージョンのシングルアベイラビリティーゾーン(Single-AZ)に、ROSA HCPクラスターのワーカーノードを作成することを前提として、VPCを作成しています。マルチアベイラビリティーゾーン(Multi-AZ)にワーカーノードを作成して、AZ単位で冗長性を確保したい場合は、`terraform plan` コマンド実行時に、リージョンにあるAZのIDを3つ指定します。
 ```
 $ terraform plan -out rosa.tfplan -var region=us-east-2 \
   -var 'subnet_azs=["use2-az1", "use2-az2", "use2-az3"]'
@@ -313,8 +313,8 @@ I: To watch your cluster installation logs, run 'rosa logs install -c hcp-01 --w
 ```
 
 $ rosa list cluster
-ID                                NAME    STATE       TOPOLOGY
-280scqkn8ocjoochasq423tg4donvpaq  hcp-01  installing  Hosted CP
+ID                                NAME    STATE  TOPOLOGY
+280scqkn8ocjoochasq423tg4donvpaq  hcp-01  ready  Hosted CP
 ```
 
 これによって、コントロールプレーンのデプロイが、Red Hat SREチームのAWSアカウントにデプロイされます。このコントロールプレーンは、ユーザーには見えず、かつ、AWSリソース利用料金も請求されません。
