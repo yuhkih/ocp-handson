@@ -1,7 +1,7 @@
 = (デモ) AWS Security Token Service (STS) を使用したROSA HCPクラスターの作成
-
 :navtitle: rosa-hcp-create
 include::_attributes.adoc[]
+
 
 == デモの概要
 このモジュールでは、インストラクターによるROSA HCPクラスター作成方法の概要をご紹介します。
