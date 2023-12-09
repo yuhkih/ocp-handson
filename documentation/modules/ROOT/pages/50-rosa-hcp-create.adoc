@@ -20,17 +20,26 @@ https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/id_credentials_temp.html[
 ROSA HCPクラスターを作成するには、AWSアカウントと
 https://cloud.redhat.com/[Red Hatアカウント]を利用します。アカウントがない場合は、アカウントを作成する必要があります。
 
-https://console.aws.amazon.com/rosa/home#/get-started[AWSコンソール]でROSAのHCPサービスを有効にします。ROSAにはClassicとHCPの2つのスタイルがありますが、ROSA HCPサービスの方を有効化するようにしてください。次のような画面になれば、ROSA HCPサービスが有効になっています。
+https://console.aws.amazon.com/rosa/home#/get-started[AWSコンソール]でROSAのHCPサービスを有効にします。ROSAにはClassicとHCPの2つのスタイルがありますが、ROSA HCPサービスを有効化するようにしてください。次のような画面になれば、ROSA HCPサービスが有効になっています。
 
 image::rosa/hcp-create/hcp-enable.png[]　
 
-AWS CLIを[インストール](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)して、[設定](https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-chap-configure.html)します。このとき、「~/.aws/credentials」で、次の情報を設定する必要があります。
+AWS CLIを
+https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html[インストール]して、
+https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-chap-configure.html[設定]します。このとき、`~/.aws/credentials`で、次の情報を設定する必要があります。
 
 - aws_access_key_id
 - aws_secret_key
 
+また、デフォルトで利用するリージョンを指定する場合、`~/.aws/config`で設定できます。
 
-次のコマンドを実行して、AWS APIをクエリーし、AWS CLIがインストールされて正しく設定されていることを確認します。次のような出力が表示されれば、AWS CLIの設定が完了しています。
+```
+$ cat ~/.aws/config 
+[default]
+region = us-east-2
+```
+
+そして、次のコマンドを実行して、AWS APIをクエリーし、AWS CLIがインストールされて正しく設定されていることを確認します。次のような出力が表示されれば、AWS CLIの設定が完了しています。
 
 ```
 $ aws sts get-caller-identity
@@ -48,9 +57,9 @@ $ aws iam create-service-linked-role --aws-service-name "elasticloadbalancing.am
 
 IAMロールが作成されると、次のような画面を確認できます。
 
-image::rosa/hcp-create/iam-elb-role.png[]　
+image::rosa/hcp-create/iam-elb-role.png[]
 
-AWSサービスクォータがROSA HCPクラスター用の要件を満たしており、ELB用のロールが作成されていると、次の画面になります。ここから画面一番下にある「Red Hatに進む」ボタンをクリックして、AWSとRed Hatアカウントをリンクします。
+AWSサービスクォータがROSA HCPクラスター用の要件を満たしており、ELB用のロールが作成されていると、次の画面が表示されます。ここから画面一番下にある「Red Hatに進む」ボタンをクリックして、AWSとRed Hatアカウントをリンクします。
 
 image::rosa/hcp-create/link01.png[]
 
@@ -65,7 +74,8 @@ Congratulations, your Red Hat and AWS accounts are linked
 Welcome to the Red Hat Hybrid Cloud Console. If you cannot access production tools for a subscription that you have purchased, please wait 5 minutes and and confirm your subscription at subscription inventory. Here you can configure or manage Red Hat OpenShift Cluster Manager.
 ```
 
-続いて、[ROSA CLI](https://console.redhat.com/openshift/downloads)をダウンロードして、PATHを設定します。
+続いて、
+https://console.redhat.com/openshift/downloads[ROSA CLI]をダウンロードして、PATHを設定します。
 
 image::rosa/hcp-create/rosa-cli-download.png[]
 
@@ -85,7 +95,7 @@ To login to your Red Hat account, get an offline access token at https://console
 I: Logged in as '<Red Hatアカウントのユーザー名>' on 'https://api.openshift.com'
 ```
 
-次のコマンドを実行して、AWSおよびRed Hatの認証情報が正しく設定されていることを確認します。AWSアカウントID、デフォルトのリージョン、および、ARNが予測した内容と一致していることを確認します。
+次のコマンドを実行して、AWSおよびRed Hatの認証情報が正しく設定されていることを確認します。AWSアカウントID、デフォルトのリージョン、および、ARNが設定した内容と一致していることを確認します。
 
 ```
 $ rosa whoami
@@ -168,12 +178,14 @@ image::rosa/hcp-create/managed-openshift-hcp-roles.png[]
 
 どのようなAWSのアクションを許可するポリシーが作成されているかは、[こちらのドキュメント](https://docs.openshift.com/rosa/rosa_architecture/rosa-sts-about-iam-resources.html#rosa-sts-account-wide-roles-and-policies-creation-methods_rosa-sts-about-iam-resources)から確認することもできます。
 
-ROSA HCPクラスターを[OpenShift Cluster Manager](https://console.redhat.com/openshift)に登録するための、OpenID Connectの設定を作成します。
+ROSA HCPクラスターを
+https://console.redhat.com/openshift[OpenShift Cluster Manager]に登録するための、OpenID Connectの設定を作成します。
 
 [Note]
 ====
-Note: OpenShift Cluster Manager(OCM)は、OpenShiftクラスターのインストール、修正、操作、およびアップグレードを可能にする管理サービスです。OCMを使用すると、単一のダッシュボードからすべてのOpenShiftクラスターを操作できるようになります。
-参考URL: https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html-single/red_hat_openshift_cluster_manager/index
+Note: 
+OpenShift Cluster Manager(OCM)は、OpenShiftクラスターのインストール、修正、操作、およびアップグレードを可能にする管理サービスです。OCMを使用すると、単一のダッシュボードからすべてのOpenShiftクラスターを操作できるようになります。詳細については、
+https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html-single/red_hat_openshift_cluster_manager/index[OCMの公式ドキュメント]もご参照ください。
 ====
 
 ```
@@ -333,7 +345,7 @@ workers  No           2/2       m5.xlarge                          us-east-2a   
 
 ```
 
-ワーカーノードのデプロイが完了すると、ROSA HCPクラスターのコンソールにログインできるようになります。このコンソールのURLは、次のコマンドで確認できます。
+ワーカーノードのデプロイが完了すると、ROSA HCPクラスターのコンソールにログインできるようになります。このコンソールのURLは、次のコマンドで確認できます。ユーザー名とパスワードは、`rosa create admin`コマンド実行時に表示されたものを使います。
 
 ```
 $ rosa describe cluster -c hcp-01 |grep Console
