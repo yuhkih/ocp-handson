@@ -17,7 +17,8 @@ https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/id_credentials_temp.html[
 * https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html/introduction_to_rosa/rosa-sts-about-iam-resources[第4章 STS を使用する ROSA クラスターの IAM リソースについて]
 * https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html/prepare_your_environment/rosa-sts-required-aws-service-quotas[第5章 必要な AWS サービスクォータ]
 
-ROSA HCPクラスターを作成するには、AWSアカウントと[Red Hatアカウント](https://cloud.redhat.com/)を利用します。アカウントがない場合は、アカウントを作成する必要があります。
+ROSA HCPクラスターを作成するには、AWSアカウントと
+https://cloud.redhat.com/[Red Hatアカウント]を利用します。アカウントがない場合は、アカウントを作成する必要があります。
 
 https://console.aws.amazon.com/rosa/home#/get-started[AWSコンソール]でROSAのHCPサービスを有効にします。ROSAにはClassicとHCPの2つのスタイルがありますが、ROSA HCPサービスの方を有効化するようにしてください。次のような画面になれば、ROSA HCPサービスが有効になっています。
 
