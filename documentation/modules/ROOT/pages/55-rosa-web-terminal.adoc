@@ -33,7 +33,7 @@ image::rosa/web-terminal/icon.png[]
 image::rosa/web-terminal/init.png[]
 
 NOTE: 「タイムアウト」オプションでは、Terminalを操作していない場合のタイムアウト値(ミリ秒/秒/分/時間単位)を指定できます。
-デフォルトのタイムアウト値は15分です。タイムアウトになると、Web TerminalのPodが削除されます。
+デフォルトのタイムアウト値は15分です。タイムアウトになると、Web TerminalのPodが自動削除されます。
 
 Web Terminalを実行すると、選択したプロジェクトに「workspace」という接頭辞が付いたPodが自動的に実行されます。
 永続ボリュームによるデータ保存はしていないため、
