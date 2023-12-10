@@ -133,7 +133,9 @@ $ terraform apply rosa.tfplan
 
 [Note]
 ====
-ここではAWSリージョンのシングルアベイラビリティーゾーン(SingleAZ)に、ROSA HCPクラスターのワーカーノードを作成することを前提として、VPCを作成しています。マルチアベイラビリティーゾーン(MultiAZ)にワーカーノードを作成して、AZ単位で冗長性を確保したい場合は、`terraform plan` コマンド実行時に、リージョンにあるAZのIDを3つ指定します。
+ここではAWSリージョンのシングルアベイラビリティーゾーン(SingleAZ)に、ROSA HCPクラスターのワーカーノードを作成することを前提として、
+VPCを作成しています。マルチアベイラビリティーゾーン(MultiAZ)にワーカーノードを作成して、
+AZ単位で冗長性を確保したい場合は、`terraform plan` コマンド実行時に、リージョンにあるAZのIDを3つ指定します。
 ```
 $ terraform plan -out rosa.tfplan -var region=us-east-2 \
   -var single_az_only=false \
