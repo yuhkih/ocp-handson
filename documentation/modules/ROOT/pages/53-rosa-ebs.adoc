@@ -1,8 +1,17 @@
-## 永続ボリュームとしてのAmazon EBS/EFS の利用設定
+= Amazon EBSの利用
+:navtitle: rosa-ebs
+include::_attributes.adoc[]
 
-### [ハンズオン] Amazon EBSの利用
+== 演習の概要
+このモジュールでは、受講生がAmazon EBSを利用した、コンテナアプリのデータ保存を実施します。
 
-ROSAには、Amazon Elastic Block Store (EBS) ボリュームを使用するストレージクラスが事前に設定されています。これにより、[Amazon EBSのgp2, gp3ボリュームタイプ](https://aws.amazon.com/jp/ebs/general-purpose/)がすぐに使えるようになっています。
+---
+
+=== 永続ボリューム要求(Persistent Volume Claim, PVC)の作成
+
+ROSAには、Amazon Elastic Block Store (EBS) ボリュームを使用するストレージクラスが事前に設定されています。
+これにより、
+https://aws.amazon.com/jp/ebs/general-purpose/[Amazon EBSのgp2, gp3ボリュームタイプ]がすぐに使えるようになっています。
 
 ![ROSAですぐに利用可能なストレージクラス](./images/storage-class.png)
 <div style="text-align: center;">ROSAですぐに利用可能なストレージクラス</div>　　

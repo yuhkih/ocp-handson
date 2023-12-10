@@ -1,5 +1,5 @@
 = サンプルアプリケーションのデプロイ
-:navtitle: rosa-hcp-create
+:navtitle: rosa-app-deploy
 include::_attributes.adoc[]
 
 
