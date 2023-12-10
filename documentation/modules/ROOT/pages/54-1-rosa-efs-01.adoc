@@ -74,10 +74,12 @@ image::rosa/efs-01/accesspoint-create3.png[]
 そのため、ユーザーID/グループIDについてはどの数値を指定してもいいのですが、
 NFSで利用される匿名ユーザ「nobody」のIDとして、「65534」を指定することにします。
 
-「1777」というパーミッションの「1」は、
+
+NOTE: 「1777」というパーミッションの「1」は、
 https://www.redhat.com/sysadmin/suid-sgid-sticky-bit[Linuxのスティッキービット(Sticky Bit)]を意味します。
 これが設定されている共有ディレクトリの中に作成されたファイル/ディレクトリは、
 それらの所有者や管理権限を持つrootユーザー以外は削除できなくなります。
+
 
 他の値は空欄のままにしておいて、「アクセスポイントを作成」をクリックして、アクセスポイントを作成します。
 Amazon EFSで利用可能なファイルシステムとアクセスポイントの作成が完了したら、それぞれのIDをメモしておきます。
@@ -96,12 +98,11 @@ ROSAクラスターに管理者権限を持つユーザー( `cluster-admin` な�
 
 image::rosa/efs-01/aws-efs-operator-install1.png[]
 
-[Note]
-====
-Operatorは、Kubernetes/OpenShift上で実行されるコンテナアプリの運用(自動構築や削除など)を自動化するための、
+
+NOTE: Operatorは、Kubernetes/OpenShift上で実行されるコンテナアプリの運用(自動構築や削除など)を自動化するための、
 専用コンテナとなります。Operatorは、対象となるコンテナアプリを運用するためのインタフェースを提供します。
 なお、Operator自身も通常のアプリケーションと同様に、Podとして実行されます。
-====
+
 
 「AWS EFS Operator」を選択したあとは、全てデフォルトの値を利用してインストールを完了します。
 
