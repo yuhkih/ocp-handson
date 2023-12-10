@@ -82,10 +82,11 @@ AWS認証情報としてOpenShiftのシークレットリソースに保存し�
 
 「OpenShift Logging Operator」をインストールした「openshift-logging」プロジェクトを選択して、
 左サイドメニューの「管理者向け表示」→「Workloads」→「シークレット」に移動します。
-そして、「作成」から「キーと値のシークレット」をクリックして、次の値を入力して「作成」をクリックします。
+そして、「作成」から「キーと値のシークレット」をクリックして、次の値を入力して作成します。
 
 - シークレット名: AWS認証情報として保存するOpenShiftリソースの任意の名前。この例では「cw-secret」を指定。
-- キー/値: AWSアクセスキー(aws_access_key_id)とシークレットアクセスキー(aws_secret_access_key)を入力。
+- キー/値: 「CloudWatch用のAWS IAMユーザーの作成」で作成した、
+AWSアクセスキー(aws_access_key_id)とシークレットアクセスキー(aws_secret_access_key)を入力。
 
 image::rosa/log-01/secret-create.png[]
 
@@ -128,10 +129,10 @@ image::rosa/log-01/loggingforwarder-instance-create2.png[]
 
 [Note]
 ====
-どの種類のログを転送するかについては、前述したYAMLの `inputRefs:` 以下の項目で指定できます。
+どの種類のログを転送するかについては、前述したYAMLの `inputRefs:` の項目で指定できます。
 
 - `application` : アプリケーションログの収集。利用者が作成したプロジェクトにデプロイされるアプリケーションのログ(stdoutとstderrに出力されるログ)を収集します。後述のインフラストラクチャー関連のログは除きます。
-- `infrastructure` : インフラストラクチャーログの収集。ROSAクラスター作成時にデフォルトで作成される `openshift-*` , `kube-*` などのプロジェクトにある、インフラストラクチャー関連のログを収集します。
+- `infrastructure` : インフラストラクチャーログの収集。ROSAクラスター作成時にデフォルトで作成される `openshift-\*` , `kube-\*` などのプロジェクトにある、インフラストラクチャー関連のログを収集します。
 - `audit` : セキュリティ監査に関連するログの収集。ノード監査システム(auditd)で生成されるログ(/var/log/audit/audit.log)、
 Kubernetes apiserver、OpenShift apiserverの監査ログを収集します。監査ログは、
 https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition/rosa-policy-responsibility-matrix.html#rosa-policy-platform-monitoring_rosa-policy-responsibility-matrix[Red HatのSREチームによって1年間保存]されます。
@@ -140,8 +141,8 @@ https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition
 
 
 これでログ転送先の設定が完了したため、先ほど作成したLoggingインスタンスによって、
-自動的に `collector-*` という名前のPod(内部ではvectorが実行)が、「openshift-logging」プロジェクトに作成されます。
-この `collector-*` Podは、全てのワーカーノードで自動的に実行されます。
+自動的に `collector-\*` という名前のPod(内部ではvectorが実行)が、「openshift-logging」プロジェクトに作成されます。
+この `collector-\*` Podは、全てのワーカーノードで自動的に実行されます。
 
 image::rosa/log-01/logging-pods.png[]
 
