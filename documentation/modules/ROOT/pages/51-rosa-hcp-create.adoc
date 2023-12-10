@@ -170,12 +170,9 @@ I: To create an OIDC Config, run the following command:
 	rosa create oidc-config
 ```
 
-AWSコンソールから、ROSAクラスター作成に必要なIAMロールとポリシーが作成されていることを確認できます。
+AWSコンソールから、ROSAクラスター作成に必要なIAMロールが作成されていることを確認できます。
 
 image::rosa/hcp-create/managed-openshift-hcp-roles.png[]
-
-どのようなAWSのアクションを許可するポリシーが作成されているかは、
-https://docs.openshift.com/rosa/rosa_architecture/rosa-sts-about-iam-resources.html#rosa-sts-account-wide-roles-and-policies-creation-methods_rosa-sts-about-iam-resources[こちらのドキュメント]から確認することもできます。
 
 ROSA HCPクラスターを
 https://console.redhat.com/openshift[OpenShift Cluster Manager]に登録するための、OpenID Connectの設定を作成します。
