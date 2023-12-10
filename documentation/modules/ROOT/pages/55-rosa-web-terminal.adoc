@@ -15,7 +15,7 @@ OperatorHubからWeb Terminal Operatorをインストールするだけで、Web
 [Note]
 ====
 本演習をワークショップ形式で実施している場合、予めWeb Terminal Operatorがインストールされている
-ROSAクラスターを利用します。自習する場合は、cluster-adminユーザーなどで、OperatorHubから
+ROSAクラスターを利用します。自習する場合は、 `cluster-admin` ユーザーなどで、OperatorHubから
 Web Terminal Operatorをインストールしてください。インストール時のパラメーターは、全てデフォルト値を利用します。
 
 image::rosa/web-terminal/operator.png[]
