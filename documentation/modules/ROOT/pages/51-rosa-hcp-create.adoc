@@ -320,7 +320,28 @@ ID                                NAME    STATE  TOPOLOGY
 
 これによって、コントロールプレーンのデプロイが、Red Hat SREチームのAWSアカウントにデプロイされます。このコントロールプレーンは、ユーザーには見えず、かつ、AWSリソース利用料金も請求されません。
 
-コントロールプレーンのデプロイ完了後に、ROSA HCPクラスターにログインするための管理者権限を持つアカウントを作成しておきます。これには、`rosa create admin` コマンドを実行します。
+そしてワーカーノードのデプロイが完了されるまで待ちます。`rosa list machinepool` コマンドで、`REPLICAS` が指定した台数分デプロイされるのを確認できます。
+
+```
+$ rosa list machinepool -c hcp-01
+ID       AUTOSCALING  REPLICAS  INSTANCE TYPE  LABELS    TAINTS    AVAILABILITY ZONE  SUBNET                    VERSION  AUTOREPAIR  
+workers  No           2/2       m5.xlarge                          us-east-2a         subnet-0087cb7bb3f628793  4.14.2   Yes
+
+```
+
+[Note]
+====
+作成したROSA HCPクラスターの情報は、OCMの画面からも確認できます。下記の画像は、SingleAZ構成(ワーカーノード2台)とMultiAZ構成(ワーカーノード2台と3台)の例です。
+
+image::rosa/hcp-create/singleaz01.png[]
+image::rosa/hcp-create/multiaz01.png[]
+image::rosa/hcp-create/multiaz02.png[]
+====
+
+
+=== ROSA HCPクラスターへのアクセス
+
+ROSA HCPクラスターのコントロールプレーンのデプロイ完了後に、ROSA HCPクラスターにログインするための管理者権限を持つアカウントを作成できます。これには、`rosa create admin` コマンドを実行します。
 
 ```
 $ rosa create admin --cluster hcp-01   
@@ -334,27 +355,36 @@ I: To login, run the following command:
 I: It may take several minutes for this access to become active.
 ```
 
-そしてワーカーノードのデプロイが完了されるまで待ちます。`rosa list machinepool` コマンドで、`REPLICAS` が指定した台数分デプロイされるのを確認できます。
-
-```
-$ rosa list machinepool -c hcp-01
-ID       AUTOSCALING  REPLICAS  INSTANCE TYPE  LABELS    TAINTS    AVAILABILITY ZONE  SUBNET                    VERSION  AUTOREPAIR  
-workers  No           2/2       m5.xlarge                          us-east-2a         subnet-0087cb7bb3f628793  4.14.2   Yes
-
-```
-
-ワーカーノードのデプロイが完了すると、ROSA HCPクラスターのコンソールにログインできるようになります。このコンソールのURLは、次のコマンドで確認できます。ユーザー名とパスワードは、`rosa create admin` コマンド実行時に表示されたもの(ユーザー名は `cluster-admin` )を使います。
+これで、ROSA HCPクラスターのコンソールにログインできるようになります。このコンソールのURLは、次のコマンドで確認できます。ユーザー名とパスワードは、`rosa create admin` コマンド実行時に表示されたもの(ユーザー名は `cluster-admin` )を使えます。
 
 ```
 $ rosa describe cluster -c hcp-01 |grep Console
 Console URL:                https://console-openshift-console.apps.rosa.hcp-01.240p.p3.openshiftapps.com
 ```
 
-[Note]
-====
-作成したROSA HCPクラスターの情報は、OCMの画面からも確認できます。下記の画像は、SingleAZ構成(ワーカーノード2台)とMultiAZ構成(ワーカーノード2台と3台)の例です。
+また、ROSA HCPクラスターでは、ローカルユーザーを利用するために、
+https://docs.openshift.com/rosa/authentication/sd-configuring-identity-providers.html[外部の認証プロバイダとの連携設定]が可能です。ROSA HCPクラスターでサポートされている認証プロバイダは下記となります。
 
-image::rosa/hcp-create/singleaz01.png[]
-image::rosa/hcp-create/multiaz01.png[]
-image::rosa/hcp-create/multiaz02.png[]
-====
+* GitHub または GitHub Enterprise
+* GitLab
+* Google
+* LDAP
+* OpenID Connect
+* htpasswd
+
+htpasswdの場合、本番環境で汎用的な認証プロバイダとして利用することはサポートしていませんので、ご注意ください。次のコマンドは、一時的な検証用途としてhtpasswdを利用するための設定例です。testuser1~testuser100のパスワード情報を記載したファイル `users.htpasswd` を、ROSA HCPクラスターの認証プロバイダとして設定しています。
+
+```
+$ htpasswd -cbB users.htpasswd testuser1 <適当なランダム文字列のパスワード>
+$ for i in {2..100}; do htpasswd -bB users.htpasswd testuser$i <適当なランダム文字列のパスワード>; done
+
+
+$ rosa create idp --type=htpasswd --name=testuser-htpasswd01 --cluster=hcp-01 --from-file=users.htpasswd
+I: Configuring IDP for cluster 'hcp-01'
+I: Identity Provider 'testuser-htpasswd01' has been created.
+   It may take several minutes for this access to become active.
+   To add cluster administrators, see 'rosa grant user --help'.
+
+I: To log in to the console, open https://console-openshift-console.apps.rosa.hcp-01.240p.p3.openshiftapps.com and click on 'testuser-htpasswd01'.
+```
+`rosa create idp` コマンドの実行によって、`htpasswd` コマンドで作成した `users.htpasswd` ファイルにある `testuserX` ユーザーを使ってログインできるようになります。
