@@ -118,7 +118,7 @@ I: Verifying whether OpenShift command-line tool is available...
 I: Current OpenShift Client Version: 4.14.5
 ```
 
-=== ROSA HCPクラスターに必要なAWS VPCやIAMロール/ポリシーの作成
+=== ROSA HCPクラスターに必要なAWS VPCやIAMロールの作成
 
 ROSA HCPクラスター作成に必要なAWS VPCを作成します。AWS VPCはAWSコンソールから作成できますが、TerraformでVPCを作成するためのテンプレートが用意されているので、それを利用することもできます。TerraformでVPCを作成するためには、次のコマンドを実行します。`terraform plan` コマンドでは、HCPクラスターが作成できるAWSリージョンのIDを指定する必要があります。
 
@@ -177,11 +177,10 @@ image::rosa/hcp-create/managed-openshift-hcp-roles.png[]
 ROSA HCPクラスターを
 https://console.redhat.com/openshift[OpenShift Cluster Manager]に登録するための、OpenID Connectの設定を作成します。
 
-[Note]
-====
-OpenShift Cluster Manager(OCM)は、OpenShiftクラスターのインストール、修正、操作、およびアップグレードを可能にするRed Hat提供の管理サービスです。OCMを使用すると、単一のダッシュボードからすべてのOpenShiftクラスターを操作できるようになります。詳細については、
+
+NOTE: OpenShift Cluster Manager(OCM)は、OpenShiftクラスターのインストール、修正、操作、およびアップグレードを可能にするRed Hat提供の管理サービスです。OCMを使用すると、単一のダッシュボードからすべてのOpenShiftクラスターを操作できるようになります。詳細については、
 https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html-single/red_hat_openshift_cluster_manager/index[OCMの公式ドキュメント]もご参照ください。
-====
+
 
 ```
 $ rosa create oidc-config --mode auto --yes
@@ -327,14 +326,10 @@ workers  No           2/2       m5.xlarge                          us-east-2a   
 
 ```
 
-[Note]
-====
-作成したROSA HCPクラスターの情報は、OCMの画面からも確認できます。下記の画像は、SingleAZ構成(ワーカーノード2台)とMultiAZ構成(ワーカーノード2台と3台)の例です。
-
+NOTE: 作成したROSA HCPクラスターの情報は、OCMの画面からも確認できます。下記の画像は、SingleAZ構成(ワーカーノード2台)とMultiAZ構成(ワーカーノード2台と3台)の例です。
 image::rosa/hcp-create/singleaz01.png[]
 image::rosa/hcp-create/multiaz01.png[]
 image::rosa/hcp-create/multiaz02.png[]
-====
 
 
 === ROSA HCPクラスターへのアクセス
@@ -386,3 +381,4 @@ I: Identity Provider 'testuser-htpasswd01' has been created.
 I: To log in to the console, open https://console-openshift-console.apps.rosa.hcp-01.240p.p3.openshiftapps.com and click on 'testuser-htpasswd01'.
 ```
 `rosa create idp` コマンドの実行によって、`htpasswd` コマンドで作成した `users.htpasswd` ファイルにある `testuserX` ユーザーを使ってログインできるようになります。
+
