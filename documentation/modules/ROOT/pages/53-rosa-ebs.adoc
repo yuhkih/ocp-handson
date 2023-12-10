@@ -10,7 +10,7 @@ include::_attributes.adoc[]
 === 永続ボリューム要求(Persistent Volume Claim, PVC)の作成
 
 ROSAには、Amazon Elastic Block Store (EBS) ボリュームを使用するストレージクラスが事前に設定されています。
-これにより、
+このため、
 https://aws.amazon.com/jp/ebs/general-purpose/[Amazon EBSのgp2, gp3ボリュームタイプ]がすぐに使えるようになっています。
 
 image::rosa/ebs/storage-class.png[]
