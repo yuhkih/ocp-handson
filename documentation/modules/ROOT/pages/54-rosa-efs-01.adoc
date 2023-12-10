@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 ---
 
-=== AWSでのファイルシステムとアクセスポイントの作成
+=== NFSトラフィックのアクセス許可ルールの追加
 
 
 ROSAクラスターの複数のコンピュートノードから同時に読み書き可能な永続ボリュームとして、
@@ -38,7 +38,10 @@ ROSAクラスター内で利用するプライベートのネットワークア�
 image::rosa/efs-01/inbound-rule-add1.png[]
 image::rosa/efs-01/inbound-rule-add2.png[]
 
-NFSトラフィックを許可するルールを追加した後に、Amazon EFSのコンソールに移動して、
+
+=== Amazon EFSのファイルシステムとアクセスポイントの作成
+
+Amazon EFSのコンソールに移動して、
 ROSAクラスターがあるリージョンと同じリージョンを選択して、「ファイルシステムの作成」をクリックします。
 
 image::rosa/efs-01/amazon-efs-top.png[]
@@ -82,6 +85,7 @@ Amazon EFSで利用可能なファイルシステムとアクセスポイント�
 アクセスポイントIDが `fsap-088d532e0518f15b0`	となります。
 
 image::rosa/efs-01/efs-id.png[]
+
 
 === ROSAでのAWS EFS Operatorのインストール
 
