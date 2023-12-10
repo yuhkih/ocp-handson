@@ -1,0 +1,116 @@
+= Amazon EFSの利用
+:navtitle: rosa-efs-02
+include::_attributes.adoc[]
+
+== 演習の概要
+このモジュールでは、受講生がAmazon EFSを利用した、コンテナアプリのデータ保存を実施します。
+
+---
+
+=== AWS EFS Operatorを利用したPVCの作成
+
+前の手順で用意したAmazon EFS上のファイルシステムを、Podが利用する永続ボリュームとして利用してみます。
+「AWS EFS Operator」を選択して、「インスタンスの作成」をクリックします。
+
+image::rosa/efs-02/sv-create1.png[]
+
+「名前」には、任意の名前(この例では、sv20)を入力します。
+本演習をワークショップ形式で実施している場合、
+インストラクターによって案内される「Access Point ID」と「File System ID」を入力します。
+
+image::rosa/efs-02/sv-create2.png[]
+
+最後に「作成」をクリックすると、SharedVolume(この例では、sv20)が作成されます。
+SharedVolumeが表示されない場合、「現在のnamespaceのみ」を選択してください。
+
+image::rosa/efs-02/sv-create3.png[]
+
+それに対応した永続ボリューム要求であるPVC
+(この例では、pvc-sv20. `pvc-<SharedVolumeの名前>` という名前が自動付与)が自動的に作成されます。
+なお、容量が1GiBと表示されていますが、実容量はこれより大きいものとなっています。
+
+image::rosa/efs-02/sv-pvc-confirm.png[]
+
+
+=== PVCを利用するPodの作成
+
+作成したPVCをもとに、Amazon EBSをPodから利用する時と同様の手順で、Podを作成します。
+Podを作成するためのYAMLファイルは、次のものを利用してください。
+このとき、受講者が作成したPVCの名前に応じて、「pvc-sv20」となっている所を適宜修正してください。
+
+[.console-input]
+[source,sh]
+----
+apiVersion: v1
+kind: Pod
+metadata:
+ name: test-efs1
+spec:
+ volumes:
+   - name: efs-storage-vol
+     persistentVolumeClaim:
+       claimName: pvc-sv20
+ containers:
+   - name: test-efs
+     image: centos:latest
+     command: [ "/bin/bash", "-c", "--" ]
+     args: [ "while true; do echo 'hello efs' && sleep 30; done;" ]
+     volumeMounts:
+       - mountPath: "/mnt/efs-data"
+         name: efs-storage-vol
+----
+
+Podの作成が完了したら、当該Podの「ターミナル」タブから、
+EFS上に作成したファイルシステムのマウント状況(NFS v4プロトコルを利用)と、
+マウントポイント先となるディレクトリに対してファイルが作成できることを確認します。
+
+下記画像では、2GiBのファイルを作成して、PVCの画面で確認した見せかけの容量(1GiB)より大きな容量を利用できることを確認しています。
+
+image::rosa/efs-02/sv-pvc-confirm.png[]
+
+この画像で実行しているコマンドは、下記からコピーできます。
+
+[.console-input]
+[source,sh]
+----
+df -h |grep efs
+mount |grep efs
+ls -lhd /mnt/efs-data/
+cd /mnt/efs-data/
+dd if=/dev/zero of=zero20.img bs=1M count=2048
+ls -lh /mnt/efs-data/
+----
+
+ここで作成したPodとは別のPodを新しく作成して、複数のPodから同じPVCを利用することで、1つのファイルシステムを共有できることを確認します。
+前述のPod作成に利用したYAMLファイルで、「name: test-efs1」を、「name: test-efs2」などに変更することで、
+変更したPod名で新規Podを実行してみます。
+
+「test-efs2」Podでもマウント先のディレクトリへのファイル作成/削除や、
+「test-efs1」Podで作成したファイルの修正ができることを、当該Podの「ターミナル」タブから確認してみてください。
+
+
+ちなみに、本演習環境では、Amazon EFS上に作成した1つのアクセスポイントを受講者全員で共有する設定にしていますが、
+他の受講者が作成したファイルと同じ名前を持つファイルを作成したり、
+他の受講者が作成したファイルを削除することができないようになっています。
+
+これは、Podに含まれるコンテナを実行するユーザ権限が、OpenShiftのプロジェクトごとに異なるようになっており(OpenShiftのデフォルト設定)、
+かつ、前の手順で設定したスティッキービットが共有ディレクトリに設定されていることで、
+所有者以外は、ファイル/ディレクトリの変更や削除ができないようになっているためです。
+
+なお、AWS EFS Operatorによって作成された「pvc-sv20」を見てみると、
+アクセスモードが「ReadWriteMany(RWX. 複数台のコンピュートノードから利用可能)」となっています。
+
+image::rosa/efs-02/pvc-sv-info.png[]
+
+デフォルトのストレージクラス(gp3タイプのEBS)を利用して作成したPVCは、
+アクセスモードが「ReadWriteOnce(RWO. 1台のコンピュートノードからのみ利用可能)」となります。
+EFSによって利用可能になる、RWXのアクセスモードに対応したPVCを利用することで、
+複数ノード上でレプリケーション構成を取るアプリケーション(Amazon EFSに保存したデータを共有)をROSAクラスター上で実行できるようになります。
+
+
+=== EFS利用のためのPVCを削除
+
+ちなみに、Pod削除などによって、不要になったPVCを削除したい場合、
+AWS EFS Operatorによって作成した、SharedVolumeを削除します。これによりSharedVolumeに対応したPVCが自動削除されます。
+
+image::rosa/efs-02/sv-delete.png[]

@@ -29,4 +29,5 @@
 ** xref:52-rosa-app-deploy.adoc[2. サンプルアプリケーションのデプロイ]
 ** xref:53-rosa-ebs.adoc[3. Amazon EBSの利用]
 ** xref:54-rosa-efs-01.adoc[4. Amazon EFSの利用準備 [デモ\]]
+** xref:55-rosa-efs-02.adoc[5. Amazon EFSの利用]
 
