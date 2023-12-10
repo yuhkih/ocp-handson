@@ -10,8 +10,9 @@ include::_attributes.adoc[]
 === Amazon CloudWatchコンソールでのログ確認
 
 https://console.aws.amazon.com/cloudwatch/home[Amazon CloudWatchのコンソール]にアクセスして、
-ROSAクラスターのリージョン(本演習環境では東京リージョン. ap-northeast-1)を選択します。
+ROSAクラスターのリージョン(本演習環境では東京リージョン. `ap-northeast-1` )を選択します。
 すると、ROSAクラスターから転送されたログのグループを確認できます。
+アプリケーション(application)、監査(audit)、インフラストラクチャー(infrastructure)に関するロググループが作成されています。
 
 NOTE: 本演習をワークショップ形式で実施している場合、AWSコンソールにアクセスするためのアカウントは、インストラクターが案内します。
 
