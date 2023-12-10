@@ -132,7 +132,7 @@ image::rosa/log-01/loggingforwarder-instance-create2.png[]
 どの種類のログを転送するかについては、前述したYAMLの `inputRefs:` の項目で指定できます。
 
 - `application` : アプリケーションログの収集。利用者が作成したプロジェクトにデプロイされるアプリケーションのログ(stdoutとstderrに出力されるログ)を収集します。後述のインフラストラクチャー関連のログは除きます。
-- `infrastructure` : インフラストラクチャーログの収集。ROSAクラスター作成時にデフォルトで作成される `openshift-\*` , `kube-\*` などのプロジェクトにある、インフラストラクチャー関連のログを収集します。
+- `infrastructure` : インフラストラクチャーログの収集。ROSAクラスター作成時にデフォルトで作成される `openshift-\*` , `kube-*` などのプロジェクトにある、インフラストラクチャー関連のログを収集します。
 - `audit` : セキュリティ監査に関連するログの収集。ノード監査システム(auditd)で生成されるログ(/var/log/audit/audit.log)、
 Kubernetes apiserver、OpenShift apiserverの監査ログを収集します。監査ログは、
 https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition/rosa-policy-responsibility-matrix.html#rosa-policy-platform-monitoring_rosa-policy-responsibility-matrix[Red HatのSREチームによって1年間保存]されます。
@@ -142,7 +142,7 @@ https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition
 
 これでログ転送先の設定が完了したため、先ほど作成したLoggingインスタンスによって、
 自動的に `collector-\*` という名前のPod(内部ではvectorが実行)が、「openshift-logging」プロジェクトに作成されます。
-この `collector-\*` Podは、全てのワーカーノードで自動的に実行されます。
+この `collector-*` Podは、全てのワーカーノードで自動的に実行されます。
 
 image::rosa/log-01/logging-pods.png[]
 
