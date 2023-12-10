@@ -101,7 +101,7 @@ image::rosa/efs-01/aws-efs-operator-install1.png[]
 
 NOTE: Operatorは、Kubernetes/OpenShift上で実行されるコンテナアプリの運用(自動構築や削除など)を自動化するための、
 専用コンテナとなります。Operatorは、対象となるコンテナアプリを運用するためのインタフェースを提供します。
-なお、Operator自身も通常のアプリケーションと同様に、Podとして実行されます。
+Operator自身も通常のアプリケーションと同様に、Podとして実行されます。
 
 
 「AWS EFS Operator」を選択したあとは、全てデフォルトの値を利用してインストールを完了します。
