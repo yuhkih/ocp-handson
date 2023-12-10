@@ -326,10 +326,14 @@ workers  No           2/2       m5.xlarge                          us-east-2a   
 
 ```
 
-NOTE: 作成したROSA HCPクラスターの情報は、OCMの画面からも確認できます。下記の画像は、SingleAZ構成(ワーカーノード2台)とMultiAZ構成(ワーカーノード2台と3台)の例です。
+[Note]
+====
+作成したROSA HCPクラスターの情報は、OCMの画面からも確認できます。下記の画像は、SingleAZ構成(ワーカーノード2台)とMultiAZ構成(ワーカーノード2台と3台)の例です。
+
 image::rosa/hcp-create/singleaz01.png[]
 image::rosa/hcp-create/multiaz01.png[]
 image::rosa/hcp-create/multiaz02.png[]
+====
 
 
 === ROSA HCPクラスターへのアクセス
