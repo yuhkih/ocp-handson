@@ -32,4 +32,5 @@
 ** xref:54-2-rosa-efs-02.adoc[5. Amazon EFSの利用]
 ** xref:55-rosa-web-terminal.adoc[6. Web Terminalの利用]
 ** xref:56-1-rosa-log-01.adoc[7. ROSAクラスターのロギング設定 [デモ\]]
+** xref:56-2-rosa-log-02.adoc[8. Amazon CloudWatchでのログ確認]
 

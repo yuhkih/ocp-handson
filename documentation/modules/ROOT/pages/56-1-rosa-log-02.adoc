@@ -1,4 +1,4 @@
-= Amazon CloudWatchによるログ確認
+= Amazon CloudWatchでのログ確認
 :navtitle: rosa-log-02
 include::_attributes.adoc[]
 
