@@ -16,7 +16,7 @@ image::rosa/efs-02/sv-create1.png[]
 
 「名前」には、任意の名前(この例では、sv20)を入力します。
 本演習をワークショップ形式で実施している場合、
-インストラクターによって案内される「Access Point ID」と「File System ID」を入力します。
+インストラクターが案内する「Access Point ID」と「File System ID」を入力します。
 
 image::rosa/efs-02/sv-create2.png[]
 
