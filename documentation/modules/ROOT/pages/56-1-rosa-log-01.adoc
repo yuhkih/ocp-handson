@@ -127,7 +127,7 @@ image::rosa/log-01/loggingforwarder-instance-create2.png[]
 - `audit` : セキュリティ監査に関連するログの収集。ノード監査システム(auditd)で生成されるログ(/var/log/audit/audit.log)、
 Kubernetes apiserver、OpenShift apiserverの監査ログを収集します。監査ログは、
 https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition/rosa-policy-responsibility-matrix.html#rosa-policy-platform-monitoring_rosa-policy-responsibility-matrix[Red HatのSREチームによって1年間保存]されます。
-そのため、ROSAの利用者は監査ログを保存する必要は必ずしもありません。
+そのため、ROSAの利用者は監査ログを保存しなくても、Red Hatのサポートケース経由で監査ログを取得することもできます。
 
 
 これでログ転送先の設定が完了したため、先ほど作成したLoggingインスタンスによって、
