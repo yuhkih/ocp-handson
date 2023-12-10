@@ -140,7 +140,7 @@ https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition
 ====
 
 
-これでログ転送先の設定が完了したため、先ほど作成したLoggingインスタンスによって、
+これでログ転送の設定が完了したため、先ほど作成したLoggingインスタンスによって、
 自動的に `collector-\*` という名前のPod(内部ではvectorが実行)が、「openshift-logging」プロジェクトに作成されます。
 この `collector-*` Podは、全てのワーカーノードで自動的に実行されます。
 
