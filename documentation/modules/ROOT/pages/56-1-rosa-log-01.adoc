@@ -143,7 +143,7 @@ https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition
 これでログ転送の設定が完了したため、先ほど作成したLoggingインスタンスによって、
 自動的に `collector-\*` という名前のPod(内部ではvectorが実行)が、「openshift-logging」プロジェクトに作成されます。
 この `collector-*` Podは、全てのワーカーノードで自動的に実行されて、
-指定したワーカーノード上のログをAmazon CloudWatchに転送します。
+ワーカーノード上のログをAmazon CloudWatchに転送します。
 
 image::rosa/log-01/logging-pods.png[]
 
