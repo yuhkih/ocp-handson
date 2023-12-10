@@ -355,7 +355,7 @@ I: To login, run the following command:
 I: It may take several minutes for this access to become active.
 ```
 
-これで、ROSA HCPクラスターのコンソールにログインできるようになります。このコンソールのURLは、次のコマンドで確認できます。ユーザー名とパスワードは、`rosa create admin` コマンド実行時に表示されたもの(ユーザー名は `cluster-admin` )を使えます。
+これで、ROSA HCPクラスターのコンソールにログインできるようになります。このコンソールのURLは、次のコマンドで確認できます。ユーザー名とパスワードは、`rosa create admin` コマンド実行時に表示されたもの(ユーザー名は `cluster-admin` )を使います。
 
 ```
 $ rosa describe cluster -c hcp-01 |grep Console
