@@ -2,7 +2,7 @@
 :navtitle: rosa-log-01
 include::_attributes.adoc[]
 
-== 演習の概要
+== デモの概要
 このモジュールでは、インストラクターによるROSAクラスターのロギング設定方法をご紹介します。
 
 ---
