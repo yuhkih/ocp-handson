@@ -149,7 +149,8 @@ $ echo $SUBNET_IDS
 subnet-0fb4f75f448b5499c,subnet-0087cb7bb3f628793
 ```
 
-AWS IAMロールとポリシーを、ROSA CLIを使って作成します。
+AWS IAMロールを、ROSA CLIを使って作成します。
+これによって、ROSA専用の既存のIAMポリシーが、作成されたIAMロールに自動的に割り当てられます。
 
 ```
 $ rosa create account-roles --mode auto --hosted-cp --yes
