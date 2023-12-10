@@ -133,8 +133,8 @@ image::rosa/log-01/loggingforwarder-instance-create2.png[]
 
 - `application` : アプリケーションログの収集。利用者が作成したプロジェクトにデプロイされるアプリケーションのログ(stdoutとstderrに出力されるログ)を収集します。後述のインフラストラクチャー関連のログは除きます。
 - `infrastructure` : インフラストラクチャーログの収集。ROSAクラスター作成時にデフォルトで作成される `openshift-\*` , `kube-*` などのプロジェクトにある、インフラストラクチャー関連のログを収集します。
-- `audit` : セキュリティ監査に関連するログの収集。ノード監査システム(auditd)で生成されるログ(/var/log/audit/audit.log)、
-Kubernetes apiserver、OpenShift apiserverの監査ログを収集します。監査ログは、
+- `audit` : セキュリティ監査に関連するログの収集。ワーカーノードのノード監査システム(auditd)で
+生成される監査ログ(/var/log/audit/audit.log)を収集します。監査ログは、OpenShift Logging Operatorとは別の仕組みで外部転送されており、
 https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition/rosa-policy-responsibility-matrix.html#rosa-policy-platform-monitoring_rosa-policy-responsibility-matrix[Red HatのSREチームによって1年間保存]されます。
 そのため、ROSAの利用者は監査ログを保存しなくても、Red Hatのサポートケース経由で監査ログを取得することもできます。
 ====
@@ -142,7 +142,8 @@ https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition
 
 これでログ転送の設定が完了したため、先ほど作成したLoggingインスタンスによって、
 自動的に `collector-\*` という名前のPod(内部ではvectorが実行)が、「openshift-logging」プロジェクトに作成されます。
-この `collector-*` Podは、全てのワーカーノードで自動的に実行されます。
+この `collector-*` Podは、全てのワーカーノードで自動的に実行されて、
+指定したワーカーノード上のログをAmazon CloudWatchに転送します。
 
 image::rosa/log-01/logging-pods.png[]
 
