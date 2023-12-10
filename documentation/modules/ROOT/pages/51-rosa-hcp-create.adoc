@@ -372,7 +372,7 @@ https://docs.openshift.com/rosa/authentication/sd-configuring-identity-providers
 * OpenID Connect
 * htpasswd
 
-htpasswdの場合、本番環境で汎用的な認証プロバイダとして利用することはサポートしていませんので、ご注意ください。次のコマンドは、一時的な検証用途としてhtpasswdを利用するための設定例です。testuser1~testuser100のパスワード情報を記載したファイル `users.htpasswd` を、ROSA HCPクラスターの認証プロバイダとして設定しています。
+htpasswdの場合、本番環境で汎用的な認証プロバイダとしての利用をサポートしていませんので、ご注意ください。次のコマンドは、一時的な検証用途としてhtpasswdを利用するための設定例です。 `testuser1` ~ `testuser100` のパスワード情報を記載したファイル `users.htpasswd` を、ROSA HCPクラスターの認証プロバイダとして設定しています。
 
 ```
 $ htpasswd -cbB users.htpasswd testuser1 <適当なランダム文字列のパスワード>
