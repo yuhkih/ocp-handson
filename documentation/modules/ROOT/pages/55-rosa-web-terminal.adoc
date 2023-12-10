@@ -32,7 +32,7 @@ image::rosa/web-terminal/init.png[]
 
 Web Terminalを実行すると、選択したプロジェクトに「workspace」という接頭辞が付いたPodが自動的に実行されます。
 このPodが実行されている間、Terminalの情報は保存されます。永続ボリュームによるデータ保存はしていないため、
-ワーカーノードが削除されると、作成したファイルなども削除されますので、ご注意ください。
+ワーカーノードが削除されると、Terminal上で作成したファイルなども削除されますので、ご注意ください。
 
 image::rosa/web-terminal/terminal.png[]
 
