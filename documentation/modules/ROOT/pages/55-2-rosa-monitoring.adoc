@@ -78,15 +78,12 @@ https://docs.openshift.com/rosa/monitoring/sd-disabling-monitoring-for-user-defi
 
 利用者のメトリクスデータを、200GiBの永続ボリュームを利用して30日間保存するような設定をしたい場合、
 「openshift-user-workload-monitoring」プロジェクトのPodが利用する設定情報(ConfigMap)を
-次のYAMLファイルで置き換えることで、自動的にPVCが作成されて、メトリクスデータが保存されるようになります。
+次のYAMLファイルで置き換えることで、自動的にデフォルトのストレージクラス(gp3)を用いたPVCが作成されて、
+メトリクスデータが保存されるようになります。
 
-OpenShiftのConfigMapは、「管理者向け表示」→「Workloads」→「ConfigMaps」から編集します。
-OpenShift CLIを用いた編集方法もありますが、これについては、
+OpenShiftのConfigMapは、「管理者向け表示」→「Workloads」→「ConfigMaps」から設定します。
+OpenShift CLIを用いた設定方法については、
 https://docs.openshift.com/rosa/monitoring/configuring-the-monitoring-stack.html#configuring-a-local-persistent-volume-claim_configuring-the-monitoring-stack[公式ドキュメント]もご参照ください。
-
-NOTE: Kubernetesの
-https://kubernetes.io/docs/concepts/configuration/configmap/[ConfigMap]は、
-アプリケーションの構成データを保存するためのリソースです。
 
 [.console-input]
 [source,sh]
