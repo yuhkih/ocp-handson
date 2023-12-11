@@ -42,7 +42,7 @@ https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/[K
 ====
 
 
-「メトリクス」タブでは、
+「Metrics」タブでは、
 https://prometheus.io/docs/prometheus/latest/querying/basics/[Prometheusのクエリー(PromQL)]によるグラフ表示が可能です。
 予め用意されたクエリー(CPUやメモリー使用量など)を用いて、データを確認してみてください。
 
