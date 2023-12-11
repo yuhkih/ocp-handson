@@ -392,3 +392,13 @@ I: To log in to the console, open https://console-openshift-console.apps.rosa.hc
 ```
 `rosa create idp` コマンドの実行によって、`htpasswd` コマンドで作成した `users.htpasswd` ファイルにある `testuserX` ユーザーを使ってログインできるようになります。
 
+[Note]
+====
+作成したローカルユーザーに対して、ROSAクラスターの管理者権限を付与(grant)または削除(revoke)する場合、
+`rosa grant user` コマンドと `rosa revoke user` コマンドを利用します。
+
+```
+$ rosa grant user cluster-admin --user <ユーザー名> --cluster <ROSAクラスター名>
+$ rosa revoke user cluster-admin --user <ユーザー名> --cluster <ROSAクラスター名>
+```
+====
