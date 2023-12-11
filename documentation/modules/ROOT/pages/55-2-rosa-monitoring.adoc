@@ -72,7 +72,7 @@ https://docs.openshift.com/rosa/monitoring/sd-disabling-monitoring-for-user-defi
 
 
 [Note]
-===
+====
 利用者のプロジェクトに関するメトリクスデータは、デフォルトでは永続ボリュームに保存される設定にはなっていません。
 このため、ROSAクラスターのアップグレードや障害発生に伴う再起動などにより、利用者のメトリクスデータが失われる可能性があります。
 
@@ -81,7 +81,11 @@ https://docs.openshift.com/rosa/monitoring/sd-disabling-monitoring-for-user-defi
 次のYAMLファイルで置き換えることで、自動的にデフォルトのストレージクラス(gp3)を用いたPVCが作成されて、
 メトリクスデータが保存されるようになります。
 
-OpenShiftのConfigMapは、「管理者向け表示」→「Workloads」→「ConfigMaps」から設定します。
+NOTE: Kubernetesの
+https://kubernetes.io/docs/concepts/configuration/configmap/[ConfigMap]は、 
+アプリケーションの構成データを、key/value形式で保存するためのリソースです。
+
+OpenShiftでのConfigMapは、「管理者向け表示」→「Workloads」→「ConfigMaps」から設定できます。
 OpenShift CLIを用いた設定方法については、
 https://docs.openshift.com/rosa/monitoring/configuring-the-monitoring-stack.html#configuring-a-local-persistent-volume-claim_configuring-the-monitoring-stack[公式ドキュメント]もご参照ください。
 
@@ -103,5 +107,6 @@ data:
             requests:
               storage: 200Gi
 ----
-===
+
+====
 
