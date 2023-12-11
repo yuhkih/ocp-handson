@@ -83,7 +83,7 @@ https://docs.openshift.com/rosa/monitoring/sd-disabling-monitoring-for-user-defi
 
 NOTE: Kubernetesの
 https://kubernetes.io/docs/concepts/configuration/configmap/[ConfigMap]は、 
-アプリケーションの構成データを、key/value形式で保存するためのリソースです。
+アプリケーションの構成データを、key/value形式で保存します。
 
 OpenShiftでのConfigMapは、「管理者向け表示」→「Workloads」→「ConfigMaps」から設定できます。
 OpenShift CLIを用いた設定方法については、
