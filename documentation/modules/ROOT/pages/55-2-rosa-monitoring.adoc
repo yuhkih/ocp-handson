@@ -77,13 +77,13 @@ https://docs.openshift.com/rosa/monitoring/sd-disabling-monitoring-for-user-defi
 このため、ROSAクラスターのアップグレードや障害発生に伴う再起動などにより、利用者のメトリクスデータが失われる可能性があります。
 
 利用者のメトリクスデータを、200GiBの永続ボリュームを利用して30日間保存するような設定をしたい場合、
-「openshift-user-workload-monitoring」プロジェクトのPodが利用する設定情報(ConfigMap)を
-次のYAMLファイルで置き換えることで、自動的にデフォルトのストレージクラス(gp3)を用いたPVCが作成されて、
-メトリクスデータが保存されるようになります。
+「openshift-user-workload-monitoring」プロジェクトの `user-workload-monitoring-config` という名前の
+設定情報(ConfigMap)を次のYAMLファイルで置き換えることで、
+自動的にデフォルトのストレージクラス(gp3)を用いたPVCが作成されて、メトリクスデータが保存されるようになります。
 
 NOTE: Kubernetesの
 https://kubernetes.io/docs/concepts/configuration/configmap/[ConfigMap]は、 
-アプリケーションの構成データを、key/value形式で保存します。
+アプリケーションで利用される構成データを保存します。
 
 OpenShiftでのConfigMapは、「管理者向け表示」→「Workloads」→「ConfigMaps」から設定できます。
 OpenShift CLIを用いた設定方法については、
