@@ -8,7 +8,7 @@ include::_attributes.adoc[]
 
 ---
 
-=== メトリクスデータの確認
+=== 「ダッシュボード」タブ
 
 ROSAクラスターのモニタリング (openshift-monitoring) で収集されるメトリクスデータを見てみます。
 
@@ -41,12 +41,15 @@ KubernetesのスケジューラによるPod配置は行われません。
 https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/[Kubernetesの公式ドキュメント]もご参照ください。
 ====
 
+=== 「Metrics」タブ
 
 「Metrics」タブでは、
 https://prometheus.io/docs/prometheus/latest/querying/basics/[Prometheusのクエリー(PromQL)]によるグラフ表示が可能です。
 予め用意されたクエリー(CPUやメモリー使用量など)を用いて、データを確認してみてください。
 
 image::rosa/metrics/prompql.png[]
+
+=== 「イベント」タブ
 
 「イベント」タブでは、プロジェクト上の様々な記録を確認できます。
 PodやPVCなどを作成した際に実行される様々な操作記録(イベント)がストリーミングされていることを確認してみてください。
