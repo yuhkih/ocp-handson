@@ -90,3 +90,24 @@ image::rosa/ebs/pod-terminal.png[]
 `/mnt/ebs-data` ディレクトリに、適当なファイルを作成します。
 Podを削除(該当Podを選択して、「アクション」->「Podの削除」を選択)した後に、
 再度「test-pvc-20」PVCを指定してPodを作成すると、作成したテストファイルが残っていることを確認できます。
+
+
+NOTE: Amazon EBSを利用したPVCは、1台のワーカーノードでマウントして利用できます。
+共有ファイルシステムのように、複数台のワーカーノードでマウントして利用することはできません。
+また、
+https://docs.openshift.com/rosa/storage/persistent_storage/persistent-storage-aws.html#maximum-number-of-ebs-volumes-on-a-node_persistent-storage-aws[1台のノードに接続できるEBSのボリュームは39個まで]となります。
+これはAWSのEBSの制限に起因します。
+
+[Note]
+====
+Amazon EFSを永続ボリュームとして利用することもできます。
+その場合、Amazon EFSのContainer Storage Interface(CSI. ストレージベンダーが提供するKubernetes用のインタフェース)
+を利用するために、「AWS EFS CSI Operator」をインストール/設定して利用します。
+
+ROSA HCPクラスターはAWS STSを利用しているため、
+Amazon EFSを利用するためのIAMロールとポリシーを作成する必要があります。
+詳細については、
+https://docs.openshift.com/rosa/storage/container_storage_interface/osd-persistent-storage-aws-efs-csi.html[公式ドキュメント]をご参照ください。
+
+image::rosa/ebs/efs-csi-operator.png[]
+====
