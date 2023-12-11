@@ -42,7 +42,7 @@ image::rosa/monitoring/monitoring-projects.png[]
 
 NOTE: 「openshift-monitoring」プロジェクトのコンポーネントは、
 Red Hat SREチームの管理下に置かれており、
-https://docs.openshift.com/rosa/monitoring/configuring-the-monitoring-stack.html#support-considerations_configuring-the-monitoring-stack[利用者が設定を変更することはサポートしていません]。
+https://docs.openshift.com/rosa/monitoring/configuring-the-monitoring-stack.html#support-considerations_configuring-the-monitoring-stack[利用者が設定を変更することを、基本的にサポートしていません]。
 
 image::rosa/monitoring/openshift-monitoring-pods.png[]
 
@@ -67,14 +67,11 @@ https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[nodeSel
 
 image::rosa/monitoring/openshift-user-workload-monitoring-pods.png[]
 
-また、利用者が作成したプロジェクトのモニタリングについては、
-https://docs.openshift.com/rosa/monitoring/sd-disabling-monitoring-for-user-defined-projects.html[無効化]することもできますので、参考にしてください。
-
 
 [Note]
 ====
 利用者のプロジェクトに関するメトリクスデータは、デフォルトでは永続ボリュームに保存される設定にはなっていません。
-このため、ROSAクラスターのアップグレードや障害発生に伴う再起動などにより、利用者のメトリクスデータが失われる可能性があります。
+このため、Podの再起動や再作成に伴い、利用者のメトリクスデータが失われる可能性があります。
 
 利用者のメトリクスデータを、200GiBの永続ボリュームを利用して30日間保存するような設定をしたい場合、
 「openshift-user-workload-monitoring」プロジェクトの `user-workload-monitoring-config` という名前の
@@ -85,9 +82,10 @@ NOTE: Kubernetesの
 https://kubernetes.io/docs/concepts/configuration/configmap/[ConfigMap]は、 
 アプリケーションで利用される構成データを保存します。
 
-OpenShiftでのConfigMapは、「管理者向け表示」→「Workloads」→「ConfigMaps」から設定できます。
-OpenShift CLIを用いた設定方法については、
-https://docs.openshift.com/rosa/monitoring/configuring-the-monitoring-stack.html#configuring-a-local-persistent-volume-claim_configuring-the-monitoring-stack[公式ドキュメント]もご参照ください。
+OpenShiftでのConfigMapは、コンソールの「管理者向け表示」→「Workloads」→「ConfigMaps」から作成、
+または、既存のConfigMapを編集できます。
+OpenShift CLI(ocコマンド)を用いた設定方法については、
+https://docs.openshift.com/rosa/monitoring/configuring-the-monitoring-stack.html#configuring_persistent_storage_configuring-the-monitoring-stack[公式ドキュメント]をご参照ください。
 
 [.console-input]
 [source,sh]
@@ -107,6 +105,8 @@ data:
             requests:
               storage: 200Gi
 ----
+
+NOTE: 本演習をワークショップ形式で実施している場合、この設定はすでに適用済みとなっています。
 
 ====
 
