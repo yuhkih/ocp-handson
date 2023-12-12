@@ -208,7 +208,7 @@ image::rosa/alert/alert-test.png[]
 
 image::rosa/alert/firing-alert.png[]
 
-NOTE: 「通知」にあるスイッチをOFFにすると、アラートをサインレンス状態にできます。
+NOTE: 「通知」にあるスイッチをOFFにすると、アラートをサイレンス状態にできます。
 
 「トポロジー」メニューから
 サンプルアプリのPod数を再度2に戻す(Podの詳細タブの「↑」矢印をクリック)と、
