@@ -20,7 +20,9 @@ ROSAクラスターでは、ROSAの利用者が作成したプロジェクトで
 
 NOTE: 本演習をワークショップ形式で実施している場合、この設定はすでに適用済みとなっています。
 
-```
+[.console-input]
+[source,sh]
+----
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -38,7 +40,7 @@ data:
     alertmanager:
       enabled: true 
       enableAlertmanagerConfig: true
-```
+----
 ====
 
 
@@ -140,7 +142,7 @@ spec:
 ここまでの設定により、「モニタリング」メニューの「Metrics」タブから、
 このサンプルアプリケーションにあるメトリクスを見れるようになります。
 「Metrics」タブから「カスタムクエリー」を選択して、「version」を入力してEnterキーを押します。
-すると、次のようなメトリクスデータを確認できます。
+すると、次のようなメトリクスを確認できます。
 
 image::rosa/alert/custom-query.png[]
 
