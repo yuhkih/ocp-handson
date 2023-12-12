@@ -115,9 +115,11 @@ https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resou
 ローカルユーザーでログインしている場合は、管理者アカウントで再ログインします。
 
 先ほどYAML形式のテキストを入力した時と同様に、
-「prometheus-example-app」サービスを作成したプロジェクトを選択して、「+」アイコンをクリックしてServiceMonitorを作成します。
+「+」アイコンをクリックしてServiceMonitorを作成します。
 「interval: 30s」で、メトリクスデータをスクレイピング(収集・加工)する間隔を30秒と設定しています。
 また、「selector」を指定して、「app: prometheus-example-app」ラベルを持つServiceを対象としています。
+
+NOTE: 「prometheus-example-app」Serviceを作成したプロジェクトを選択して、ServiceMonitorを作成します。
 
 [.console-input]
 [source,sh]
