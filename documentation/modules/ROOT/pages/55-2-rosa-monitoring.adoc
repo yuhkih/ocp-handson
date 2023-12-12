@@ -10,7 +10,7 @@ include::_attributes.adoc[]
 ROSAクラスターは、デフォルトでPrometheusをベースとしたモニタリング機能が有効になっており、
 下記の2つのユースケースで利用されています。
 
-* ROSAクラスター全体のモニタリング
+* ROSAクラスター全体のモニタリング (Platform monitoring)
 * 利用者が作成したプロジェクトのモニタリング (User-defined projects monitoring)
 
 この2つについて、どのようにROSAクラスターで利用されているかを確認していきます。
