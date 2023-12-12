@@ -173,15 +173,13 @@ I: To create an OIDC Config, run the following command:
 ```
 
 AWSコンソールから、ROSAクラスター作成に必要なIAMロールが作成されていることを確認できます。
+このIAMロールは、複数のクラスターにわたって使用されます。
 
 image::rosa/hcp-create/managed-openshift-hcp-roles.png[]
 
-ROSA HCPクラスターを
-https://console.redhat.com/openshift[OpenShift Cluster Manager]に登録するための、OpenID Connectの設定を作成します。
-
-
-NOTE: OpenShift Cluster Manager(OCM)は、OpenShiftクラスターのインストール、修正、操作、およびアップグレードを可能にするRed Hat提供の管理サービスです。OCMを使用すると、単一のダッシュボードからすべてのOpenShiftクラスターを操作できるようになります。詳細については、
-https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html-single/red_hat_openshift_cluster_manager/index[OCMの公式ドキュメント]もご参照ください。
+ROSA HCPクラスターの
+https://www.redhat.com/en/topics/containers/what-is-a-kubernetes-operator[Operator]が、
+専用のIAMロールを作成して利用するために必要となる、OpenID Connectの設定を作成します。
 
 
 ```
@@ -330,7 +328,13 @@ workers  No           2/2       m5.xlarge                          us-east-2a   
 
 [Note]
 ====
-作成したROSA HCPクラスターの情報は、OCMの画面からも確認できます。下記の画像は、SingleAZ構成(ワーカーノード2台)とMultiAZ構成(ワーカーノード2台と3台)の例です。
+作成したROSA HCPクラスターの情報は、OpenShift Cluster Manager (OCM)の画面からも確認できます。
+下記の画像は、SingleAZ構成(ワーカーノード2台)とMultiAZ構成(ワーカーノード2台と3台)の例です。
+
+NOTE: OCMは、OpenShiftクラスターのインストール、
+修正、操作、およびアップグレードを可能にするRed Hat提供の管理サービスです。
+OCMを使用すると、単一のダッシュボードからすべてのOpenShiftクラスターを操作できるようになります。詳細については、
+https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html-single/red_hat_openshift_cluster_manager/index[OCMの公式ドキュメント]もご参照ください。
 
 image::rosa/hcp-create/singleaz01.png[]
 image::rosa/hcp-create/multiaz01.png[]
