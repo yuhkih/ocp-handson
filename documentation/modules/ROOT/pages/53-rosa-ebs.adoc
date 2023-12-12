@@ -11,7 +11,7 @@ include::_attributes.adoc[]
 
 ROSAには、Amazon Elastic Block Store (EBS) ボリュームを使用するストレージクラスが事前に設定されています。
 このため、
-https://aws.amazon.com/jp/ebs/general-purpose/[Amazon EBSのgp2, gp3ボリュームタイプ]がすぐに使えるようになっています。
+https://aws.amazon.com/jp/ebs/general-purpose/[Amazon EBSのgp2, gp3ボリュームタイプ]がすぐ使えるようになっています。
 
 image::rosa/ebs/storage-class.png[]
 
