@@ -10,8 +10,8 @@ include::_attributes.adoc[]
 ROSAクラスターは、デフォルトでPrometheusをベースとしたモニタリング機能が有効になっており、
 下記の2つのユースケースで利用されています。
 
-* ROSAクラスター全体のモニタリング (openshift-monitoring)
-* ROSAの利用者が作成したプロジェクトのモニタリング (openshift-user-workload-monitoring)
+* ROSAクラスター全体のモニタリング
+* 利用者が作成したプロジェクトのモニタリング (User-defined projects monitoring)
 
 この2つについて、どのようにROSAクラスターで利用されているかを確認していきます。
 
@@ -67,6 +67,9 @@ https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[nodeSel
 
 image::rosa/monitoring/openshift-user-workload-monitoring-pods.png[]
 
+NOTE: ROSA HCPクラスターでは、 `rosa create cluster` でHCPクラスター作成時に、
+`disable-workload-monitoring` オプションで、利用者が作成したプロジェクトの
+モニタリングを無効化できます。
 
 [Note]
 ====
