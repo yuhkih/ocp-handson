@@ -35,6 +35,10 @@ $ rosa create machinepool -c hcp-01
 
 I: Enabling interactive mode
 ? Machine pool name: mp20
+? OpenShift version:  [Use arrows to move, type to filter, ? for more help]
+> 4.14.2
+  4.14.1
+  4.14.0
 ? OpenShift version: 4.14.2
 ? Select subnet for a hosted machine pool: Yes
 ? Subnet ID: subnet-0087cb7bb3f628793 ('hcp-cluster01-vpc-private-use2-az1','vpc-0727149c80d7f166f','us-east-2a', Owner ID: '999417968296')
@@ -48,6 +52,9 @@ I: Fetching instance types
 I: Machine pool 'mp20' created successfully on hosted cluster 'hcp-01'
 I: To view all machine pools, run 'rosa list machinepools -c hcp-01'
 ```
+
+ROSA HCPクラスターでは、コントロールプレーンより古いバージョンのワーカーノードをデプロイできるようになっています。
+上記の例では、 `4.14.2` を選択していますが、他の古いバージョンも選択できます。
 
 Subnet IDで、ROSA HCPクラスター作成時に指定した、AWS VPCのプライベートサブネットIDを指定します。
 ROSA HCPクラスターでは、AZにあるサブネットIDを指定して、
