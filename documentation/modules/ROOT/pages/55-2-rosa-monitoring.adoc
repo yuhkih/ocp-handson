@@ -68,7 +68,7 @@ https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[nodeSel
 image::rosa/monitoring/openshift-user-workload-monitoring-pods.png[]
 
 NOTE: ROSA HCPクラスターでは、 `rosa create cluster` でHCPクラスター作成時に、
-`disable-workload-monitoring` オプションで、利用者が作成したプロジェクトの
+`disable-workload-monitoring` オプションで、利用者のプロジェクトの
 モニタリングを無効化できます。
 
 [Note]
