@@ -1,13 +1,13 @@
-= ワーカーノードの追加・削除
+= ワーカーノードの追加と削除
 :navtitle: rosa-nodes
 include::_attributes.adoc[]
 
 == 演習の概要
-このモジュールでは、ワーカーノードの(自動的な)追加・削除を実施します。
+このモジュールでは、ワーカーノードの(自動的な)追加と削除を実施します。
 
 ---
 
-=== ワーカーノードの追加・削除
+=== ワーカーノードの追加と削除
 
 実行するアプリケーションの数が多くなり、ワーカーノードのリソース(CPUやメモリ)使用率が逼迫した場合、
 ROSA CLI(rosaコマンド)を使用して、ワーカーノードを簡単に追加・削除できます。
@@ -55,9 +55,9 @@ SingleAZ構成/MultiAZ構成の両方で、ワーカーノードを最低1台か
 Replicasで、作成するワーカーノードの台数(ここでは1台)を指定します。
 Autorepairは、ワーカーノードの反応が無くなったとき、新規作成したワーカーノードに置換することを意味します。
 
-NOET: 2023年12月時点では、ROSA HCPクラスターではEC2スポットインスタンスの利用はできません。
+NOTE: 2023年12月時点では、ROSA HCPクラスターではEC2スポットインスタンスの利用はできません。
 
-再度「rosa list machinepool」コマンドを実行して、machinepool `mp20` が正常に作成されたかを確認します。
+再度 `rosa list machinepool` コマンドを実行して、machinepool `mp20` が正常に作成されたかを確認します。
 ワーカーノードに紐づいたEC2インスタンスの作成完了まで、5~10分ほどかかります。
 ```
 $ rosa list machinepool -c hcp-01
@@ -119,7 +119,7 @@ https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4
 オートスケールの設定の場合だと、「Enable autoscaling」のチェックボックスによって、
 オートスケールの有効化/無効化ができます。
 
-NOTE: 本演習をワークショップ形式で実施している場合、OCMへのアクセス権限を持たないことを想定します。
+NOTE: 本演習をワークショップ形式で実施している場合、OCMへアクセスできません。
 
 image::rosa/nodes/ocm-autoscale1.png[]
 image::rosa/nodes/ocm-autoscale2.png[]
@@ -169,12 +169,11 @@ Machinepoolに紐づいたワーカーノードにラベルが付与されない
 
 
 ここで、実際にサンプルジョブを投入して確認してみましょう。
-適当なプロジェクト(この例では、 `autoscale-ex20` )を作成し、
 次のYAMLファイルで `busybox` Podを15個並列に実行するジョブを投入します。
-
 このとき、先ほど確認したラベルを利用して、
 このジョブによって作成されるPodが、受講者が作成したmachinepool内だけで実行されるように、
 「nodeSelector」を指定します。
+
 ラベルの「key: value」の「value」に相当する文字列(この例では、`hcp-01-mp20` )は、
 ダブルクォーテーションで囲む必要があります。
 これを忘れると、「value」の値が文字列として認識されないため、ラベルの指定ができず、
@@ -222,10 +221,7 @@ image::rosa/nodes/job-create.png[]
 
 image::rosa/nodes/job-status.png[]
 
-![ジョブの実行状況](./images/job-status.png)
-<div style="text-align: center;">ジョブの実行状況</div>　
-
-この他にも、管理者アカウントで、ROSAクラスターの「コンピュート」→「Nodes」の情報を見ることで、
+この他にも、管理者アカウントで、ROSAクラスターのコンソールの「コンピュート」→「Node」メニューから、
 自動的にワーカーノードが追加されている状況を確認できます。
 
 前述のコマンドで作成したm5.xlargeインスタンスのMachinepoolを利用して、
