@@ -1,4 +1,4 @@
-= プロジェクトのアラート設定
+= アラート設定
 :navtitle: rosa-alert
 include::_attributes.adoc[]
 
@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 ---
 
-=== プロジェクトのアラート設定
+=== アラート設定の有効化
 
 ROSAクラスターでは、ROSAの利用者が作成したプロジェクトで実行しているアプリケーションを対象とした、
 アラート設定が可能です。
