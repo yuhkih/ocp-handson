@@ -155,9 +155,11 @@ $ rosa edit machinepool mp20 -c hcp-01 --enable-autoscaling=true
 I: Updated machine pool 'mp20' on hosted cluster 'hcp-01'
 ```
 
-Machinepoolに紐づくワーカーノードに自動付与されるラベルのうち、
+Machinepoolに紐づくワーカーノードに自動付与されるラベルのうち、ROSAクラスターのコンソールの、
+「コンピュート」→「Node」メニューから当該ノードを選択して、「詳細」タブの「ラベル」に表示されている
 `hypershift.openshift.io/nodePool=<ROSAクラスター名>-<Machinepool名>` を使います。
-下記の画像の例では、 `hypershift.openshift.io/nodePool=hcp-01-mp20` というラベルが付与されています。
+下記の画像の例では、 `hypershift.openshift.io/nodePool=hcp-01-mp20` というラベルが、
+ワーカーノードに付与されています。
 
 image::rosa/nodes/node-label.png[]
 
