@@ -53,7 +53,7 @@ I: Machine pool 'mp20' created successfully on hosted cluster 'hcp-01'
 I: To view all machine pools, run 'rosa list machinepools -c hcp-01'
 ```
 
-ROSA HCPクラスターでは、コントロールプレーンより古いバージョンのワーカーノードをデプロイできるようになっています。
+ROSA HCPクラスターでは、コントロールプレーンより古いバージョンのワーカーノードをデプロイできます。
 上記の例では、 `4.14.2` を選択していますが、他の古いバージョンも選択できます。
 
 Subnet IDで、ROSA HCPクラスター作成時に指定した、AWS VPCのプライベートサブネットIDを指定します。
