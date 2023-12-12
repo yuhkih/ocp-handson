@@ -33,7 +33,7 @@
 ** xref:55-1-rosa-log-02.adoc[6. Amazon CloudWatchでのログ確認]
 ** xref:55-2-rosa-monitoring.adoc[7. ROSAクラスターのモニタリング]
 ** xref:55-3-rosa-project-metrics.adoc[8. プロジェクトのメトリクスデータの確認]
-** xref:55-4-rosa-alert.adoc[9. ]
+** xref:55-4-rosa-alert.adoc[9. プロジェクトのアラート設定]
 # ** xref:59-X-rosa-efs-01.adoc[X. Amazon EFSの利用準備 [デモ\]]
 # ** xref:59-X-rosa-efs-02.adoc[X. Amazon EFSの利用]
 

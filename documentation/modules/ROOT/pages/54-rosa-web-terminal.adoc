@@ -12,6 +12,10 @@ include::_attributes.adoc[]
 OpenShiftでは、Webコンソール上でTerminalを実行するための「Web Terminal Operator」を標準で提供しています。
 OperatorHubからWeb Terminal Operatorをインストールするだけで、Web Terminalを利用できるようになります。
 
+NOTE: Operatorは、Kubernetes/OpenShift上で実行されるコンテナアプリの運用(自動構築や削除など)を自動化するための、
+専用コンテナとなります。Operatorは、対象となるコンテナアプリを運用するためのインタフェースを提供します。
+Operator自身も通常のアプリケーションと同様に、Podとして実行されます。
+
 [Note]
 ====
 本演習をワークショップ形式で実施している場合、予めWeb Terminal Operatorがインストールされている

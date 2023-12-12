@@ -1,4 +1,3 @@
-
 = プロジェクトのメトリクスデータの確認
 :navtitle: rosa-project-metrics
 include::_attributes.adoc[]
