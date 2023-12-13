@@ -214,7 +214,7 @@ Machinepoolの更新を `rosa upgrade machinepool` コマンドでスケジュ�
 なお、時刻はUTC形式で指定します。日本時間はこれより9時間進んでいることを考慮してください。
 
 ```
-rosa upgrade machinepool mp20 -c hcp-01 --interactive
+$ rosa upgrade machinepool mp20 -c hcp-01 --interactive
 
 I: Interactive mode enabled.
 Any optional fields can be left empty and a default will be selected.
