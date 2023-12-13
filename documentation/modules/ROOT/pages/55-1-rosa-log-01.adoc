@@ -1,4 +1,4 @@
-= [デモ] ROSAクラスターのロギング設定
+= [デモ] ロギング設定
 :navtitle: rosa-log-01
 include::_attributes.adoc[]
 

@@ -1,4 +1,4 @@
-= ROSAクラスターのモニタリング
+= モニタリング
 :navtitle: rosa-monitoring
 include::_attributes.adoc[]
 
