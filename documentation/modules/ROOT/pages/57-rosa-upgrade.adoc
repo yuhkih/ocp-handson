@@ -108,8 +108,9 @@ Kubernetesのワークロード(デプロイ設定に利用するDeploymentな�
 なお、1台のワーカーノードの更新(新規ノード作成と既存ノードの削除)にかかる所要時間は、
 およそ5~10分ほどです。
 
-NOTE: ROSA HCPクラスターでは、
-ワーカーノード更新に伴うPodの強制停止(SIGKILL)実行前の猶予時間(Pod Disruption Budget)は、設定できません。
+NOTE: ワーカーノード更新に伴ってPodの停止(SIGTERM)が実行されますが、Podの停止不可の場合に、
+Podの強制停止(SIGKILL)が実行されます。ROSA HCPクラスターでは、
+Podの強制停止実行前の猶予時間(Pod Disruption Budget)の変更はできません。
 
 
 === ROSA CLIを利用したコントロールプレーンの更新
