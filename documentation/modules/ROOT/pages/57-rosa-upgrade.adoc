@@ -83,7 +83,7 @@ ROSA HCPクラスターでは、コントロールプレーンより古いバー
 Machinepool単位でワーカーノードを更新できます。
 
 OCMでは、更新可能なMachinepoolがある場合、
-指定したMachinepol、または全てのMachinepoolを更新できます。
+指定したMachinepol、または、全てのMachinepoolを更新できます。
 OCMでMachinepoolを更新する場合、約5分後に更新がスケジュールされます。
 更新時刻を指定したい場合、ROSA CLIを利用する必要があります。
 
@@ -95,7 +95,7 @@ image::rosa/upgrade/mp-upgrade3.png[]
 ワーカーノードの更新は、インプレースアップグレードではなく、
 新規ワーカーノードの追加と既存ワーカーノードの削除を実行します。
 Machinepoolに複数台のワーカーノードが紐づいている場合、台数分のワーカーノードを一括作成および削除するのではなく、
-1台ずつワーカーノードの新規追加と削除が自動的に実行されます。
+1台ずつワーカーノードの新規追加と削除が自動実行されていきます。
 
 更新の際に、削除対象のワーカーノード上でPodが実行している場合、Podの停止と再作成が実行されますので、
 冗長性を考慮してPodのレプリカ数を複数個設定しておくことを推奨します。
@@ -164,7 +164,7 @@ VERSION  NOTES
 ```
 
 
-=== ROSA CLIによるワーカーノードの更新
+=== ROSA CLIを利用したワーカーノードの更新
 
 NOTE: 本演習をワークショップ形式で実施している場合、下記で紹介している手順を実施してください。
 
@@ -191,7 +191,7 @@ I: Enabling interactive mode
 I: Fetching instance types
 ? Instance type: c5.xlarge
 ? Autorepair: Yes
-I: Machine pool 'mp01' created successfully on hosted cluster 'hcp-01'
+I: Machine pool 'mp20' created successfully on hosted cluster 'hcp-01'
 I: To view all machine pools, run 'rosa list machinepools -c hcp-01'
 ```
 
