@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 == デモの概要
-このモジュールでは、インストラクターによるROSA HCPクラスター作成方法の概要をご紹介します。
+このモジュールでは、インストラクターがROSA HCPクラスター作成方法の概要をご紹介します。
 
 ---
 
@@ -330,6 +330,7 @@ workers  No           2/2       m5.xlarge                          us-east-2a   
 ====
 作成したROSA HCPクラスターの情報は、OpenShift Cluster Manager (OCM)の画面からも確認できます。
 下記の画像は、SingleAZ構成(ワーカーノード2台)とMultiAZ構成(ワーカーノード2台と3台)の例です。
+なお、どちらの構成でも、コントロールプレーンはMultiAZ構成となります。
 
 NOTE: OCMは、OpenShiftクラスターのインストール、
 修正、操作、およびアップグレードを可能にするRed Hat提供の管理サービスです。

@@ -35,6 +35,7 @@
 ** xref:55-3-rosa-project-metrics.adoc[8. プロジェクトのメトリクスデータの確認]
 ** xref:55-4-rosa-alert.adoc[9. アラート設定]
 ** xref:56-rosa-nodes.adoc[10. ワーカーノードの追加と削除]
+** xref:57-rosa-upgrade.adoc[11. ROSA HCPクラスターの更新 [デモ\]]
 # ** xref:59-X-rosa-efs-01.adoc[X. Amazon EFSの利用準備 [デモ\]]
 # ** xref:59-X-rosa-efs-02.adoc[X. Amazon EFSの利用]
 
