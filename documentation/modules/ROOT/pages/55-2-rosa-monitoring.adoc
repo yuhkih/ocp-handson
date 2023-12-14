@@ -32,7 +32,7 @@ ROSAクラスターでは、モニタリング機能を提供するPodが、
 プラットフォームモニタリング機能を提供するPodが「openshift-monitoring」プロジェクトで実行されます。
 Red Hat SREチームの監視対象のリストは、
 https://docs.openshift.com/rosa/monitoring/monitoring-overview.html#default-monitoring-targets_monitoring-overview[公式ドキュメント]をご参照ください。
-これらの一部はワーカーノード上で実行されますが、ワーカーノードも含めてSREチームにより監視されています。
+これらの一部はワーカーノード上で実行されており、ワーカーノードも含めてSREチームにより監視されています。
 
 
 これらの情報は、ROSAクラスターの管理者アカウント( `cluster-admin` など)でログインすることで確認できます。
