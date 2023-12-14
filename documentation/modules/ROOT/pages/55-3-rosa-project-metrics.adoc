@@ -56,7 +56,11 @@ PodやPVCなどを作成した際に実行される様々な操作記録(イベ�
 これらのイベントは、ROSA/OpenShiftの様々なクラスター情報を保存する「etcd」データベースに保存されており、
 保存期間は「3時間」となります。3時間を過ぎたらetcdデータベースから自動的に消去されます。
 
-NOTE: この値はハードコーディングされているため、ROSAクラスターの利用者が保存期間の値を変更することはできません。
+NOTE: この値はAPI ServerのOperatorによって管理されています。デフォルトの設定は、
+https://github.com/openshift/cluster-kube-apiserver-operator/blob/master/bindata/assets/config/defaultconfig.yaml[`defaultconfig.yaml`]
+が利用されており、この中の `event-ttl`変数で定義されています。
+Operatorによってこれらの値は保護されており、
+https://access.redhat.com/solutions/6968044[OpenShiftクラスターの利用者が編集できない]ようになっています。
 
 image::rosa/metrics/events.png[]
 
