@@ -59,7 +59,7 @@ PodやPVCなどを作成した際に実行される様々な操作記録(イベ�
 NOTE: この値はAPI ServerのOperatorによって管理されています。デフォルトの設定は、
 https://github.com/openshift/cluster-kube-apiserver-operator/blob/master/bindata/assets/config/defaultconfig.yaml[`defaultconfig.yaml`]
 が利用されており、この中の `event-ttl`変数で定義されています。
-Operatorによってこれらの値は保護されており、
+https://github.com/openshift/cluster-kube-apiserver-operator/issues/805[Operatorによってこれらの値は保護]されており、
 https://access.redhat.com/solutions/6968044[ROSA/OpenShiftクラスターの利用者が編集できない]ようになっています。
 
 image::rosa/metrics/events.png[]
