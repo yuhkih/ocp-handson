@@ -1,0 +1,44 @@
+= はじめに
+:navtitle: rosa-info
+include::_attributes.adoc[]
+
+Red Hat OpenShift Service on AWS (ROSA) Lab プロジェクトは、
+インストラクター主導のデモ紹介またはセルフペースの演習で、ROSAを効果的に紹介及び体感していただくことを目的としています。
+
+[Note]
+====
+AWSのマネージドなコンテナオーケストレーションサービスである、
+Amazon ECS、EKS、ROSAの特徴の違いや想定される用途をご紹介している資料を用意していますので、参考にしてください。
+
+Kubernetesに興味のある人から特に聞かれることの多い、EKSとROSAについて、
+いくつかのサンプルユースケースと共に、両者の違いも合わせてご紹介しています。
+
+* image::rosa/pdf/2023-rosa-hcp-infomation.pdf[ECS/EKS/ROSAの比較情報とROSAの紹介資料(PDFファイル)]
+====
+
+---
+
+== 演習の前提要件
+
+* AWSにアクセス可能なネットワーク環境
+* ROSAクラスターにアクセス可能なWebブラウザ
+  * https://access.redhat.com/articles/4763741[「Browsers and Client Tools」表]にある、
+  最新版のOpenShiftに対応したWebブラウザ(Firefox/MS Edge/Chrome/Safari)のいずれかを利用します。
+
+[Note]
+====
+次のものを用意することで、このLabsを自習できます。
+
+* 有償サービスを利用可能なAWSアカウント
+* 無料で作成可能な
+https://cloud.redhat.com/[Red Hatアカウント] (「Create an account」から作成)
+====
+
+
+== 演習の進め方
+
+* 本Labをワークショップ形式で受講する場合は、[デモ]と分類している項目以外を実施してください。
+受講生が利用するROSAクラスターのアクセス情報は、インストラクターがご案内します。
+
+* 本Labを自習形式で実施する場合、全てのコンテンツを実施してください。
+
