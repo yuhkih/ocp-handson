@@ -85,7 +85,7 @@ image::rosa/nodes/node-lists.png[]
 ROSAクラスターの「Node」メニューから、 `mp20` に対応したワーカーノード1台が削除されていることを確認できます。
 
 ```
-$ rosa edit machinepool mp20 -c rosa-XXXXX --replicas 0
+$ rosa edit machinepool mp20 -c hcp-01 --replicas 0
 I: Updated machine pool 'mp20' on cluster 'hcp-01'
 
 $ rosa list machinepool -c hcp-01                  
