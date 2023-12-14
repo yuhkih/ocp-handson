@@ -43,5 +43,5 @@ NOTE: https://access.redhat.com/articles/4763741[「Browsers and Client Tools」
 
 * 有償サービスを利用可能なAWSアカウント
 * 無料で作成可能な
-https://cloud.redhat.com/[Red Hatアカウント] (「Create an account」から作成)
+https://cloud.redhat.com/[Red Hatアカウント] ( `Create an account` から作成)
 ====
