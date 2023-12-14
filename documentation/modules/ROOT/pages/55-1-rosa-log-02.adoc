@@ -23,7 +23,14 @@ image::rosa/log-02/loggroup.png[]
 各ログストリームには受講者が作成したプロジェクト名(下の画像だと、 `test-project20` )が付いていますので、
 自身が作成したプロジェクト名が付いたログストリームを選択します。
 
+NOTE: 前の演習の「Cluster Log Forwarder」の設定で、
+プロジェクトごとのロググループの作成や、ロググループの名前に含まれるデフォルトの接頭辞を変更する設定ができます。
+具体的な設定方法については、
+https://access.redhat.com/documentation/ja-jp/openshift_container_platform/4.14/html/logging/log-collection-and-forwarding#cluster-logging-collector-log-forward-cloudwatch_log-forwarding[公式ドキュメント]をご参照ください。
+
+
 image::rosa/log-02/logstream.png[]
+
 
 前の演習で作成した　`test-ebs` Podは、「hello ebs」というログを30秒間隔で出力し続けており、
 そのログが `message` の所で表示されています。
