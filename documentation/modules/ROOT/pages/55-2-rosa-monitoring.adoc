@@ -22,13 +22,17 @@ NOTE: 本演習をワークショップ形式で実施している場合、こ�
 ROSAクラスター全体のリソース利用状況のモニタリング、
 いわゆる「プラットフォームモニタリング」とRed Hatの公式ドキュメントで定義しているものについては、
 Red HatのSREチームによって利用されています。
-ROSAの責任分担マトリクスによって、プラットフォームモニタリングについては、Red Hatに責任があると定義しているため、
+https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition/rosa-policy-responsibility-matrix.html#rosa-policy-responsibilities_rosa-policy-responsibility-matrix[ROSAの責任分担マトリクス]によって、
+プラットフォームモニタリングについては、Red Hatに責任があると定義しているため、
 ROSAの利用者は、ワーカーノードにおけるユーザーアプリの利用状況の監視に集中できるようになっています。
 
 
 ROSAクラスターでは、モニタリング機能を提供するPodが、
 「openshift-monitoring」と「openshift-user-workload-monitoring」という2つのプロジェクトで実行されています。
 プラットフォームモニタリング機能を提供するPodが「openshift-monitoring」プロジェクトで実行されます。
+Red Hat SREチームの監視対象のリストは、
+https://docs.openshift.com/rosa/monitoring/monitoring-overview.html#default-monitoring-targets_monitoring-overview[公式ドキュメント]をご参照ください。
+これらの一部はワーカーノード上で実行されますが、ワーカーノードも含めてSREチームにより監視されています。
 
 
 これらの情報は、ROSAクラスターの管理者アカウント( `cluster-admin` など)でログインすることで確認できます。
