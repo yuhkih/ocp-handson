@@ -106,13 +106,14 @@ NOTE: 本演習では、Quarkusの解説は含みません。
 https://ja.quarkus.io/guides/getting-started[公式ドキュメント]をご参照ください。
 
 ```
+quarkus-quickstarts $ cd getting-started
 getting-started $ mvn quarkus:dev -Dquarkus.http.port=8081
 ```
 
 image::rosa/dev-spaces/mvn-command.png[]
 
-このコマンド実行によって、必要なパッケージがダウンロードされ、jarファイルが作成されて、
-Quarkusのアプリケーションが実行されます。正常に実行が完了すると、
+このコマンド実行によって、ビルドに必要なパッケージのダウンロード、jarファイルの作成後に、
+Quarkusのアプリケーションが実行されます。正常に実行されると、
 次のような表示になります。ここで、上のメッセージの方にある「yes」をクリックして、
 「Open in New Tab」→「Open」をクリックすることで、Quarkusアプリケーションにアクセスできます。
 
@@ -123,8 +124,8 @@ image::rosa/dev-spaces/access3.png[]
 [Note]
 ====
 「Open in New Tab」などが表示されるメニューが消えてしまった場合、
-下記のように、 `[h] for more options> ` の所で、半角「q」を入力することで、
-Quarkusアプリケーションを終了できますので、終了後に再度Quarkusアプリケーションを、
+下記のように、 `[h] for more options\> ` の所で半角「q」を入力することで、
+Quarkusアプリケーションを終了できますので、終了後に再度Quarkusアプリケーションを
 `mvn` コマンドで実行してください。
 
 ```
@@ -154,7 +155,7 @@ https://ja.quarkus.io/get-started/[ライブコーディング]という機能�
 これを確認するために、先ほどのQuarkusアプリケーションを実行したままで、
 ソースコードを変更してみます。
 
-左サイドに表示されている `getting-started` ディレクトリから辿っていって、
+左サイドに表示されている `getting-started` ディレクトリの「src」→「main」→「java」と辿っていき、
 `GreetingResource.java` ファイルを開きます。
 
 image::rosa/dev-spaces/greeting-resource.png[]
