@@ -38,7 +38,7 @@ image::rosa/dev-spaces/instance-create1.png[]
 
 デフォルトで「YAMLビュー」が選択されていますが、一旦「フォームビュー」を選択して、
 再度「YAMLビュー」を選択することで、インスタンス作成時のパラメーターが表示されるようになります。
-ここで編集しておくと、便利なパラメーターを記載します。
+ここで編集しておくと、便利なパラメーターをご紹介します。
 
 * `maxNumberOfRunningWorkspacesPerUser` : OpenShiftの各ユーザーアカウントで、同時に実行できる
 Workspaceの数。デフォルトの数は「1」となっています。「-1」とすると、無制限になります。
@@ -123,7 +123,7 @@ image::rosa/dev-spaces/access3.png[]
 [Note]
 ====
 「Open in New Tab」などが表示されるメニューが消えてしまった場合、
-下記のように、 `\[h] for more options> `の所で、半角「q」を入力することで、
+下記のように、 `[h] for more options> ` の所で、半角「q」を入力することで、
 Quarkusアプリケーションを終了できますので、終了後に再度Quarkusアプリケーションを、
 `mvn` コマンドで実行してください。
 
@@ -226,7 +226,7 @@ https://github.com/h-kojima/quarkus-getting-started/
 
 image::rosa/dev-spaces/git-import.png[]
 
-あとは、しばらく待つと、アプリケーションのビルドとデプロイが自動的に完了しますので、
+しばらく待つと、アプリケーションのビルドとデプロイが自動的に完了しますので、
 前の演習の時と同様に、「トポロジー」メニューからデプロイしたQuarkusアプリケーションのURLにアクセスします。
 
 image::rosa/dev-spaces/topology.png[]
@@ -242,8 +242,8 @@ image::rosa/dev-spaces/topology.png[]
 Dev Spacesでは、Visual Studio Codeの拡張機能を使えます。
 そのため、
 https://aws.amazon.com/jp/codewhisperer/[Amazon CodeWhisperer]が使える状態だと、
-https://marketplace.visualstudio.com/items?itemName=AmazonWebServices.aws-toolkit-vscode&ssr=false#version-history[AWS Toolkit]
-拡張機能のファイルを手動でダウンロードして、Dev Spacesの各Workspaceにインポートすることで、
+https://marketplace.visualstudio.com/items?itemName=AmazonWebServices.aws-toolkit-vscode&ssr=false#version-history[AWS Toolkit拡張機能]
+のファイルをダウンロードして、Dev Spacesの各Workspaceに手動でインポートすることで、
 Amazon CodeWhispererによるコード補完機能などが使えるようになります。
 こちらは本演習では扱いませんが、ご興味がありましたらお試し下さい。
 
