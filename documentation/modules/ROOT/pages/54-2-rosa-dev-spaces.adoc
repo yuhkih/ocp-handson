@@ -163,7 +163,7 @@ image::rosa/dev-spaces/greeting-resource.png[]
 このコードでは、アプリケーションのURLの末尾に `/hello` を付与すると、
 `hello` メッセージが表示されるようになっています。
 実際に、これを確認してみてください。下記のように、先ほど開いたURLの末尾に `/hello` を加えて
-アクセスすることで、`hello` というメッセージが表示されます。
+アクセスすることで、`hello` というメッセージだけが表示されます。
 
 ```
 https://testuser20-quarkus-quickstart-code-...-openshiftapps.com/hello
