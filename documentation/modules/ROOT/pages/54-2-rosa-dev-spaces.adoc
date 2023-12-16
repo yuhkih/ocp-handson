@@ -124,7 +124,7 @@ image::rosa/dev-spaces/access3.png[]
 [Note]
 ====
 「Open in New Tab」などが表示されるメニューが消えてしまった場合、
-下記のように、 「...[h] for more options\>」 の所で半角「q」を入力することで、
+下記のように、 「... [h] for more options\> 」 の所で半角「q」を入力することで、
 Quarkusアプリケーションを終了できますので、終了後にQuarkusアプリケーションを
 `mvn` コマンドで再実行してください。
 
