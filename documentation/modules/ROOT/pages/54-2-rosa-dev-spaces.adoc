@@ -163,7 +163,7 @@ image::rosa/dev-spaces/greeting-resource.png[]
 このコードでは、アプリケーションのURLの末尾に `/hello` を付与すると、
 `hello` メッセージが表示されるようになっています。
 実際に、これを確認してみてください。下記のように、先ほど開いたURLの末尾に `/hello` を加えて
-アクセスすることで、`hello` というメッセージだけの画面が表示されます。
+アクセスすることで、`hello` というメッセージが表示されます。
 
 ```
 https://testuser20-quarkus-quickstart-code-...-openshiftapps.com/hello
@@ -207,7 +207,7 @@ OpenShiftのS2I機能を利用した、アプリケーションデプロイを�
 前の手順で利用したWorkspaceのTerminalでは、OpenShift CLI(ocコマンド)やsshだけでなく、
 gitコマンドなども使えるため、開発したコードをそのままGitリポジトリに保存できます。
 
-本演習では各受講者用のGitリポジトリは提供していないため、
+本演習では受講者用のGitリポジトリは提供していないため、
 前までの手順で変更したコードをGitリポジトリに保存したという想定で、
 アプリケーションデプロイを実行します。
 
