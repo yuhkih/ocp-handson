@@ -12,19 +12,19 @@ include::_attributes.adoc[]
 Red Hat OpenShift Dev Spaces (以降はDev Spacesと記載)は、OpenShift上で使える
 KubernetesネイティブなWeb IDEであり、オープンソースプロジェクトの
 https://eclipse.dev/che/[Eclipse Che]をベースとして開発・提供しています。
-Dev Spacesは、OpenShiftの標準機能の1つであるため、ROSA HCPクラスターの利用者は、
-追加料金を支払う必要なく、使うことができます。
+Dev Spacesは、OpenShiftの標準機能の1つであるため、ROSA HCPクラスターの利用者は
+追加料金を支払う必要なく利用できます。
 
 Dev Spacesは、OpenShiftのOperatorとして提供されており、
-Operatorからインストールすることで、簡単に使えるようになっています。
+Operatorからインストールすることで、簡単に利用できるようになっています。
 
 
 [Note]
 ====
-NOTE: 本演習をワークショップ形式で実施している場合、Dev Spacesは既にインストールして設定されています。
+NOTE: 本演習をワークショップ形式で実施している場合、Dev Spacesは既にインストール済みです。
 
-Dev Spacesをインストールする場合、OpenShiftの管理者アカウントで、OperatorHubから
-`Red Hat OpenShift Dev Spaces` を最初にインストールします。Operatorインストール時の
+Dev Spacesをインストールする場合、最初にOpenShiftの管理者アカウントで、OperatorHubから
+`Red Hat OpenShift Dev Spaces` をインストールします。Operatorインストール時の
 パラメーターは、全てデフォルト値を利用します。
 
 image::rosa/dev-spaces/operator.png[]
@@ -36,13 +36,13 @@ image::rosa/dev-spaces/operator.png[]
 
 image::rosa/dev-spaces/instance-create1.png[]
 
-デフォルトで「YAMLビュー」選択されていますが、一旦「フォームビュー」を選択して、
+デフォルトで「YAMLビュー」が選択されていますが、一旦「フォームビュー」を選択して、
 再度「YAMLビュー」を選択することで、インスタンス作成時のパラメーターが表示されるようになります。
 ここで編集しておくと、便利なパラメーターを記載します。
 
 * `maxNumberOfRunningWorkspacesPerUser` : OpenShiftの各ユーザーアカウントで、同時に実行できる
-Workspaceの数。デフォルトは「1」となっていて、同時実行数は1です。「-1」とすると、無制限になります。
-* `secondsOfInactivityBeforeIdling` : Workspaceを操作しなかったときに、Workspaceが停止するまでの秒数であり、
+Workspaceの数。デフォルトの数は「1」となっています。「-1」とすると、無制限になります。
+* `secondsOfInactivityBeforeIdling` : Workspaceを操作しなかったときに、Workspaceが停止するまでの秒数。
 デフォルトは1800秒です。「-1」とすると、無制限になります。
 
 NOTE: これらの値を無制限として指定した場合、リソース(特にメモリー)を多く使う設定となりますので、注意してください。
@@ -75,6 +75,8 @@ image::rosa/dev-spaces/permit.png[]
 https://www.redhat.com/ja/topics/cloud-native-apps/what-is-quarkus[Quarkus]の
 開発環境が一通り揃っているWorkspaceを起動します。
 
+image::rosa/dev-spaces/quarkus-select.png[]
+
 NOTE: Workspaceは、
 https://eclipse.dev/che/[Devfile]という、Web IDEを定義するフォーマット(YAML)で記載された
 テンプレートをもとに作成されます。このテンプレートでは、
@@ -83,7 +85,7 @@ Gitリポジトリに置いたDevfileをもとに、カスタムのWorkspaceも�
 
 クリックすると、Webブラウザの新しいタブが自動的に開かれて、しばらく待つと、
 IDEの画面が表示されます。ここに記載してあるメッセージのとおり、
-このIDEは、Visual Studio Code (VS Code)のように利用することができます。
+このIDEは、Visual Studio Codeのように利用することができます。
 
 image::rosa/dev-spaces/ide-welcome.png[]
 
@@ -96,9 +98,7 @@ image::rosa/dev-spaces/new-terminal-select.png[]
 
 すると下部にTerminalが開きますので、サンプルアプリのうちの1つが入っている
 `getting-started` ディレクトリに `cd` コマンドで移動します。
-
-
-Mavenの実行ファイルやソースコード一式が入っていますので、ここから、次のMavenコマンドを実行して、
+Mavenの実行ファイルやソースコード一式が入っていますので、ここから、次の `mvn` コマンドを実行して、
 サンプルアプリを実行してみます。
 
 NOTE: 本演習では、Quarkusの解説は含みません。
@@ -123,9 +123,9 @@ image::rosa/dev-spaces/access3.png[]
 [Note]
 ====
 「Open in New Tab」などが表示されるメニューが消えてしまった場合、
-下記のように、 `... more options> `の所で、半角「q」を入力することで、
-Quarkusアプリケーションを終了できますので、停止後に再度Quarkusアプリケーションを、
-Mavenコマンドで実行してください。
+下記のように、 `\[h] for more options> `の所で、半角「q」を入力することで、
+Quarkusアプリケーションを終了できますので、終了後に再度Quarkusアプリケーションを、
+`mvn` コマンドで実行してください。
 
 ```
 --
@@ -161,7 +161,7 @@ image::rosa/dev-spaces/greeting-resource.png[]
 
 このコードでは、アプリケーションのURLの末尾に `/hello` を付与すると、
 `hello` メッセージが表示されるようになっています。
-実際に、これを確認してみてください。下記のように、URLの末尾に `/hello` を加えて、
+実際に、これを確認してみてください。下記のように、URLの末尾に `/hello` を加えて
 アクセスすることで、`hello` というメッセージだけの画面が表示されます。
 
 ```
@@ -180,8 +180,7 @@ image::rosa/dev-spaces/return-change.png[]
 
 メッセージ変更の確認後は、Terminalから半角「q」を入力して、
 Quarkusアプリケーションを終了します。終了しないままブラウザを閉じてしまうと、
-アプリケーションが実行したままとなり、今回の例だと、
-他のWorkspaceでのアプリケーション実行時に、8081ポートが使えなくなりますので、ご注意ください。
+アプリケーションが実行したままとなりますので、ご注意ください。
 
 [Note]
 ====
@@ -236,3 +235,17 @@ image::rosa/dev-spaces/topology.png[]
 というメッセージが表示される画面と同じ画面が表示されます。そして、アプリケーションURLの末尾に、
 `/hello` を付与してアクセスすると、 `hello!! <YOUR_NAME>!!!!`
 というメッセージが表示されることを確認できます。
+
+
+[Note]
+====
+Dev Spacesでは、Visual Studio Codeの拡張機能を使えます。
+そのため、
+https://aws.amazon.com/jp/codewhisperer/[Amazon CodeWhisperer]が使える状態だと、
+https://marketplace.visualstudio.com/items?itemName=AmazonWebServices.aws-toolkit-vscode&ssr=false#version-history[AWS Toolkit]
+拡張機能のファイルを手動でダウンロードして、Dev Spacesの各Workspaceにインポートすることで、
+Amazon CodeWhispererによるコード補完機能などが使えるようになります。
+こちらは本演習では扱いませんが、ご興味がありましたらお試し下さい。
+
+image::rosa/dev-spaces/amazon-codewhisperer.png[]
+====
