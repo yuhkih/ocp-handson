@@ -30,7 +30,7 @@
 ** xref:52-rosa-app-deploy.adoc[2. サンプルアプリケーションのデプロイ]
 ** xref:53-rosa-ebs.adoc[3. Amazon EBSの利用]
 ** xref:54-1-rosa-web-terminal.adoc[4. Web Terminalの利用]
-** xref:54-2-rosa-dev-spaces.adoc[5. Web IDEを利用したサンプルアプリケーションの開発]
+** xref:54-2-rosa-dev-spaces.adoc[5. Web IDEを利用した開発]
 ** xref:55-1-rosa-log-01.adoc[6. ロギング設定 [デモ\]]
 ** xref:55-1-rosa-log-02.adoc[7. Amazon CloudWatchでのログ確認]
 ** xref:55-2-rosa-monitoring.adoc[8. モニタリング]

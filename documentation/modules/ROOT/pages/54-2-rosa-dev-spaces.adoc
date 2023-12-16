@@ -1,9 +1,9 @@
-= Web IDEを利用したサンプルアプリケーションの開発
+= Web IDEを利用した開発
 :navtitle: rosa-dev-spaces
 include::_attributes.adoc[]
 
 == 演習の概要
-このモジュールでは、Red Hat OpenShift Dev Spacesでのサンプルアプリケーションを開発します。
+このモジュールでは、Red Hat OpenShift Dev Spacesでサンプルアプリケーションを開発します。
 
 ---
 
