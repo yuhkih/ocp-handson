@@ -99,7 +99,9 @@ Machinepoolに複数台のワーカーノードが紐づいている場合、台
 ワーカーノードの新規追加と削除が1台ずつ自動実行されていきます。
 
 更新の際に、削除対象のワーカーノード上でPodが実行している場合、Podの停止(SIGTERM)と再作成が実行されますので、
-冗長性を考慮してPodのレプリカ数を複数個設定しておくことを推奨します。
+冗長性を考慮してPodのレプリカ数を複数個設定しておくことを推奨します。Podの停止不可の場合は、
+Podの強制停止(SIGKILL)が実行されます。これについては、
+https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination[公式ドキュメント]をご参照ください。
 
 NOTE: このROSA Labでは詳細を扱いませんが、
 https://kubernetes.io/docs/concepts/workloads/pods/#pods-and-controllers[Podのレプリカ数]は、
@@ -108,9 +110,11 @@ Kubernetesのワークロード(デプロイ設定に利用するDeploymentな�
 なお、1台のワーカーノードの更新(新規ノード作成と既存ノードの削除)にかかる所要時間は、
 およそ5~10分ほどです。
 
-NOTE: ワーカーノード更新に伴ってPodの停止(SIGTERM)が実行されますが、Podの停止不可の場合に、
-Podの強制停止(SIGKILL)が実行されます。ROSA HCPクラスターでは、
-Podの強制停止実行前の猶予時間(Pod Disruption Budget)の変更はできません。
+NOTE: ワーカーノード更新に伴って、新規ワーカーノードの追加とPodの再作成が実行されますが、
+ワーカーノードが利用可能な状態になった時点で既存ワーカーノードが削除されるため、Podの再作成や起動に時間がかかる場合、
+一時的にでも全てのPodが利用不可になることがあります。このとき、
+https://access.redhat.com/documentation/ja-jp/openshift_container_platform/4.14/html/post-installation_configuration/post-install-pod-disruption-budgets[Pod Disruption Budget(Podの停止数の許容度)]を設定することで、
+Podの実行数が指定した数や割合になるまでワーカーノード上のPodの停止を待つため、全てのPodが利用不可となる状況を回避できるようになります。
 
 
 === ROSA CLIを利用したコントロールプレーンの更新

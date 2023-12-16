@@ -25,7 +25,10 @@ ID       AUTOSCALING  REPLICAS  INSTANCE TYPE  LABELS    TAINTS    AVAILABILITY 
 workers  No           2/2       m5.xlarge                          us-east-2a         subnet-0087cb7bb3f628793  4.14.2   Yes
 ```
 
-ワーカーノードに対応したAWS EC2インスタンス(デフォルトはm5.xlarge)を2台起動しているという設定を確認できます。
+上記の例では、ワーカーノードに対応したAWS EC2インスタンス(デフォルトはm5.xlarge)を2台起動しているという設定を確認できます。
+
+NOTE: このコマンドの出力結果は、受講生が利用しているROSA HCPクラスターによって変わることがあります。
+
 ここにmachinepoolを新しく作成して、ワーカーノードを1台追加します。 `rosa create machinepool` コマンドを実行します。
 
 NOTE: 1つのROSAクラスターを受講生で共有している場合、他の受講生と重複しないMachinepoolの名前を付けて下さい。
