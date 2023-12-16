@@ -162,7 +162,7 @@ image::rosa/dev-spaces/greeting-resource.png[]
 
 このコードでは、アプリケーションのURLの末尾に `/hello` を付与すると、
 `hello` メッセージが表示されるようになっています。
-実際に、これを確認してみてください。下記のように、URLの末尾に `/hello` を加えて
+実際に、これを確認してみてください。下記のように、先ほど開いたURLの末尾に `/hello` を加えて
 アクセスすることで、`hello` というメッセージだけの画面が表示されます。
 
 ```
@@ -171,7 +171,7 @@ https://testuser20-quarkus-quickstart-code-...-openshiftapps.com/hello
 
 この表示されるメッセージを変更してみます。
 `return "hello";` の記載を、 `return "hello!! <YOUR_NAME>!!!!";`
-に変更して、Control-sキーなどで、 `GreetingResource.java` ファイルを上書き保存します。
+に変更して、「Control + s」キーなどで `GreetingResource.java` ファイルを上書き保存します。
 
 image::rosa/dev-spaces/return-change.png[]
 
@@ -204,8 +204,8 @@ Workspace内にある特定のディレクトリ(ソースコードがある `/p
 
 Web IDEを使って開発したコードををGitリポジトリに置いておくことで、
 OpenShiftのS2I機能を利用した、アプリケーションデプロイを実行できます。
-前の手順で利用したWorkspaceのTerminalでは、OpenShift CLI(ocコマンド), ssh, gitコマンドなどが
-使えるため、開発したコードをそのままGitリポジトリに保存できます。
+前の手順で利用したWorkspaceのTerminalでは、OpenShift CLI(ocコマンド)やsshだけでなく、
+gitコマンドなども使えるため、開発したコードをそのままGitリポジトリに保存できます。
 
 本演習では各受講者用のGitリポジトリは提供していないため、
 前までの手順で変更したコードをGitリポジトリに保存したという想定で、
