@@ -44,6 +44,11 @@ Web Terminalを実行すると、選択したプロジェクトに「workspace�
 永続ボリュームによるデータ保存はしていないため、
 ワーカーノードが削除されると、Terminal上で作成したファイルなども削除されますので、ご注意ください。
 
-image::rosa/web-terminal/terminal.png[]
+image::rosa/web-terminal/terminal-ja.png[]
 
-このTerminalでは、OpenShift CLI(ocコマンド)やsshなどが利用できます。色々試してみてください。
+このとき、OSやWebブラウザなどを英語環境にすると、半角フォントのTerminalが利用できます。
+
+image::rosa/web-terminal/terminal-en.png[]
+
+このTerminalでは、OpenShift CLI(ocコマンド)の他に、kubectl, git, scp, sshなどが利用できます。
+色々試してみてください。

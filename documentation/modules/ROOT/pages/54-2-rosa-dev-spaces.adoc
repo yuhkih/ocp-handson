@@ -204,7 +204,7 @@ Workspace内にある特定のディレクトリ(ソースコードがある `/p
 
 Web IDEを使って開発したコードををGitリポジトリに置いておくことで、
 OpenShiftのS2I機能を利用した、アプリケーションデプロイを実行できます。
-前の手順で利用したWorkspaceのTerminalでは、OpenShift CLI(ocコマンド)やsshだけでなく、
+前の手順で利用したWorkspaceのTerminalでは、OpenShift CLI(ocコマンド), kubectl, scp, sshだけでなく、
 gitコマンドなども使えるため、開発したコードをそのままGitリポジトリに保存できます。
 
 本演習では受講者用のGitリポジトリは提供していないため、
