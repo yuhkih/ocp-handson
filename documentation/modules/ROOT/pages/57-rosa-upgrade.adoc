@@ -114,7 +114,7 @@ NOTE: ワーカーノード更新に伴って、新規ワーカーノードの�
 ワーカーノードが利用可能な状態になった時点で既存ワーカーノードが削除されるため、Podの再作成や起動に時間がかかる場合、
 一時的にでも全てのPodが利用不可になることがあります。このとき、
 https://access.redhat.com/documentation/ja-jp/openshift_container_platform/4.14/html/post-installation_configuration/post-install-pod-disruption-budgets[Pod Disruption Budget(Podの停止数の許容度)]を設定することで、
-Podの実行数が指定した数や割合になるまでワーカーノード上のPodの停止を待つため、全てのPodが利用不可となる状況を回避できるようになります。
+Podの実行数が指定した数や割合になるまで既存ワーカーノード上のPodの停止を待つため、全てのPodが利用不可となる状況を回避できるようになります。
 
 
 === ROSA CLIを利用したコントロールプレーンの更新
