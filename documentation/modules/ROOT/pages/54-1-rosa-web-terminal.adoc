@@ -46,7 +46,7 @@ Web Terminalを実行すると、選択したプロジェクトに「workspace�
 
 image::rosa/web-terminal/terminal-ja.png[]
 
-OSやWebブラウザなどが英語環境の場合、半角フォントのTerminalが利用できます。
+OSやWebブラウザが英語環境の場合、半角フォントのTerminalが利用できます。
 
 image::rosa/web-terminal/terminal-en.png[]
 
