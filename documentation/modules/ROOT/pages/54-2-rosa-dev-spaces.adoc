@@ -247,7 +247,7 @@ Dev Spacesでは、Visual Studio Codeの拡張機能を使えます。
 そのため、
 https://aws.amazon.com/jp/codewhisperer/[Amazon CodeWhisperer]が使える状態だと、
 https://marketplace.visualstudio.com/items?itemName=AmazonWebServices.aws-toolkit-vscode&ssr=false#version-history[AWS Toolkit拡張機能]
-のファイルをダウンロードして、Dev Spacesの各Workspaceに手動でインポートすることで、
+のファイルをダウンロードして、Dev Spacesの各IDEに手動でインポートすることで、
 Amazon CodeWhispererによるコード補完機能などが使えるようになります。
 こちらは本演習では扱いませんが、ご興味がありましたらお試し下さい。
 
