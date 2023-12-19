@@ -193,13 +193,13 @@ I: Created OIDC provider with ARN 'arn:aws:iam::XXXXXXXXX:oidc-provider/rh-oidc.
 
 [Note]
 ====
-ROSA CLIを使ってROSA HCPクラスターを作成する時に必要となるIAMロールは、次の2種類です。
+ROSA CLIを使ってHCPクラスターを作成する時に必要となるIAMロールは、次の2種類です。
 
 * アカウントロール(account roles): Red Hat SREチームがクラスターの管理に利用します。
 * オペレーターロール(operator roles): OpenShiftのOperatorがAWSリソースの管理に利用します。
 クラスターごとに個別に作成されます。
 
-これらのIAMロールに割り当てられるIAMポリシーについては、
+これらに割り当てられるIAMポリシーについては、
 https://docs.aws.amazon.com/rosa/latest/userguide/security-iam-awsmanpol.html#security-iam-awsmanpol-rosamanagedpolicies-account-roles[公式ドキュメント]をご参照ください。
 ====
 
