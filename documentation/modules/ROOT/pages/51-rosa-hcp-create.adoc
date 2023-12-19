@@ -172,18 +172,14 @@ I: To create an OIDC Config, run the following command:
 	rosa create oidc-config
 ```
 
-AWSコンソールから、ROSAクラスター作成に必要な
-https://docs.aws.amazon.com/rosa/latest/userguide/security-iam-awsmanpol.html#security-iam-awsmanpol-rosamanagedpolicies-account-roles[IAMロール]
-が作成されていることを確認できます。
+AWSコンソールから、ROSAクラスター作成に必要なIAMロールが作成されていることを確認できます。
 このIAMロールは、複数のクラスターにわたって使用されます。
 
 image::rosa/hcp-create/managed-openshift-hcp-roles.png[]
 
 ROSA HCPクラスターの
-https://www.redhat.com/en/topics/containers/what-is-a-kubernetes-operator[Operator]が、専用の
-https://docs.aws.amazon.com/rosa/latest/userguide/security-iam-awsmanpol.html#security-iam-awsmanpol-rosamanagedpolicies-operator-roles[IAMロール]
-を作成して利用するために必要となる、OpenID Connectの設定を作成します。
-
+https://www.redhat.com/en/topics/containers/what-is-a-kubernetes-operator[Operator]が、
+専用のIAMロールを作成して利用するために必要となる、OpenID Connectの設定を作成します。
 
 ```
 $ rosa create oidc-config --mode auto --yes
@@ -194,6 +190,18 @@ If you are going to create a Hosted Control Plane cluster please include '--host
 I: Creating OIDC provider using 'arn:aws:iam::XXXXXXXXX:user/testuser01'
 I: Created OIDC provider with ARN 'arn:aws:iam::XXXXXXXXX:oidc-provider/rh-oidc.s3.us-east-1.amazonaws.com/280rqooan3kqqn4o1us1ip073fsrkfm8'
 ```
+
+[Note]
+====
+ROSA CLIを使ってROSA HCPクラスターを作成する時に必要となるIAMロールは、次の2種類です。
+
+* アカウントロール(account roles): Red Hat SREチームがクラスターの管理に利用します。
+* オペレーターロール(operator roles): OpenShiftのOperatorがAWSリソースの管理に利用します。
+クラスターごとに個別に作成されます。
+
+これらのIAMロールに割り当てられるIAMポリシーについては、
+https://docs.aws.amazon.com/rosa/latest/userguide/security-iam-awsmanpol.html#security-iam-awsmanpol-rosamanagedpolicies-account-roles[公式ドキュメント]をご参照ください。
+====
 
 
 === ROSA HCPクラスターの作成
