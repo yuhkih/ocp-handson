@@ -177,6 +177,11 @@ AWSコンソールから、ROSAクラスター作成に必要なIAMロールが�
 
 image::rosa/hcp-create/managed-openshift-hcp-roles.png[]
 
+
+NOTE: ここで作成されるIAMロールに割り当てられるIAMポリシーについては、
+https://docs.aws.amazon.com/rosa/latest/userguide/security-iam-awsmanpol.html#security-iam-awsmanpol-rosamanagedpolicies-account-roles[公式ドキュメント]をご参照ください。
+
+
 ROSA HCPクラスターの
 https://www.redhat.com/en/topics/containers/what-is-a-kubernetes-operator[Operator]が、
 専用のIAMロールを作成して利用するために必要となる、OpenID Connectの設定を作成します。
