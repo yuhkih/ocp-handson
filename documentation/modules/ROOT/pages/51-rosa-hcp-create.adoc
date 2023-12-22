@@ -239,8 +239,8 @@ I: To use a different billing account, add --billing-account xxxxxxxxxx to previ
 I: Using arn:aws:iam::XXXXXXXXX:role/ManagedOpenShift-HCP-ROSA-Installer-Role for the Installer role
 I: Using arn:aws:iam::XXXXXXXXX:role/ManagedOpenShift-HCP-ROSA-Worker-Role for the Worker role
 I: Using arn:aws:iam::XXXXXXXXX:role/ManagedOpenShift-HCP-ROSA-Support-Role for the Support role
-? OIDC Configuration ID: 280rqooan3kqqn4o1us1ip073fsrkfm8 | https://rh-oidc.s3.us-east-1.amazonaws.com/280rqooan3kqqn4o1us1ip073fsrkfm8
 
+? OIDC Configuration ID: 280rqooan3kqqn4o1us1ip073fsrkfm8 | https://rh-oidc.s3.us-east-1.amazonaws.com/280rqooan3kqqn4o1us1ip073fsrkfm8
 ? Tags (optional): 
 ? AWS region: us-east-2
 ? PrivateLink cluster: No
