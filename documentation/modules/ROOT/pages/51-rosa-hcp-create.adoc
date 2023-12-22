@@ -206,7 +206,9 @@ https://docs.aws.amazon.com/rosa/latest/userguide/security-iam-awsmanpol.html#se
 
 === ROSA HCPクラスターの作成
 
-ROSA HCPクラスターの作成コマンドを実行します。`version` オプションを指定しない場合、自動的に最新版のOpenShiftが利用されます。`dry-run` オプションを付けると、正常に実行可能かどうかを事前確認できます。次のコマンドによって `hcp-01` という名前のROSA HCPクラスター( `m5.xlarge` のワーカーノード)が自動的に作成されます。指定するサブネットIDによって、SingleAZ構成とMultiAZ構成のどちらになるかが自動的に決まります。今まで実行してきたコマンド例だと、パブリック/プライベートサブネットを1つずつ指定することになるので、SingleAZのワーカーノード2台構成のROSA HCPクラスターが作成されます。
+ROSA HCPクラスターの作成コマンドを実行します。`version` オプションを指定しない場合、自動的に最新版のOpenShiftが利用されます。`dry-run` オプションを付けると、正常に実行可能かどうかを事前確認できます。次のコマンドによって `hcp-01` という名前のROSA HCPクラスター( `m5.xlarge` のワーカーノード)が自動的に作成されます。
+
+このとき、指定するサブネットIDによって、SingleAZ構成とMultiAZ構成のどちらになるかが自動的に決まります。今まで実行してきたコマンド例だと、パブリック/プライベートサブネットIDを1つずつ指定することになるので、ワーカーノード2台のSingleAZ構成としてROSA HCPクラスターが作成されます。
 
 ```
 $ rosa create cluster --cluster-name=hcp-01 --mode=auto --yes --hosted-cp \
