@@ -208,7 +208,11 @@ image::rosa/alert/alert-test.png[]
 
 image::rosa/alert/firing-alert.png[]
 
+
 NOTE: 「通知」にあるスイッチをOFFにすると、アラートをサイレンス状態にできます。
+また、アラートをCLIで確認したい場合は、
+https://access.redhat.com/solutions/4250221[こちらのページにある情報]を参考にしてください。
+
 
 「トポロジー」メニューから
 サンプルアプリのPod数を再度2に戻す(Podの詳細タブの「↑」矢印をクリック)と、
