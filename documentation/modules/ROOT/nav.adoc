@@ -41,3 +41,6 @@
 # ** xref:59-X-rosa-efs-01.adoc[X. Amazon EFSの利用準備 [デモ\]]
 # ** xref:59-X-rosa-efs-02.adoc[X. Amazon EFSの利用]
 
+* 61. Azure Red Hat OpenShift (ARO) Lab
+** xref:60-aro-info.adoc[0. はじめに]
+
