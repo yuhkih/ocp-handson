@@ -37,6 +37,15 @@ PVC作成後すぐに永続ボリュームの割り当てが行われます。
 
 image::aro/storage/pvc-info1.png[]
 
+[Note]
+====
+PVCによって作成されたAzure Diskは、Azure Portalからも確認できます。
+Azureの `aro-infra-XXXXX-<AROクラスター名>` リソースグループに、
+`pvc-` という接頭辞が付いたAzure Diskが作成されていることを確認できます。
+
+image::aro/storage/azure-portal-disk.png[]
+====
+
 
 === Azure Disk用のPVCを利用するPodの作成
 
@@ -111,6 +120,15 @@ RWXのアクセスモードに対応したPVCを利用することで、
 複数ノード上でレプリケーション構成を取るアプリケーション(Azure Filesに保存したデータを共有)を
 ARO上で実行できるようになります。
 
+[Note]
+====
+PVCによって作成されたAzure Filesは、Azure Portalからも確認できます。
+Azureの `aro-infra-XXXXX-<AROクラスター名>` リソースグループに、
+Azure Filesを利用するためのAzureストレージアカウントが自動作成され、
+その中の「ファイル共有」から `pvc-` という接頭辞が付いたAzure Filesが作成されていることを確認できます。
+
+image::aro/storage/azure-portal-files.png[]
+====
 
 === Azure Files用のPVCを利用するPodの作成
 
@@ -144,15 +162,6 @@ CIFSプロトコルでマウントされていることを確認できます。
 
 image::aro/storage/pod-terminal2.png[]
 
-[Note]
-====
-PVCによって作成されたAzure Filesは、Azure Portalからも確認できます。
-Azureの `aro-infra-XXXXX-<AROクラスター名>` リソースグループに、
-Azure Filesを利用するためのAzureストレージアカウントが自動作成され、
-その中の「ファイル共有」から `pvc-` という接頭辞が付いたAzure Filesが作成されていることを確認できます。
-
-image::aro/storage/azure-portal-files.png[]
-====
 
 ここで作成したPodとは別のPodを新しく作成して、複数のPodから同じPVCを利用することで、
 1つのファイルシステムを共有できることを確認します。
