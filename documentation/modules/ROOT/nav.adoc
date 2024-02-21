@@ -43,4 +43,5 @@
 
 * 61. Azure Red Hat OpenShift (ARO) Lab
 ** xref:60-aro-info.adoc[0. はじめに]
+** xref:61-aro-create.adoc[1. AROクラスターの作成 [デモ\]]
 

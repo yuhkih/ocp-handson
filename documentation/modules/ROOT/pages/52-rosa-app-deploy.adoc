@@ -28,16 +28,20 @@ image::rosa/app-deploy/nodejs-select.png[]
 image::rosa/app-deploy/nodejs-create1.png[]
 image::rosa/app-deploy/nodejs-create2.png[]
 
+
 [Note]
 ====
 「作成」がクリックできない状態の場合、アプリケーションの「名前」の
 テキストフィールドに任意の名前を入力してください。
+
 image::rosa/app-deploy/app-name.png[]
 ====
+
 
 Node.jsのサンプルアプリのデプロイが完了すると、「トポロジー」メニューからデプロイしたアプリのトポロジーや情報を確認できます。トポロジーにある、Node.jsアイコンの右上部にある「矢印」アイコンをクリックすると、デプロイしたNode.jsアプリにアクセスできます。
 
 image::rosa/app-deploy/nodejs-app.png[]
+
 
 [Note]
 ====
