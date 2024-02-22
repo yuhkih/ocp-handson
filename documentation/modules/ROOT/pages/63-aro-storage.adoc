@@ -116,7 +116,7 @@ image::aro/storage/pvc-info2.png[]
 
 
 RWXは複数台のコンピュートノードから利用可能なアクセスモードです。
-RWXのアクセスモードに対応したPVCを利用することで、
+RWXに対応したPVCを利用することで、
 複数ノード上でレプリケーション構成を取るアプリケーション(Azure Filesに保存したデータを共有)を
 ARO上で実行できるようになります。
 
@@ -167,6 +167,7 @@ image::aro/storage/pod-terminal2.png[]
 1つのファイルシステムを共有できることを確認します。
 前述のPod作成に利用したYAMLファイルで、「name: test-files」を「name: test-files-new」などに
 変更することで、変更したPod名で新規Podを実行してみます。
+
 「test-files-new」Podでもマウント先のディレクトリへのファイル作成/削除や、
 「test-files」Podで作成したファイルの修正ができることを、
 当該Podの「ターミナル」タブから確認してみてください。
