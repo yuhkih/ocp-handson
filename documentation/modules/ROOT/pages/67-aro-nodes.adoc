@@ -186,7 +186,7 @@ spec:
 その他のパラメータの説明については、
 https://access.redhat.com/documentation/ja-jp/openshift_container_platform/4.14/html-single/machine_management/index#configuring-clusterautoscaler_applying-autoscaling[OpenShiftの製品ドキュメント]もご参照ください。
 
-Cluster Autoscalerが作成されると、下記の画像のように、 `default` という名前で
+Cluster Autoscalerが作成されると、下記の画像の一番下に `default` という名前で
 作成されていることが確認できます。
 
 image::aro/nodes/cluster-settings-autoscaler.png[]
