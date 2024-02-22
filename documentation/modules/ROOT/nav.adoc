@@ -46,4 +46,5 @@
 ** xref:61-aro-create.adoc[1. AROクラスターの作成 [デモ\]]
 ** xref:62-aro-app-deploy.adoc[2. サンプルアプリケーションのデプロイ]
 ** xref:63-aro-storage.adoc[3. Azure DiskとAzure Filesの利用]
+** xref:64-aro-web-terminal.adoc[4. Web Terminalの利用]
 
