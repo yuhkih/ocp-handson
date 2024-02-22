@@ -116,7 +116,7 @@ image::aro/storage/pvc-create2.png[]
 image::aro/storage/pvc-info2.png[]
 
 
-RWXは複数台のコンピュートノードから利用可能なアクセスモードです。
+RWXは複数台のワーカーノードから利用可能なアクセスモードです。
 RWXに対応したPVCを利用することで、
 複数ノード上でレプリケーション構成を取るアプリケーション(Azure Filesに保存したデータを共有)を
 ARO上で実行できるようになります。
