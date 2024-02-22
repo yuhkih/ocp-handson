@@ -68,6 +68,9 @@ AROのデフォルトだと、この機能は無効化されています。
 NOTE: Kubernetesの
 https://kubernetes.io/docs/concepts/configuration/configmap/[ConfigMap]は、 
 アプリケーションで利用される構成データを保存します。
+OpenShiftでは、コンソールの「管理者向け表示」→「Workloads」→「ConfigMaps」から作成、
+または、既存のConfigMapを編集できます。
+
 
 NOTE: 本演習をワークショップ形式で実施している場合、この設定はすでに適用済みとなっています。
 
@@ -104,8 +107,6 @@ https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[nodeSel
 自動的にデフォルトのストレージクラス(managed-csi)を用いたPVCが作成されて、
 メトリクスデータが保存されるようになります。
 
-OpenShiftでのConfigMapは、コンソールの「管理者向け表示」→「Workloads」→「ConfigMaps」から作成、
-または、既存のConfigMapを編集できます。
 
 NOTE: 本演習をワークショップ形式で実施している場合、この設定はすでに適用済みとなっています。
 
