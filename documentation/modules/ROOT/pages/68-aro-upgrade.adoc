@@ -30,7 +30,8 @@ image::aro/upgrade/channel-config2.png[]
 image::aro/upgrade/channel-config3.png[]
 
 
-一部のワーカノードを更新対象外にする(カナリアロールアウト更新)ことができます。
+一部のワーカノードを更新対象外にする(
+https://access.redhat.com/documentation/ja-jp/openshift_container_platform/4.14/html/updating_clusters/update-using-custom-machine-config-pools[カナリアロールアウト更新])ことができます。
 その場合は、ラベルをつけた特定のノードのプール(Machine Config Pool, MCP)を作成する必要があります。
 
 ```
