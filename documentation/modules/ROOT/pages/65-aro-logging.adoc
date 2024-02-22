@@ -1,0 +1,46 @@
+= ロギング
+:navtitle: aro-logging
+include::_attributes.adoc[]
+
+
+== 演習の概要
+このモジュールでは、AROクラスターのロギングを学習します。
+
+---
+
+=== AROクラスターのロギング
+
+AROクラスターでは、MicrosoftとRed HatのSREチームがロギングサービスとして利用している
+https://github.com/Azure/fluentd-plugin-mdsd[Azure Linux monitoring agent (mdsd)] Podが
+実行されています。
+このPodは `openshift-azure-logging` プロジェクトで実行され、
+全てのコントローラ/コンピュートノードで実行されます。
+
+AROクラスターの利用者がコンピュートノードを追加/削除した場合、それに伴って、
+mdsd Podも自動的に追加/削除されます。
+AROクラスターの利用者が、
+https://learn.microsoft.com/ja-jp/azure/openshift/support-policies-v4#logging-and-monitoring[mdsd Podを変更/削除することは許可されていません]。
+
+image::aro/logging/mdsd.png[]
+
+
+=== 参考情報: Loki
+
+前述したmdsdとは別に、AROクラスターの利用者がOpenShift標準のロギング機能を導入して
+利用することもできます。OpenShiftでは、Lokiを使ったロギングサブシステムが標準となっています。
+以前のOpenShiftではElasticsearchを利用していましたが、
+最新版のOpenShiftでは非推奨になっており、今後削除される予定です。
+
+本演習では扱いませんが、Lokiを使ったロギングサブシステムのデプロイ手順は、
+https://access.redhat.com/documentation/ja-jp/openshift_container_platform/4.14/html-single/logging/index#log-storage[OpenShiftの製品ドキュメント]を参考にしてください。
+Lokiのロギングサブシステムをデプロイすることで、
+AROクラスターの利用者が、次のログを収集してOpenShiftのWebコンソールから確認できるようになります。
+
+* `アプリケーションログ` : 利用者が作成したプロジェクトにデプロイされるアプリケーションのログ(stdoutとstderrに出力されるログ)を収集します。後述のインフラストラクチャー関連のログは除きます。
+* `インフラストラクチャーログ` : AROクラスター作成時にデフォルトで作成される `openshift-*` , `kube-*` などのプロジェクトにある、インフラストラクチャー関連のログを収集します。
+* `監査ログ` : ワーカーノードのノード監査システム(auditd)で 生成される監査ログ(/var/log/audit/audit.log)や、Kube API監査ログ、OpenShift API監査ログを収集します。
+通常、監査ログは、MicroSoftとRed HatのSREチームによって管理され、
+https://learn.microsoft.com/ja-jp/azure/openshift/responsibility-matrix#change-management[問題調査の際に、ARO利用者のサポートケースを使用したリクエストに伴って提供]されます。
+そのため、ARO利用者は監査ログを保存する必要は必ずしもありませんが、Lokiを利用することで、利用者も随時確認できるようになります。
+
+image::aro/logging/loki-logs.png[]
