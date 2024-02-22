@@ -12,7 +12,7 @@ include::_attributes.adoc[]
 === Azure Disk用の永続ボリューム要求(Persistent Volume Claim, PVC)の作成
 
 AROには、Azure Diskを使用するストレージクラス(managed-csi)が、予めデフォルトとして設定されています。
-これにより、https://azure.microsoft.com/ja-jp/pricing/details/managed-disks/[Azure DiskのPremium SSD LRS]
+これにより、https://azure.microsoft.com/ja-jp/pricing/details/managed-disks/[Azure DiskのPremium SSD LRS] 
 (Locally Redundant Storage. ローカル冗長ストレージ)オプションがすぐに使えるように設定されています。
 
 image::aro/storage/storage-class.png[]
