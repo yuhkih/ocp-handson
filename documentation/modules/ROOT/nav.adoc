@@ -52,4 +52,5 @@
 ** xref:66-2-aro-project-metrics.adoc[7. プロジェクトのメトリクスデータの確認]
 ** xref:66-3-aro-alert.adoc[8. アラート設定]
 ** xref:67-aro-nodes.adoc[9. ワーカーノードの追加と削除]
+** xref:68-aro-upgrade.adoc[10. AROクラスターの更新[デモ\]]
 
