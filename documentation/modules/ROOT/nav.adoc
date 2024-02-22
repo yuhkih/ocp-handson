@@ -49,3 +49,6 @@
 ** xref:64-aro-web-terminal.adoc[4. Web Terminalの利用]
 ** xref:65-aro-logging.adoc[5. ロギング]
 ** xref:66-1-aro-monitoring.adoc[6. モニタリング]
+** xref:66-2-aro-project-metrics.adoc[7. プロジェクトのメトリクスデータの確認]
+** xref:66-3-aro-alert.adoc[8. アラート設定]
+
