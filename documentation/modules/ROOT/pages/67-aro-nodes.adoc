@@ -30,7 +30,7 @@ image::aro/nodes/machinesets.png[]
 image::aro/nodes/node-lists.png[]
 
 デフォルトで用意されているマシンセットのうち、いずれかを選択して、
-「必要なカウント」にあるマシン台数を編集することで、
+「アクション」→「マシン数の編集」から、マシン台数を編集することで、
 ワーカーノードを簡単に追加・削除できるようになっています。
 
 image::aro/nodes/machine-number-edit.png[]
@@ -119,7 +119,7 @@ MachineSetを新規作成する場合は、既存のMachineSetを参照しなが
 * `AROクラスター名` : マシンセットで参照されるAROクラスターの名前。(例: testmyaro01-ddm8w)
 * `key, value` : マシンセットで指定する任意のラベル名。(例:「key」に「type」、「value」に「hkojima-worker-nodes」を指定。このラベルは後に使いますので、他の受講者と被らないようなラベルを付けて下さい)
 * `リージョン名` : AROクラスターが作成されたリージョン名。(例: japaneast)
-ネットワークリソースグループ名: AROが利用するVirtual Networkリソースがあるリソースグループ名。(例: openenv-hkctf)
+* `ネットワークリソースグループ名` : AROが利用するVirtual Networkリソースがあるリソースグループ名。(例: openenv-hkctf)
 * `AROクラスターのインフラID` : AROクラスターに付けられたID。(例: myopendomain01)
 * `Virutal Network名` : AROクラスターが利用するVirtual Network名。(例: myopenaro-vnet01)
 * `サブネット名` : ワーカーノードが利用するサブネット名。(例: worker-subnet)
@@ -128,14 +128,14 @@ MachineSetを新規作成する場合は、既存のMachineSetを参照しなが
 
 これらの変数を設定した、
 https://rh-open.github.io/ocp-handson/openshift-services/_images/aro/nodes/aro-machineset-japaneast3.yaml[MachineSetのサンプルファイル]がありますので参考にしてください。
-なお、 `vmSize: Standard_F4s_v2` でAROで利用可能な最小サイズのコンピュートノードを指定し、
+このサンプルでは、 `vmSize: Standard_F4s_v2` でAROで利用可能な最小サイズのコンピュートノードを指定し、
 `zone: “3”` で3番目のアベイラビリティーゾーンを指定しています。
 
 image::aro/nodes/machineset-create1.png[]
 image::aro/nodes/machineset-create2.png[]
 
 MachineSetの作成に伴い、対応したワーカーノードに、
-前述したMachineSet作成時に指定したラベル(この例では、「type=hkojima-worker-nodes」)が
+前述したMachineSet作成時に指定したラベル(この例では、 `type=hkojima-worker-nodes` )が
 自動的に付与されます。
 このラベルを利用して、Podを特定のラベルが付いたワーカーノードで実行できるようになります。
 
@@ -256,8 +256,8 @@ image::aro/nodes/job-status.png[]
 
 
 最後に受講生が作成したMachineSetを削除します。
-当該MachineSetを選択して、「MachineSetの削除」から削除できます。
-これによって、MachineSet及びそれに紐づく全てのワーカーノードが削除されます。
+当該MachineSetを選択して、「MachineSetの削除」を選択することで、
+MachineSet及びそれに紐づく全てのワーカーノードが削除されます。
 
 image::aro/nodes/machineset-delete.png[]
 
