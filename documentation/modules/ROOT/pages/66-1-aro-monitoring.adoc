@@ -91,7 +91,7 @@ image::aro/monitoring/user-workload-monitoring-pods.png[]
 
 この「openshift-user-workload-monitoring」プロジェクトにあるPodは、
  KubernetesのnodeSelctorを利用して、
-https://docs.openshift.com/rosa/monitoring/configuring-the-monitoring-stack.html#using-node-selectors-to-move-monitoring-components_configuring-the-monitoring-stack[任意のラベルを付けたワーカーノードに移動]することができます。
+https://access.redhat.com/documentation/ja-jp/openshift_container_platform/4.14/html/nodes/nodes-scheduler-node-selectors[任意のラベルを付けたワーカーノードに移動]することができます。
 
 NOTE: Kubernetesの 
 https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[nodeSelector]は、
