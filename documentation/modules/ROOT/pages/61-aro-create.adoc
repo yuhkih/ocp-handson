@@ -14,11 +14,11 @@ AROは、Red Hatによるお客様の既存Azureアカウントへのデプロ�
 AROクラスターを作成するためには、次の条件が必要です。
 
 * Azureアカウント
-* Azure CLIのバージョン2.30.0以降 (2024年2月時点)
 * Azureのリソースクォータの引き上げ (トータルで40vCPU以上)
 * AROクラスター用のAzureリソースグループ
 * AROクラスター用のAzureサービスプリンシパル作成のための
 https://learn.microsoft.com/ja-jp/azure/openshift/tutorial-create-cluster#verify-your-permissions[Microsoft Entraアクセス許可] (管理者が作成した既存サービスプリンシパルの利用も可能)
+* Azure CLIを使う場合、バージョン2.30.0以降 (2024年2月時点)
 
 
 NOTE: AROクラスターには、Azure APIで操作するためのMicrosoft Entraサービスプリンシパルが必要です。
