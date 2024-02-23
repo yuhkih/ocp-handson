@@ -191,7 +191,7 @@ Quarkusアプリケーションを終了します。終了しないままブラ�
 ====
 Workspaceの停止や削除は、左サイドメニューの「Workspaces」から、対象のWorkspaceの
 「Stop Workspace」や「Delete Workspace」から実行できます。Workspace自身も、
-`<ユーザーアカウント名>-devspaces` といった文字列を含む名前が付けられた
+`<ユーザーアカウント名>-devspaces` といった文字列を含む
 (自動作成される)プロジェクトにあるPodとして実行されており、
 Workspaceの停止や削除を実行すると、それに対応したPodも削除されます。
 
