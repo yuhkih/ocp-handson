@@ -61,7 +61,12 @@ image::aro/create/marketplace.png[]
 
 image::aro/create/section1.png[]
 
-NOTE: AROクラスターのワーカーノードは最小3台からとなります。
+NOTE: AROクラスターのワーカーノードは
+https://learn.microsoft.com/ja-jp/azure/openshift/support-policies-v4#compute[最小台数3台]で、
+https://learn.microsoft.com/ja-jp/azure/openshift/openshift-faq#azure-red-hat-openshift-------------------------azure-red-hat-openshift----------------------------[最大台数60台または120台]となります。
+最大台数の120台構成は、Azureの
+https://learn.microsoft.com/ja-jp/azure/virtual-network/virtual-networks-udr-overview#user-defined[User Defined Route]を
+利用している時に限定されます。
 また、利用者のワークロードに応じて、ワーカーノードのサイズ変更もできます。
 利用できるワーカーノードのタイプについては、
 https://learn.microsoft.com/ja-jp/azure/openshift/support-policies-v4#worker-nodes[Microsoftの公式ドキュメント]
