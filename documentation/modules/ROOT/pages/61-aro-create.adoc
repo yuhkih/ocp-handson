@@ -61,6 +61,12 @@ image::aro/create/marketplace.png[]
 
 image::aro/create/section1.png[]
 
+NOTE: AROクラスターのワーカーノードは最小3台からとなります。
+また、利用者のワークロードに応じて、ワーカーノードのサイズ変更もできます。
+利用できるワーカーノードのタイプについては、
+https://learn.microsoft.com/ja-jp/azure/openshift/support-policies-v4#worker-nodes[Microsoftの公式ドキュメント]
+をご参照ください。
+
 次に、「認証」セクションに進み、
 前に保存しておいたRed Hatのプルシークレットを入力して、「ネットワーク」セクションに進みます。
 
