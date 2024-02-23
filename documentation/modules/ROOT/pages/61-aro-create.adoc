@@ -67,10 +67,8 @@ https://learn.microsoft.com/ja-jp/azure/openshift/openshift-faq#azure-red-hat-op
 最大台数の120台構成は、Azureの
 https://learn.microsoft.com/ja-jp/azure/virtual-network/virtual-networks-udr-overview#user-defined[User Defined Route]を
 利用している時に限定されます。
-また、利用者のワークロードに応じて、ワーカーノードのサイズ変更もできます。
-利用できるワーカーノードのタイプについては、
-https://learn.microsoft.com/ja-jp/azure/openshift/support-policies-v4#worker-nodes[Microsoftの公式ドキュメント]
-をご参照ください。
+また、利用者のワークロードに応じて、
+https://learn.microsoft.com/ja-jp/azure/openshift/support-policies-v4#worker-nodes[ワーカーノードのタイプ変更]もできます。
 
 次に、「認証」セクションに進み、
 前に保存しておいたRed Hatのプルシークレットを入力して、「ネットワーク」セクションに進みます。
