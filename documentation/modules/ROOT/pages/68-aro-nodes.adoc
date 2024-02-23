@@ -158,7 +158,7 @@ Cluster Autoscalerは、次のYAMLファイルを利用して、OpenShiftのWeb�
 直接YAMLファイルを入力して作成します。Cluster Autoscalerの名前は、
 `default` を指定する必要がありますので、注意してください。
 
-NOTE: 本演習をワークショップ形式で実施している場合、この設定はすでに作成済みとなっています。
+NOTE: 本演習をワークショップ形式で実施している場合、Cluster Autoscalerはすでに設定されています。
 
 [.console-input]
 [source,sh]
