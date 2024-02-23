@@ -130,4 +130,4 @@ https://learn.microsoft.com/ja-jp/azure/openshift/configure-azure-ad-ui[Microsof
 
 * https://learn.microsoft.com/ja-jp/azure/openshift/tutorial-create-cluster[チュートリアル:Azure Red Hat OpenShift 4 クラスターを作成する]
 * https://learn.microsoft.com/ja-jp/azure/openshift/quickstart-portal[クイックスタート: Azure portal を使用した Azure Red Hat OpenShift クラスターのデプロイ]
-* https://www.redhat.com/en/blog/a-guide-to-controller-ingress-for-azure-red-hat-openshift[A Guide to Ingress Controllers for Azure Red Hat OpenShift] (プライベートなAROクラスターの作成とアプリケーションの外部公開方法を紹介したブログ)
+* https://www.redhat.com/en/blog/a-guide-to-controller-ingress-for-azure-red-hat-openshift[A Guide to Ingress Controllers for Azure Red Hat OpenShift] (プライベートなAROクラスターの作成とアプリケーションの外部公開の参考手順を紹介したブログ)
