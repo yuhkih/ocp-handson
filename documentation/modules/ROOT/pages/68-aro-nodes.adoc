@@ -214,7 +214,7 @@ image::aro/nodes/machine-autoscaler-settings.png[]
 このジョブによって作成されるPodが、受講者が作成したMachineSet内だけで実行されるように、
 「nodeSelector」を指定します。
 
-ラベルの「key: value」の「value」に相当する文字列(この例では、 `hkojima-worker-nodes` )は、
+ラベルの「key: value」の「value」に相当する文字列(この例では、 `<ユーザー名>-worker-nodes` )は、
 ダブルクォーテーションで囲む必要があります。
 これを忘れると、「value」の値が文字列として認識されないため、
 ラベルの指定ができず、CPU/メモリのリソースが空いている任意のワーカーノードで
@@ -231,7 +231,7 @@ spec:
   template:
     spec:
       nodeSelector:
-        type: "hkojima-worker-nodes"
+        type: "<ユーザー名>-worker-nodes"
       containers:
       - name: work
         image: busybox
