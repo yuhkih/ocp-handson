@@ -82,8 +82,8 @@ image::pipelines/add-task-command-2.png[align="center"]
 trivy コマンドを埋め込んだ Task を作成します。
 Tekton Hub には link:https://hub.tekton.dev/tekton/task/trivy-scanner[trivy scanner] といったタスクもありますので必要に応じて活用してください。
 
-. 左のナビゲーションバーから *パイプライン* -> *タスク* をクリックします
-. 右上の *作成* をクリックし、ドロップダウンから *タスク* を選択します
+. 左のナビゲーションバーから *Pipelines* -> *Tasks* をクリックします
+. 右上の *作成* をクリックし、ドロップダウンから *Task* を選択します
 . 表示されたデフォルトの YAML 定義を次のように置き換えます
 +
 [.console-input]
@@ -150,8 +150,8 @@ Pipeline に追加する前に、Task[trivy] を検証するための TaskRun �
 
 Nationalparksバックエンド用のTektonパイプラインを作成します。
 
-. 左のナビゲーションバーから *パイプライン* -> *タスク* をクリックします
-. 右上の *作成* をクリックし、ドロップダウンから *タスク実行* を選択します
+. 左のナビゲーションバーから *Pipelines* -> *Tasks* をクリックします
+. 右上の *作成* をクリックし、ドロップダウンから *TaskRun* を選択します
 . 表示されたデフォルトの YAML 定義を次のように置き換え実行します
 
 [.console-input]
@@ -184,8 +184,8 @@ image::pipelines/add-task-taskrun.png[align="center"]
 前回作成した `Pipeline[build-and-deply]` に、新しく作成した `Task[trivy]` を追加します。
 今回は修正ではなく、新しい `Pipeline[build-scan-deploy]` を作成します。
 
-. 左のナビゲーションバーから *パイプライン* -> *パイプライン* をクリックします
-. 右上の *作成* をクリックし、ドロップダウンから *パイプライン* を選択します
+. 左のナビゲーションバーから *Pipelines* -> *Pipelines* をクリックします
+. 右上の *作成* をクリックし、ドロップダウンから *Pipeline* を選択します
 . 表示されたデフォルトの YAML 定義を次のように置き換えます
 +
 
@@ -294,8 +294,8 @@ image::pipelines/add-task-pipeline.png[align="center"]
 
 パイプラインを実行します。
 
-. 左のナビゲーションバーから *パイプライン* -> *パイプライン* をクリックします
-. 右上の *作成* をクリックし、ドロップダウンから *パイプライン実行* を選択します
+. 左のナビゲーションバーから *Pipelines* -> *Pipelines* をクリックします
+. 右上の *作成* をクリックし、ドロップダウンから *PipelineRun* を選択します
 . 表示されたデフォルトの YAML 定義を次のように置き換えます
 +
 

@@ -17,7 +17,7 @@ Tekton Trigger をパイプラインと組み合わせることで、パイプ�
 各マニフェストのプロジェクト名に注意してください。各マニュフェスト中のプロジェクト名 `pipelines-test` を、お使いのプロジェクト名に修正してください。
 ====
 
-* *パイプライン* -> *トリガー* -> *作成* -> *トリガーテンプレート* を選択します。
+* *Pipelines* -> *Trigger* -> *作成* -> *TrigerTemplate* を選択します。
 * 以下の yaml を入力し、作成をクリックします
 
 [.console-input]
@@ -69,7 +69,7 @@ spec:
 ===  Trigger Binding
 TriggerBindings は、イベントからフィールドを取得、パラメータとして保存することで、イベントが発生するたびに TriggerTemplate でそれらを置き換えることができます。
 
-* *パイプライン* -> *トリガー* -> *作成* -> *トリガーバインディング* を選択
+* *Pipelines* -> *Trigger* -> *作成* -> *TriggerBinding* を選択
 * 以下の yaml を入力し、作成をクリックします。
 
 [.console-input]
@@ -147,7 +147,7 @@ spec:
 
 `EventListner` は、Service を作成し、イベントを検知するエンドポイントの役割（event-sink）をします。
 
-* *パイプライン* -> *トリガー* -> *作成* -> *イベントリスナー* を選択します。
+* *Pipelines* -> *Trigger* -> *作成* -> *EventLister* を選択します。
 * 以下の yaml を入力し、作成をクリックします。
 
 [.console-input]
