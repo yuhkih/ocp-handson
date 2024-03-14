@@ -1,0 +1,133 @@
+= [デモ] AROクラスターの作成
+:navtitle: aro-create
+include::_attributes.adoc[]
+
+
+== デモの概要
+このモジュールでは、インストラクターがAROクラスター作成方法の概要をご紹介します。
+
+---
+
+=== 前準備
+
+AROは、Red Hatによるお客様の既存Azureアカウントへのデプロイを可能にするモデルを提供します。
+AROクラスターを作成するためには、次の条件が必要です。
+
+* Azureアカウント
+* Azureのリソースクォータの引き上げ (トータルで40vCPU以上)
+* AROクラスター用のAzureリソースグループ
+* AROクラスター用のAzureサービスプリンシパル作成のための
+https://learn.microsoft.com/ja-jp/azure/openshift/tutorial-create-cluster#verify-your-permissions[Microsoft Entraアクセス許可] (管理者が作成した既存サービスプリンシパルの利用も可能)
+* Azure CLIを使う場合、バージョン2.30.0以降 (2024年2月時点)
+
+
+NOTE: AROクラスターには、Azure APIで操作するためのMicrosoft Entraサービスプリンシパルが必要です。
+このサービスプリンシパルは、Azureのロードバランサーや、Azure Container Registry (ACR)などの、
+Azureリソースを動的に作成、管理、アクセスするために利用されます。
+
+
+また、AzureでAROクラスターの機能を有効化するための
+https://learn.microsoft.com/ja-jp/azure/azure-resource-manager/management/resource-providers-and-types[リソースプロバイダー]を登録します。
+
+```
+$ az provider register -n Microsoft.RedHatOpenShift --wait
+$ az provider register -n Microsoft.Compute --wait
+$ az provider register -n Microsoft.Storage --wait
+$ az provider register -n Microsoft.Authorization --wait
+```
+
+続いて、AROクラスターで使用するための、Red Hat プルシークレットをダウンロードします。
+このプルシークレットにより、AROクラスターがRed Hatのコンテナレジストリにアクセスして、
+OperatorHubなどからRed Hat提供のコンテナイメージをダウンロードして利用できるようになります。
+
+Red Hatの
+https://console.redhat.com/openshift/downloads#tool-pull-secret[Hybrid Cloud Console]に
+Red Hatアカウントでログインして、「Pull Secret」をコピーかダウンロードして保存します。
+
+image::aro/create/pull-secret.png[]
+
+
+=== Azure PortalでのAROクラスターの作成
+
+AROクラスターを作成します。
+Azure PortalのMarketplaceの検索画面から「Azure Red Hat OpenShift」を検索して、
+「作成」から「Azure Red Hat OpenShift Cluster」をクリックします。
+
+image::aro/create/marketplace.png[]
+
+予め作成しておいたAzureのリソースグループを選択(または新規作成)して、
+「OpenShiftクラスター名」には任意の名前(下記画像の例では「myaro01」)を入力します。
+また、AROクラスター作成時に、OpenShiftクラスターバージョンを選択できます。
+
+image::aro/create/section1.png[]
+
+NOTE: AROクラスターのワーカーノードは
+https://learn.microsoft.com/ja-jp/azure/openshift/support-policies-v4#compute[最小台数3台]で、
+https://learn.microsoft.com/ja-jp/azure/openshift/openshift-faq#azure-red-hat-openshift-------------------------azure-red-hat-openshift----------------------------[最大台数60台または120台]となります。
+最大台数の120台構成は、Azureの
+https://learn.microsoft.com/ja-jp/azure/virtual-network/virtual-networks-udr-overview#user-defined[User Defined Route]を
+利用している時に限定されます。
+また、利用者のワークロードに応じて、
+https://learn.microsoft.com/ja-jp/azure/openshift/support-policies-v4#worker-nodes[ワーカーノードのタイプ変更]もできます。
+
+次に、「認証」セクションに進み、
+前に保存しておいたRed Hatのプルシークレットを入力して、「ネットワーク」セクションに進みます。
+
+image::aro/create/section2.png[]
+
+NOTE: AROクラスター用のサービスプリンシパルについては、「新規作成」と
+管理者が事前に作成した「既存サービスプリンシパル」のいずれかを指定できます。
+サービスプリンシパルの作成については、
+https://learn.microsoft.com/ja-jp/azure/openshift/howto-create-service-principal[こちらのドキュメント]を参考にしてください。
+
+「ネットワーク」セクションでは、全てデフォルト値を利用します。
+
+image::aro/create/section3.png[]
+
+NOTE: https://learn.microsoft.com/ja-jp/azure/openshift/howto-create-private-cluster-4x#create-the-cluster[AROクラスターをプライベート化]する場合は、
+「APIサーバーの可視性」と「イングレスの可視性」を「非公開」に設定します。
+
+
+最後に「レビューと作成」セクションに進みます。
+次のような画面で「検証に成功しました」と表示されていれば、
+AROクラスターの作成準備が完了していますので、
+「作成」ボタンをクリックして、AROクラスターを作成します。
+デフォルト構成(コントローラー3台、ワーカー3台)のAROクラスター作成には、
+およそ45分ほどかかります。
+
+image::aro/create/section4.png[]
+
+
+AROクラスターの作成が完了すると、 `aro-infra-XXXXXXX-<AROクラスター名>` という名前の
+Azureリソースグループが自動的に作成され、AROクラスター作成に必要となる
+Azureリソース(ストレージアカウント/ロードバランサー/仮想マシン/ネットワークインターフェイスなど)が
+ここに作成されます。これらを見ることで、
+AROクラスターにどのようなAzureリソースが利用されているかを確認できます。
+
+image::aro/create/aro-infra-rg.png[]
+
+この自動作成されたリソースグループは、
+https://learn.microsoft.com/ja-jp/azure/openshift/tutorial-delete-cluster[AROクラスターを削除]
+する時に、自動的に削除されるようになっています。
+
+
+=== AROクラスターへのアクセス
+
+AROクラスターの作成完了後に、Azure Portal上で、
+AROクラスターにアクセスするためのコンソールURLや、管理者アカウント(kubeadmin)と
+パスワード情報が表示されますので、これを使ってAROクラスターにログインできます。
+
+image::aro/create/info1.png[]
+image::aro/create/info2.png[]
+
+オプションとして、AROクラスターのアイデンティティープロバイダーを設定して、
+ローカルユーザーとして利用することができます。
+https://access.redhat.com/documentation/ja-jp/openshift_container_platform/4.14/html-single/authentication_and_authorization/index#configuring-htpasswd-identity-provider[HTPasswdファイルの認証情報を利用]したり、
+https://learn.microsoft.com/ja-jp/azure/openshift/configure-azure-ad-ui[Microsoft Entra認証を利用]するような設定が可能です。
+
+
+=== 参考情報
+
+* https://learn.microsoft.com/ja-jp/azure/openshift/tutorial-create-cluster[チュートリアル:Azure Red Hat OpenShift 4 クラスターを作成する]
+* https://learn.microsoft.com/ja-jp/azure/openshift/quickstart-portal[クイックスタート: Azure portal を使用した Azure Red Hat OpenShift クラスターのデプロイ]
+* https://www.redhat.com/en/blog/a-guide-to-controller-ingress-for-azure-red-hat-openshift[A Guide to Ingress Controllers for Azure Red Hat OpenShift] (プライベートなAROクラスターの作成とアプリケーションの外部公開の参考手順を紹介したブログ)

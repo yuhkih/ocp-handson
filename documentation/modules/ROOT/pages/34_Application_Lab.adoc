@@ -1,0 +1,483 @@
+:labname: Application
+
+include::../../include/00_0_Lab_Header.adoc[]
+
+== {labname} Lab
+
+:numbered:
+
+このラボでは、Red Hat^(R)^ Advanced Cluster Management for Kubernetes (RHACM) のアプリケーション ライフサイクル機能について学習します。
+
+.Goals
+* RHACM のアプリケーション ライフサイクル機能を理解する
+* アプリケーションを _managed_ クラスターにデプロイする
+* デプロイされたアプリケーションを _managed_ クラスターから削除する
+* デプロイされたアプリケーションを変更する (オプション)
+
+[[labexercises]]
+:numbered:
+
+== Introduction
+前のラボでは、RHACM のクラスター ライフサイクル機能を調べました。
+これにより、OpenShift^(R)^ クラスターを RHACM に追加できるようになり、アプリケーションのデプロイに使用できるようになりました。
+
+=== Review Application Lifecycle Functionality
+RHACM のアプリケーション ライフサイクル機能は、_managed_ クラスターでアプリケーション リソースを管理するために使用されるプロセスを提供します。
+これにより、Kubernetes 仕様を使用して単一クラスターまたは複数クラスターのアプリケーションを定義できますが、個々のクラスターへのリソースのデプロイとライフサイクル管理がさらに自動化されます。
+単一のクラスターで実行するように設計されたアプリケーションは単純であり、OpenShift の基礎を扱うことで慣れておく必要があります。
+マルチクラスター アプリケーションを使用すると、アプリケーション コンポーネントを実行するクラスターに対して定義した一連のルールに基づいて、これらの同じリソースの複数のクラスターへの展開を調整できます。
+
+この表では、RHACM のアプリケーション ライフサイクル モデルを構成するさまざまなコンポーネントについて説明します。
+
+[options=header,cols="1,3"]
+|====
+|Resource
+|Purpose
+|`Channel`
+|オブジェクト ストア、Kubernetes 名前空間、Helm リポジトリ、GitHub リポジトリなど、デプロイ可能なリソースが格納される場所を定義します。
+|`Subscription`
+|ターゲット クラスタにデプロイされる「Channel」リソースで利用可能なデプロイ可能なリソースを識別する定義。
+|`PlacementRule`
+|サブスクリプションがアプリケーションをデプロイおよび維持するターゲット クラスターを定義します。 
+`Subscription` リソースによって識別され、`Channel` リソースで定義された場所からプルされる Kubernetes リソースで構成されます。
+|`Application`
+|ここにあるコンポーネントを、より見やすい単一のリソースにグループ化する方法。
+通常、`Application` リソースは `Subscription` リソースを参照します。
+|====
+
+これらはすべて、カスタム リソース定義 (CRD) によって定義された Kubernetes カスタム リソースであり、RHACM のインストール時に作成されます。
+これらを Kubernetes ネイティブ オブジェクトとして作成することで、Pod と同じように操作できます。
+たとえば、 `oc get application` を実行すると、デプロイされた RHACM アプリケーションのリストが取得されます。これは、 `oc get pods` がデプロイされた Pod のリストを取得するのと同じです。
+
+これは、アプリケーションを実際に構成するデプロイ可能なものに加えて、管理するための余分なリソースがたくさんあるように思えるかもしれません。
+ただし、多くのクラスターにデプロイする場合は、アプリケーションの構成、配置、および全体的な制御を自動化できます。
+単一のクラスターでは、ログインして `oc create -f...` を実行するのは簡単です。
+多数のクラスターでこれを行う必要がある場合は、間違いを犯したり、クラスターを見逃したりしないようにする必要があり、アプリケーションの更新をスケジュールして調整する方法が必要です。
+RHACM のアプリケーション ライフサイクル機能を利用すると、マルチクラスター アプリケーションを簡単に管理できます。
+
+=== Consider Personas
+
+アプリケーション ライフサイクル機能について考えるときは、次のペルソナとそのニーズについて考えてください。
+
+[options=header,cols="1,3"]
+|====
+|Persona
+|Need and RHACM Solution
+|IT Operations
+a|* 一連の既知の構成と必要なアプリケーションを使用して、新しいクラスターをデプロイしたいと考えています。
+* クラスターの展開時にラベルを割り当てると、必要な構成とアプリケーションが自動的に展開され、追加の手動作業なしで実行されます。
+|DevOps/SRE
+a|* どこに問題があるのかを把握するために、リアルタイムのステータスでアプリケーションの関係をすばやく調査したい。
+* *Application Topology* ビューを使用すると、クラスターに接続して情報を収集することなく、アプリケーションのステータス ラベルと Pod ログを視覚的に調べて、アプリケーションの一部が実行されているかどうかを確認できます。
+|====
+
+== Create Application in RHACM
+アプリケーション ライフサイクル機能が RHACM にどのようなものがあるかがわかったので、今度は単純なアプリケーションを _managed_ クラスターにデプロイします。
+このラボでは 1 つのターゲット クラスターにのみデプロイしますが、学習した内容を多数のクラスターを含む環境に適応させることができます。
+
+このラボでデプロイするアプリケーションは *Etherpad* と呼ばれます。
+これは、フロントエンド コンポーネントとバックエンド コンポーネントを備えたシンプルなアプリケーションです。
+
+このラボを理解しやすくするために、_hub_ クラスターの「bastion」VM で CLI を使用していくつかの作成手順を実行します。
+
+. 前のラボからまだログインしていない場合は、プロビジョニング E メールで提供された認証情報を使用して RHACM コンソールにログインします。
+これを行う方法の詳細が必要な場合は、前のラボを参照してください。
+
+. 左上のメニューを使用して、*Applications* に移動します。
+* _Cluster Lifecycle Lab_ を開始したときと同様に、定義済みのアプリケーションが見つからないことを想定してください。
+
+. ターミナルを開き、SSH を使用して _hub_ OpenShift クラスターの `bastion` VM にアクセスします。
+* 接続情報と資格情報は、受信した _hub_ クラスター用のプロビジョニング メールに記載されています。
+. 接続したら、次のコマンドを使用して _hub_ OpenShift クラスターと対話できることを確認します。
++
+[source,sh]
+----
+ oc get projects
+----
++
+.Sample Output
+[source,sh]
+----
+NAME                                               DISPLAY NAME   STATUS
+default                                                           Active
+hive                                                              Active
+kube-node-lease                                                   Active
+kube-public                                                       Active
+kube-system                                                       Active
+my-openshift-cluster                                              Active
+open-cluster-management                                           Active
+open-cluster-management-hub                                       Active
+openshift                                                         Active
+...
+----
++
+[IMPORTANT]
+`hive` 、`my-openshift-cluster` 、および `open-cluster-management` という名前のプロジェクトが表示されない場合は、間違った OpenShift クラスターにログインしているか、前のラボを完了していない可能性があります。
+ここで立ち止まって、何が間違っていたかを理解してください。
+
+. このラボを完了するために必要なリソースはすべて GitHub リポジトリにありますが、変更を加えるには、このリポジトリのForkが必要になります。
+次に示すリポジトリのForkを作成します。 
+
++
+link:https://github.com/redhat-gpte-devopsautomation/rhacm-labs.git[^]
++
+次章のオプションのハンズオン手順(ソースコード変更からの構成変更)を実行される場合には、Forkが必要となりますが、このステップを実行されない場合には、不要です。Forkされない場合には、次のステップで、`export GITHUB_ID=redhat-gpte-devopsautomation` と設定して進めてください。
++
+[NOTE]
+====
+フォークする方法のヒントについては、link:https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#fork-an-example-repository[GitHub ドキュメント^] のリンクにアクセスしてください。 
+====
+
+. GitHub ID を環境変数として設定します。
+これにより、後続のコマンドが少し簡単になります。
++
+[source,sh]
+----
+ export GITHUB_ID=<your-github-id>
+----
+
+. _hub_ クラスターの `bastion` でリポジトリのクローンを作成して、ローカルで使用できるようにします。 
++
+[source,sh]
+----
+ cd $HOME
+ git clone https://github.com/${GITHUB_ID}/rhacm-labs.git
+----
++
+[NOTE]
+====
+Git リポジトリからファイルを直接参照することで、後続の手順ですべてを作成することもできますが、それらを複製すると、ローカルで分析および変更できるようになります。
+====
+
+. 最初に必要なのは、最終的にアプリケーションを定義する、作成する予定のすべてのリソースを保持する名前空間です。
+`etherpad` という名前の新しい名前空間を作成します。
++
+[source,sh]
+----
+ oc create -f $HOME/rhacm-labs/apps/etherpad/namespace.yaml
+----
++
+.Sample Output
+[source,sh]
+----
+namespace/etherpad created
+----
+
+. `Application` の一部のコンポーネントを記述したマニフェストを更新して、フォークされた GitHub リポジトリを指すようにします。
++
+[source,sh]
+----
+ sed -i "s/redhat-gpte-devopsautomation/${GITHUB_ID}/g" $HOME/rhacm-labs/apps/etherpad/application.yaml
+----
+
+. アプリケーションのデプロイに必要な 3 つのリソース (`Channel` 、`Application` 、および `Subscription` ) を定義する YAML 定義を見てください。
++
+[NOTE]
+====
+便宜上、ここではリソースを 1 つのファイルで表示していますが、3 つの個別のマニフェストにすることもできます。
+また、これらのリソースを任意の順序で 1 つずつ作成することもできます。
+====
++
+[source,sh]
+----
+ cat $HOME/rhacm-labs/apps/etherpad/application.yaml
+----
++
+.Sample Output
+[source,yaml]
+----
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  name: etherpad-app-latest
+  namespace: etherpad <1>
+spec:
+  type: GitHub
+  pathname: https://github.com/redhat-gpte-devopsautomation/rhacm-labs.git <2>
+---
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: etherpad-app
+  namespace: etherpad <1>
+spec:
+  componentKinds:
+  - group: apps.open-cluster-management.io
+    kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions: <3>
+    - key: app
+      operator: In
+      values:
+      - etherpad-app
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  name: etherpad-app
+  namespace: etherpad <1>
+  labels:
+    app: etherpad-app <4>
+  annotations:
+    apps.open-cluster-management.io/github-path: resources/etherpad <5>
+spec:
+  channel: etherpad/etherpad-app-latest <6>
+  placement:
+    placementRef:
+      kind: PlacementRule
+      name: dev-clusters <7>
+----
++
+このファイルで起こっているすべてのことに注意してください。
++
+<1> これらのリソースはすべて `etherpad` 名前空間に作成されます。
+<2> `Channel` は `GitHub` タイプを指し、アプリケーションのデプロイ可能なものが保存されているこのリポジトリを参照します。
+これがフォークされた GitHub リポジトリと一致するように更新されていることを確認してください。
+<3> `Application` は、`app: etherpad-app` に一致するラベルを持つ `Subscription` リソースを探しています。
+<4> この `Subscription` リソースには、`Application` リソースが探している `etherpad-app` ラベルがあります。
+<5> `github-path` アノテーションは `GitHub` のタイプを使用する場合、 `Channel` リソースで定義された `pathname` 仕様に結合されます。
+<6> これは、`Subscription` リソースがターゲット クラスタでデプロイ可能なものを見つけるために使用する `Channel` リソースです。
+<7> `Subscription` リソースは、まだ定義されていない `PlacementRule` リソースも参照します。
+`PlacementRule` リソースがなければ、このアプリケーションをデプロイするクラスターはありません。
+
+. _hub_ クラスターで `bastion` VM を使用して 3 つのリソースすべてを作成します。
++
+[source,sh]
+----
+ oc create -f $HOME/rhacm-labs/apps/etherpad/application.yaml
+----
++
+.Sample Output
+[source,sh]
+----
+channel.apps.open-cluster-management.io/etherpad-app-latest created
+application.app.k8s.io/etherpad-app created
+subscription.apps.open-cluster-management.io/etherpad-app created
+----
+
+. RHACM コンソールで、新しく作成された `Application` リソースを探します。
++
+[NOTE]
+====
+RHACM コンソールが更新され、アプリケーションが表示されるまでに数分かかる場合があります。
+数分後にブラウザでページを更新します。
+====
+
+. `etherpad-app` アプリケーションをクリックして、トポロジ マップの概要を表示します。
++
+image::images/acm_app_lifecycle_topology_initial.png[width=100%]
+
+.  数分待ち、トポロジの全体が表示されるのを待ちます。
+これで、`Subscription` リソースと `Channel` リソースが定義され、`Subscription` リソースは現在 _Failed_ であることに注意してください。
++
+image::images/acm_app_lifecycle_topology_later.png[width=100%]
+
+== Deploy Application
+
+アプリケーションとそれに関連するすべてのコンポーネントが作成されたので、ターゲット クラスターにデプロイする準備が整いました。
+ただし、RHACM にアプリケーション、より具体的には `Subscription` リソースをデプロイするように指示する必要があります。
+この指示がないことが、`Subscription` リソースが現在 _Failed_ 状態になっている理由です。
+
+. RHACM コンソールで、画面上部の右側にある *+* (`?` の左隣)をクリックし、プロジェクトとして `すべてのプロジェクト` を選択し、次の YAML コンテンツをエディターに貼り付けます。
++
+[source,yaml]
+----
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: dev-clusters
+  namespace: etherpad
+spec:
+  clusterConditions:
+    - type: ManagedClusterConditionAvailable
+      status: "True"
+  clusterSelector:
+    matchLabels:
+      environment: dev
+----
++
+[WARNING]
+====
+`clusterSelector` セクションのキーと値のペアでは、大文字と小文字が区別されます。
+前のラボでクラスターにラベルを付けた方法と一致していることを確認してください。
+====
++
+[NOTE]
+====
+RHACM コンソールで YAML エディターを使用することは、アプリケーションのライフサイクルに関連するリソースを作成する別の方法です。
+前のセクションで行ったように、 `oc create -f...` コマンドを実行した場合と同じ結果が得られます。
+====
+
+. 一つ前のステップで別のブラウザを開いている場合には、元の RHACMコンソールに移動してください。`etherpad-app` アプリケーションの *Overview* タブをクリックし、ターゲット クラスタへのデプロイ可能ファイルのロールアウトが開始された後、トポロジ ビューが更新されることを確認します。
++
+image::images/acm_app_lifecycle_topology_final.png[width=100%]
+
+. _managed_ クラスター(_hub_ クラスターには何も表示されません。)内のリソースをチェックして、アプリケーションがデプロイされていることを確認します。
+Importしたクラスタのログイン情報は、クラスタ情報を記載したメールを参照ください。
+
+[NOTE]
+====
+このラボで作成したクラスタのログイン情報は、ACMのコンソールで、*Infrastructure -> Clusters* を開き、画面上のクラスタ名をクリックすることで `Console URL` や `Username & password` を確認することができます。
+====
+
+コマンドラインでアプリケーションのデプロイを確認するには、_managed_ クラスターの `bastion` VM から次のコマンドを実行します。
++
+[source,sh]
+----
+ oc get pods -n etherpad
+----
++
+.Sample Output
+[source,sh]
+----
+NAME                          READY   STATUS    RESTARTS   AGE
+etherpad-5ccc6bdc6d-xj2sg     1/1     Running   0          3m6s
+postgresql-7f499d7f94-wdlk9   1/1     Running   0          3m6s
+----
+
+. アプリケーションの `route` を見つけ、それを使用して Web ブラウザ経由でアプリケーションにアクセスします。
++
+[source,sh]
+----
+ oc get route etherpad-route -n etherpad -o jsonpath='{.spec.host}'
+----
++
+.Sample Output
+[source,sh]
+----
+etherpad-route-etherpad.apps.cluster-acmm1.red.osp.opentlc.com
+----
+
+== Remove Application
+
+ある時点で、クラスターからアプリケーションを削除する必要があります。
+これは、アプリケーションが廃止されたか、マルチクラスター展開で特定のクラスターに展開する必要がなくなったことが原因である可能性があります。
+幸いなことに、ターゲット クラスタからアプリケーションを削除するのは簡単です。
+選択肢は 2 つあります。
+
+最初のオプションは、`Subscription` リソースを削除することです。
+これを行うと、`Channel` リソースからプルされた `Subscription` リソースとアプリケーションのデプロイ可能オブジェクトが _hub_ クラスターから削除されます。
+変更が _managed_ クラスターに伝達されると、「サブスクリプション」リソースとそれに関連付けられたリソースが削除されます。
+ログインして `oc delete...` コマンドを実行したかのように、Pod、Service、Deployment、およびその他のリソースが削除されていることを確認できます。
+`Subscription` リソースを削除すると、`PlacementRule` リソースに基づいてデプロイされているすべてのクラスターに影響することに注意してください。
+
+2 番目のオプションは、`Subscription` リソースがターゲット クラスタを決定するために使用している `PlacementRule` リソースを削除または変更することです。
+これを行うと、`Subscription` リソースがターゲット クラスターの新しいリストに更新されます。この場合は空であり、アプリケーションを実行する場所がありません。
+このオプションには注意してください。
+他の `Subscription` リソースが同じ `PlacementRule` リソースを使用している場合、誤って他のアプリケーションを削除する可能性があります。
+
+このラボでは、`Subscription` リソースを削除します。
+
+. _hub_ クラスターの `bastion` VM で、`etherpad-app` アプリケーションの「Subscription」リソースが表示されていることを確認します。
+具体的には、`Subscription` リソースの `metadata/annotations/apps.open-cluster-management.io/deployables` および `spec` セクションを確認します。
+* `deployables` リストには、_managed_ クラスターにデプロイする、リポジトリで検出されたリソースが表示されます。
+* `spec` は、`PlacementRule` に基づいて、この `Subscription` がデプロイされる場所を示します。
++
+[source,sh]
+----
+ oc get subscription etherpad-app -n etherpad -o yaml
+----
++
+.Sample Output
+[source,yaml]
+----
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  annotations:
+    apps.open-cluster-management.io/deployables: etherpad/etherpad-app-resources-etherpad-etherpad-route-route,etherpad/etherpad-app-resources-etherpad-etherpad-service,etherpad/etherpad-app-resources-etherpad-postgresql-deployment,etherpad/etherpad-app-resources-etherpad-ether-secret,etherpad/etherpad-app-resources-etherpad-etherpad-settings-configmap,etherpad/etherpad-app-resources-etherpad-etherpad-deployment <1>
+  labels:
+    app: etherpad-app
+    manager: multicluster-operators-subscription
+    operation: Update
+  name: etherpad-app
+  namespace: etherpad
+spec: <2>
+  channel: etherpad/etherpad-app-latest
+  placement:
+    placementRef:
+      kind: PlacementRule
+      name: dev-clusters
+status:
+  phase: Propagated
+  statuses:
+    my-openshift-cluster:
+
+...<output abridged>...
+----
++
+<1> この注釈は、 `Subscription` に関連付けられた Git リポジトリで見つかったすべての「デプロイ可能なもの」をリストします。
+<2> `Subscription` の `spec` には、以前に定義した `Channel` と `PlacementRules` が表示されます。
+
+. _hub_ クラスターで次のコマンドを実行して、 `Subscription` リソースを削除します。
++
+[source,sh]
+----
+ oc delete subscription etherpad-app -n etherpad
+----
++
+.Sample Output
+[source,sh]
+----
+subscription.apps.open-cluster-management.io "etherpad-app" deleted
+----
+
+. _managed_ クラスター内の `bastion` VM または RHACM コンソールから、デプロイされたすべてのリソースとともに `Subscription` リソースがなくなっていることを確認します。
++
+[source,sh]
+----
+ oc get all -n etherpad
+----
++
+.Sample Output
+[source,sh]
+----
+No resources found in etherpad namespace.
+----
+
+. RHACM コンソールで、`etherpad-app` アプリケーションの *Overview* タブに移動し、`Application` リソースだけが *Resource topology* セクションに残っていることを確認します。
+
+. 次章のOptionalなタスクの実行時にアプリケーションをデプロイする必要があるため(Optionalなタスクを実行しない方は不要です)、`Subscription` リソースを再作成します。まず、_managed_ クラスターの `environment` ラベル(image:images/options_menu_icon.png[] (*Options*) をクリックし、*Edit labels* を選択)を `production` と `dev` で入れ替えてください(my-imported-cluster: dev->production, my-openshift-cluster: production->dev)。
+次に、CLI ( `oc create -f source.yaml`) を使用するか、RHACM コンソールの画面上部の右側にある *+* (`?` の左隣)をクリックし、プロジェクトとして `全てのプロジェクト` を選択し、次の YAML コンテンツをエディターに貼り付け、*作成* をクリックします。
+
++
+[source,yaml]
+----
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  name: etherpad-app
+  namespace: etherpad
+  labels:
+    app: etherpad-app
+  annotations:
+    apps.open-cluster-management.io/github-path: resources/etherpad
+spec:
+  channel: etherpad/etherpad-app-latest
+  placement:
+    placementRef:
+      kind: PlacementRule
+      name: dev-clusters
+----
++
+[NOTE]
+====
+RHACM コンソールを使用する場合は、YAML エディターのすべてを上記の内容に置き換えます。
+====
+
+* 数分後、アプリケーションがターゲット クラスタに再デプロイされることを期待します。
+
+
+== Summary
+
+これで、RHACM のアプリケーション ライフサイクル機能の概要が完了しました。
+
+RHACM を使用して、ターゲットクラスターにアプリケーションを正常にデプロイしました。
+このアプローチでは、アプリケーションを定義するすべてのマニフェストを格納する Git リポジトリを利用しました。
+RHACM はこれらのマニフェストを取得してデプロイ可能なものとして使用し、ターゲット クラスターにデプロイすることができました。
+
+デプロイされたアプリケーションも削除しました。
+
+https://github.com/RH-OPEN/hands_on_acm/blob/main/modules/01_Hands_on_RHACM_Cluster_Lifecycle/05_PoolSet_Optional_And_Cleanup.adoc[５章へ]

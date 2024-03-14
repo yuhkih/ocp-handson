@@ -1,0 +1,530 @@
+= [WIP]外部認証プロバイダ(LDAP)の設定
+:navtitle: oauth
+include::_attributes.adoc[]
+
+本コンテンツは、link:https://github.com/team-ohc-jp-place/openshift-cns-testdrive[MAD Workshop Ops Track] の内容をベースに、一部変更しています。
+
+== 演習の概要
+OpenShiftは多くの異なる認証プロバイダをサポートしています。完全なリストは link:https://docs.openshift.com/container-platform/4.5/authentication/understanding-identity-provider.html[understanding
+identity provider configuration] に記載されています。最も一般的に使用されている認証プロバイダの1つはLDAPです。Microsoft Active Directoryによって提供されているか、他のソースから提供されているかにはよりません。
+
+OpenShiftはLDAPサーバーに対してユーザ認証を実行することができます。LDAPのグループメンバーシップに基づいて、グループメンバーシップと特定のRBAC属性を設定することもできます。
+
+---
+
+### 前提知識: LDAPの構造
+
+LDAP についてはすでに構築されているものを使います。講師から提供される ldapsearch コマンドを使って、どのようなユーザグループが作成されているか確認してください。　※確認①
+
+この環境では、以下のユーザグループでLDAPを提供しています。
+
+* `ose-user`: OpenShiftにアクセスできるユーザ
+** OpenShiftにログインできるユーザは、このグループのメンバーでなければなりません。
+** 以下のユーザはすべてこのグループに属しています。
+* `ose-normal-dev`: 通常のOpenShiftユーザ
+** 特別な権限を持たない正規のOpenShiftユーザ
+** 例: `normaluser1`, `teamuser1`, `teamuser2`
+* `ose-fancy-dev`: 特殊なOpenShiftユーザ
+** いくつかの特別な権限が付与されているOpenShiftのユーザ
+** 例: `fancyuser1`, `fancyuser2`
+* `ose-teamed-app`: チームに属するアプリケーションユーザ
+** 同じOpenShift *Project* にアクセスできるユーザのグループ
+** 例: `teamuser1`, `teamuser2`
+
+#### OAuth の設定を調べる
+この環境は何も手を加えていないOpenShift 4のインストールなので、デフォルトのOAuthリソースを持っています。そのOAuth設定を以下で調べることができます。
+
+[.console-input]
+[source,sh]
+----
+oc get oauth cluster -o yaml
+----
+
+以下のように表示されます。
+
+[source,yaml]
+----
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  annotations:
+    include.release.openshift.io/ibm-cloud-managed: "true"
+    include.release.openshift.io/self-managed-high-availability: "true"
+    include.release.openshift.io/single-node-developer: "true"
+    release.openshift.io/create-only: "true"
+  creationTimestamp: "2023-06-19T03:17:20Z"
+  generation: 2
+  name: cluster
+  ownerReferences:
+  - apiVersion: config.openshift.io/v1
+    kind: ClusterVersion
+    name: version
+    uid: f7ab1da3-d33b-4dc2-b9a6-792cfc6d2c94
+  resourceVersion: "21651"
+  uid: 999e83ec-6cfc-430a-b356-15ea390f4013
+spec:
+  identityProviders:
+  - htpasswd:
+      fileData:
+        name: htpasswd-secret
+    mappingMethod: claim
+    name: htpasswd_provider
+    type: HTPasswd
+----
+
+すでに一つの 認証プロバイダが設定してあります。
+これに加えて、このラボでは、認証プロバイダである `identityProvider` としてLDAPを構成します。
+
+OpenShiftにおけるLDAP認証の具体的な詳細については、link:https://docs.openshift.com/container-platform/4.10/authentication/identity_providers/configuring-ldap-identity-provider.html[Configuring
+an LDAP identity provider]のドキュメントを参照してください。
+
+LDAP IDプロバイダを設定するには、以下を行う必要があります。
+
+1. バインドパスワードを使用して `Secret` を作成します。
+2. CA 証明書を使用して `ConfigMap` を作成します。
+3. `cluster` `OAuth` オブジェクトを LDAP IDプロバイダで更新します。
+
+`kubeadmin` ユーザとして `oc` で OAuth 設定を適用します。
+
+次のコマンドは、openshift-config ネームスペースに ldap-secret という名前の Kubernetes Secretを、1つのデータアイテムで作成します。データアイテムは "bindPassword" という名前で、その値は "b1ndP^ssword" に設定されています。
+
+[.console-input]
+[source,sh]
+----
+oc create secret generic ldap-secret --from-literal=bindPassword=b1ndP^ssword -n openshift-config
+----
+
+次のコマンドで、証明書をダウンロードし 'ca.crt' というファイルに保存します。
+
+[.console-input]
+[source,sh]
+----
+wget https://certs.godaddy.com/repository/gd-class2-root.crt -O ca.crt
+----
+
+----
+もし、`Unable to establish SSL connection.` と表示された場合は、上記のコマンドを再度クリックしてから先に進んでください。
+----
+
+次のコマンドをクリックすると、openshift-config ネームスペースに ca-config-map という名前の新しい ConfigMap が作成されます。このConfigMapには、ca.cltというファイルの内容が入力されます。そして、そのファイルを適用します。
+
+[.console-input]
+[source,sh]
+----
+oc create configmap ca-config-map --from-file=ca.crt -n openshift-config
+----
+
+[.console-input]
+[source,sh]
+----
+vi oauth-cluster.yaml
+----
+
+identityProviders: 配下に以下をコピー＆ペーストします。
+bindDN: と、url: の情報は講師から取得してください。
+----
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+spec:
+  identityProviders:
+  - name: ldap
+    challenge: false
+    login: true
+    mappingMethod: claim
+    type: LDAP
+    ldap:
+      attributes:
+        id:
+        - dn
+        email:
+        - mail
+        name:
+        - cn
+        preferredUsername:
+        - uid
+      bindDN: "uid=openshiftworkshop,ou=Users,o=5e615ba46b812e7da02e93b5,dc=jumpcloud,dc=com"
+      bindPassword:
+        name: ldap-secret
+      ca:
+        name: ca-config-map
+      insecure: false
+      url: "ldaps://ldap.jumpcloud.com/ou=Users,o=5e615ba46b812e7da02e93b5,dc=jumpcloud,dc=com?uid?sub?(memberOf=cn=ose-user,ou=Users,o=5e615ba46b812e7da02e93b5,dc=jumpcloud,dc=com)"
+  tokenConfig:
+    accessTokenMaxAgeSeconds: 86400
+----
+
+これにより、oAuth Operatorの再デプロイが開始されます。次のコマンドでロールアウトを監視することができます。
+
+[.console-input]
+[source,sh]
+----
+oc rollout status deployment/oauth-openshift -n openshift-authentication
+----
+
+#### LDAPグループをOpenShiftグループに同期する
+OpenShiftでは、グループを使用してユーザを管理し、複数のユーザの権限を一度に制御することができます。LDAPでグループを同期する方法については、link:https://docs.openshift.com/container-platform/4.10/authentication/ldap-syncing.html[Syncing LDAP groups
+]の中にセクションがあります。グループを同期するには、`cluster-admin` 権限を持つユーザとしてOpenShiftにログインした状態で `groupsync` というプログラムを実行し、OpenShiftが様々なグループ内で見つけたユーザをどうするかを指示する設定ファイルを使う必要があります。
+
+このラボでは次のような `groupsync` の設定ファイルを提供しています。
+
+[.console-input]
+[source,sh]
+----
+vi groupsync.yaml
+----
+
+bindDN: 、bindPassword:、baseDN: の情報は講師から取得してください。
+
+----
+kind: LDAPSyncConfig
+apiVersion: v1
+url: ldaps://ldap.jumpcloud.com
+bindDN: uid=openshiftworkshop,ou=Users,o=5e615ba46b812e7da02e93b5,dc=jumpcloud,dc=com
+bindPassword: b1ndP^ssword
+rfc2307:
+  groupsQuery:
+    baseDN: ou=Users,o=5e615ba46b812e7da02e93b5,dc=jumpcloud,dc=com
+    derefAliases: never
+    filter: '(|(cn=ose-*))'
+  groupUIDAttribute: dn
+  groupNameAttributes:
+  - cn
+  groupMembershipAttributes:
+  - member
+  usersQuery:
+    baseDN: ou=Users,o=5e615ba46b812e7da02e93b5,dc=jumpcloud,dc=com
+    derefAliases: never
+  userUIDAttribute: dn
+  userNameAttributes:
+  - uid
+----
+
+`groupsync` 設定ファイルは以下のようなことをします。
+
+* 指定されたバインドユーザとパスワードを使って LDAPを検索する。
+* 名前が `ose-` で始まるLDAPグループに対してクエリを実行する。
+* LDAPグループの `cn` からとった名前を持つOpenShiftグループを作成する。
+* LDAPグループのメンバーを見つけ、作成されたOpenShiftグループに入れる。
+* OpenShiftでは `dn` と `uid` をそれぞれUIDとname属性として使用します。
+
+`groupsync` を実行します。
+
+[.console-input]
+[source,sh]
+----
+oc adm groups sync --sync-config=groupsync.yaml --confirm
+----
+
+以下のような出力になります。
+
+----
+group/ose-fancy-dev
+group/ose-user
+group/ose-normal-dev
+group/ose-teamed-app
+----
+
+今見ているのは、`groupsync` コマンドで作成された *Group* オブジェクトです。もし `--confirm` フラグが気になる場合は、`oc adm groups sync -h` でヘルプの出力を確認してください。
+
+作成された *Groups* を見たい場合は、以下を実行して下さい。
+
+[.console-input]
+[source,sh]
+----
+oc get groups
+----
+
+以下のような出力が表示されます。
+
+----
+NAME             USERS
+ose-fancy-dev    fancyuser1, fancyuser2
+ose-normal-dev   normaluser1, teamuser1, teamuser2
+ose-teamed-app   teamuser1, teamuser2
+ose-user         fancyuser1, fancyuser2, normaluser1, teamuser1, teamuser2
+----
+
+YAMLで特定のグループを見てみましょう。
+
+[.console-input]
+[source,sh]
+----
+oc get group ose-fancy-dev -o yaml
+----
+
+OpenShiftは自動的にいくつかのLDAPメタデータを *Group* に関連付け、グループに含まれるユーザーを一覧表示します。
+
+*Users* をリストアップするとどうなるでしょうか?
+
+[.console-input]
+[source,sh]
+----
+oc get user
+----
+
+以下のように出てきます。
+
+----
+NAME    UID                                    FULL NAME   IDENTITIES
+admin   211b4143-f317-42a8-b3c6-252b9a63c7ec               htpasswd_provider:admin
+----
+
+*Users* は *Group* の定義に明確にリストされているのに、なぜ LDAP の認証プロバイダの *Users* が見つからないのでしょうか? 
+
+*Users* は、最初にログインしようとするまで実際には作成されません。*Group* の定義に表示されているのは、OpenShiftがその特定のIDを持つ *User* に遭遇した場合、その *User* を *Group* に関連付けるべきであるとOpenShiftに伝えているだけのプレースホルダーです。
+
+#### グループポリシーの変更
+この環境では、`ose-fancy-dev` というスーパー開発者グループがあります。この人たちに特別な  `cluster-reader` 権限を与えてみましょう。これは、クラスタに関する管理レベルの情報を閲覧できるようにする役割です。たとえば、クラスター内のすべての *Projects* のリストを見ることができます。
+
+`ose-fancy-dev` *Group* のポリシーを変更します。
+
+[.console-input]
+[source,sh]
+----
+oc adm policy add-cluster-role-to-group cluster-reader ose-fancy-dev
+----
+
+[Note]
+====
+OpenShiftに付属するさまざまなロールに興味がある方は、link:https://docs.openshift.com/container-platform/4.10/authentication/using-rbac.html[Role-Based Access Control (RBAC)^] のドキュメントを参照してください。
+====
+
+#### cluster-reader ポリシーを調べる
+通常のユーザでログインしてみましょう。
+
+[.console-input]
+[source,sh]
+----
+oc login -u normaluser1 -p Op#nSh1ft
+----
+
+*Projects* をリストしてみると、
+
+[.console-input]
+[source,sh]
+----
+oc get projects
+----
+
+この通り何も見えません。
+
+----
+No resources found.
+----
+
+次に `ose-fancy-dev` のメンバーとしてログインします。
+
+[.console-input]
+[source,sh]
+----
+oc login -u fancyuser1 -p Op#nSh1ft
+----
+
+同じ `oc get projects` を実行すると、クラスタ内のすべての *Projects* のリストが表示されます。
+
+----
+NAME                                                    DISPLAY NAME                        STATUS
+    app-management
+    default
+    kube-public
+    kube-system
+    labguide
+    openshift
+    openshift-apiserver
+...
+----
+
+これで、OpenShift Container PlatformのRBACがどのように機能するか理解し始めているはずです。
+
+cluster-admin としてログインし直しておきましょう。
+
+[.console-input]
+[source,sh]
+----
+oc login -u admin -p <*** ivpn13A5E4t3GCKG のようなパスワード ***>
+----
+
+
+#### コラボレーションのためのProjectの作成
+
+そして、複数の人で共同作業を行うためにいくつかの *Project* を作成してください。
+
+[.console-input]
+[source,sh]
+----
+oc adm new-project app-dev --display-name="Application Development"
+oc adm new-project app-test --display-name="Application Testing"
+oc adm new-project app-prod --display-name="Application Production"
+----
+
+これで、典型的なソフトウェア開発ライフサイクルを表す複数の *Project* が作成されました。次に、これらのProjectへの共同アクセスを許可するための *Group* を構成します。
+
+
+[Note]
+====
+`oc adm new-project` でProjectを作成しても、Project requestプロセスやProject requestテンプレートは使われません。これらのProjectには、デフォルトではクォータや制限範囲が適用されません。クラスタ管理者は他のユーザに「なりすます」ことで、これらのProjectにクォータや制限範囲を適用したい場合には、いくつかのオプションがあります。
+
+. 通常のユーザになりすますことを指定するために `--as` を使用して `oc new-project` を指定します。
+. `oc process` を使用して、Project requestテンプレートの値を指定し、createにパイプします(例: `oc process ... | oc create -f -)。これにより、Project requestテンプレート内のすべてのオブジェクトが作成され、その中にはクォータと制限範囲が含まれます。
+
+これらの演習では、Projectにクォータや制限範囲を設定することは重要ではありません。
+====
+
+#### GroupsをProjectにマップする
+先ほど見たように、OpenShift内にはいくつかのロールがあらかじめ設定されています。 *Project* に関しても同様に、閲覧(View)、編集(Edit)、管理者アクセスを付与することができます。`ose-teamed-app` のユーザにDevelopment ProjectとTest Projectを編集するためのアクセス権を与えてみましょう。
+
+[.console-input]
+[source,sh]
+----
+oc adm policy add-role-to-group edit ose-teamed-app -n app-dev
+oc adm policy add-role-to-group edit ose-teamed-app -n app-test
+----
+
+そして、Productionを閲覧するためのアクセス権を与えます。
+
+[.console-input]
+[source,sh]
+----
+oc adm policy add-role-to-group view ose-teamed-app -n app-prod
+----
+
+次に、`ose-fancy-dev` グループにProduction Projectの編集アクセス権を与えます。
+
+[.console-input]
+[source,sh]
+----
+oc adm policy add-role-to-group edit ose-fancy-dev -n app-prod
+----
+
+#### Examine Group Access
+`normaluser1` としてログインし、どのような *Projects* が表示されるか確認します。
+
+[.console-input]
+[source,sh]
+----
+oc login -u normaluser1 -p Op#nSh1ft
+oc get projects
+----
+
+このようになるはずです。
+
+----
+No resources found.
+----
+
+次に `ose-teamed-app` グループの `teamuser1` で試してみます。
+
+[.console-input]
+[source,sh]
+----
+oc login -u teamuser1 -p Op#nSh1ft
+oc get projects
+----
+
+このようになるはずです。
+
+----
+NAME       DISPLAY NAME              STATUS
+app-dev    Application Development   Active
+app-prod   Application Production    Active
+app-test   Application Testing       Active
+----
+
+チームユーザにはProduction Projectへの編集アクセス権が付与されていません。次に、Production Projectに `teamuser1` として何かを作成してみてください。
+
+[.console-input]
+[source,sh]
+----
+oc project app-prod
+oc new-app docker.io/siamaksade/mapit
+----
+
+以下のようにうまくいかないことが分かります。
+
+----
+error: can't lookup images: imagestreamimports.image.openshift.io is forbidden: User "teamuser1
+" cannot create resource "imagestreamimports" in API group "image.openshift.io" in the namespac
+e "app-prod"
+error:  local file access failed with: stat docker.io/siamaksade/mapit: no such file or directo
+ry
+error: unable to locate any images in image streams, templates loaded in accessible projects, t
+emplate files, local docker images with name "docker.io/siamaksade/mapit"
+
+Argument 'docker.io/siamaksade/mapit' was classified as an image, image~source, or loaded templ
+ate reference.
+
+The 'oc new-app' command will match arguments to the following types:
+
+  1. Images tagged into image streams in the current project or the 'openshift' project
+     - if you don't specify a tag, we'll add ':latest'
+  2. Images in the Docker Hub, on remote registries, or on the local Docker engine
+  3. Templates in the current project or the 'openshift' project
+  4. Git repository URLs or local paths that point to Git repositories
+
+--allow-missing-images can be used to point to an image that does not exist yet.
+
+See 'oc new-app -h' for examples.
+----
+
+このエラーは想定通りのものです。
+
+
+
+
+
+
+
+#### Prometheus
+`cluster-reader` 権限を持つユーザ (クラスタ管理の多くの情報を閲覧することができるユーザ) ができたので、Prometheusをもう一度見てみましょう。
+
+`cluster-reader` 権限を持つユーザでログインします。
+
+[.console-input]
+[source,sh]
+----
+oc login -u fancyuser1 -p Op#nSh1ft
+----
+
+`prometheus` の `Route` を検索します。
+
+[.console-input]
+[source,sh]
+----
+oc get route prometheus-k8s -n openshift-monitoring -o jsonpath='{.spec.host}{"\n"}'
+----
+
+以下のように表示されます。
+
+----
+prometheus-k8s-openshift-monitoring.apps.cluster-vfg6m.vfg6m.sandbox2574.opentlc.com
+----
+
+[Warning]
+====
+先に進む前に、OpenShiftのWebコンソールに移動し、右上の`kube:admin` のドロップダウンメニューからログアウトしてください。そうしないと、Prometheusは認証を通過するためにあなたの `kubeadmin` ユーザを使用しようとします。もちろんこれは動作しますが、`cluster-reader` ロールのデモンストレーションにはなりません。
+====
+
+https:// + 上記で取得した Link + /api をブラウザで開きます。
+ログイン画面が出てきたら *Log in with OpenShift* ボタンをクリックして `ldap` auth を選択し、先ほど `cluster-reader` 権限を付与した `fancyuser1` ユーザを使用します。
+
+より細かく言えば、`ose-fancy-dev` グループに `cluster-reader` 権限があり、`fancyuser1` がメンバーです。これらのユーザのパスワードはすべて `Op#nSh1ft` です。自己署名証明書のため、証明書エラーが出ると思います。必ず承諾するようにしましょう。
+
+ログインすると、最初にauthプロキシのパーミッションの承認画面が表示されます。
+
+.Auth Proxy Acceptance.
+image::basics/appmgmt/openshift_pod.png[]
+image::images/prometheus-auth-proxy.png[]
+
+実際には、あなたとPrometheusコンテナの間のフローの中にOAuthプロキシが存在します。このプロキシは、あなたの認証(AuthenticatioN:AuthN)を確認するためと、また、何が許可されているかの認可(AuthoriZe:AuthZ)のためにに使用されます。ここでは、Prometheusへのアクセスの一部として使用される `fancyuser1` アカウントのパーミッションを明示的に承認しています。_Allow selected permissions_ をクリックします。
+
+この時点でPrometheusが表示されています。アラートは設定されていません。`Status` と `Targets` を見ると、クラスタの現在の状態に関する興味深い情報を見ることができます。
+
+これが終わったら、管理者ユーザーとして再度ログインしてください。
+
+[.console-input]
+[source,sh]
+----
+oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}
+----

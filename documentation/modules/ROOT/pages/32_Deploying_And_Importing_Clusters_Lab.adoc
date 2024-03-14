@@ -1,0 +1,340 @@
+:labname: Deploying and Importing Clusters
+
+include::../../include/00_0_Lab_Header.adoc[]
+
+== {labname} Lab
+
+:numbered:
+
+== Introduction to Deploying and Importing Clusters
+
+Red Hat^(R)^ Advanced Cluster Management for Kubernetes (RHACM) の主な機能の 1 つは、クラスターのライフサイクル管理です。これにより、新しいクラスターをさまざまなクラウド プロバイダーにデプロイしたり、既存のクラスターをインポートして RHACM で管理したりできます。
+
+複数のクラスター (さらに複数のクラウド プロバイダー上のクラスター) の管理は、さまざまな資格情報、さまざまなクラウド環境にデプロイされているクラスター、さまざまなクラウド環境からインポートされているマネージド クラスターを管理する必要があることを考えると、非常に複雑になる可能性があります。 管理目的でクラスターにラベルを使用します。
+RHACM を使用すると、1 つのコンソールからすべてのクラスターを管理できるため、新しいデプロイメントを管理し、既存のクラスターをインポートできます。
+
+.Goals
+
+* クラウド認証情報を作成する
+* 新しい単一ノードの OpenShift^(R)^ クラスターを作成する
+* クラスタ プロパティの管理
+* 既存のクラスターをインポートする方法を学ぶ
+* インフラ環境を特定する
+
+[[labexercises]]
+:numbered:
+
+== Create Cloud Credentials
+
+Red Hat Advanced Cluster Management にクラウド資格情報を提供して、異なるクラウドで OpenShift クラスターをデプロイおよび管理できます。 この演習では、Amazon Web Services に新しい SNO クラスターをデプロイします。
+
+[NOTE]
+====
+`AWS_ACCESS_KEY_ID` と `AWS_SECRET_ACCESS_KEY` の AWS 認証情報は、プロビジョニング E メールで入手できます。
+====
+
+マルチクラウド環境として、Red Hat Advanced Cluster Management はクラスターを複数のクラウドおよびベアメタル インフラストラクチャにデプロイできます。 この演習では、認証情報を使用して AWS のリソースを処理します。
+
+.手順
+. 認証情報は、RHACM ハブ クラスターの独自の名前空間にある必要があります。 bastionホストで、新しい名前空間を作成します。
++
+[source,sh]
+----
+oc create namespace aws-sandbox
+----
+
+. RHACM Web コンソールから、*Credentials* に移動し、*Add credential* をクリックします。
++
+image::images/add_credentials.png[]
+
+. 次のプロパティを使用して AWS 資格情報を作成します。
+.. *Basic Information* 画面で次のように入力します。
+* *Credential type*: `Amazon Web Services`
+* *Credential name*: `aws-sandbox`
+* *Namespace*: `aws-sandbox`
+* *Base DNS domain*: `sandboxNNNN.opentlc.com` (トップ レベル ドメインのプロビジョニング メールを確認してください。先頭のピリオドは除外してください。)
+.. *Next* をクリックします。
+.. *Amazon Web Services* 画面で次のように入力します。
+* *Access key ID*: (OpenTLCのカスタム属性表中"Environment Info 011"、もしくはプロビジョニング メールに記載)
+* *Secret access key*: (OpenTLCのカスタム属性表中"Environment Info 012"、プロビジョニング メールで提供)
+.. *Next* をクリックします。
+.. *Pull secret and SSH* 画面で次のように入力します。
+** *Pull secret*: (プル シークレット未入手の場合は、無料の Red Hat 開発者アカウントに登録して、`https://console.redhat.com` から *OpenShift -> Downloads* と開き、最下部までスクロールダウンして表示される `Pull secret` の右の `Copy` をクリックすることで入手できます。)
+** *SSH private key*: bastionホストから、`$HOME/.ssh/${GUID}key.pem` ファイルの内容を取得して、ここに貼り付けます。この秘密鍵は、マネージド クラスター インスタンスとの接続に使用されます。
++
+[source,sh]
+----
+cat $HOME/.ssh/${GUID}key.pem
+----
+** *SSH public key*: bastionホストから、`$HOME/.ssh/${GUID}key.pub` ファイルの内容を取得します。
++
+NOTE: この時、単にファイルの内容を参照すると、末尾に改行がないためシェルプロンプトとの文字列の境界がわかりにくことに注意してください。
+以下のコマンド実行例では、`echo` コマンドを追加することで、この点を考慮しています。
++
+この公開鍵は、マネージド インスタンスの「authorized_keys」に挿入されます。
++
+[source,sh]
+----
+cat $HOME/.ssh/${GUID}key.pub ; echo
+----
+.. *Next* をクリックします。
+.. 画面が次のようになっていることを確認します。
++
+image::images/credentials.png[width=50%]
+
+.  *Add* をクリックします。
+
+== Deploy Single-Node OpenShift Cluster
+
+認証情報を作成したら、新しいクラスターをデプロイできます。
+
+.手順
+. RHACM コンソールで、*Infrastructure -> Clusters* に移動し、*Create cluster* をクリックします。
+.新しいクラスターを作成するときは、次のプロパティを使用します。
+.. *インフラストラクチャ プロバイダー* 画面で次のように入力します。
+** *Provider*: Amazon Web Services
+** *Infrastructure provider credential*: メニューを使用して、以前に作成した資格情報を選択します。
+.. *Next* をクリックします。
+.. *Cluster details* 画面で次のように入力します。
+** *Cluster name*: `my-openshift-cluster`
+** *Cluster set*: `空`
+** *Base DNS Domain*: このフィールドは、使用される資格情報から自動的に設定されます
+** *Release name (or Release image)*: 利用可能な最新の 4.9 リリースを使用します (例: `OpenShift 4.9.23`)。
+** *Additional Label* (","を入力時にラベルが登録されるので、コピー＆ペーストせずに、キーボードから文字列入力してください): `sno=true, environment=production, guid=<5桁の任意のID>`
+.. *Next* をクリックします。
+.. *Node pools* 画面で次のように入力します。
+** *Region*: お好みで、`eu-central-1`、`ap-northeast-1`、`ap-southeast-1`、`sa-east-1` のいずれかを選択します。
+** *Control plane*: セクションを展開し、*Instance type* を `m5.2xlarge` に設定します。
+** *Worker pool 1*: セクションを展開し、*Node count* を `0` に設定します。
+.. *Next* をクリックします。
+.. *Networking* 画面で次のように入力します。
+// +
+// You use this cluster later in this course to deploy the Submariner multi-cluster networking add-on. Therefore, you can not use the defaults for the *Cluster network CIDR* and *Service network CIDR* settings because those conflict with the cluster you are currently working with.
+// +
+** *Cluster network CIDR*: `10.132.0.0/14` (変更前のDefault表示: 10.128.0.0/14)
+** *Service network CIDR*: `172.31.0.0/16` (変更前のDefault表示: 172.30.0.0/16)
+.. *Review* 画面が表示されるまで *Next* をクリックし、次のように設定します。
+** 画面上部の *YAML*: `On`
+** *Cluster YAML* ペインの *cluster* タブを選択し(初期状態で選択されています)、*kind: MachinePool* を見つけて、数行下の *spec:* の次の行に *"  skipMachinePools: true"* (行頭に空白２個あるのでご注意ください)フィールドを加えます。
++
+image::images/create_cluster_skipmachinepool.png[width=100%]
++
+** *Cluster YAML* ペインの *install-config* タブを選択し、*controlPlane* を見つけて、その下の *replicas* フィールドを `1` に変更します。
+** *compute* セクションの *replicas* フィールドが `0` に設定されていることを確認します。
+** *install-config* タブの内容が次のようになっていることを確認します。
++
+[source,yaml,linenums]
+----
+apiVersion: v1
+metadata:
+  name: 'my-openshift-cluster'
+baseDomain: sandboxNNNN.opentlc.com
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  replicas: 1               <1>
+  platform:
+    aws:
+      rootVolume:
+        iops: 4000
+        size: 100
+        type: io1
+      type: m5.2xlarge
+compute:
+- hyperthreading: Enabled
+  name: 'worker'
+  replicas: 0               <2>
+  platform:
+    aws:
+      rootVolume:
+        iops: 2000
+        size: 100
+        type: io1
+      type: m5.xlarge
+[... OUTPUT OMITTED ...]
+----
+<1> Controlノード数 (3 -> 1 に変更)
+<2> Workerノード数 (0となっていることを確認)
+
+. *Create* をクリックして(YAML書き換え後にSaveなどは不要です)クラスターをデプロイします。(ProxyとAutomationは設定不要です。)
++
+Red Hat Advanced Cluster Management は新しいクラスターの作成を監視し、デプロイが完了するとクラスターをインポートします。
++
+image::images/cluster_deployment.png[width=100%]
++
+. *Cluster Install* の下の *View logs* をクリックして、`hive` (OpenShift インストーラー) のログを追跡します。 Web ブラウザがポップアップ ウィンドウをブロックしていないことを確認してください。
+
+. OpenShift CLI を使用して `hive` ログにアクセスします。
+.. _hub_ クラスタのBastion ホストで、インストーラー Pod を見つけます。
++
+[source,sh]
+----
+oc get pods -n my-openshift-cluster
+----
++
+.Sample Output
+----
+NAME                                   READY   STATUS     RESTARTS   AGE
+my-openshift-cluster-0-8x28c-provision--1-2z2wk   1/3     NotReady   0          2m40s
+----
+
+.. この Pod は `NotReady` と表示されることに注意してください。 このポッドには 3 つのコンテナーがあり、次々と実行されるため、このポッドは `Running` として表示されません。 とにかく、Hive コンテナーのログを追跡できます。
++
+[source,sh]
+----
+oc logs -f my-openshift-cluster-0-8x28c-provision--1-2z2wk -c hive -n my-openshift-cluster
+----
++
+.Sample Output
+[options=nowrap]
+----
+[...]
+time="2021-12-13T02:48:29Z" level=debug msg="module.vpc.aws_route.to_nat_gw[1]: Creation complete after 0s [id=r-rtb-083b15b8931cce7051080289494]"
+time="2021-12-13T02:48:29Z" level=debug msg="module.vpc.aws_route.to_nat_gw[0]: Creation complete after 0s [id=r-rtb-0ee45fd6cd658e5831080289494]"
+time="2021-12-13T02:48:29Z" level=debug msg="module.vpc.aws_route.to_nat_gw[2]: Creation complete after 1s [id=r-rtb-0249ceb167cb3359f1080289494]"
+time="2021-12-13T02:48:33Z" level=debug msg="module.vpc.aws_lb.api_internal: Still creating... [2m0s elapsed]"
+time="2021-12-13T02:48:33Z" level=debug msg="Bootstrap complete!"
+[...]
+----
+
+. 正常に完了するまで、新しいクラスターのデプロイに従います。 これには 20 ～ 40 分かかります。 クラスターのプロビジョニングを進めつつ(時折上記の方法でログを確認してみてください)、次のステップへ進めてください。
+
+== Import Clusters
+
+Red Hat Advanced Cluster Management はすでに構築されたクラスターをImportすることができます。
+
+.手順
+. Import対象のクラスタのOpenShift Webコンソールをブラウザで開き、一度adminアカウントでログインしたのち右上のユーザ名をクリックします。*ログインコマンドをコピー* を選択し、ログイン画面で再度ログインした後に表示される *Display Token* リンクをクリックし、トークンとURLを表示します。
+. RHACM コンソールで、*Infrastructure -> Clusters* に移動します。
+. *Mnaged clusters* タブ画面から、スクロールダウンして *Import cluster* ボタンをクリックします。
+. 次の値を使用して Import情報を作成します。
+.. *Import an existing cluster* 画面で次のように入力します。
+* *Name*: `my-imported-cluster`
+* *Cluster set*: 空
+* *Additional labels*: `sno=true, environment=dev, guid=<クラスタに割り当てられたGUID>, region=<クラスタのregion>` (クラスタのGUIDとregion情報はOpenTLCの構成情報から入手可能です)
+* *Import mode*: `Enter your server URL and API token for the existing cluster`
+* *Server URL*:  Import対象クラスタのポート番号を含めたAPI URL(例: https://api.cluster-abcd5.abcd5.sandbox5555.opentlc.com:6443/ ) <- 手順1で表示した画面の `Log in with this token` のコマンドラインの `--server=` からコピーする。
+* *API Token*:  Import対象クラスタのトークン <- 手順1で表示した画面の `Your API token is` (shaから始まる文字列全体)からコピーする。
+. *Import* をクリックします。
+
+== Explore Cluster Properties
+
+Red Hat Advanced Cluster Management によって管理されるすべてのクラスターはカスタマイズ可能です。 このセクションでは、RHACM を介して変更できるクラスターのプロパティーを調べます。
+
+次のクラスター プロパティを調べます。
+
+* Labels
+* Cluster channels
+* Managed Cluster object
+
+=== Explore Labels
+
+クラスター ラベルは、アプリケーションとポリシーをデプロイするクラスターを選択するために使用されます。
+
+.手順
+. RHACM コンソールで、*Infrastructure -> Clusters* に移動します。
+. 前のセクションで作成した、もしくはImportしたクラスターを選択します。
+. *Actions* をクリックし、*Edit Labels* を選択して、そのクラスターのラベルを表示します。
++
+image::images/edit_labels.png[width=80%]
++
+NOTE: 指定したラベル (`sno=true`) に加えて、RHACM によって追加されたラベル (このクラスターがデプロイされているクラウドまたはリージョンなど) がいくつかあります。
+
+クラスターにラベルを追加および削除でき、加えた変更はすぐに有効になります。
+
+=== Explore Cluster Channels
+
+チャネルは、クラスターの更新の送信元を表します。 RHACM を使用して、管理するクラスターのチャネルを変更できます。 たとえば、あるメジャー リリース (OpenShift 4.9) から次のメジャー リリース (OpenShift 4.10) にクラスターをアップグレードするときに、チャネルを変更します。ここでは、実際のUpgradeは実施しません。チャネルの設定を変更するのみである点をご留意ください。
+
+OpenShift のメジャー リリースごとに、`candidate` (新しいバージョンの初期リリース)、`fast` (1 週間後)、`stable` (`candidate` でのリリース以降問題が表面化していない場合はさらに 1 週間後) の 3 つのチャネルを利用できます。 または `fast` チャンネル）。
+
+RHACM で OpenShift クラスター リリース イメージに使用されるデフォルトのチャネルは `fast` チャネルです。 これは、前のラボ セクションでデプロイしたクラスターが、RHACM が実行されているクラスターよりも新しい可能性が高いことを意味します。
+
+.手順
+. RHACM コンソールで、*Infrastructure -> Clusters* に移動します。 新しいクラスターがまだデプロイされている間に、RHACM をホストしているハブ クラスターである `local-cluster` を選択します。 このクラスタのチャネルが `stable-4.9` に設定されていることを確認してください。
+. *Actions* をクリックし、*Select channels* をクリックします。
++
+image::images/channels.png[width=100%]
+
+. リストから他のチャネルが選択できることを確認し、Cancelを押してください。
+. *Managed Clusters* ビューに戻ります。(本来ならば、`fast` チャネルを選択し、 `local-cluster` ハブ クラスターのアップグレードが利用可能になっている手順ですが、2022/12/14現在当該チャネルが適用できないため、設定の確認のみとしています)
++
+
+
+=== Manage Clusters via OpenShift CLI
+
+`ManagedCluster` カスタム Kubernetes リソースを使用して、マネージド クラスターを調べることができます。
+
+.手順
+. _hub_ クラスタのBastion ホストで、現在利用可能なマネージド クラスターを取得します (SNO クラスターの状態によっては、まだ表示されない場合があります)。
++
+[source,sh]
+----
+oc get managedclusters
+----
++
+.Sample Output
+[options=nowrap]
+----
+NAME            HUB ACCEPTED   MANAGED CLUSTER URLS                                           JOINED   AVAILABLE   AGE
+local-cluster   true           https://api.cluster-jrwm6.jrwm6.sandbox1857.opentlc.com:6443   True     True        23h
+my-imported-cluster       true           https://api.sno-jrwm6.sandbox1857.opentlc.com:6443             True     True        33m
+----
+
+. `local-cluster` のプロパティを取得します。
++
+[source,sh]
+----
+oc get managedcluster local-cluster -o yaml
+----
++
+.Sample Output
+----
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  annotations:
+    open-cluster-management/created-via: other
+  creationTimestamp: "2022-03-07T17:27:51Z"
+  finalizers:
+  - managedcluster-import-controller.open-cluster-management.io/cleanup
+  - agent.open-cluster-management.io/klusterletaddonconfig-cleanup
+  - cluster.open-cluster-management.io/api-resource-cleanup
+  - managedcluster-import-controller.open-cluster-management.io/manifestwork-cleanup
+  - managedclusterinfo.finalizers.open-cluster-management.io
+  - open-cluster-management.io/managedclusterrole
+  generation: 2
+  labels:
+    cloud: Amazon
+    clusterID: 319ddfa6-2fdf-4541-bcd2-d4ba1dcaf941
+    feature.open-cluster-management.io/addon-application-manager: available
+    feature.open-cluster-management.io/addon-cert-policy-controller: available
+    feature.open-cluster-management.io/addon-iam-policy-controller: available
+    feature.open-cluster-management.io/addon-policy-controller: available
+    feature.open-cluster-management.io/addon-work-manager: available
+    installer.name: multiclusterhub
+    installer.namespace: open-cluster-management
+    local-cluster: "true"
+    name: local-cluster
+    openshiftVersion: 4.9.7
+    vendor: OpenShift
+  name: local-cluster
+  resourceVersion: "631309"
+  uid: e41dc084-1922-40cd-902c-7da4b4522473
+spec:
+
+[... OUTPUT OMITTED ...]
+----
+
+. YAML 出力を調べて、コンソールに表示される内容と一致することを確認します。 たとえば、このクラスターのラベルと、使用されている OpenShift のバージョンを確認できます。
+
+== Summary
+
+このラボでは、クラウド認証情報を設定する方法を調べ、単一ノードの OpenShift クラスターをアマゾン ウェブ サービスにデプロイしました。 次に、クラスターのラベルとチャネル、およびコマンド ラインからクラスターに関する情報を取得する方法を調べました。
+
+[IMPORTANT]
+====
+次のラボに進む前に、SNO クラスターが正常に進められていることを確認してください。クラスターの構築の完了を待つ必要はないので、先の章にお進みください。
+====
+
+https://github.com/RH-OPEN/hands_on_acm/blob/main/modules/01_Hands_on_RHACM_Cluster_Lifecycle/03_Pooling_And_Organizing_Clusters_Lab.adoc[3章へ]

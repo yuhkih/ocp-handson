@@ -1,11 +1,57 @@
-* 1. OpenShift Pipeline Lab
-** xref:10-pipeline-install.adoc[OpenShift Pipelines インストール]
+
+* 01. OpenShift 基礎
+** xref:01_app-mgmt-basics.adoc[1. コンテナデプロイと管理]
+** xref:01_app-deployment.adoc[2. Web コンソールの利用]
+** xref:02_app-storage-basics.adoc[3. 永続ストレージ]
+** xref:03_machinesets.adoc[4. ノードの動的管理]
+** xref:04_infra-nodes.adoc[5. Infra ノードの作成]
+** xref:06_template-quota-limits.adoc[6. Project のクオータ/制限]
+** xref:07_clusterresourcequota.adoc[7. クラスタのクオータ設定]
+# ** xref:08_disabling-project-self-provisioning.adoc[8. Project セルフプロビジョニング]
+# ** xref:09_networking.adoc[9. Network Policy]
+# ** xref:10_taints-and-tolerations.adoc[10. Taint/Toleration]
+# ** xref:05_ldap-groupsync.adoc[認証プロバイダの追加]
+
+* 20. OpenShift Pipeline Lab
+** xref:10-pipeline-install.adoc[インストール]
 ** xref:11-pipelines.adoc[1. Pipelines -1/2]
 ** xref:12-add-task.adoc[2. Pipelines -2/2]
 ** xref:13-triggers.adoc[3. Tekton Triggers]
 
-* 2. OpenShift GitOps Lab
-** xref:20-GitOps-install.adoc[OpenShift GitOps インストール]
+* 21. OpenShift GitOps Lab
+** xref:20-GitOps-install.adoc[インストール]
 ** xref:21-GitOps.adoc[1. OpenShift GitOps]
 ** xref:22-Kustomize.adoc[2. Kustomizeインテグレーション]
 ** xref:23-Helm.adoc[3. Helmインテグレーション]
+
+* 51. Red Hat OpenShift Service on AWS (ROSA) Lab
+** xref:50-rosa-info.adoc[0. はじめに]
+** xref:51-rosa-hcp-create.adoc[1. ROSA HCPクラスターの作成 [デモ\]]
+** xref:52-rosa-app-deploy.adoc[2. サンプルアプリケーションのデプロイ]
+** xref:53-rosa-ebs.adoc[3. Amazon EBSの利用]
+** xref:54-1-rosa-web-terminal.adoc[4. Web Terminalの利用]
+** xref:54-2-rosa-dev-spaces.adoc[5. Web IDEを利用した開発]
+** xref:55-1-rosa-log-01.adoc[6. ロギング設定 [デモ\]]
+** xref:55-1-rosa-log-02.adoc[7. Amazon CloudWatchでのログ確認]
+** xref:55-2-rosa-monitoring.adoc[8. モニタリング]
+** xref:55-3-rosa-project-metrics.adoc[9. プロジェクトのメトリクスデータの確認]
+** xref:55-4-rosa-alert.adoc[10. アラート設定]
+** xref:56-rosa-nodes.adoc[11. ワーカーノードの追加と削除]
+** xref:57-rosa-upgrade.adoc[12. ROSA HCPクラスターの更新]
+# ** xref:59-X-rosa-efs-01.adoc[X. Amazon EFSの利用準備 [デモ\]]
+# ** xref:59-X-rosa-efs-02.adoc[X. Amazon EFSの利用]
+
+* 61. Azure Red Hat OpenShift (ARO) Lab
+** xref:60-aro-info.adoc[0. はじめに]
+** xref:61-aro-create.adoc[1. AROクラスターの作成 [デモ\]]
+** xref:62-aro-app-deploy.adoc[2. サンプルアプリケーションのデプロイ]
+** xref:63-aro-storage.adoc[3. Azure DiskとAzure Filesの利用]
+** xref:64-aro-web-terminal.adoc[4. Web Terminalの利用]
+** xref:65-aro-dev-spaces.adoc[5. Web IDEを利用した開発]
+** xref:66-aro-logging.adoc[6. ロギング]
+** xref:67-1-aro-monitoring.adoc[7. モニタリング]
+** xref:67-2-aro-project-metrics.adoc[8. プロジェクトのメトリクスデータの確認]
+** xref:67-3-aro-alert.adoc[9. アラート設定]
+** xref:68-aro-nodes.adoc[10. ワーカーノードの追加と削除]
+** xref:69-aro-upgrade.adoc[11. AROクラスターの更新[デモ\]]
+

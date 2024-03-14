@@ -1,0 +1,54 @@
+= Web Terminalの利用
+:navtitle: rosa-web-terminal
+include::_attributes.adoc[]
+
+== 演習の概要
+このモジュールでは、ROSAクラスターのコンソール上で、Web Terminalを実行します。
+
+---
+
+=== Web Terminalの利用
+
+OpenShiftでは、Webコンソール上でTerminalを実行するための「Web Terminal Operator」を標準で提供しています。
+OperatorHubからWeb Terminal Operatorをインストールするだけで、Web Terminalを利用できるようになります。
+
+NOTE: https://www.redhat.com/en/topics/containers/what-is-a-kubernetes-operator[Operator]は、
+Kubernetes/OpenShift上で実行されるコンテナアプリの運用(自動構築や削除など)を自動化するための、
+専用コンテナとなります。Operatorは、対象となるコンテナアプリを運用するためのインタフェースを提供します。
+Operator自身も通常のアプリケーションと同様に、Podとして実行されます。
+
+[Note]
+====
+本演習をワークショップ形式で実施している場合、予めWeb Terminal Operatorがインストールされている
+ROSAクラスターを利用します。自習する場合は、 `cluster-admin` ユーザーなどで、OperatorHubから
+Web Terminal Operatorをインストールしてください。インストール時のパラメーターは、全てデフォルト値を利用します。
+
+image::rosa/web-terminal/operator.png[]
+====
+
+Web Terminal Operatorがインストールされている場合、OpenShiftのWebコンソール上で、 
+`>_` アイコンが表示されていますので、これをクリックします。
+
+image::rosa/web-terminal/icon.png[]
+
+すると、下記の画面が表示されますので、「開始」をクリックして、Web Terminalを実行します。
+オプションでタイムアウト値と、Web Terminalに利用するカスタムのコンテナイメージのURLを指定できます。
+タイムアウト値は、好きな値に変更してください。
+
+image::rosa/web-terminal/init.png[]
+
+NOTE: 「タイムアウト」オプションでは、Terminalを操作していない場合のタイムアウト値(ミリ秒/秒/分/時間単位)を指定できます。
+デフォルトのタイムアウト値は15分です。タイムアウトになると、Web TerminalのPodが自動削除されます。
+
+Web Terminalを実行すると、選択したプロジェクトに「workspace」という接頭辞が付いたPodが自動的に実行されます。
+永続ボリュームによるデータ保存はしていないため、
+ワーカーノードが削除されると、Terminal上で作成したファイルなども削除されますので、ご注意ください。
+
+image::rosa/web-terminal/terminal-ja.png[]
+
+OSやWebブラウザが英語環境の場合、半角フォントのTerminalが利用できます。
+
+image::rosa/web-terminal/terminal-en.png[]
+
+このTerminalでは、OpenShift CLI(ocコマンド)の他に、kubectl, git, scp, sshなどが利用できます。
+色々試してみてください。

@@ -1,0 +1,60 @@
+= サンプルアプリケーションのデプロイ
+:navtitle: rosa-app-deploy
+include::_attributes.adoc[]
+
+
+== 演習の概要
+このモジュールでは、Node.jsのサンプルアプリケーションのデプロイを実行します。
+
+---
+
+=== プロジェクトの作成
+
+アプリケーションの作成場所となる「プロジェクト」を、「新規プロジェクトを作成します」をクリックして作成します。この例では、「test-project20」を入力しています。1つのROSAクラスター内に、同じ名前を持つプロジェクトを複数作成できませんので、プロジェクト名は適宜変更してください。
+
+image::rosa/app-deploy/project-create1.png[]
+image::rosa/app-deploy/project-create2.png[]
+
+
+=== サンプルアプリケーションの作成
+
+プロジェクトの作成が完了したら、「+追加」からサンプルアプリケーションを作成します。「すべてのサービス」を選択して、ビルダーイメージの「Node.js」を選択します。
+
+image::rosa/app-deploy/add-console.png[]
+image::rosa/app-deploy/nodejs-select.png[]
+
+「作成」を選択して、「サンプルを試す」をクリックしてアプリケーションのビルドに利用するGitリポジトリーのURLを指定します。最後に「作成」をクリックします。入力パラメータは全てデフォルトのままにします。
+
+image::rosa/app-deploy/nodejs-create1.png[]
+image::rosa/app-deploy/nodejs-create2.png[]
+
+
+[Note]
+====
+「作成」がクリックできない状態の場合、アプリケーションの「名前」の
+テキストフィールドに任意の名前を入力してください。
+
+image::rosa/app-deploy/app-name.png[]
+====
+
+
+Node.jsのサンプルアプリのデプロイが完了すると、「トポロジー」メニューからデプロイしたアプリのトポロジーや情報を確認できます。トポロジーにある、Node.jsアイコンの右上部にある「矢印」アイコンをクリックすると、デプロイしたNode.jsアプリにアクセスできます。
+
+image::rosa/app-deploy/nodejs-app.png[]
+
+
+[Note]
+====
+OpenShiftは、
+https://access.redhat.com/documentation/ja-jp/openshift_container_platform/4.14/html/builds_using_buildconfig/builds-strategy-s2i-build_build-strategies-docker[Source-to-Image (S2I)] という機能を標準で備えています。これは、OpenShiftにある専用のコンテナビルダーイメージを利用して、アプリケーションのソースコードからのイメージビルドとコンテナ起動を実行する機能です。
+
+image::rosa/app-deploy/s2i-flow.png[]
+
+ビルダーイメージには、最低限、バイナリファイル作成のスクリプト(assemble)と、コンテナ起動時に実行されるスクリプト(run)が含まれます。OpenShift標準のビルダーイメージの他に、ユーザーが作成したカスタムイメージも利用できます。
+
+これらのS2I用スクリプトのイメージが下記となります。S2I用スクリプトは、ビルダーイメージ内で実行可能なスクリプトである必要があります。
+
+image::rosa/app-deploy/s2i-scripts.png[]
+====
+
+
