@@ -152,5 +152,5 @@ NOTE: AWSアカウントでのIAMユーザー作成が許可されていない�
 AWS STSを利用したログ転送の設定が可能です。この場合、AWS IAMの一時的な認証情報として利用される、
 専用のAWS IAMロール(CloudWatchへのログ転送に必要)を作成する必要があります。
 この設定方法については、
-https://docs.openshift.com/rosa/logging/log_collection_forwarding/log-forwarding.html#rosa-cluster-logging-collector-log-forward-sts-cloudwatch_log-forwarding[公式ドキュメント]をご参照ください。
+https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html-single/logging/index#rosa-cluster-logging-collector-log-forward-sts-cloudwatch_configuring-log-forwarding[公式ドキュメント]をご参照ください。
 
