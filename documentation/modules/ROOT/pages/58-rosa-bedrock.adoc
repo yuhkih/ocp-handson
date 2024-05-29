@@ -269,10 +269,12 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: bedrock-sa
-  namespace: test-llm-project20
   annotations:
     eks.amazonaws.com/role-arn: 'arn:aws:iam::XXXXXXXXXXXXXX:role/iam-app-bedrock-role'
 ----
+
+image::rosa/bedrock/serviceaccount.png[]
+
 
 === Deploymentにサービスアカウントの追加
 
