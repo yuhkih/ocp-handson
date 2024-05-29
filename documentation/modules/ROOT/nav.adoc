@@ -38,6 +38,7 @@
 ** xref:55-4-rosa-alert.adoc[10. アラート設定]
 ** xref:56-rosa-nodes.adoc[11. ワーカーノードの追加と削除]
 ** xref:57-rosa-upgrade.adoc[12. ROSA HCPクラスターの更新]
+** xref:58-rosa-bedrock.adoc[[オプション\] Amazon Bedrockアプリケーションの実行]
 # ** xref:59-X-rosa-efs-01.adoc[X. Amazon EFSの利用準備 [デモ\]]
 # ** xref:59-X-rosa-efs-02.adoc[X. Amazon EFSの利用]
 
