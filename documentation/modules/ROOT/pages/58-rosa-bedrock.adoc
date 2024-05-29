@@ -1,4 +1,4 @@
-= [オプション] (作成中) Amazon Bedrockアプリケーションの実行
+= [オプション]Amazon Bedrockアプリケーションの実行
 :navtitle: rosa-bedrock
 include::_attributes.adoc[]
 
@@ -21,8 +21,8 @@ NOTE: このコンテンツを実行する必要はありません。
 
 上記の1つめのブログで紹介されているアプリケーションを変更します。
 このブログでは、Amazon BedrockのClaude 1モデルを利用するためのサンプルコード(app.py)を
-紹介していますが、最新のhttps://aws.amazon.com/jp/bedrock/claude/[Claude 3モデル]
-を利用するためのコードに変更してみます。
+紹介していますが、最新の
+https://aws.amazon.com/jp/bedrock/claude/[Claude 3モデル]を利用するためのコードに変更してみます。
 
 * Amazon BedrockのClaude 3 Haikuモデルを利用するアプリケーションのコードの例 (app.py)
 ```
@@ -187,8 +187,8 @@ Dockerfileとrequirements.txtは、元のブログに記載されていたもの
 OpenShiftコンソールにログインして、「開発者」→「+追加」メニューから、 
 「Gitからのインポート」をクリックします。
 
-NOTE: このモジュールをワークショップ形式で実施している場合、
-サンプルアプリケーションをデプロイするプロジェクト名には、
+NOTE: 本演習をワークショップ形式で実施している場合、
+サンプルアプリケーションをデプロイするプロジェクトには
 「test」から始まる名前を付けてください。
 
 image::rosa/dev-spaces/dev-console-menu.png[]
@@ -233,12 +233,12 @@ image::rosa/bedrock/error.png[]
 NOTE: 本演習をワークショップ形式で実施している場合、この項目を実施する必要はありません。
 
 デプロイしたアプリケーションがAmazon Bedrockを利用するための認証情報を追加します。
-https://aws.amazon.com/jp/blogs/news/fine-grained-iam-roles-for-red-hat-openshift-service-on-aws-rosa-workloads-with-sts/[STS を用いた Red Hat OpenShift Service on AWS (ROSA) ワークロードのためのきめ細かい IAM ロール]
+https://aws.amazon.com/jp/blogs/news/fine-grained-iam-roles-for-red-hat-openshift-service-on-aws-rosa-workloads-with-sts/[STS を用いた ROSA ワークロードのためのきめ細かい IAM ロール]
 に記載してある、ステップ1, 2, 4, 5を順番に実行します。これらのステップ実行時の注意点を記載します。
 
 * ステップ1で設定してある変数は、ご自身の利用している環境に応じて、適宜変更します。
 `APP_NAMESPACE` 変数は、前述の手順でデプロイしたアプリケーションのプロジェクト名(例: `test-llm-project20` など)を指定します。
-また、「AWS_REGION」変数の設定は必要ありません。
+また `AWS_REGION` 変数は必要ありません。
 
 * ステップ2で実行する `oc` CLIは、ROSA HCPクラスターの管理者アカウント( `cluster-admin` など)で実行します。
 
@@ -255,7 +255,7 @@ OpenShiftのコンソールに戻って、「管理者向け表示」→「ユ�
 「ServiceAccount の作成」をクリックします。
 
 下記をコピペして貼り付けます。「XXXXX」となっているところは、
-AWSアカウントのIDに置き換えて、「作成」をクリックします。
+AWSアカウントIDに置き換えて、「作成」をクリックします。
 これで、Amazon Bedrockの認証情報として利用するための、
 「bedrock-sa」という名前のサービスアカウントが作成されます。
 
