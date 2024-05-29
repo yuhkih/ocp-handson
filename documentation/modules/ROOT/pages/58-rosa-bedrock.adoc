@@ -12,17 +12,19 @@ include::_attributes.adoc[]
 
 * https://aws.amazon.com/jp/blogs/news/eks-pod-identity-iam-roles-for-applications/[Amazon EKS Pod Identity を利用した Amazon Bedrock アプリケーションの実行]
 
-* https://aws.amazon.com/jp/blogs/news/fine-grained-iam-roles-for-red-hat-openshift-service-on-aws-rosa-workloads-with-sts/[STS を用いた Red Hat OpenShift Service on AWS (ROSA) ワークロードのためのきめ細かい IAM ロール]
+* https://aws.amazon.com/jp/blogs/news/fine-grained-iam-roles-for-red-hat-openshift-service-on-aws-rosa-workloads-with-sts/[STS を用いた ROSA ワークロードのためのきめ細かい IAM ロール]
 
 
-=== Amazon Bedrockを利用するためのサンプルアプリケーション
+=== [デモ]Amazon Bedrockを利用するためのサンプルアプリケーション
+
+NOTE: このコンテンツを実行する必要はありません。
 
 上記の1つめのブログで紹介されているアプリケーションを変更します。
 このブログでは、Amazon BedrockのClaude 1モデルを利用するためのサンプルコード(app.py)を
-紹介していますが、最新のhttps://aws.amazon.com/jp/bedrock/claude/
-[Claude 3モデル]を利用するためのコードに変更してみます。
+紹介していますが、最新のhttps://aws.amazon.com/jp/bedrock/claude/[Claude 3モデル]
+を利用するためのコードに変更してみます。
 
-* Amazon BedrockのClaude 3モデルを利用するアプリケーションのコードの例 (app.py)
+* Amazon BedrockのClaude 3 Haikuモデルを利用するアプリケーションのコードの例 (app.py)
 ```
 import streamlit as st
 import boto3
@@ -171,7 +173,7 @@ if prompt := st.chat_input("このテキストボックスに文章を入力し�
 * Claude 3の
 https://docs.aws.amazon.com/ja_jp/bedrock/latest/userguide/model-parameters-anthropic-claude-messages.html[Message API]
 を利用するように変更
-* Claude 3の出力形式に従って、JSON形式にデコードした情報からメッセージを抽出するように変更
+* Claude 3の出力をJSON形式にデコードした情報からメッセージを抽出するように変更
 
 Dockerfileとrequirements.txtは、元のブログに記載されていたものと同じです。
 これらのソースコードを、下記のGitHubリポジトリにアップロードしています。
@@ -226,14 +228,16 @@ image::rosa/bedrock/topology.png[]
 image::rosa/bedrock/error.png[]
 
 
-=== Amazon Bedrockを利用するためのIAMロールの追加
+=== [デモ]Amazon Bedrockを利用するためのIAMロールの追加
+
+NOTE: 本演習をワークショップ形式で実施している場合、この項目を実施する必要はありません。
 
 デプロイしたアプリケーションがAmazon Bedrockを利用するための認証情報を追加します。
 https://aws.amazon.com/jp/blogs/news/fine-grained-iam-roles-for-red-hat-openshift-service-on-aws-rosa-workloads-with-sts/[STS を用いた Red Hat OpenShift Service on AWS (ROSA) ワークロードのためのきめ細かい IAM ロール]
 に記載してある、ステップ1, 2, 4, 5を順番に実行します。これらのステップ実行時の注意点を記載します。
 
 * ステップ1で設定してある変数は、ご自身の利用している環境に応じて、適宜変更します。
-`APP_NAMESPACE` 変数は、前述の手順でデプロイしたアプリケーションのプロジェクト名(例: test-llm-project20 など)を指定します。
+`APP_NAMESPACE` 変数は、前述の手順でデプロイしたアプリケーションのプロジェクト名(例: `test-llm-project20` など)を指定します。
 また、「AWS_REGION」変数の設定は必要ありません。
 
 * ステップ2で実行する `oc` CLIは、ROSA HCPクラスターの管理者アカウント( `cluster-admin` など)で実行します。
@@ -255,7 +259,7 @@ AWSアカウントのIDに置き換えて、「作成」をクリックします
 これで、Amazon Bedrockの認証情報として利用するための、
 「bedrock-sa」という名前のサービスアカウントが作成されます。
 
-NOTE: このモジュールをワークショップ形式で実施している場合、
+NOTE: 本演習をワークショップ形式で実施している場合、
 インストラクターがAWSアカウントIDを案内します。
 
 [.console-input]
@@ -276,7 +280,7 @@ OpenShiftのDeploymentリソースに、作成したサービスアカウント�
 これで、既存のサンプルアプリケーションが、Amazon Bedrockの認証情報を利用できるようになります。
 
 「Deployments」メニューから「sample-llm-aws」デプロイメントを選択して、
-「YAML」タブから下記を、「spec:」と「containers:」の間に挿入して「保存」をクリックします。
+「YAML」タブから下記を「spec:」と「containers:」の間に挿入して「保存」をクリックします。
 
 [.console-input]
 [source,sh]
