@@ -15,7 +15,7 @@ include::_attributes.adoc[]
 * https://aws.amazon.com/jp/blogs/news/fine-grained-iam-roles-for-red-hat-openshift-service-on-aws-rosa-workloads-with-sts/[STS を用いた ROSA ワークロードのためのきめ細かい IAM ロール]
 
 
-=== [デモ]Amazon Bedrockを利用するためのサンプルアプリケーション
+=== [デモ] Amazon Bedrockを利用するためのサンプルアプリケーション
 
 NOTE: このコンテンツを実行する必要はありません。
 
@@ -228,7 +228,7 @@ image::rosa/bedrock/topology.png[]
 image::rosa/bedrock/error.png[]
 
 
-=== [デモ]Amazon Bedrockを利用するためのIAMロールの追加
+=== [デモ] Amazon Bedrockを利用するためのIAMロールの追加
 
 NOTE: 本演習をワークショップ形式で実施している場合、この項目を実施する必要はありません。
 
@@ -244,7 +244,7 @@ https://aws.amazon.com/jp/blogs/news/fine-grained-iam-roles-for-red-hat-openshif
 
 * ステップ3を実行する必要はありません。
 
-* ステップ5にあるIAMポリシーについて、元のブログではAmazon S3をアクセスするための
+* ステップ5にあるIAMポリシーについて、元のブログではAmazon S3にアクセスするための
 IAMポリシーをアタッチしていますが、ここではAmazon BedrockにアクセスするためのIAMポリシーとして、
 `AmazonBedrockFullAccess` を指定するようにします。
 
