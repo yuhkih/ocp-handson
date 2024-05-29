@@ -222,7 +222,7 @@ image::rosa/bedrock/port.png[]
 image::rosa/bedrock/topology.png[]
 
 すると、次のようなサンプルアプリケーションの画面が表示されます。
-この段階では、Bedrockを利用するための認証情報が無いため、
+この段階では、Bedrockを利用するための認証情報が無いため、テキストボックスに何か入力しても、
 画面のように `NoCredentialsError: Unable to locate credentials` などが表示されるはずです。
 
 image::rosa/bedrock/error.png[]
