@@ -255,12 +255,13 @@ OpenShiftのコンソールに戻って、「管理者向け表示」→「ユ�
 「ServiceAccount の作成」をクリックします。
 
 下記をコピペして貼り付けます。「XXXXX」となっているところは、
-AWSアカウントIDに置き換えて、「作成」をクリックします。
+AWSアカウントIDに置き換えて「作成」をクリックします。
 これで、Amazon Bedrockの認証情報として利用するための、
 「bedrock-sa」という名前のサービスアカウントが作成されます。
 
 NOTE: 本演習をワークショップ形式で実施している場合、
 インストラクターがAWSアカウントIDを案内します。
+また「YYYYY」となっているところも、ご案内するランダムIDに置き換えてください。
 
 [.console-input]
 [source,sh]
@@ -270,7 +271,7 @@ kind: ServiceAccount
 metadata:
   name: bedrock-sa
   annotations:
-    eks.amazonaws.com/role-arn: 'arn:aws:iam::XXXXXXXXXXXXXX:role/iam-app-bedrock-role'
+    eks.amazonaws.com/role-arn: 'arn:aws:iam::XXXXXXXXXXXXXX:role/iam-app-bedrock-role-YYYYYYYYY'
 ----
 
 image::rosa/bedrock/serviceaccount.png[]
