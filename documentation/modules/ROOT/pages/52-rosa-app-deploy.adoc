@@ -50,6 +50,7 @@ image::rosa/app-deploy/nodejs-app.png[]
 [Note]
 ====
 アプリケーションの削除(特定のラベルが付けられた全リソースの一括削除)は、「アプリケーションの削除」から実施できます。
+
 image::rosa/app-deploy/nodejs-app-delete.png[]
 
 ただし、2024年6月時点ではバグのためローカルユーザーの権限では削除できないようになっています。
