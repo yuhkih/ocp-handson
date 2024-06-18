@@ -56,7 +56,7 @@ image::rosa/app-deploy/nodejs-app.png[]
 image::rosa/app-deploy/nodejs-app-delete.png[]
 
 ただし、2024年6月時点ではバグのため、ローカルユーザーの権限ではコンソールから削除できません。
-そのため、作成したアプリケーションを削除したい場合、次のいずれかの方法を実行してください。
+そのため、作成したアプリケーションを削除したい場合、次のいずれかの方法を実行します。
 
 a. ROSAクラスターの管理者アカウント( `cluster-admin` など)で再ログインして、対象のアプリケーションを削除
 b. https://rh-open.github.io/ocp-handson/openshift-services/54-1-rosa-web-terminal.html[Web Terminalの利用]で扱うOpenShift Web Terminalの端末から、OpenShiftのCLIであるocコマンドを実行
