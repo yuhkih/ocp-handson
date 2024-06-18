@@ -25,6 +25,8 @@ image::rosa/app-deploy/nodejs-select.png[]
 
 「作成」を選択して、「サンプルを試す」をクリックしてアプリケーションのビルドに利用するGitリポジトリーのURLを指定します。最後に「作成」をクリックします。入力パラメータは全てデフォルトのままにします。
 
+NOTE: Red Hatの製品ドキュメントに、https://access.redhat.com/documentation/ja-jp/red_hat_build_of_node.js/20/html-single/node.js_runtime_guide/index#developing-and-deploying-a-nodejs-application_introduction-to-application-development-with-runtime[サンプルアプリケーションの作成ガイド]を記載していますので参考にしてください。
+
 image::rosa/app-deploy/nodejs-create1.png[]
 image::rosa/app-deploy/nodejs-create2.png[]
 
