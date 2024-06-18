@@ -47,8 +47,9 @@ image::rosa/app-deploy/nodejs-app.png[]
 このアプリケーションに付けられる「名前」は、OpenShift上で作成されるリソースに付けられるラベルとして扱われます。
 この例だと「nodejs-ex-git」という名前が付けられており、関連するリソースに「app=nodejs-ex-git」というラベル(上記画像の青四角部分)が付けられていることを確認できます。
 
-[Note]
-====
+
+=== サンプルアプリケーションの削除
+
 アプリケーションの削除(特定のラベルが付けられた全リソースの一括削除)は、「アプリケーションの削除」から実施できます。
 
 image::rosa/app-deploy/nodejs-app-delete.png[]
@@ -62,7 +63,7 @@ b. https://rh-open.github.io/ocp-handson/openshift-services/54-1-rosa-web-termin
 $ oc delete all -l app=nodejs-ex-git
 $ oc delete secrets -l app=nodejs-ex-git
 ```
-====
+
 
 
 [Note]
