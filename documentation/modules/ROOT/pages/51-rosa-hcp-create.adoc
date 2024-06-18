@@ -224,6 +224,7 @@ https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition
 MultiAZ構成のワーカーノードを利用する場合は、SingleAZ構成の時と同様に、 `rosa create cluster` コマンド実行時に `subnet-ids` オプションで、MultiAZ構成を取るためのパブリック/プライベートサブネットを指定します。
 
 AWSリージョンで利用可能なEC2インスタンスのタイプにも依存しますが、最小で 4vCPU/RAM8GiB のインスタンスを、ワーカーノードとして利用できます。
+ワーカーノードのデフォルトのEC2インスタンスタイプは、m5.xlarge(4vCPU/RAM16GiB)です。
 ROSA HCPクラスター作成時に、オプションとしてワーカーノードのインスタンスタイプ(例: `--compute-machine-type c5.xlarge` )や台数(例: `--replicas 3` )を指定できます。
 ====
 
