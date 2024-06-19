@@ -95,7 +95,7 @@ IDEの画面が表示されます。ここに記載してあるメッセージ�
 ====
 Workspaceがうまく起動しなくてWeb IDEを開けない場合は、以下を試してみてください。
 
-1. 左サイドメニューにある「Workspaces」から対象のWorkspaceを削除して、Workspaceを改めて作成
+1. Dev Spacesコンソールの左サイドメニューにある「Workspaces」から対象のWorkspaceを削除して、Workspaceを改めて作成
 2. 1. で削除できない場合、一旦Dev Spacesのコンソールを閉じて、ROSAクラスターの管理者ユーザー( `cluster-admin` など)で
 再ログインして、<ユーザーアカウント名>-devspacesプロジェクトを削除した後に、ローカルユーザーで再ログインしてWorkspaceを改めて作成
 
