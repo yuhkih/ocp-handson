@@ -55,5 +55,5 @@ https://cloud.redhat.com/[Red Hatアカウント] ( `Create an account` から�
 ROSA HCP環境を利用したセルフサービスのハンズオンを、無償で実施いただくためのサービスを別途ご提供しています。
 詳細については、次の資料をご参照ください。
 
-* https://rh-open.github.io/ocp-handson/openshift-services/_images/rosa/pdf/202406-rosa-hoe.pdf[ROSAハンズオン無償体験]
+* https://rh-open.github.io/ocp-handson/openshift-services/_images/rosa/pdf/202406-rosa-hoe.pdf[ROSAハンズオン無償体験(PDFファイル)]
 
