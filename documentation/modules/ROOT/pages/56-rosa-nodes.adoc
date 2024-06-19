@@ -17,9 +17,15 @@ ROSAのワーカーノードは、Machinepoolというリソース単位で管�
 デフォルトで利用されているMachinepoolは、 `rosa list machinepool` コマンドで確認します。
 
 NOTE: 本演習をワークショップ形式で実施している場合、 `-c` オプションで指定するROSAクラスター名は、
-インストラクターによって案内されます。以下の手順は、 `hcp-01` という名前のROSAクラスターを例とします。
+`rosa list cluster` コマンドで表示される名前を指定してください。
+複数のクラスターがある場合は、各受講者にどのクラスターを使うべきかをご案内します。
+以下の手順は、 `hcp-01` という名前のROSAクラスターを例とします。
 
 ```
+$ rosa list cluster
+ID                                NAME    STATE  TOPOLOGY
+280scqkn8ocjoochasq423tg4donvpaq  hcp-01  ready  Hosted CP
+
 $ rosa list machinepool -c hcp-01                             
 ID       AUTOSCALING  REPLICAS  INSTANCE TYPE  LABELS    TAINTS    AVAILABILITY ZONE  SUBNET                    VERSION  AUTOREPAIR  
 workers  No           2/2       m5.xlarge                          us-east-2a         subnet-0087cb7bb3f628793  4.14.2   Yes
