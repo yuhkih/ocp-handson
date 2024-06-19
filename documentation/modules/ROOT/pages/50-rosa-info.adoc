@@ -48,3 +48,11 @@ ROSAクラスターのアクセス情報は、インストラクターがご案�
 * 無料で作成可能な
 https://cloud.redhat.com/[Red Hatアカウント] ( `Create an account` から作成)
 ====
+
+
+=== 無償で実施可能なROSA Hands On Experience (HoE)
+
+ROSA HCP環境を利用したセルフサービスのハンズオンを、無償で実施いただける環境を別途ご用意しています。
+詳細については、次の資料をご参照ください。
+https://rh-open.github.io/ocp-handson/openshift-services/_images/rosa/pdf/202406-rosa-hoe.pdf[ROSAハンズオン無償体験]
+
