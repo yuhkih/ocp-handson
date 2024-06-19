@@ -205,8 +205,9 @@ https://github.com/h-kojima/sample-llm-aws/
 
 image::rosa/bedrock/git-import.png[]
 
-この画面を下にスクロールしていき、ターゲットポートに「8501」を入力します。
-このポートは、前述したコードのDockerfileでアプリケーション起動時に指定されています。
+この画面を下にスクロールしていき、アプリケーション名に「sample-llm-aws-app」、名前に「sample-llm-aws」
+ターゲットポートに「8501」を入力します。
+このターゲットポートは、前述したコードのDockerfileでアプリケーション起動時に指定されています。
 
 image::rosa/bedrock/port.png[]
 
