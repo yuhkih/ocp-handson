@@ -229,13 +229,13 @@ image::rosa/bedrock/topology.png[]
 image::rosa/bedrock/error.png[]
 
 
-=== [デモ] Amazon Bedrockを利用するためのIAMロールの追加
+=== [デモ] Amazon Bedrockを利用するためのIAMロールの作成
 
 NOTE: 本演習をワークショップ形式で実施している場合、この項目を実施する必要はありません。
 
 デプロイしたアプリケーションがAmazon Bedrockを利用するための認証情報を追加します。
 https://aws.amazon.com/jp/blogs/news/fine-grained-iam-roles-for-red-hat-openshift-service-on-aws-rosa-workloads-with-sts/[STS を用いた ROSA ワークロードのためのきめ細かい IAM ロール]
-に記載してある、ステップ1, 2, 4, 5を順番に実行します。これらのステップ実行時の注意点を記載します。
+に記載してあるステップ1, 2, 4, 5を順番に実行して、次の「サービスアカウントの作成」で利用するIAMロールを作成します。これらのステップ実行時の注意点を記載します。
 
 * ステップ1で設定してある変数は、ご自身の利用している環境に応じて、適宜変更します。
 `APP_NAMESPACE` 変数は、前述の手順でデプロイしたアプリケーションのプロジェクト名(例: `test-llm-project20` など)を指定します。
@@ -261,10 +261,8 @@ AWSアカウントIDに置き換えて「作成」をクリックします。
 「bedrock-sa」という名前のサービスアカウントが作成されます。
 
 NOTE: 本演習をワークショップ形式で実施している場合、
-インストラクターがAWSアカウントIDを案内します。
-また「YYYYY」となっているところも、ご案内するランダムIDに置き換えてください。
-本演習を自習している場合、「iam-app-bedrock-role-YYYYY」を
-ご自身で作成したIAMロール名に置き換えてください。
+インストラクターがAWSのARNをご案内します。
+本演習を自習している場合、前の手順で作成したIAMロールのARNに置き換えてください。
 
 [.console-input]
 [source,sh]
