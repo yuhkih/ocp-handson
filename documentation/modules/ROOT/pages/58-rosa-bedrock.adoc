@@ -1,4 +1,4 @@
-= [オプション] Amazon Bedrockアプリケーションの実行
+= Amazon Bedrockアプリケーションの実行
 :navtitle: rosa-bedrock
 include::_attributes.adoc[]
 
