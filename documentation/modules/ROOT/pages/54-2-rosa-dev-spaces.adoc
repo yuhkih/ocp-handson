@@ -12,7 +12,7 @@ include::_attributes.adoc[]
 Red Hat OpenShift Dev Spaces (以降はDev Spacesと記載)は、OpenShift上で使える
 KubernetesネイティブなWeb IDEであり、オープンソースプロジェクトの
 https://eclipse.dev/che/[Eclipse Che]をベースとして開発・提供しています。
-Dev Spacesは、OpenShiftの標準機能の1つであるため、ROSA HCPクラスターの利用者は
+Dev Spacesは、OpenShift Container Platformの標準機能の1つであるため、ROSA HCPクラスターの利用者は
 追加料金を支払う必要なく利用できます。
 
 Dev Spacesは、OpenShiftのOperatorとして提供されており、
@@ -96,7 +96,7 @@ IDEの画面が表示されます。ここに記載してあるメッセージ�
 Workspaceがうまく起動しなくてWeb IDEを開けない場合は、以下を試してみてください。
 
 1. Dev Spacesコンソールの左サイドメニューにある「Workspaces」から対象のWorkspaceを削除して、Workspaceを改めて作成
-2. 1. で削除できない場合、一旦Dev Spacesのコンソールを閉じて、ROSAクラスターの管理者ユーザー( `cluster-admin` など)で
+2. 1. で削除できない場合、一旦Dev Spacesのコンソールを閉じて、OpenShiftの管理者ユーザーで
 再ログインして、<ユーザーアカウント名>-devspacesプロジェクトを削除した後に、ローカルユーザーで再ログインしてWorkspaceを改めて作成
 
 image::rosa/dev-spaces/devspaces-project-delete.png[]

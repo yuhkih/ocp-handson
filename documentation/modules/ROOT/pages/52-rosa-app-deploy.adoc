@@ -10,7 +10,7 @@ include::_attributes.adoc[]
 
 === プロジェクトの作成
 
-アプリケーションの作成場所となる「プロジェクト」を、「新規プロジェクトを作成します」をクリックして作成します。この例では、「test-project20」を入力しています。1つのROSAクラスター内に、同じ名前を持つプロジェクトを複数作成できませんので、プロジェクト名は適宜変更してください。
+アプリケーションの作成場所となる「プロジェクト」を、「新規プロジェクトを作成します」をクリックして作成します。この例では、「test-project20」を入力しています。1つのOpenShiftクラスター内に、同じ名前を持つプロジェクトを複数作成できませんので、プロジェクト名は適宜変更してください。
 
 image::rosa/app-deploy/project-create1.png[]
 image::rosa/app-deploy/project-create2.png[]
@@ -52,7 +52,7 @@ image::rosa/app-deploy/nodejs-app.png[]
 ====
 アプリケーションの外部アクセス用のURLについては自動作成されますが、
 サンプルアプリケーション作成画面に表示される「詳細なルーティングオプションの表示」から任意の名前も指定できます。
-ROSAクラスターで利用されるドメイン名(ROSAクラスターのコンソールのURLから確認できる `apps.rosa.XXXXX.openshiftapps.com` )を末尾に付けたホスト名を指定することで、
+OpenShiftクラスターで利用されるドメイン名(OpenShiftクラスターのコンソールのURLから確認できる `apps.XXXXX.openshiftapps.com` )を末尾に付けたホスト名を指定することで、
 アプリケーション開発時のコンソールテストに利用できます。
 
 次の例では、`nodejs001-project20.apps.rosa.hcp-01.n7b6.p3.openshiftapps.com` というホスト名から、
@@ -71,7 +71,7 @@ image::rosa/app-deploy/nodejs-app-delete.png[]
 ただし、2024年6月時点ではバグのため、ローカルユーザーの権限ではコンソールから削除できません。
 そのため、作成したアプリケーションを削除したい場合、次のいずれかの方法を実行します。
 
-a. ROSAクラスターの管理者アカウント( `cluster-admin` など)で再ログインして、対象のアプリケーションを削除
+a. OpenShiftクラスターの管理者アカウントで再ログインして、対象のアプリケーションを削除
 b. https://rh-open.github.io/ocp-handson/openshift-services/54-1-rosa-web-terminal.html[Web Terminalの利用]で扱うOpenShift Web Terminalの端末から、OpenShiftのCLIであるocコマンドを実行
 ```
 $ oc delete all -l app=nodejs-ex-git

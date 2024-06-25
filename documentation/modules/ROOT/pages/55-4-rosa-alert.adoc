@@ -50,7 +50,7 @@ data:
 Prometheusのフォーマットに沿ったメトリクスを出力するアプリケーションを作成しておく必要があります。
 そのためのサンプルアプリがありますので、まずはこちらを適当なプロジェクトで作成します。
 
-プロジェクトを選択して、ROSAクラスターのWebコンソール右上にある、「+」アイコンをクリックします。
+プロジェクトを選択して、OpenShiftクラスターのWebコンソール右上にある、「+」アイコンをクリックします。
 
 NOTE: OpenShiftでは、このインタフェースからYAML/JSON形式のテキストを直接入力して、Podなどのリソースを作成できます。
 
@@ -58,7 +58,7 @@ image::rosa/alert/yaml-input1.png[]
 
 サンプルアプリケーションを実行するための、次のYAML形式のテキストを入力して「作成」をクリックします。
 これによって、レプリカ数2の「prometheus-example-app」Podが実行されます。
-また、PrometehusメトリクスをROSAクラスター内部で見るために利用する「prometheus-example-app」
+また、PrometehusメトリクスをOpenShiftクラスター内部で見るために利用する「prometheus-example-app」
 https://kubernetes.io/docs/concepts/services-networking/service/[Service]も、同時に作成しています。
 
 [.console-input]
