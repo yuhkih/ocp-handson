@@ -20,10 +20,15 @@ Operator自身も通常のアプリケーションと同様に、Podとして実
 [Note]
 ====
 本演習をワークショップ形式で実施している場合、予めWeb Terminal Operatorがインストールされている
-ROSAクラスターを利用します。自習する場合は、 `cluster-admin` ユーザーなどで、OperatorHubから
+OpenShiftクラスターを利用します。自習する場合は、OpenShiftの管理者ユーザーなどで、OperatorHubから
 Web Terminal Operatorをインストールしてください。インストール時のパラメーターは、全てデフォルト値を利用します。
 
 image::rosa/web-terminal/operator.png[]
+
+ROSAなどのAWS STSを利用しているOpenShiftクラスターを利用している場合、Operatorのインストール時にIAMのARNの入力を求められる場合があります。その時は、何の権限も持たないIAMユーザーをAWSコンソールから適宜作成して、そのユーザーのARNを利用するようにして下さい。
+
+image::rosa/web-terminal/install.png[]
+image::rosa/web-terminal/iam-arn.png[]
 ====
 
 Web Terminal Operatorがインストールされている場合、OpenShiftのWebコンソール上で、 
