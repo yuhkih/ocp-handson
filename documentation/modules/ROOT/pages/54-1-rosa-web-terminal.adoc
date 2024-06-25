@@ -25,7 +25,7 @@ Web Terminal Operatorをインストールしてください。インストー�
 
 image::rosa/web-terminal/operator.png[]
 
-ROSAなどのAWS STSを利用しているOpenShiftクラスターを利用している場合、Operatorのインストール時にIAMのARNの入力を求められる場合があります。その時は、何の権限も持たないIAMユーザーをAWSコンソールから適宜作成して、そのユーザーのARNを利用するようにして下さい。
+ROSAなどのAWS STSを利用しているOpenShiftクラスターを利用している場合、Operatorのインストール時にIAMのARNの入力を求められる場合があります。その時は、何も権限を付与していないIAMユーザー(下記画像の例では `user00001` )をAWSコンソールから適宜作成して、そのユーザーのARNを利用するようにして下さい。
 
 image::rosa/web-terminal/install.png[]
 image::rosa/web-terminal/iam-arn.png[]
