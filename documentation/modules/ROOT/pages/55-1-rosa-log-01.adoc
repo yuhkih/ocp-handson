@@ -110,6 +110,7 @@ spec:
    - name: cw
      type: cloudwatch
      cloudwatch:
+       groupPrefix: hcp-01
        region: ap-northeast-1
      secret:
         name: cw-secret
