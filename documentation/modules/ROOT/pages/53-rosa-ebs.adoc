@@ -71,6 +71,10 @@ spec:
      volumeMounts:
        - mountPath: "/mnt/ebs-data"
          name: ebs-storage-vol
+     securityContext:
+       allowPrivilegeEscalation: false
+       seccompProfile:
+         type: RuntimeDefault
 ----
 
 image::rosa/ebs/pod-create1.png[]
