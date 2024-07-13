@@ -18,7 +18,7 @@ ROSAクラスターでは、ROSAの利用者が作成したプロジェクトで
 「user-workload-monitoring-config」設定マップ(ConfigMap)を、
 次のように末尾3行の「alertmanager: ...」を追加して保存します。
 
-NOTE: 本演習をワークショップ形式で実施している場合、この設定はすでに適用済みとなっています。
+NOTE: 本演習を自習している時以外、この設定を適用する必要はありません。
 
 [.console-input]
 [source,sh]

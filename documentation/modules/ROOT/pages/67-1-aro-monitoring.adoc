@@ -108,7 +108,7 @@ https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[nodeSel
 メトリクスデータが保存されるようになります。
 
 
-NOTE: 本演習をワークショップ形式で実施している場合、この設定はすでに適用済みとなっています。
+NOTE: 本演習を自習している時以外、この設定を適用する必要はありません。
 
 [.console-input]
 [source,sh]

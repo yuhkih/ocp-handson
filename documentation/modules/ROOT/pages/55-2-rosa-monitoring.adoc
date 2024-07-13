@@ -94,7 +94,7 @@ OpenShiftでのConfigMapは、コンソールの「管理者向け表示」→�
 OpenShift CLI(ocコマンド)を用いた設定方法については、
 https://docs.openshift.com/rosa/monitoring/configuring-the-monitoring-stack.html#configuring_persistent_storage_configuring-the-monitoring-stack[公式ドキュメント]をご参照ください。
 
-NOTE: 本演習をワークショップ形式で実施している場合、この設定はすでに適用済みとなっています。
+NOTE: 本演習を自習している時以外、この設定を適用する必要はありません。
 
 [.console-input]
 [source,sh]

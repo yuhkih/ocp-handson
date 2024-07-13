@@ -19,7 +19,9 @@ Operator自身も通常のアプリケーションと同様に、Podとして実
 
 [Note]
 ====
-本演習をワークショップ形式で実施している場合、予めWeb Terminal Operatorがインストールされている
+NOTE: 本演習を自習している時以外、この丸四角で囲んでいる部分は実行しないで下さい。
+
+本演習では、予めWeb Terminal Operatorがインストールされている
 OpenShiftクラスターを利用します。自習する場合は、OpenShiftの管理者ユーザーなどで、OperatorHubから
 Web Terminal Operatorをインストールしてください。インストール時のパラメーターは、全てデフォルト値を利用します。
 

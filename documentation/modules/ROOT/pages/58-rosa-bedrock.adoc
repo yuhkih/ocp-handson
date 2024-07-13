@@ -231,7 +231,7 @@ image::rosa/bedrock/error.png[]
 
 === [デモ] Amazon Bedrockを利用するためのIAMロールの作成
 
-NOTE: 本演習をワークショップ形式で実施している場合、この項目を実施する必要はありません。
+NOTE: 本演習を自習している時以外、この項目は実行しないで下さい。
 
 デプロイしたアプリケーションがAmazon Bedrockを利用するための認証情報を追加します。
 https://aws.amazon.com/jp/blogs/news/fine-grained-iam-roles-for-red-hat-openshift-service-on-aws-rosa-workloads-with-sts/[STS を用いた ROSA ワークロードのためのきめ細かい IAM ロール]
