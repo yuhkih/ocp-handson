@@ -1,0 +1,47 @@
+= Amazon CloudWatchでのログ確認
+:navtitle: rosa-log-02
+include::_attributes.adoc[]
+
+== 演習の概要
+このモジュールでは、Amazon CloudWatchのコンソールから、転送されたログを確認します。
+
+---
+
+=== Amazon CloudWatchコンソールでのログ確認
+
+https://console.aws.amazon.com/cloudwatch/home[Amazon CloudWatchのコンソール]にアクセスして、
+ROSAクラスターのリージョン(本演習環境では東京リージョン. `ap-northeast-1` )を選択します。
+すると、ROSAクラスターから転送されたログのグループを確認できます。
+アプリケーション(application)、監査(audit)、インフラストラクチャー(infrastructure)に関するロググループが作成されています。
+
+NOTE: 本演習をワークショップ形式で実施している場合、AWSコンソールにアクセスするためのアカウントは、インストラクターが案内します。
+
+image::rosa/log-02/loggroup.png[]
+
+末尾に「application」という名前が付いているロググループを選択して、ログストリームの1つを選択します。
+ここでは、 `test-ebs` Podのログを確認することにしてみます。
+各ログストリームには受講者が作成したプロジェクト名(下の画像だと、 `test-project20` )が付いていますので、
+自身が作成したプロジェクト名が付いたログストリームを選択します。
+
+NOTE: 前の演習の「Cluster Log Forwarder」の設定で、
+プロジェクトごとのロググループの作成や、ロググループの名前に含まれるデフォルトの接頭辞を変更する設定ができます。
+具体的な設定方法については、
+https://access.redhat.com/documentation/ja-jp/openshift_container_platform/4.14/html/logging/log-collection-and-forwarding#cluster-logging-collector-log-forward-cloudwatch_log-forwarding[公式ドキュメント]をご参照ください。
+
+
+image::rosa/log-02/logstream.png[]
+
+
+前の演習で作成した　`test-ebs` Podは、「hello ebs」というログを30秒間隔で出力し続けており、
+そのログが `message` の所で表示されています。
+これによって、ログ転送が正常に機能していることを確認できます。
+
+image::rosa/log-02/logforward-confirm.png[]
+
+ログ転送については、他のアプリケーションをデプロイすることでも確認してみることができます。
+色々試してみてください。
+
+NOTE: こうしたログをもとに、ROSAの利用者は
+https://docs.aws.amazon.com/ja_jp/AmazonCloudWatch/latest/logs/Subscriptions.html[CloudWatchのサブスクリプションを使用したログデータのリアルタイム処理]
+などを実行できるようになります。
+

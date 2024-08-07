@@ -1,0 +1,545 @@
+= OpenShift GitOps Lab - Kustomizeインテグレーション
+:navtitle: kustomize
+include::_attributes.adoc[]
+
+== Kustomize
+
+https://kustomize.io/[Kustomize]はKubernetesのマニフェスト管理ツールです。
+Kubernetesマニフェストをフォークせずに、構成にオプションを追加、削除、更新します。
+スタンドアロンでも、kubectl (または oc)のネイティブ機能としても利用できます。
+
+kustomizeの基本
+
+* configurationのカスタマイズに対する宣言的なアプローチ
+* 任意の数の、個別にカスタマイズされたKubernetes configurationを管理
+* kustomizeが使用するすべてのアーティファクトはプレーンなYAML
+* "templateless" なテンプレートシステム; レポジトリをフォークせずにYAMLを使用する
+
+image::gitops/kustomize/kustomize-001.png[]
+
+この演習では、Kustomizeの構文について調べて、Kustomizeを利用するアプリケーションをデプロイします。
+まず最初に、kustomize CLIとkubectlコマンドに組み込まれた機能について説明します。
+
+== Kustomize CLI
+Kustomizeは元のYAMLをそのまま残しながら、YAMLに基づいてネイティブのKubernetesマニフェストを構築することができます。 
+これは `templateless` テンプレートシステムで実現され、kustomization.yamlファイルを提供することによって行われます。
+
+buildコマンドとeditコマンドのふたつのサブコマンドに焦点を当てます。
+buildコマンドは、YAMLソース(pathまたはURLを介して) を受け取り、kubectl createに渡すことができる新しいYAMLを作成します。
+
+演習を進めるにあたり、この演習用のgitリポジトリをユーザのホームディレクトリにクローンします。
+
+[.console-input]
+[source,sh]
+----
+cd ~
+sudo git clone https://github.com/redhat-developer-demos/openshift-gitops-examples.git
+cd openshift-gitops-examples
+----
+
+components/kustomize-build/ディレクトリで作業します。
+
+[.console-input]
+[source,sh]
+----
+cd components/kustomize-build/
+----
+
+ここにkustomization.yamlとwelcome.yamlのふたつのファイルがあるはずです。lsコマンドを実行します、
+
+[.console-input]
+[source,sh]
+----
+ls -l
+----
+
+該当のファイルが確認できます。
+
+[source,sh]
+----
+total 8
+-rw-r--r--. 1 root root 298 Nov 11 08:18 kustomization.yaml
+-rw-r--r--. 1 root root 384 Nov 11 08:18 welcome.yaml
+----
+
+rootユーザ以外にも編集できるように、ファイルのパーミッションを変更しておきましょう。下記のコマンドを実行します。
+
+[.console-input]
+[source,sh]
+----
+sudo chmod 666 kustomization.yaml welcome.yaml
+----
+
+https://raw.githubusercontent.com/redhat-developer-demos/openshift-gitops-examples/main/components/kustomize-build/welcome.yaml[welcome.yaml] を見てみましょう。特別なファイルではなくwelcome-phpという名前のアプリケーションをデプロイするKubernetesのマニフェストです。
+
+[source,yaml]
+----
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: welcome-php
+  name: welcome-php
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: welcome-php
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: welcome-php
+    spec:
+      containers:
+      - image: quay.io/redhatworkshops/welcome-php:latest
+        name: welcome-php
+        resources: {}
+----
+
+
+例えば、このマニフェストを編集せずにlabelを追加したい場合はどうでしょうか? 
+ここで https://raw.githubusercontent.com/redhat-developer-demos/openshift-gitops-examples/main/components/kustomize-build/kustomization.yaml[kustomization.yaml] ファイルの出番です。
+
+[source,yaml]
+----
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ./welcome.yaml
+patchesJson6902:
+  - target:
+      version: v1
+      group: apps
+      kind: Deployment
+      name: welcome-php
+    patch: |-
+      - op: add
+        path: /metadata/labels/testkey
+        value: testvalue
+----
+
+
+ファイルを見てわかるように内容はそれほど多くはありません。 主に、resourcesセクションと patchesJson6902セクションです。
+resourcesは他のマニフェストが保存されているファイル、ディレクトリおよび、またはURLの配列を指します。この例ではwelcome.yamlを指定しています。 patchesJson6902 は、RFC6902に沿ったkustomizeがサポートするパッチです。patchesJson6902パッチは、welcome.yamlマニフェストにtestkey: testvalueというlabelを追加するものです。
+
+NOTE: https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/[公式ドキュメントサイト]で、パッチ適用に使用できるオプションについて読むことができます。
+
+
+次を実行し、このマニフェストをビルドします。
+
+[.console-input]
+[source,sh]
+----
+kustomize build .
+----
+
+
+結果が出力され、新しいラベルtestkey: testvalueがマニフェストに追加されたことがわかります。
+
+[source,yaml]
+----
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: welcome-php
+    testkey: testvalue
+  name: welcome-php
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: welcome-php
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: welcome-php
+    spec:
+      containers:
+      - image: quay.io/redhatworkshops/welcome-php:latest
+        name: welcome-php
+        resources: {}
+----
+
+YAMLに記述する代わりにkustomize editコマンドを使用することもできます。たとえば、次のコマンドを実行すると、Deploymentが使用するイメージタグをlatestからffcd15に変更できます。
+
+[.console-input]
+[source,sh]
+----
+kustomize edit set image quay.io/redhatworkshops/welcome-php:ffcd15
+----
+
+これにより、components/kustomize-build/kustomization.yamlファイルのイメージセクションが更新されます。
+この状態で `kustomize build .` を実行すると、新しいラベルだけでなく新しい ffcd15 イメージタグも表示されます。
+このように、元のYAMLをコピーまたは編集することなく、既存のYAMLを特定の環境に合わせて変更できます。
+
+[.console-input]
+[source,sh]
+----
+cat kustomization.yaml
+----
+
+[source,yaml]
+----
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ./welcome.yaml
+patchesJson6902:
+- patch: |-
+    - op: add
+      path: /metadata/labels/testkey
+      value: testvalue
+  target:
+    group: apps
+    kind: Deployment
+    name: welcome-php
+    version: v1
+images:
+- name: quay.io/redhatworkshops/welcome-php
+  newTag: ffcd15
+----
+
+Kustomizeを使用して、新しいYAMLファイルを作成したり、ocコマンドにパイプで渡すことができます。
+
+まずはアプリケーションデプロイ用のプロジェクトを作成します。
+
+[.console-input]
+[source,sh]
+----
+oc new-project welcome-php
+----
+
+次に、以下のコマンドを実行し、kustomizeからocコマンドにパイプで渡してみましょう。
+
+[.console-input]
+[source,sh]
+----
+kustomize build . | oc apply -f -
+----
+
+コマンド実行の結果、welcome-phpアプリがクラスターにデプロイされました。
+
+[source,sh]
+----
+deployment.apps/welcome-php created
+----
+
+== ocコマンドとKustomize
+
+Kubernetes 1.14 以降、kubectl (およびoc) は、組み込みのKustomizeをサポートしています。
+`kustomize build` コマンドの代わりに `oc kustomize` を実行することでも可能です。
+先程は、`kustomize build` コマンドの結果を、パイプで `oc apply` コマンドに渡して実行しましたが、
+`oc apply` コマンドを使うとその必要がなくなります。
+`oc apply` には、マニフェストをapplyする前にbuildを実行する -k オプションがあります。
+これをテストするために、まずプロジェクトを作成します。
+
+[.console-input]
+[source,sh]
+----
+oc new-project kustomize-test
+----
+
+プロジェクトが作られたことが出力されます。
+
+[source,sh]
+----
+Now using project "kustomize-test" on server "https://api.crc.testing:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname
+----
+
+次に、作成したプロジェクトにいることを確認します。
+
+[.console-input]
+[source,sh]
+----
+oc project kustomize-test
+----
+
+次のメッセージが表示されば正常です（URLの値は環境ごとに異なります）。
+
+[source,sh]
+----
+Already on project "kustomize-test" on server "https://api.cluster-56bgl.56bgl.sandbox704.opentlc.com:6443".
+----
+
+oc applyコマンドを実行してマニフェストをbuildおよびapplyします。
+
+[.console-input]
+[source,sh]
+----
+oc apply -k ./
+----
+
+welcome-phpアプリケーションがクラスターにデプロイされました。
+
+[source,sh]
+----
+deployment.apps/welcome-php created
+----
+
+NOTE: ディレクトリだけでなくURLも渡すことができます。唯一の要件は、-k が指定するパスにkustomization.yamlファイルがあることです。
+
+これによりデプロイメントが作成されネームスペースで実行されているpodが表示されます。
+
+[.console-input]
+[source,sh]
+----
+oc get pods -n kustomize-test
+----
+
+[source,sh]
+----
+NAME                           READY   STATUS    RESTARTS   AGE
+welcome-php-7f9c4fdf94-knx2j   1/1     Running   0          11s
+----
+
+次のコマンド出力を確認すると、追加のラベルを使用してデプロイメントが作成されたことがわかります。
+
+[.console-input]
+[source,sh]
+----
+oc get deployment welcome-php -o jsonpath='{.metadata.labels}' | jq -r
+----
+
+[source,sh]
+----
+{
+  "app": "welcome-php",
+  "testkey": "testvalue"
+}
+----
+
+また、次のコマンドの出力を確認すると、行われたカスタマイズに基づいてイメージタグがffcd15に更新されているのがわかります。
+
+[.console-input]
+[source,sh]
+----
+oc get deploy welcome-php  -o jsonpath='{.spec.template.spec.containers[].image}{"\n"}'
+----
+
+[source,sh]
+----
+quay.io/redhatworkshops/welcome-php:ffcd15
+----
+
+このように、kustomizeは強力なツールになり得るものです。
+
+== Deploying Kustomized Applicaton
+
+別の演習で、GitOpsワークフローでは、アプリケーションスタック全体 (インフラストラクチャを含む) がgitリポジトリに反映されることを学びました。 この演習の課題はYAMLを複製せずにこれを行う方法です。
+前のトピックでkustomizeについて学んだので、それがArgoCDとどのように適合し、GitOpsワークフローでどのように使用できるかを見てみましょう。
+
+まずマニフェストがあるルートディレクトリに移動します。
+
+[.console-input]
+[source,sh]
+----
+cd ~/openshift-gitops-examples/
+----
+
+この時点で、openshift-gitops-examplesにいるはずです。
+以前の演習では、青色の丸が表示されるアプリケーションをデプロイしました。これは、次のコマンドを実行することでデプロイされます。
+
+[.console-input]
+[source,sh]
+----
+oc apply -f components/applications/bgd-app.yaml
+----
+
+ターミナルに次のメッセージが表示され、Argo CD UIを確認するとApplicationが作成されています。
+
+[source,sh]
+----
+application.argoproj.io/bgd-app created
+----
+
+image::gitops/kustomize/kustomize-002.png[]
+
+アプリケーションのロールアウトを待ちます。次のコマンドでスタータスを確認します。
+
+[.console-input]
+[source,sh]
+----
+oc rollout status deploy/bgd -n bgd
+----
+
+次のような出力結果が得られます。
+
+[source,sh]
+----
+deployment "bgd" successfully rolled out
+----
+
+ロールアウトが完了したら、次のコマンドを実行してbgdアプリケーションのURLを確認します。
+
+[.console-input]
+[source,sh]
+----
+oc get route -n bgd
+----
+
+次のように出力されます（URLの値は環境ごとに異なります）。
+
+[source,sh]
+----
+NAME   HOST/PORT                                                 PATH   SERVICES   PORT   TERMINATION   WILDCARD
+bgd    bgd-bgd.crc-dzk9v-master-0.crc.ohwkzih58pxs.instruqt.io          bgd        8080                 None
+----
+
+「HOST/PORT」列の下の URLをコピーしてブラウザでアプリケーションにアクセスします。すると、次のような画面が表示されます。
+
+[NOTE]
+====
+以前のラボ同様、HTTP接続のアプリケーションであることに注意してください。
+====
+
+image::gitops/kustomize/kustomize-003.png[]
+
+ArgoCDの演習を履修済であれば、これはおなじみのはずです。では、このアプリケーションを変更してデプロイしたい場合はどうすればよいでしょうか?
+
+
+== Kustomized アプリケーション
+
+Argo CDはKustomizeをネイティブでサポートしています。これを使用して、デプロイメントごとにYAMLが重複するのを避けることができます。例えば本番環境と検証環境などデプロイ先の環境やクラスターが異なる場合に特に便利です。
+https://raw.githubusercontent.com/redhat-developer-demos/openshift-gitops-examples/main/components/applications/bgdk-app.yaml[bgdk-app.yaml]アプリケ−ションの定義を見てみましょう。
+
+[source,yaml]
+----
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bgdk-app
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: bgdk
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: apps/bgd/overlays/bgdk
+    repoURL: https://github.com/redhat-developer-demos/openshift-gitops-examples
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
+----
+
+bgdとbgdkは https://github.com/redhat-developer-demos/openshift-gitops-examples[同じレポジトリ] を利用していますが異なるディレクトリをソースとしています。
+
+* アプリケーションbgd - bgd-app.yaml：apps/bgd/overlays/bgd
+* アプリケーションbgdk - bgdk-app.yaml：apps/bgd/overlays/bgdk
+
+以下は、ディレクトリ構成と、その中に存在するファイルの抜粋です。
+
+[source,sh]
+----
+./openshift-gitops-examples/
+├── README.md
+├── apps
+│   ├── bgd
+│   │   ├── base
+│   │   │   ├── bgd-deployment.yaml
+│   │   │   ├── bgd-route.yaml
+│   │   │   ├── bgd-svc.yaml
+│   │   │   └── kustomization.yaml
+│   │   └── overlays
+│   │       ├── bgd
+│   │       │   ├── bgd-deployment.yaml
+│   │       │   ├── bgd-ns.yaml
+│   │       │   ├── bgd-route.yaml
+│   │       │   └── bgd-svc.yaml
+│   │       └── bgdk
+│   │           ├── bgdk-ns.yaml
+│   │           └── kustomization.yaml
+(略)
+└── components
+    ├── applications
+    │   ├── bgd-app.yaml
+    │   ├── bgdk-app.yaml
+    │   ├── quarkus-app.yaml
+    │   ├── quarkus-subchart.yaml
+    │   ├── welcome-hooks.yaml
+    │   ├── welcome-syncwaves-and-hooks.yaml
+    │   └── welcome-syncwaves.yaml
+----
+
+マニフェストの共通設定である"base"セットがあり、差分などのカスタマイズをオーバーレイする"overlay"の概念を使用しています。
+ファイル `apps/bgd/overlays/bgdk/kustomization.yaml` を見てください。
+
+[source,yaml]
+----
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: bgdk
+resources:
+- ../../base
+- bgdk-ns.yaml
+patchesJson6902:
+  - target:
+      version: v1
+      group: apps
+      kind: Deployment
+      name: bgd
+      namespace: bgdk
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/0/value
+        value: yellow
+----
+
+このkustomization.yamlはベースアプリケーションを取得し、マニフェストにパッチを適用して、青色の丸ではなく黄色の正方形を表示します。
+ また、アプリケーションを bgdkネームスペース (ファイルの namespace: セクションで示されます) にデプロイします。
+このアプリケーションをデプロイします。
+
+[.console-input]
+[source,sh]
+----
+oc apply -f components/applications/bgdk-app.yaml
+----
+
+Argo CDのUIにふたつのアプリケーションが表示されます。
+
+image::gitops/kustomize/kustomize-004.png[]
+
+先程同様bgdkアプリケーションのrouteを取得し、ブラウザでアクセスします。
+
+[.console-input]
+[source,sh]
+----
+oc get route -n bgdk
+----
+
+[source,sh]
+----
+NAME   HOST/PORT                                                 PATH   SERVICES   PORT   TERMINATION   WILDCARD
+bgd    bgd-bgd.crc-dzk9v-master-0.crc.ohwkzih58pxs.instruqt.io          bgd        8080                 None
+----
+
+「HOST/PORT」列の下の URLをコピーしてブラウザでアプリケーションにアクセスします。
+
+image::gitops/kustomize/kustomize-005.png[]
+
+アプリケーションがカスタマイズされてデプロイされたことがわかります。
+今行ったことを確認します。
+
+* 青色の丸を表示するbgdというアプリケーションをデプロイしました
+* bgdkと呼ばれるbgdに基づく別のアプリケーションをデプロイしました
+* アプリケーションbgdk は、独自のネームスペースにデプロイされ、デプロイのカスタマイズが行われました
+* YAMLの複製は行っていません
+
+このように、"base"と"overlay"の仕組みを利用して差分を管理することができます。
+
+以上で本演習は終了です。

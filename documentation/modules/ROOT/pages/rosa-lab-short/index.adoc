@@ -1,0 +1,5 @@
+= Welcome to OpenShift Handson
+:page-layout: home
+:!sectids:
+
+OpenShift Handsonページへようこそ。本ページは、OpenShiftに関する複数のハンズオンガイドを提供します。

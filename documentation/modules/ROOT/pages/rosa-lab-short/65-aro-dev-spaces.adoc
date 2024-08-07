@@ -1,0 +1,17 @@
+= Web IDEを利用した開発
+:navtitle: aro-dev-spaces
+include::_attributes.adoc[]
+
+== 演習の概要
+このモジュールでは、Red Hat OpenShift Dev Spacesでサンプルアプリケーションを開発します。
+
+---
+
+=== 演習の手順
+下記のWebページを参照して、演習を実行してください。
+ROSAクラスター上の手順となっていますが、AROクラスターでも同様の手順で実行できます。
+
+NOTE: Dev Spacesは、OpenShift Container Platformの標準機能の1つであるため、
+AROクラスターの利用者は追加料金を支払う必要なく利用できます。
+
+* https://rh-open.github.io/ocp-handson/openshift-services/54-2-rosa-dev-spaces.html[ROSAクラスター上でのWeb IDEを利用した開発]

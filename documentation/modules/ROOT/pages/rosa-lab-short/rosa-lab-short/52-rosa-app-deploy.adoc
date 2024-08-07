@@ -1,0 +1,97 @@
+= サンプルアプリケーションのデプロイ
+:navtitle: rosa-app-deploy
+include::_attributes.adoc[]
+
+
+== 演習の概要
+このモジュールでは、Node.jsのサンプルアプリケーションのデプロイを実行します。
+
+---
+
+=== プロジェクトの作成
+
+アプリケーションの作成場所となる「プロジェクト」を、「新規プロジェクトを作成します」をクリックして作成します。この例では、「test-project20」を入力しています。1つのOpenShiftクラスター内に、同じ名前を持つプロジェクトを複数作成できませんので、プロジェクト名は適宜変更してください。
+
+image::rosa/app-deploy/project-create1.png[]
+image::rosa/app-deploy/project-create2.png[]
+
+
+=== サンプルアプリケーションの作成
+
+プロジェクトの作成が完了したら、「+追加」からサンプルアプリケーションを作成します。「すべてのサービス」を選択して、ビルダーイメージの「Node.js」を選択します。
+
+image::rosa/app-deploy/add-console.png[]
+image::rosa/app-deploy/nodejs-select.png[]
+
+「作成」を選択して、「サンプルを試す」をクリックしてアプリケーションのビルドに利用するGitリポジトリーのURLを指定します。最後に「作成」をクリックします。入力パラメータは全てデフォルトのままにします。
+
+NOTE: このソースコード作成方法については、
+https://access.redhat.com/documentation/ja-jp/red_hat_build_of_node.js/20/html-single/node.js_runtime_guide/index#developing-and-deploying-a-nodejs-application_introduction-to-application-development-with-runtime[Node.js アプリケーションの開発およびデプロイ]を参考にしてください。
+
+image::rosa/app-deploy/nodejs-create1.png[]
+image::rosa/app-deploy/nodejs-create2.png[]
+
+
+[Note]
+====
+「作成」がクリックできない状態の場合、アプリケーションの「名前」の
+テキストフィールドに任意の名前を入力してください。
+
+image::rosa/app-deploy/app-name.png[]
+====
+
+
+Node.jsのサンプルアプリのデプロイが完了すると、「トポロジー」メニューからデプロイしたアプリのトポロジーや情報を確認できます。トポロジーにある、Node.jsアイコンの右上部にある「矢印」アイコンをクリックすると、デプロイしたNode.jsアプリにアクセスできます。
+
+image::rosa/app-deploy/nodejs-app.png[]
+
+このアプリケーションに付けられる「名前」は、OpenShift上で作成されるリソースに付けられるラベルとして扱われます。
+この例だと「nodejs-ex-git-app」という名前が付けられており、関連するリソースに「app=nodejs-ex-git」というラベル(上記画像の青四角部分)が付けられていることを確認できます。
+
+[Note]
+====
+アプリケーションの外部アクセス用のURLについては自動作成されますが、
+サンプルアプリケーション作成画面に表示される「詳細なルーティングオプションの表示」から任意の名前も指定できます。
+OpenShiftクラスターで利用されるドメイン名(OpenShiftクラスターのコンソールのURLから確認できる `apps.XXXXX.openshiftapps.com` )を末尾に付けたホスト名を指定することで、
+アプリケーション開発時のコンソールテストに利用できます。
+
+次の例では、`nodejs001-project20.apps.rosa.hcp-01.n7b6.p3.openshiftapps.com` というホスト名から、
+サンプルアプリケーションにアクセスできるように指定しています。
+
+image::rosa/app-deploy/nodejs-app-route.png[]
+====
+
+
+=== サンプルアプリケーションの削除
+
+アプリケーションの削除(特定のラベルが付けられた全リソースの一括削除)は、「アプリケーションの削除」から実施できます。
+
+image::rosa/app-deploy/nodejs-app-delete.png[]
+
+ただし、2024年6月時点ではバグのため、ローカルユーザーの権限ではコンソールから削除できません。
+そのため、作成したアプリケーションを削除したい場合、次のいずれかの方法を実行します。
+
+a. OpenShiftクラスターの管理者アカウントで再ログインして、対象のアプリケーションを削除
+b. https://rh-open.github.io/ocp-handson/openshift-services/54-1-rosa-web-terminal.html[Web Terminalの利用]で扱うOpenShift Web Terminalの端末から、OpenShiftのCLIであるocコマンドを実行
+```
+$ oc delete all -l app=nodejs-ex-git
+$ oc delete secrets -l app=nodejs-ex-git
+```
+
+
+
+[Note]
+====
+OpenShiftは、
+https://access.redhat.com/documentation/ja-jp/openshift_container_platform/4.14/html/builds_using_buildconfig/builds-strategy-s2i-build_build-strategies-docker[Source-to-Image (S2I)] という機能を標準で備えています。これは、OpenShiftにある専用のコンテナビルダーイメージを利用して、アプリケーションのソースコードからのイメージビルドとコンテナ起動を実行する機能です。
+
+image::rosa/app-deploy/s2i-flow.png[]
+
+ビルダーイメージには、最低限、バイナリファイル作成のスクリプト(assemble)と、コンテナ起動時に実行されるスクリプト(run)が含まれます。OpenShift標準のビルダーイメージの他に、ユーザーが作成したカスタムイメージも利用できます。
+
+これらのS2I用スクリプトのイメージが下記となります。S2I用スクリプトは、ビルダーイメージ内で実行可能なスクリプトである必要があります。
+
+image::rosa/app-deploy/s2i-scripts.png[]
+====
+
+

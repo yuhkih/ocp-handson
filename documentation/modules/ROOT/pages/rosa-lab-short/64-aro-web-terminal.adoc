@@ -1,0 +1,14 @@
+= Web Terminalの利用
+:navtitle: aro-app-deploy
+include::_attributes.adoc[]
+
+== 演習の概要
+このモジュールでは、AROクラスターのコンソール上で、Web Terminalを実行します。
+
+---
+
+=== 演習の手順
+下記のWebページを参照して、演習を実行してください。
+ROSAクラスター上の手順となっていますが、AROクラスターでも同様の手順で実行できます。
+
+* https://rh-open.github.io/ocp-handson/openshift-services/54-1-rosa-web-terminal.html[ROSAクラスター上でのWeb Terminalの利用]

@@ -1,0 +1,158 @@
+= [デモ] ロギング設定
+:navtitle: rosa-log-01
+include::_attributes.adoc[]
+
+== デモの概要
+このモジュールでは、インストラクターがROSAクラスターのロギング設定方法をご紹介します
+
+---
+NOTE: 本演習を自習している時以外、ROSAクラスターのロギング設定を実行しないで下さい。
+
+ROSAのロギングについては、Amazon CloudWatchをベースとするログ転送ソリューションの利用を推奨しています。
+転送設定の概要は次のとおりです。STSの利用有無に関わらず、以下の手順を実施することができます。
+
+1. Amazon CloudWatchのログ参照/書き込み権限を持つAWS IAMユーザーを作成して、
+このユーザーのアクセスキーとシークレットアクセスキーを取得します。
+1. ROSAのOpenShiftコンソールから、OpenShift Logging Operatorをインストールして、
+ロギングとログ転送用のインスタンスを作成します。
+このとき、上記手順で作成したAWS IAMユーザーの認証情報(アクセスキー/シークレットアクセスキー)を利用するように設定します。
+
+これらを順番に見ていきましょう。
+
+=== CloudWatch用のAWS IAMユーザーの作成
+
+AWSのコンソールまたはAWS CLIで、CloudWatchのログ参照/書き込み権限を持つAWS IAMユーザーを作成します。
+IAMユーザー作成手順は、
+https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/id_users_create.html[AWS アカウントでの IAM ユーザーの作成]を
+ご参照ください。
+
+例として、下記画像のような権限を持つユーザーを作成します。この画像の例では、ログ参照/書き込み権限として
+「CloudWatchLogsFullAccess」を「rosauser01」ユーザーに付与しています。
+
+image::rosa/log-01/iam-user-create.png[]
+
+この時に作成した、AWS IAMユーザーのアクセスキーとシークレットアクセスキーをメモします。
+
+=== OpenShift Logging Operatorのインストール
+
+OpenShiftには「Red Hat OpenShift Logging Operator」というOperatorがあり、
+OpenShiftのロギングスタックを運用するために利用されます。
+このOperatorによって、CloudWatchへのログ転送設定が可能になります。
+
+OperatorHubから、「Red Hat OpenShift Logging Operator」をインストールします。
+これは `cluster-admin` ユーザーで実行します。
+インストールには、インストールモードで「クラスターの特定のnamespace」を選択すること以外、
+全てデフォルトのパラメータを利用します。
+
+image::rosa/log-01/logging-operator-install1.png[]
+image::rosa/log-01/logging-operator-install2.png[]
+
+
+=== ロギングの設定
+
+vectorによるクラスターロギングを設定します。
+「インストール済みのOperator」の「Red Hat OpenShift Logging」Operatorを選択して、
+「Cluster Logging」の下にある「インスタンスの作成」から、次のYAMLを入力して「作成」をクリックします。
+
+[.console-input]
+[source,sh]
+----
+apiVersion: logging.openshift.io/v1
+kind: ClusterLogging
+metadata:
+  name: instance
+  namespace: openshift-logging
+spec:
+  collection:
+    type: vector
+  managementState: Managed
+----
+
+image::rosa/log-01/logging-instance-create1.png[]
+image::rosa/log-01/logging-instance-create2.png[]
+image::rosa/log-01/logging-instance-create3.png[]
+
+この段階では、logstore or logforward destination(ログ保存先またはログ転送先)の設定が無いために、
+ログ収集/転送に利用するvectorを実行するPodが起動されません。
+
+=== ログ転送の設定
+
+ログ転送設定を行います。
+「CloudWatch用のAWS IAMユーザーの作成」で作成したアクセスキーとシークレットアクセスキーを、
+AWS認証情報としてOpenShiftのシークレットリソースに保存します。
+
+「OpenShift Logging Operator」をインストールした「openshift-logging」プロジェクトを選択して、
+左サイドメニューの「管理者向け表示」→「Workloads」→「シークレット」に移動します。
+そして、「作成」から「キーと値のシークレット」をクリックして、次の値を入力して作成します。
+
+- シークレット名: AWS認証情報として保存するOpenShiftリソースの任意の名前。この例では「cw-secret」を指定。
+- キー/値: 「CloudWatch用のAWS IAMユーザーの作成」で作成した、
+AWSアクセスキー(aws_access_key_id)とシークレットアクセスキー(aws_secret_access_key)を入力。
+
+image::rosa/log-01/secret-create.png[]
+
+作成したシークレットリソース「cw-secret」を利用した、ログ転送設定のためのインスタンスを作成します。
+「OpenShift Logging Operator」を選択して、「Cluster Log Forwarder」の下にある「インスタンスの作成」から、
+次のYAMLを入力して「作成」をクリックします。
+
+ここでは、 `region: ap-northeast-1` を指定して、東京リージョンのCloudWatchへのログ転送を指定しています。
+また、前述の手順で作成した「cw-secret」シークレットも指定します。
+
+[.console-input]
+[source,sh]
+----
+apiVersion: "logging.openshift.io/v1"
+kind: ClusterLogForwarder
+metadata:
+  name: instance
+  namespace: openshift-logging
+spec:
+  outputs:
+   - name: cw
+     type: cloudwatch
+     cloudwatch:
+       groupPrefix: hcp-01
+       region: ap-northeast-1
+     secret:
+        name: cw-secret
+  pipelines:
+    - name: all-logs
+      inputRefs:
+        - application
+        - infrastructure
+        - audit
+      outputRefs:
+        - cw
+----
+
+image::rosa/log-01/loggingforwarder-instance-create1.png[]
+image::rosa/log-01/loggingforwarder-instance-create2.png[]
+
+
+[Note]
+====
+どの種類のログを転送するかについては、前述したYAMLの `inputRefs:` の項目で指定できます。
+
+- `application` : アプリケーションログの収集。利用者が作成したプロジェクトにデプロイされるアプリケーションのログ(stdoutとstderrに出力されるログ)を収集します。後述のインフラストラクチャー関連のログは除きます。
+- `infrastructure` : インフラストラクチャーログの収集。ROSAクラスター作成時にデフォルトで作成される `openshift-\*` , `kube-*` などのプロジェクトにある、インフラストラクチャー関連のログを収集します。
+- `audit` : セキュリティ監査に関連するログの収集。ワーカーノードのノード監査システム(auditd)で
+生成される監査ログ(/var/log/audit/audit.log)を収集します。監査ログは、OpenShift Logging Operatorとは別の仕組みで外部転送されており、
+https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition/rosa-policy-responsibility-matrix.html#rosa-policy-platform-monitoring_rosa-policy-responsibility-matrix[Red HatのSREチームによって1年間保存]されます。
+そのため、ROSAの利用者は監査ログを保存しなくても、Red Hatのサポートケース経由で監査ログを取得することもできます。
+====
+
+
+これでログ転送の設定が完了したため、先ほど作成したLoggingインスタンスによって、
+自動的に `collector-\*` という名前のPod(内部ではvectorが実行)が、「openshift-logging」プロジェクトに作成されます。
+この `collector-*` Podは、全てのワーカーノードで自動的に実行されて、
+ワーカーノード上のログをAmazon CloudWatchに転送します。
+
+image::rosa/log-01/logging-pods.png[]
+
+
+NOTE: AWSアカウントでのIAMユーザー作成が許可されていない場合、ROSAクラスターインストールの時と同様に、
+AWS STSを利用したログ転送の設定が可能です。この場合、AWS IAMの一時的な認証情報として利用される、
+専用のAWS IAMロール(CloudWatchへのログ転送に必要)を作成する必要があります。
+この設定方法については、
+https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html-single/logging/index#rosa-cluster-logging-collector-log-forward-sts-cloudwatch_configuring-log-forwarding[公式ドキュメント]をご参照ください。
+

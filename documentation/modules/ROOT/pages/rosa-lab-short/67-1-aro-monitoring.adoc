@@ -1,0 +1,131 @@
+= モニタリング
+:navtitle: aro-monitoring
+include::_attributes.adoc[]
+
+== 演習の概要
+このモジュールでは、Prometheusによるモニタリングを学習します。
+
+---
+
+AROクラスターは、デフォルトでPrometheusをベースとしたモニタリング機能が有効になっており、
+下記の2つのユースケースで利用できるようになっています。
+
+* AROクラスター全体のモニタリング (Platform monitoring)
+* 利用者が作成したプロジェクトのモニタリング (User-defined projects monitoring)
+
+この2つについて、どのようにAROクラスターで利用されているかを確認していきます。
+
+NOTE: 本演習をワークショップ形式で実施している場合、このモジュールでは、設定作業を実施しません。
+
+=== クラスター全体のモニタリング
+
+AROクラスター全体のリソース利用状況のモニタリング、
+いわゆる「プラットフォームモニタリング」と公式ドキュメントで定義しているものについては、
+MicrosoftとRed HatのSREチームによって利用されています。
+https://learn.microsoft.com/ja-jp/azure/openshift/responsibility-matrix[AROの責任分担マトリクス]によって、
+プラットフォームモニタリングについては、MicrosoftとRed Hatに責任があると定義しているため、
+AROの利用者は、ワーカーノードにおけるユーザーアプリの利用状況の監視に集中できるようになっています。
+
+
+AROクラスターでは、プラットフォームモニタリング機能を提供するPodが、
+「openshift-monitoring」というプロジェクトで実行されています。
+これらのモニタリングで監視対象となっている項目については、
+OpenShiftのコンソールの「モニタリング」メニューのメトリクスターゲットなどから確認できるようになっています。
+こうした項目やワーカーノードなどが、SREチームによって監視されています。
+
+image::aro/monitoring/metrics-targets.png[]
+
+
+これらの情報は、AROクラスターの管理者アカウント( `kubeadmin` など)でログインすることで確認できます。
+ログインすると、「openshift-monitoring」プロジェクトで実行されているPodのリストも見ることができます。
+
+NOTE: 本演習をワークショップ形式で実施している場合、インストラクターが管理者アカウントを案内します。
+
+image::aro/monitoring/projects.png[]
+image::aro/monitoring/monitoring-pods.png[]
+
+NOTE: 「openshift-monitoring」プロジェクトのコンポーネントは、
+MicrosoftとRed Hat SREチームの管理下に置かれており、
+https://learn.microsoft.com/ja-jp/azure/openshift/support-policies-v4#logging-and-monitoring[利用者が設定を変更することを、基本的にサポートしていません]。
+
+なお、プラットフォームモニタリングによって監視されているメトリクスデータは、
+PVによる永続化はされていません。
+そのため、AROのユーザーが利用するプロジェクトのメトリクスデータだけでも永続化したい場合、
+後述するカスタム設定によって、データ永続化の設定を適用します。
+
+
+=== 利用者が作成したプロジェクトのモニタリング
+
+利用者が作成したプロジェクトのモニタリングに関するカスタム設定を適用することもできます。
+この機能を「User-defined projects monitoring」と定義しており、
+プロジェクトのメトリクスデータの永続化や、アラート設定などが可能になります。
+
+これらの機能を提供するPodは、「openshift-user-workload-monitoring」プロジェクトで実行されますが、
+AROのデフォルトだと、この機能は無効化されています。
+そのため、この機能を使う場合、「openshift-monitoring」プロジェクトの `cluster-monitoring-config` 
+という名前の設定情報(ConfigMap)の末尾を、次のように置き換えて有効化する必要があります。
+
+NOTE: Kubernetesの
+https://kubernetes.io/docs/concepts/configuration/configmap/[ConfigMap]は、 
+アプリケーションで利用される構成データを保存します。
+OpenShiftでは、コンソールの「管理者向け表示」→「Workloads」→「ConfigMaps」から作成、
+または、既存のConfigMapを編集できます。
+
+
+NOTE: 本演習を自習している時以外、この設定を適用する必要はありません。
+
+[.console-input]
+[source,sh]
+----
+...
+data:
+  config.yaml: |
+    enableUserWorkload: true
+----
+
+この設定を `cluster-monitoring-config` ConfigMapに適用すると、
+モニタリングに関するカスタム設定を適用するためのPodが、「openshift-user-workload-monitoring」
+プロジェクトで実行されます。
+
+image::aro/monitoring/user-workload-monitoring-pods.png[]
+
+この「openshift-user-workload-monitoring」プロジェクトにあるPodは、
+ KubernetesのnodeSelctorを利用して、
+https://access.redhat.com/documentation/ja-jp/openshift_container_platform/4.14/html/nodes/nodes-scheduler-node-selectors[任意のラベルを付けたワーカーノードに移動]することができます。
+
+NOTE: Kubernetesの 
+https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/[nodeSelector]は、
+指定したPodを特定のノードで実行するように割り当てる仕組みです。
+
+なお、利用者のプロジェクトに関するメトリクスデータは、
+デフォルトでは永続ボリュームに保存される設定にはなっていません。
+このため、Podの再起動や再作成に伴い、利用者のメトリクスデータが失われる可能性があります。
+
+利用者のメトリクスデータを、200GiBの永続ボリュームを利用して30日間保存するような設定をしたい場合、
+「openshift-user-workload-monitoring」プロジェクトの `user-workload-monitoring-config` という名前の
+設定情報(ConfigMap)を次のYAMLファイルで作成することで、
+自動的にデフォルトのストレージクラス(managed-csi)を用いたPVCが作成されて、
+メトリクスデータが保存されるようになります。
+
+
+NOTE: 本演習を自習している時以外、この設定を適用する必要はありません。
+
+[.console-input]
+[source,sh]
+----
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: user-workload-monitoring-config
+  namespace: openshift-user-workload-monitoring
+data:
+  config.yaml: |
+    prometheus:
+      retention: 30d
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 200Gi
+----
+
