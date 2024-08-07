@@ -29,8 +29,9 @@
 ** xref:50-rosa-info-01.adoc[0. はじめに]
 ** xref:51-rosa-hcp-create.adoc[1. ROSA HCPクラスターの作成]
 ** xref:55-1-rosa-log-01.adoc[2. ロギング設定]
-** xref:56-rosa-nodes.adoc[3. ワーカーノードの追加と削除]
-** xref:57-rosa-upgrade.adoc[4. ROSA HCPクラスターの更新]
+** xref:55-1-rosa-log-02.adoc[3. Amazon CloudWatchでのログ確認]
+** xref:56-rosa-nodes.adoc[4. ワーカーノードの追加と削除]
+** xref:57-rosa-upgrade.adoc[5. ROSA HCPクラスターの更新]
 
 * 51. ROSA ワークロード Lab Short
 ** xref:50-rosa-info-02.adoc[0. はじめに]
@@ -49,10 +50,9 @@
 ** xref:54-1-rosa-web-terminal.adoc[3. Web Terminalの利用]
 ** xref:54-2-rosa-dev-spaces.adoc[4. Web IDEを利用した開発]
 ** xref:58-rosa-bedrock.adoc[5. Amazon Bedrockアプリケーションの実行]
-** xref:55-1-rosa-log-02.adoc[6. Amazon CloudWatchでのログ確認]
-** xref:55-2-rosa-monitoring.adoc[7. モニタリング]
-** xref:55-3-rosa-project-metrics.adoc[8. プロジェクトのメトリクスデータの確認]
-** xref:55-4-rosa-alert.adoc[9. アラート設定]
+** xref:55-2-rosa-monitoring.adoc[6. モニタリング]
+** xref:55-3-rosa-project-metrics.adoc[7. プロジェクトのメトリクスデータの確認]
+** xref:55-4-rosa-alert.adoc[8. アラート設定]
 # ** xref:59-X-rosa-efs-01.adoc[X. Amazon EFSの利用準備 [デモ\]]
 # ** xref:59-X-rosa-efs-02.adoc[X. Amazon EFSの利用]
 
