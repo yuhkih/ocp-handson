@@ -25,12 +25,12 @@
 ** xref:23-Helm.adoc[3. Helmインテグレーション]
 
 
-* 50. ROSA demo
+* 50. ROSA デモ 
 ** xref:50-rosa-info.adoc[0. はじめに]
 ** xref:51-rosa-hcp-create.adoc[1. ROSA HCPクラスターの作成 [デモ\]]
-** xref:55-1-rosa-log-01.adoc[7. ロギング設定 [デモ\]]
-** xref:56-rosa-nodes.adoc[12. ワーカーノードの追加と削除]
-** xref:57-rosa-upgrade.adoc[13. ROSA HCPクラスターの更新]
+** xref:55-1-rosa-log-01.adoc[2. ロギング設定 [デモ\]]
+** xref:56-rosa-nodes.adoc[3. ワーカーノードの追加と削除]
+** xref:57-rosa-upgrade.adoc[4. ROSA HCPクラスターの更新]
 
 * 51. ROSA Lab Short
 ** xref:50-rosa-info.adoc[0. はじめに]
@@ -42,7 +42,7 @@
 ** xref:55-3-rosa-project-metrics.adoc[6. プロジェクトのメトリクスデータの確認]
 ** xref:55-4-rosa-alert.adoc[7. アラート設定]
 
-* 52. ROSA Lab Long
+* 5. ROSA Lab Long
 ** xref:50-rosa-info.adoc[0. はじめに]
 ** xref:52-rosa-app-deploy.adoc[1. サンプルアプリケーションのデプロイ]
 ** xref:53-rosa-ebs.adoc[2. Amazon EBSの利用]
