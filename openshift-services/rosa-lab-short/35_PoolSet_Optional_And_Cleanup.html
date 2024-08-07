@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Untitled :: OpenShift Handson</title>
+    <link rel="canonical" href="https://yuhkih.github.io/ocp-handson/openshift-services/rosa-lab-short/35_PoolSet_Optional_And_Cleanup.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://yuhkih.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#50-rosa-info.adoc">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#51-rosa-hcp-create.adoc">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#52-rosa-app-deploy.adoc">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#53-rosa-ebs.adoc">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#54-1-rosa-web-terminal.adoc">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#54-2-rosa-dev-spaces.adoc">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#58-rosa-bedrock.adoc">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-1-rosa-log-01.adoc">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-1-rosa-log-02.adoc">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-2-rosa-monitoring.adoc">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-3-rosa-project-metrics.adoc">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-4-rosa-alert.adoc">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#56-rosa-nodes.adoc">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#57-rosa-upgrade.adoc">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/rosa-lab-short/35_PoolSet_Optional_And_Cleanup.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<div class="paragraph">
+<p>Unresolved include directive in modules/ROOT/pages/rosa-lab-short/35_PoolSet_Optional_And_Cleanup.adoc - include::../../include/00_0_Lab_Header.adoc[]</p>
+</div>
+<div class="sect1">
+<h2 id="_pool_set_optional_task_and_clean_up_environment"><a class="anchor" href="#_pool_set_optional_task_and_clean_up_environment"></a>Pool, Set, Optional task, and Clean up environment</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_claim_cluster_from_cluster_pool"><a class="anchor" href="#_claim_cluster_from_cluster_pool"></a>1. Claim Cluster from Cluster Pool</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>プール内のクラスターがプロビジョニングされると、クラスター プールからクラスターを要求するプロセスは短時間で完了します (通常は約 1 分)。</p>
+</div>
+<div class="olist arabic">
+<div class="title">手順</div>
+<ol class="arabic">
+<li>
+<p><strong>Infrastructure &#8594; Clusters</strong> に移動します。</p>
+</li>
+<li>
+<p><strong>Cluster pools</strong> タブを選択します。</p>
+</li>
+<li>
+<p><code>production-uk</code> クラスター プール内の少なくとも 1 つのクラスターの <strong>Status</strong> が <code>Hibernating</code> になり、<strong>Available to claim</strong> が <code>yes</code> に変わるまで待ちます。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/deployed-cluster-pool.png" alt="deployed cluster pool" width="80%">
+</div>
+</div>
+</li>
+<li>
+<p><code>production-uk</code> クラスタ プールの <code>Claim cluster</code> をクリックします。</p>
+</li>
+<li>
+<p><strong>Cluster claim name</strong> を <code>uk-1</code> に設定します。</p>
+</li>
+<li>
+<p><strong>Claim</strong> をクリックします。</p>
+</li>
+<li>
+<p>確認ダイアログ ボックスで、<strong>View cluster</strong> をクリックします。</p>
+</li>
+<li>
+<p>クラスターの  <strong>Overview</strong> ページで、クラスターが再開されていることを確認します。 数分以内に、要求されたクラスターを使用できるようになります。</p>
+</li>
+<li>
+<p>クラスターが再開するのを待っている間に、<strong>Infrastructure &#8594; Clusters</strong> に戻り、 <strong>Cluster pools</strong> タブを選択します。</p>
+</li>
+<li>
+<p><code>production-uk</code> クラスター プールに、要求したクラスターの代わりに新たなクラスターが表示されていることを確認します。 クラスター プールは常に、構成したサイズのままです。</p>
+</li>
+<li>
+<p>一部のリソースを節約するには、<code>production-uk</code> クラスタ プールをスケールして <code>1</code> レプリカに戻します。</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><span class="image unresolved"><img src="images/options_menu_icon.png" alt="options menu icon"></span> (<strong>Options</strong>) をクリックし、<strong>Scale cluster pool</strong> を選択します。</p>
+</li>
+<li>
+<p><strong>Desired cluster pool size</strong> を <code>1</code> に設定します。</p>
+</li>
+<li>
+<p><strong>Scale</strong> をクリックします。</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_use_cluster_pool_release_images"><a class="anchor" href="#_use_cluster_pool_release_images"></a>1.1. Use Cluster Pool Release Images</h3>
+<div class="paragraph">
+<p>クラスター プール内のすべてのクラスターは、同じリリース イメージで作成されます。 新しいイメージが利用可能になったら、新しいリリース イメージを使用して新しいクラスターを作成することをお勧めします。</p>
+</div>
+<div class="paragraph">
+<p>プール内の既存のクラスターは、この変更の影響を <strong>受けない</strong> ことに注意してください。</p>
+</div>
+<div class="olist arabic">
+<div class="title">手順</div>
+<ol class="arabic">
+<li>
+<p><strong>Cluster pools</strong> タブで、<code>production-ireland</code> クラスター プールを見つけ、<span class="image unresolved"><img src="images/options_menu_icon.png" alt="options menu icon"></span> (<strong>Options</strong>) をクリックし、<strong>Update release images</strong> を選択します。</p>
+</li>
+<li>
+<p>他の使用可能なリリース イメージを選択します。 クラスター プールが OpenShift 4.9 の利用可能な最新リリースに既にある場合、利用可能なイメージは、他の主要な OpenShift リリース用である可能性があります。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/pool_images.png" alt="pool images" width="80%">
+</div>
+</div>
+</li>
+<li>
+<p>古いリリースを使用したくないので、<strong>Cancel</strong> をクリックしてダイアログ ボックスを終了します。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_explore_cluster_sets"><a class="anchor" href="#_explore_cluster_sets"></a>2. Explore Cluster Sets</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>クラスター セットを使用して、ポリシー (環境、物理的な場所、サーバー ラック、部屋など) に基づいてクラスターを論理的にグループ化します。</p>
+</div>
+<div class="paragraph">
+<p>クラスタ セットを使用すると、特定の環境でアクションを実行できます。 この演習では、すべてのクラスターが <code>production</code> クラスター セットに属しています。</p>
+</div>
+<div class="paragraph">
+<p>また、クラスタをグループ化する機能を使用して、次のような機能をクラスタ セット レベルで有効にすることもできます。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Submariner接続インターコネクト</p>
+</li>
+<li>
+<p>役割ベースのアクセス制御 (RBAC)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>クラスター セットを使用すると、クラスター セット全体に展開される分散アプリケーションを展開できます。 これにより、クラスター セットに沿ってアプリケーション オブジェクトを分散させ、セット全体を 1 つのクラスターとして扱い、Submariner を介してマルチクラスター ネットワーク機能を有効にすることができます。</p>
+</div>
+<div class="olist arabic">
+<div class="title">手順</div>
+<ol class="arabic">
+<li>
+<p><strong>Infrastructure &#8594; Clusters</strong> に移動します。</p>
+</li>
+<li>
+<p><strong>Cluster sets</strong> タブを選択します。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/cluster-sets.png" alt="cluster sets" width="80%">
+</div>
+</div>
+</li>
+<li>
+<p><code>production</code> クラスター セットをクリックして、クラスター セットのプロパティを開きます。5 つのタブが表示されます。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Overview</p>
+</li>
+<li>
+<p>Submariner add-ons</p>
+</li>
+<li>
+<p>Managed clusters</p>
+</li>
+<li>
+<p>Cluster pools</p>
+</li>
+<li>
+<p>Access management</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Cluster pools</strong> タブに切り替えます。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/cs-cluster-pools.png" alt="cs cluster pools" width="80%">
+</div>
+</div>
+</li>
+<li>
+<p>前の手順で作成した両方のクラスター プールが一覧表示されていることを確認します。 これは、クラスター プール内のクラスターが現在、<code>production</code> クラスター セットの一部であることを示しています。</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_use_cluster_sets_for_access_management_rbac"><a class="anchor" href="#_use_cluster_sets_for_access_management_rbac"></a>2.1. Use Cluster Sets for Access Management (RBAC)</h3>
+<div class="paragraph">
+<p>クラスター セットを使用すると、クラスター セットおよびすべてのマネージド クラスターとやり取りするためのさまざまなアクセス許可を構成できます。 この構成はハブ クラスター用であることに注意してください。ハブ クラスター上のどのユーザーとグループが、クラスター セットとその管理対象クラスターと対話できるかを定義します。</p>
+</div>
+<div class="paragraph">
+<p>この演習では、クラスター セットのアクセス許可を <code>user1</code> ユーザーに付与します。 ただし、それを行う前に、このユーザーとして 1 回ログインする必要があります。そうしないと、<code>user</code> オブジェクトがクラスターに存在せず、そのユーザーに権限を付与できません。</p>
+</div>
+<div class="olist arabic">
+<div class="title">手順</div>
+<ol class="arabic">
+<li>
+<p><em>hub</em> クラスターのbastionホストで、プロビジョニング メールに記載されているパスワードを使用して <code>user1</code> としてログインします。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u user1 -p &lt;user password&gt; $(oc whoami --show-server)</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre>Login successful.
+
+You don't have any projects. You can try to create a new project, by running
+
+    oc new-project &lt;projectname&gt;</pre>
+</div>
+</div>
+</li>
+<li>
+<p><code>admin</code> として再度ログインします。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u admin</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>ユーザーが作成されたことを確認します。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get users</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-texinfo hljs" data-lang="texinfo">NAME     UID                                    FULL NAME   IDENTITIES
+admin    4f028861-8ff3-43c3-9d40-638a59290e6f               htpasswd_provider:admin
+user1    abfccf6b-daf6-42f3-8ec7-246041689bc0               htpasswd_provider:user1</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>Cluster set admin</strong> パーミッションを <strong>user1</strong> に付与します。</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>RHACM コンソールで、<strong>Infrastructure &#8594; Clusters &#8594; Cluster sets &#8594; production</strong> に移動します。</p>
+</li>
+<li>
+<p><strong>Access management</strong> タブに切り替えます。</p>
+</li>
+<li>
+<p><strong>Add user or group</strong> をクリックします。</p>
+</li>
+<li>
+<p><strong>Select user or group</strong> : <code>user1</code></p>
+</li>
+<li>
+<p><strong>Select role</strong>: <code>Cluster set admin</code></p>
+</li>
+<li>
+<p><strong>Add</strong> をクリックします。</p>
+<div class="paragraph">
+<p>OpenShift の <code>user1</code> ユーザーは、RHACM コンソールにログインして、<code>production</code> クラスター セットとそのクラスター セット内のすべてのクラスターを管理できるようになりました。</p>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_change_deployed_application_optional"><a class="anchor" href="#_change_deployed_application_optional"></a>3. Change Deployed Application (Optional)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>すでにデプロイされているアプリケーションを更新する必要がある場合はどうなりますか?
+ターゲット クラスタに直接変更を加えると、システムが同期しなくなる (最悪の場合) か、変更が上書きされて、<code>Channel</code> リソースのデプロイ可能オブジェクトによって定義された元の値に戻ります。
+適切な方法は、リポジトリに保存されているマニフェストを変更することです。
+これらの変更を行ったら、コミットして Git リポジトリにプッシュします。
+そこから、RHACM に引き継がせて、それらが確実にデプロイされるようにします。</p>
+</div>
+<div class="paragraph">
+<p>この演習はオプションです。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><em>hub</em> クラスタのBastion上で、フォークされた GitHub リポジトリのローカル クローンで、データベースの永続的なボリューム要求 (PVC) を定義する新しいファイルを作成し、そのファイルを <code>$HOME/rhacm-labs/resources/etherpad/postgres_pvc.yaml</code> として保存します。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    template: postgresql-persistent-template
+  name: postgresql
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>使用する PVC を定義しましたが、ここで PostgreSQL の <code>Deployment</code> マニフェストを更新する必要があります。
+<code>$HOME/rhacm-labs/resources/etherpad/postgres_deployment.yaml</code> ファイルを編集して、既存の <code>postgresql-data</code> ボリュームを次の内容に置き換えます。</p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>このセクションは、ファイルの最後にあります。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">...
+volumes:
+- name: postgresql-data
+  persistentVolumeClaim:
+    claimName: postgresql</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>ファイルを保存します。</p>
+</li>
+<li>
+<p>両方の変更をコミットして、GitHub リポジトリにプッシュします。この時、Githubのアカウントと、認証用のパスワード(トークン)を入力する必要があります。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh"> cd $HOME/rhacm-labs
+ git add resources/etherpad/postgres_pvc.yaml resources/etherpad/postgres_deployment.yaml
+ git commit -m 'update postgres pvc and deployment'
+ git push origin master</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>managed</em> クラスターの <code>bastion</code> VM で、Pod を確認します。
+約 1 分後、<code>Deployment</code> リソースが更新され、プロビジョニングした PVC を使用して新しい Pod が開始されるため、<code>postgresql</code>  Pod は <code>Terminating</code> 状態に移行することに注意してください。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh"> oc get pod,pvc -n etherpad</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-sh hljs" data-lang="sh">NAME                              READY   STATUS    RESTARTS   AGE
+pod/etherpad-5ccc6bdc6d-xr8nw     1/1     Running   2          67m
+pod/postgresql-6df558f94c-djbvp   1/1     Running   0          5m42s
+
+NAME                               STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+persistentvolumeclaim/postgresql   Bound    pvc-f4ccd5b8-e9ce-4348-a32b-ad38192fc697   10Gi       RWO            standard       21m</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>オプションで、RHACM コンソールで新しいリソースを監視できます。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>新しい <code>PVC</code> リソースがトポロジ ビューに表示されることを期待してください。
+<code>PVC</code> リソースと PostgreSQL <code>Deployment</code> リソースの両方のデプロイ可能ファイルが更新されます。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>アプリケーションのデプロイと更新に GitOps アプローチを採用しました。
+構成を Git リポジトリに保存することで、小さな変更をプッシュするだけで変更を加えることができました。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_application_deployment_controloptional"><a class="anchor" href="#_application_deployment_controloptional"></a>4. Application Deployment Control(Optional)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>4章で作成したクラスタ、アプリケーションを用いて、さまざまなデプロイを試してみましょう。ここでは、クラスタのを編集することで、デプロイがどのように変わってくるかを確認しましょう。すでにApplicationが存在している場合には、一旦削除して、クラスターのラベルと`PlacementRule` を編集して、Applicationのデプロイ先がどう変わってくるか観察してみましょう。</p>
+</div>
+<div class="olist loweralpha">
+<div class="title">実施例</div>
+<ol class="loweralpha" type="a">
+<li>
+<p>4章では、<code>PlacementRule</code> で <code>environment</code> ラベルを指定してデプロイしました。他のラベル(guidやregion)を指定してデプロイしてみましょう。</p>
+</li>
+<li>
+<p>複数のクラスタに同じラベルを定義して、<code>PlacementRule</code> でそれを指定した場合に、Applicationがどこにデプロイされるか観察してみましょう。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_clean_up_environment"><a class="anchor" href="#_clean_up_environment"></a>5. Clean Up Environment</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>ホスティング コストを節約するには、このラボで作成したクラスター プールをクリーンアップする必要があります。</p>
+</div>
+<div class="olist arabic">
+<div class="title">手順</div>
+<ol class="arabic">
+<li>
+<p><strong>Infrastructure &#8594; Clusters &#8594; Cluster pools</strong> に移動します。</p>
+</li>
+<li>
+<p>2 つのクラスター プールの横にあるボックスをオンにします。</p>
+</li>
+<li>
+<p><strong>Actions</strong> をクリックし、<strong>Destroy cluster pools</strong> を選択します。</p>
+</li>
+<li>
+<p>確認ダイアログ ボックスに <code>confirm</code> と入力し、<strong>Destroy</strong> をクリックします。</p>
+<div class="paragraph">
+<p>これにより、以前に要求したクラスターがクラスタープールから削除されるわけではありません。 要求されたクラスターも削除します。</p>
+</div>
+</li>
+<li>
+<p><strong>Infrastructure &#8594; Clusters</strong> に移動します。</p>
+</li>
+<li>
+<p><code>my-imported-cluster</code> クラスターの右にある <span class="image unresolved"><img src="images/options_menu_icon.png" alt="options menu icon"></span> (<strong>オプション</strong>) をクリックします。</p>
+</li>
+<li>
+<p><strong>Detach cluster</strong> を選択します。</p>
+</li>
+<li>
+<p>確認ダイアログ ボックスに <code>confirm</code> と入力し、<strong>Detach</strong> をクリックします。</p>
+</li>
+<li>
+<p><code>my-openshift-cluster</code> <code>production-uk-xxxx</code> クラスターの横にあるチェックボックスをオンにします。</p>
+</li>
+<li>
+<p><strong>Actions</strong> をクリックし、<strong>Destroy clusters</strong> を選択します。</p>
+</li>
+<li>
+<p>確認ダイアログ ボックスに <code>confirm</code> と入力し、<strong>Destroy</strong> をクリックします。</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+これは、複数のクラスターを管理する 1 つの方法です。 もう 1 つのオプションは、<span class="image unresolved"><img src="images/options_menu_icon.png" alt="options menu icon"></span> (<strong>オプション</strong>) をクリックして、<strong>Destroy cluster</strong> を選択することです。
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

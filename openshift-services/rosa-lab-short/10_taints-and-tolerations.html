@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Taint と Toleration :: OpenShift Handson</title>
+    <link rel="canonical" href="https://yuhkih.github.io/ocp-handson/openshift-services/rosa-lab-short/10_taints-and-tolerations.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://yuhkih.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#50-rosa-info.adoc">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#51-rosa-hcp-create.adoc">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#52-rosa-app-deploy.adoc">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#53-rosa-ebs.adoc">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#54-1-rosa-web-terminal.adoc">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#54-2-rosa-dev-spaces.adoc">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#58-rosa-bedrock.adoc">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-1-rosa-log-01.adoc">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-1-rosa-log-02.adoc">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-2-rosa-monitoring.adoc">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-3-rosa-project-metrics.adoc">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-4-rosa-alert.adoc">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#56-rosa-nodes.adoc">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#57-rosa-upgrade.adoc">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">OpenShift Handson</a></li>
+    <li><a href="10_taints-and-tolerations.html">Taint と Toleration</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/rosa-lab-short/10_taints-and-tolerations.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Taint と Toleration</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>本コンテンツは、<a href="https://github.com/team-ohc-jp-place/openshift-cns-testdrive">MAD Workshop Ops Track</a> の内容を利用しています。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>以前の演習では、インフラノードを作成し、 <a href="https://docs.openshift.com/container-platform/4.3/nodes/scheduling/nodes-scheduler-node-selectors.html">nodeSelector</a> を使用して、ワークロードを配置する場所を制御しました。
+あるタスクを実行するために、どのようにノードをセットするかを見てきました。
+ <code>nodePlacement</code> 内の <code>nodeSelector</code> は、あるノードのセットに Pod を引き寄せます。
+しかし、反対に、Pod をなるノードから遠ざけたい場合は、どうすればいいでしょう？</p>
+</div>
+<div class="paragraph">
+<p>Taint された(汚された)ノード上でPodが動作しないようにする事ができます。</p>
+</div>
+<div class="paragraph">
+<p>これは、例えば、以下のようなユースケースで役に立つでしょう。：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>クラスタ内のノード(またはノードのグループ)は特別な目的のために予約されている。</p>
+</li>
+<li>
+<p>特定のタスクに特化したハードウェア(GPUのような)を持つノードがある。</p>
+</li>
+<li>
+<p>特定のノードにだけ、その上で実行されているソフトウェアのライセンスを持っている。</p>
+</li>
+<li>
+<p>コンプライアンス上の理由から、ノードが異なるネットワークゾーンに存在する。</p>
+</li>
+<li>
+<p>不具合のあるノードのトラブルシューティングを行いたい。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>この演習では、Taint と Toleration を使用してワークロードを制御する方法を試して見ます。</p>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="_背景"><a class="anchor" href="#_背景"></a>背景</h3>
+<div class="paragraph">
+<p>Taint と Toleration は、協調して動作し、ワークロードが他のノードにスケジュールされないようにします。
+ノードが Taint になると、そのノードは Taint を許容しないワークロードを受け入れるべきではありません。
+ワークロードに適用された Toleration は、対応する Pod を、マッチする Taint をもったノードにスケジュールする事を可能にします。（ただし、必要ではありません）</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>ワークロードが常に特定のノードに配置されるようにするためには、<code>nodeSelector</code> を Taint と Toleration と一緒に使用する必要があります。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_examine_node_labels"><a class="anchor" href="#_examine_node_labels"></a>Examine node labels</h4>
+<div class="paragraph">
+<p>ノードを調べるには、<code>kubeadmin</code> で実行していることを確認してください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>インフラノードとストレージノード以外の、ワーカーノードをリストします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get nodes -l 'node-role.kubernetes.io/worker,!node-role.kubernetes.io/infra,!cluster.ocs.openshift.io/openshift-storage'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>どの演習をやったかにもよりますが、ワーカーラベルセットを持ったノードが3つ以上ある場合があります。</p>
+</div>
+<div class="paragraph">
+<p>では、これらのワーカーノードに、何か Taint が設定されてないか見てみましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc describe nodes -l 'node-role.kubernetes.io/worker,!node-role.kubernetes.io/infra,!cluster.ocs.openshift.io/openshift-storage' | grep Taint</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>これらのワーカーノードに Taint は設定されてないはずです。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_deploying_test_application"><a class="anchor" href="#_deploying_test_application"></a>Deploying test application</h4>
+<div class="paragraph">
+<p>この演習では、テスト用のアプリをデプロイします。</p>
+</div>
+<div class="paragraph">
+<p>このアプリをデプロイする前に、この演習の期間中はノードにラベルを付ける必要があります。
+アプリケーションは <code>appnode=welome-php</code> というラベルのついたノードにデプロイします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get nodes -l 'node-role.kubernetes.io/worker,!node-role.kubernetes.io/infra,!cluster.ocs.openshift.io/openshift-storage' -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | xargs -I{} oc label node {} appnode=welcome-php</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ノードにラベルを付けるには、ノード名をkey=valueのペアで渡します。例：oc label node worker.example.com appnode=welcome-php</p>
+</div>
+<div class="paragraph">
+<p>ノードの名前をメモしながら、ノードがラベル付けされていることを確認します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get nodes -l appnode=welcome-php</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ホームディレクトリで提供されているYAMLマニフェストを使ってアプリケーションをデプロイすることができます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc create -f ~/support/welcome-php.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のオブジェクトが作成されます。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Namespace <code>tt-lab</code></p>
+</li>
+<li>
+<p>サンプルのphpアプリを実行している <code>welcome-php</code> というDeployment</p>
+</li>
+<li>
+<p>ポート <code>8080</code> で Listen する <code>welcome-php</code> というService</p>
+</li>
+<li>
+<p><code>welcome-php</code> という名前のRoute</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>ここから <code>tt-lab</code> プロジェクトで作業しますので、切り替えます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc project tt-lab</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ここで、Podをノードの数と同じにスケールさせます。
+デフォルトのスケジューラは、アプリを均等に分散させようとします。
+また、ロールアウトが完了するのを待ちます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">NODE_NUMBER=$(oc get nodes --no-headers -l appnode=welcome-php | wc -l)
+oc scale deploy welcome-php --replicas=${NODE_NUMBER}
+oc rollout status deploy welcome-php</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>アプリケーションがロールアウトされたら、すべてのノードでリバランスされるように Pod を削除してみましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc delete pods --all
+oc rollout status deploy welcome-php</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Pod がworkerに均等に広がっていることを確認してください。各ノードに1つの Pod があるはずです。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">clear
+oc get pods -o=custom-columns=NAME:.metadata.name,NODE:.spec.nodeName
+oc get nodes -l appnode=welcome-php</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Pod が均等に広がるようにするには、<code>oc delete pods --all</code> を何度か実行する必要があるかもしれません。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ノードを_taint_する"><a class="anchor" href="#_ノードを_taint_する"></a>ノードを Taint する</h4>
+<div class="paragraph">
+<p>これからノードを Taint して、ワークロードを拒否するようにします。
+最初に、それぞれの Taint が何をするのかを説明します。
+設定できる基本的な Taint は3つあります。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key=value:NoSchedule</code></p>
+</li>
+<li>
+<p><code>key=value:NoExecute</code></p>
+</li>
+<li>
+<p><code>key=value:PreferNoSchedule</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>この場合の <code>key</code> は、253文字以内の任意の文字列です。
+キーは文字か数字で始めなければならず、文字、数字、ハイフン、ドット、アンダースコアを含むことができます。</p>
+</div>
+<div class="paragraph">
+<p>ここでの <code>value</code> は任意の文字列であり、63文字以内です。
+値は文字か数字で始めなければならず、文字、数字、ハイフン、ドット、アンダースコアを含むことができます。</p>
+</div>
+<div class="paragraph">
+<p>以下の 3 つの効果が現れます。:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>NoSchedule</code> - taint にマッチしない新しいPodは、そのノードにスケジュールされません。ノード上の既存のPodはそのまま残ります。</p>
+</li>
+<li>
+<p><code>NoExecute</code> -  taint にマッチしない新しいPodは、そのノードにスケジューリングすることはできません。一致しないノード上の既存のPodは削除されます。</p>
+</li>
+<li>
+<p><code>PreferNoSchedule</code> - taint にマッチしない新しいPodがそのノードにスケジューリングされることがありますが、スケジューラはそれを回避しようとします。ノード上の既存のPodは残ります。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>もう一つのコンポーネントとして <code>operator</code> があります。 <code>operator</code> については「Toleration」のセクションで詳しく説明します。</p>
+</div>
+<div class="paragraph">
+<p>この演習では、インフラ・ノードでもストレージ・ノードではない最初のノードを <code>welcome-php=run:NoSchedule</code> で Taint します。
+これにより、すべての新しいPod(適切な Toleration を持たないものは)は、このノードでスケジューリングされないようになります。</p>
+</div>
+<div class="paragraph">
+<p>構文は　oc adm taint node ${nodename} key=value:Effect　です。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">TTNODE=$(oc get nodes -l 'node-role.kubernetes.io/worker,!node-role.kubernetes.io/infra,!cluster.ocs.openshift.io/openshift-storage' -o jsonpath='{range .items[0]}{.metadata.name}')
+oc adm taint node ${TTNODE} welcome-php=run:NoSchedule</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>デプロイしたノードを調べて、そのうちの1つのノードに Taint が適用されていることを確認します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc describe nodes -l appnode=welcome-php | grep Taint</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>NoSchedule</code> を使用しているので、Podはまだそこにあるはずです。
+<code>NoSchedule</code> はノード上での新しいPodの生成を停止するだけであることを覚えておいてください（コマンドは <code>1</code> を返すはずです）。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pods -o wide | grep -c ${TTNODE}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Pod を削除して <code>replicaSet</code> が再配置するのを待ちましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc delete pods --all
+oc rollout status deploy welcome-php</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>このデプロイメントには Toleration がないので、スケジューラは、Taint されたノードを除いたすべてのノードに Pod をデプロイします。
+このコマンドは <code>0</code> を返すはずです。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pods -o wide | grep -c ${TTNODE}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Pod が実行されている場所を調べる。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">clear
+oc get pods -o=custom-columns=NAME:.metadata.name,NODE:.spec.nodeName
+oc get nodes -l appnode=welcome-php</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_toleration"><a class="anchor" href="#_toleration"></a>Toleration</h4>
+<div class="paragraph">
+<p><code>toleration</code> は、スケジューリング中にノードの Taint を "許容 "する(または "無視 "する) Pod の方法です。
+<code>toleration</code> は <code>podSpec</code> で適用され、以下の形式になります。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">tolerations:
+- key: "welcome-php"
+  operator: "Equal"
+  value: "run"
+  effect: "NoSchedule"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>もし Toleration が "マッチ " した場合、スケジューラはこのノードにワークロードをスケジュールします(必要に応じて&#8230;&#8203;保証ではないことを覚えておいてください)。
+<code>key</code> , <code>value</code> , <code>effect</code> にマッチしなければならないことに注意してください。
+オペレータと呼ばれるものもあります。</p>
+</div>
+<div class="paragraph">
+<p><code>operator</code> には <code>Equal</code> か <code>Exists</code> を設定することができます。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Equal</code> - パラメータ <code>key</code>, <code>value</code>, <code>effect</code> がマッチしなければいけません。これは何も指定しない場合のデフォルトの設定です。</p>
+</li>
+<li>
+<p><code>Exists</code> - パラメータ <code>key</code> と <code>effect</code> がマッチしなければなりません。全てにマッチさせるには、値のパラメータは空白のままにしておく必要があります。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Deployment の <code>spec.template.spec</code> セクションでこの Toleration を適用します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc patch deployment welcome-php --patch '{"spec":{"template":{"spec":{"tolerations":[{"key":"welcome-php","operator":"Equal","value":"run","effect":"NoSchedule"}]}}}}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>パッチを当てると別の展開が始まるので、展開が終わるのを待つことにします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc rollout status deploy welcome-php</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>デプロイメントYAMLを見ることで、Toleration の設定を見ることができます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get deploy welcome-php -o yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>さて、Toleration を設定したので、Taint を持つノードで実行してみましょう (これは <code>1</code> を返すはずです)。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pods -o wide | grep -c ${TTNODE}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>すべてのPodをリストアップすると、それらが均等に広がっているはずです</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">clear
+oc get pods -o=custom-columns=NAME:.metadata.name,NODE:.spec.nodeName
+oc get nodes -l appnode=welcome-php</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Taint と Toleration について、もっと良く知るには、https://docs.openshift.com/container-platform/4.2/nodes/scheduling/nodes-scheduler-taints-tolerations.html[Official Documentation] を読んでみて下さい。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_クリーンアップ"><a class="anchor" href="#_クリーンアップ"></a>クリーンアップ</h4>
+<div class="paragraph">
+<p>次の演習では <code>kubeadmin</code> でログインしてください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>他の演習も Taint の影響を受ける可能性があるので、やったことを元に戻しておきましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc delete project tt-lab
+oc adm taint node ${TTNODE} welcome-php-
+oc get nodes -l 'node-role.kubernetes.io/worker,!node-role.kubernetes.io/infra,!cluster.ocs.openshift.io/openshift-storage' -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}' | xargs -I{} oc label node {} appnode-</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ノードの Taint が除去されていることを確認してください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc describe nodes -l 'node-role.kubernetes.io/worker,!node-role.kubernetes.io/infra,!cluster.ocs.openshift.io/openshift-storage' | grep Taint</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>また、作業していたノードにラベルが存在しないことを確認してください。
+このコマンドはノードを返さないはずです。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get nodes -l appnode=welcome-php</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Projectのセルフプロビジョニングの無効化 :: OpenShift Handson</title>
+    <link rel="canonical" href="https://yuhkih.github.io/ocp-handson/openshift-services/rosa-lab-short/08_disabling-project-self-provisioning.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://yuhkih.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#50-rosa-info.adoc">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#51-rosa-hcp-create.adoc">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#52-rosa-app-deploy.adoc">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#53-rosa-ebs.adoc">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#54-1-rosa-web-terminal.adoc">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#54-2-rosa-dev-spaces.adoc">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#58-rosa-bedrock.adoc">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-1-rosa-log-01.adoc">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-1-rosa-log-02.adoc">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-2-rosa-monitoring.adoc">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-3-rosa-project-metrics.adoc">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-4-rosa-alert.adoc">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#56-rosa-nodes.adoc">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#57-rosa-upgrade.adoc">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">OpenShift Handson</a></li>
+    <li><a href="08_disabling-project-self-provisioning.html">Projectのセルフプロビジョニングの無効化</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/rosa-lab-short/08_disabling-project-self-provisioning.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Projectのセルフプロビジョニングの無効化</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>本コンテンツは、<a href="https://github.com/team-ohc-jp-place/openshift-cns-testdrive">MAD Workshop Ops Track</a> の内容を利用しています。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>続ける前に、LDAPの演習(「外部認証プロバイダ(LDAP)の設定」)を終了して下さい。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>OpenShiftでは、デフォルトでは、認証済みのユーザが <strong>Project</strong> を作成してアプリケーションを論理的に収容できるようになっています。この機能により、管理者は「PaaS」(Platform as a Service)モデルで普及した「セルフサービス」機能を提供することができます。</p>
+</div>
+<div class="paragraph">
+<p>この機能はすべてのサイトに適しているわけではないでしょう。多くの管理者は、Projectや、誰がProjectを作成できるかを、よりコントロールしたいと考えているかもしれません。この目的には以下のようなものがあります。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>環境の保護 - 管理者は、自分の知らないところでProjectが作成されることを望まないかもしれません。</p>
+</li>
+<li>
+<p>リソースの割り当て - 管理者はリソースの割り当てを細かく制御したい場合があります。(「オーバーコミットはしたくない」など)</p>
+</li>
+<li>
+<p>クォータの柔軟性 - デフォルトクォータを設定することはできますが、管理者はProjectのスコープに応じてクォータの追加(または削減)を指定することができます。</p>
+</li>
+<li>
+<p>課金計算とチャージバック - マルチテナントシステムでは、利用額の計算とチャージバックを行う必要があるかもしれません。</p>
+</li>
+<li>
+<p>一般的な管理制御 - 管理者は、環境内での動作を完全に制御したい場合があります。</p>
+</li>
+</ul>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Projectのセルフプロビジョニングを無効にする以外にも、これらのタイプのコントロールを得る方法は存在します。</p>
+</div>
+</div>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="_前提知識_projects"><a class="anchor" href="#_前提知識_projects"></a>前提知識: Projects</h3>
+<div class="paragraph">
+<p>具体的には何を無効にしようとしているのでしょうか?前のラボでは、Projectはアプリケーションのためのすべてのリソースを保持する「バケツ」のようなものであることを学びました。また、Projectはコラボレーションのためにユーザやグループに割り当てることができることも学びました。しかし、ProjectとKubernetes Namespaceの違いは何でしょうか?</p>
+</div>
+<div class="paragraph">
+<p>ProjectはKubernetes Namespaceに直接マッピングされますが、内部レジストリのNamespaceネームスペースやVXLANのVNIDにもマッピングされます。つまり、Projectへのアクセス権を与えることは、ユーザの共同作業を可能にするだけではなく、ネットワーク通信、レジストリNamespaceへのアクセス、Kubernetes Namespace内のオブジェクトへのアクセスも許可しているのです。</p>
+</div>
+<div class="sect3">
+<h4 id="_clusterrolebindingを調べる"><a class="anchor" href="#_clusterrolebindingを調べる"></a>Clusterrolebindingを調べる</h4>
+<div class="paragraph">
+<p><code>self-provisioners</code> の <code>clusterrolebinding</code> を調べます。これには <strong>kubeadmin</strong> である必要があります。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>前のラボで使用した serviceaccount ユーザを使用することもできます。<code>kubeadmin</code> と service account user は両方とも <code>cluster-admin</code> ロールを持っているので、どちらでも構いません。</p>
+</div>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>oc describe</code> コマンドを実行して、<code>self-provisioners</code> の <code>clusterrolebinding</code> の使用状況を確認して下さい。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc describe clusterrolebinding.rbac self-provisioners</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のような出力が表示されるはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Name:         self-provisioners
+Labels:       &lt;none&gt;
+Annotations:  rbac.authorization.kubernetes.io/autoupdate: true
+Role:
+  Kind:  ClusterRole
+  Name:  self-provisioner
+Subjects:
+  Kind   Name                        Namespace
+  ----   ----                        ---------
+  Group  system:authenticated:oauth</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ここでは、グループ <code>system:authenticated:oauth</code> (デフォルトでは認証済みのすべてのユーザが属するグループ) が <code>self-provisioners</code> ロールにバインドされていることを示しています。このロールはOpenShiftに組み込まれているロールで、ユーザがProjectを作成することを許可します。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>OpenShiftに付属するさまざまなロールに興味がある場合は、<a href="https://docs.openshift.com/container-platform/4.5/authentication/using-rbac.html">Role-Based
+Access Control (RBAC)</a> のドキュメントで詳しく説明されています。</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>設定を確認するには、以下を実行してYAMLを調査します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get clusterrolebinding.rbac self-provisioners -o yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>設定は以下のようになっているはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: "true"
+  creationTimestamp: "2022-06-07T02:52:33Z"
+  name: self-provisioners
+  resourceVersion: "9988"
+  uid: 24f23fdd-4a10-40f2-8ca2-0068d4b51a8a
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: self-provisioner
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: system:authenticated:oauth</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_self_provisionerロールの削除"><a class="anchor" href="#_self_provisionerロールの削除"></a>Self-Provisionerロールの削除</h4>
+<div class="paragraph">
+<p>グループ <code>system:authenticated:oauth</code> から <code>self-provisioner</code> クラスタロールを削除するには、ロールバインディングからグループを削除する必要があります。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc patch clusterrolebinding.rbac self-provisioners -p '{"subjects": null}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>自動更新が有効な場合は、クラスタロールをデフォルトの状態にリセットします。これを無効にするには、annotation <code>rbac.authorization.kubernetes.io/autoupdate</code> を <code>false</code> に設定して実行する必要があります。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc patch clusterrolebinding.rbac self-provisioners -p '{ "metadata": { "annotations": { "rbac.authorization.kubernetes.io/autoupdate": "false" } } }'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>新しい設定を表示します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get clusterrolebinding.rbac self-provisioners -o yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>YAMLには <code>subjects</code> がなくなって、次のように表示されるはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: "false"
+  creationTimestamp: "2022-06-07T02:52:33Z"
+  name: self-provisioners
+  resourceVersion: "66495"
+  uid: 24f23fdd-4a10-40f2-8ca2-0068d4b51a8a
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: self-provisioner</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>fancyuser1</code> としてログインして、Projectを作成できるかテストしてみましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u fancyuser1 -p Op#nSh1ft
+oc new-project fancyuserproject</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>エラーメッセージが表示されるはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Error from server (Forbidden): You may not request a new project via this API.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次の演習のために <code>kubeadmin</code> としてログインします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_リクエストメッセージのカスタマイズ"><a class="anchor" href="#_リクエストメッセージのカスタマイズ"></a>リクエストメッセージのカスタマイズ</h4>
+<div class="paragraph">
+<p>これで、ユーザがProjectを作成しようとすると、いつでも <code>You may not request a new project via this API</code> というメッセージが表示されるようになりました。 このメッセージをカスタマイズすることで、より意味のあるアクションを促すことができます。</p>
+</div>
+<div class="paragraph">
+<p>例えば、ユーザにProjectをリクエストするチケットを提出させることができます。これを行うには、以下のようにテキストを変更して、指示を含むようにすることができます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc patch --type=merge project.config.openshift.io cluster -p '{"spec":{"projectRequestMessage":"Please visit https://ticket.example.com to request a project"}}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ここでは、<code>projectRequestMessage</code> と <code>Please visit
+<a href="https://ticket.example.com" class="bare">https://ticket.example.com</a> to request a project</code> というValueを指定しています。</p>
+</div>
+<div class="paragraph">
+<p>この新しいメッセージを表示する前に、<code>apiserver</code> アプリケーションが変更をロールアウトするのを待つ必要があります。これはロールアウトに時間がかかることがあり、特に忙しいクラスタではそうです。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">sleep 30
+oc rollout status -n openshift-apiserver deploy/apiserver</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>これで、ユーザはProjectを作成しようとするときにこのメッセージを受け取るようになります。<code>fancyuser1</code> になってProjectを作成してみてください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u fancyuser1 -p Op#nSh1ft
+oc new-project fancyuserproject</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のようなメッセージが表示されるはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Error from server (Forbidden): Please visit https://ticket.example.com to request a project</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Operatorがmaster configを更新するまでに時間がかかることがあるので、新しいメッセージが表示されるまでに時間がかかるかもしれません。新しいメッセージが表示されない場合は、しばらく待ってからもう一度試してみてください。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_クリーンアップ"><a class="anchor" href="#_クリーンアップ"></a>クリーンアップ</h4>
+<div class="paragraph">
+<p>次のラボでは必ず <code>kubeadmin</code> でログインしてください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u kubeadmin -p {{ KUBEADMIN_PASSWORD }}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>他のラボでは <code>self-provisioners</code> ロールが必要になるかもしれないので、このラボでやったことを元に戻しましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc patch clusterrolebinding.rbac self-provisioners -p '{"subjects":[{"apiGroup":"rbac.authorization.k8s.io","kind":"Group","name":"system:authenticated:oauth"}]}'
+oc patch clusterrolebinding.rbac self-provisioners -p '{"metadata":{"annotations":{"rbac.authorization.kubernetes.io/autoupdate":"true"}}}'
+oc patch --type=json project.config.openshift.io cluster -p '[{"op": "remove", "path": "/spec/projectRequestMessage"}]'</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>OpenShift GitOps Lab - Helmインテグレーション :: OpenShift Handson</title>
+    <link rel="canonical" href="https://yuhkih.github.io/ocp-handson/openshift-services/rosa-lab-short/23-Helm.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://yuhkih.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#50-rosa-info.adoc">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#51-rosa-hcp-create.adoc">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#52-rosa-app-deploy.adoc">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#53-rosa-ebs.adoc">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#54-1-rosa-web-terminal.adoc">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#54-2-rosa-dev-spaces.adoc">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#58-rosa-bedrock.adoc">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-1-rosa-log-01.adoc">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-1-rosa-log-02.adoc">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-2-rosa-monitoring.adoc">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-3-rosa-project-metrics.adoc">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-4-rosa-alert.adoc">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#56-rosa-nodes.adoc">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#57-rosa-upgrade.adoc">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">OpenShift Handson</a></li>
+    <li><a href="23-Helm.html">OpenShift GitOps Lab - Helmインテグレーション</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/rosa-lab-short/23-Helm.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">OpenShift GitOps Lab - Helmインテグレーション</h1>
+<div class="sect1">
+<h2 id="_helmインテグレーション"><a class="anchor" href="#_helmインテグレーション"></a>Helmインテグレーション</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://helm.sh/">Helm</a>はKubernetesアプリケーションのパッケージマネージャーです。事前にパッケージ化されたアプリケーションを定義、インストール、更新することができます。ビルド済みのKubernetesアプリケーションをバンドルして提供する方法です。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/gitops/helm/helm-001.png" alt="helm 001">
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://argoproj.github.io/argo-cd/">Argo CD</a>は、Kubernetes用の宣言型GitOps継続的デリバリーツールです。Argo CDを使用すると、Helmチャートを使用してアプリケーションをデプロイおよび管理できます。
+この演習では、Argo CDを使用してHelm チャートをデプロイする方法を学習します。</p>
+</div>
+<div class="paragraph">
+<p>このトピックではArgo CD内のネイティブHelmインテグレーションについて説明します。</p>
+</div>
+<div class="sect2">
+<h3 id="_背景"><a class="anchor" href="#_背景"></a>背景</h3>
+<div class="paragraph">
+<p>Helmはアプリケーションスタックをパッケージ化してKubernetesにデプロイするための方法です。 Helmは、Kubernetesのパッケージマネージャーのようなものと考えることができます。Helmの主なコンポーネントは次のとおりです。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Chart : アプリケーションやアプリケーションスタックなどのをデプロイするために使用される、関連するKubernetes YAMLファイルで構成されるパッケージ</p>
+</li>
+<li>
+<p>Repository : チャートを保存、共有、配布できる場所</p>
+</li>
+<li>
+<p>Release : Kubernetes クラスターにデプロイされた Chart の特定のインスタンス</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Helm は、ユーザーがCLIを介しHelmチャートに対して（ほとんどの場合YAMLファイルを介して）パラメーターを提供することによって機能します。
+これらのパラメーターはHelmテンプレートYAMLに挿入され、KubernetesクラスターにデプロイされるYAMLを生成します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/gitops/helm/helm-002.png" alt="helm 002">
+</div>
+</div>
+<div class="paragraph">
+<p>Argo CDにはHelmのネイティブサポートが組み込まれています。 Helmチャートリポジトリを呼び出し、値を直接 アプリケーションマニフェストに提供します。 さらに、UIまたはCLIを介して、直接、クラスター上のHelmリリースをArgoCDで操作や管理することができます。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_マニフェストを調べる"><a class="anchor" href="#_マニフェストを調べる"></a>マニフェストを調べる</h3>
+<div class="paragraph">
+<p>Argo CDのApplicationマニフェストで Helmリポジトリ、チャート、および値を直接指定できます。
+例を見てみましょう。 quarkus-app.yamlファイルを確認します。
+このApplicationは、サンプルのQuarkusアプリケーションをデプロイします。ファイル全体は以下の通りです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo
+  labels:
+    argocd.argoproj.io/managed-by: openshift-gitops
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: quarkus-app
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: demo
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    helm:
+      parameters:
+        - name: build.enabled
+          value: "false"
+        - name: deploy.route.tls.enabled
+          value: "true"
+        - name: image.name
+          value: quay.io/ablock/gitops-helm-quarkus
+    chart: quarkus
+    repoURL: https://redhat-developer.github.io/redhat-helm-charts
+    targetRevision: 0.0.3
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>内容を見ると、.spec.source.helmで特定の構成が設定されているのでセクションを少し細かく見てみます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
+  source:
+    helm:
+      parameters:
+        - name: build.enabled
+          value: "false"
+        - name: deploy.route.tls.enabled
+          value: "true"
+        - name: image.name
+          value: quay.io/ablock/gitops-helm-quarkus
+    chart: quarkus
+    repoURL: https://redhat-developer.github.io/redhat-helm-charts
+    targetRevision: 0.0.3</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>parameters - このセクションでは、Helmチャートに渡すパラメーターを入力します。これらはValues.yamlファイルにある値と同じです。</p>
+</li>
+<li>
+<p>chart - Helmリポジトリからデプロイするチャートの名前です。</p>
+</li>
+<li>
+<p>repoURL - HelmリポジトリのURLです。</p>
+</li>
+<li>
+<p>targetRevision - デプロイしたいチャートのバージョンです。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>これらはhelm install &#8230;&#8203;を使用するのと同じように、Helmチャートをクラスターにデプロイするために使用できます。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+実際に起こることは、Argo CDが helm template &#8230;&#8203; | kubectl apply -f - を実行することです。それについては少し後で説明します。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_アプリケーションをデプロイする"><a class="anchor" href="#_アプリケーションをデプロイする"></a>アプリケーションをデプロイする</h3>
+<div class="paragraph">
+<p>Argo CDインスタンスにGUIおよびCLI接続を行っていない場合、<a href="21-GitOps.html">GitOpsのラボ</a>を参照しインスタンスへの接続を行います。</p>
+</div>
+<div class="paragraph">
+<p>このトピックの最初の方に表示したArgo CD Applicationマニフェスト quarkus-app.yamlを適用して、Helmチャートをデプロイします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc apply -f https://raw.githubusercontent.com/redhat-developer-demos/openshift-gitops-examples/main/components/applications/quarkus-app.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>これによりquarkus-appアプリケーションが作成されます。Helmのアイコンに注意してください。アイコン ⎈ はHelmアプリケーションであることを示しています。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/gitops/helm/helm-002.png" alt="helm 002">
+</div>
+</div>
+<div class="paragraph">
+<p>この"card"をクリックすると、アプリケーションの概要ページに移動します。"show hidden resources"をクリックすると"tree"ビューが展開されます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/gitops/helm/helm-003.png" alt="helm 003">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/gitops/helm/helm-004.png" alt="helm 004">
+</div>
+</div>
+<div class="paragraph">
+<p>次のコマンドを実行してアプリケーションのURLを取得します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get route/quarkus-app -n demo  -o jsonpath='{.spec.host}{"\n"}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>URLにアクセスすると、次のようなページが表示されます。quarkus-appはこのような表示を行うアプリケーションです。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/gitops/helm/helm-005.png" alt="helm 005">
+</div>
+</div>
+<div class="paragraph">
+<p>argocd CLI を使用して、このApplicationを操作できるようになりました。 例えば、アプリケーションのスケールを2レプリカに変更したい場合は、
+argocd CLIを使用してその値を変更するだけです。
+まず、実行中のpodの数を確認します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pods -n demo</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>出力は次のようになり、1つのpodが稼働しています。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">NAME                           READY   STATUS              RESTARTS   AGE
+quarkus-app-58f475cb86-rddz2   1/1     Running             0          14m</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Helmのvaluesを変更してみましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">argocd app set quarkus-app -p deploy.replicas=2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>このアプリケーションが2つのpodを利用するようにセットしました。podの数を再度確認します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pods -n demo</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>podが2つになります。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">NAME                           READY   STATUS              RESTARTS   AGE
+quarkus-app-58f475cb86-rddz2   1/1     Running             0          15m
+quarkus-app-58f475cb86-s9llq   0/1     ContainerCreating   0          1s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Argo CDのUIには、2つのポッドがあり、アプリケーションが表示され、完全に正常に同期していることがわかります。</p>
+</div>
+<div class="paragraph">
+<p>これはArgo CDを使用してHelmチャートをデプロイする有効かつ完全にサポートされている方法です。
+しかし、これはGitOpsフレンドリーではありません。次のトピックでGitOpsワークフローでHelmを使用する方法を見てみましょう。
+次の演習のために Argo CD WebUI タブを開いたままにしておいてください。Helm チャートをデプロイする、よりGitOpsフレンドリーな方法を学びます。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_helm_gitops_deployment"><a class="anchor" href="#_helm_gitops_deployment"></a>Helm GitOps Deployment</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このトピックではHelmを利用したGitOpsデプロイメントパターンを学習します。</p>
+</div>
+<div class="sect2">
+<h3 id="_背景_2"><a class="anchor" href="#_背景_2"></a>背景</h3>
+<div class="paragraph">
+<p>前のトピックでは、Argo CDを使用してHelmチャートをネイティブにデプロイする方法を見てきました。この方法では、コンフィグでHelm Repo、Chart、および Valuesを直接提供する必要がありました。前のトピックの最後に、この方法は有効ではあるものの、GitOpsフレンドリーではないと申し上げました。</p>
+</div>
+<div class="paragraph">
+<p>GitOpsワークフローでは、アプリケーションのデプロイの状態をSCMリポジトリ（GitHubなど）に保存する必要があります。これを行うには、values.yamlをgitリポジトリに保存し、何らかの方法でHelmリポジトリを参照する必要があります。</p>
+</div>
+<div class="paragraph">
+<p>ここで、Helm Subchart/Dependency デプロイ戦略の出番です。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_マニフェストを調べる_2"><a class="anchor" href="#_マニフェストを調べる_2"></a>マニフェストを調べる</h3>
+<div class="paragraph">
+<p><a href="22-Kustomize.html">Kustomizeのラボ</a> でクローンしたレポジトリ <code>examples repo</code> の中の <code>quarkus-subchart</code> ディレクトリをターゲットにします。</p>
+</div>
+<div class="paragraph">
+<p>レポジトリをクローンしていない場合は、下記のコマンドでクローンを実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ~
+git clone https://github.com/redhat-developer-demos/openshift-gitops-examples
+cd openshift-gitops-examples</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>quarkus-subchart</code> ディレクトリの構成を調べると次のような、Chart.yaml ファイルと values.yaml ファイルの2つのYAMLファイルのみで構成されています。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">openshift-gitops-examples/apps/quarkus-subchart
+├── Chart.yaml
+└── values.yaml
+
+0 directories, 2 files</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>まずChart.yamlファイルを見てみましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cat apps/quarkus-subchart/Chart.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のように表示されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v2
+name: quarkus-subchart
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+dependencies:
+- name: quarkus
+  version: 0.0.3
+  repository: https://redhat-developer.github.io/redhat-helm-charts</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>このChart.yamlファイルは、空のHelmチャートを作成し、デプロイするHelmチャートに関する依存関係としてdependeciesセクションに追加しています。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+この方法を使用して、複数のHelmチャートをデプロイできます。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>次にvalues.yamlファイルを見てみます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cat apps/quarkus-subchart/values.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のように表示されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">quarkus:
+  build:
+    enabled: false
+  deploy:
+    route:
+      tls:
+        enabled: true
+    replicas: 1
+  image:
+    name: quay.io/ablock/gitops-helm-quarkus</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ここでは、Helmチャートに渡す値を指定しています。
+デプロイの状態がgitリポジトリに保存されるようになり、よりGitOpsに適しています。たとえば、イメージやレプリカの数を変更する場合は、gitワークフローを使用してこのアプリケーションを更新できます。GitOpsワークフローの場合と同様に、このリポジトリにpull requestできるようになりました。</p>
+</div>
+<div class="paragraph">
+<p>Argo CDのApplicationは、通常のgitアプリケーションのように見えるはずです。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cat components/applications/quarkus-subchart.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のように表示されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: quarkus-subchart
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: demo
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: apps/quarkus-subchart/
+    repoURL: https://github.com/redhat-developer-demos/openshift-gitops-examples
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>sourceの部分を見ると、Helmリポジトリではなくgitリポジトリをターゲットにしていることがわかります。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"> source:
+    path: apps/quarkus-subchart/
+    repoURL: https://github.com/redhat-developer-demos/openshift-gitops-examples
+    targetRevision: main</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_アプリケーションのデプロイ"><a class="anchor" href="#_アプリケーションのデプロイ"></a>アプリケーションのデプロイ</h3>
+<div class="paragraph">
+<p>このアプリケーションをデプロイする前に、Argo CDのWeb UIが開いていることを確認してください。
+前のステップと同様に、Argo CD Web UIを開き、アプリケーションが作成されるのを確認します。</p>
+</div>
+<div class="paragraph">
+<p>Argo CD Application マニフェスト quarkus-subchart.yaml を適用して、このHelmチャートをデプロイします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc apply -f https://raw.githubusercontent.com/redhat-developer-demos/openshift-gitops-examples/main/components/applications/quarkus-subchart.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>これにより、アプリケーションが作成されます。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Helmロゴ ⎈ は表示されません。 YAMLをロードしているだけなので、gitロゴになりました。
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/gitops/helm/helm-006.png" alt="helm 006">
+</div>
+</div>
+<div class="paragraph">
+<p>このカードをクリックすると、アプリケーションの概要ページに移動します。必要に応じて、"show hidden resources"をクリックして、"tree"ビューを展開します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/gitops/helm/helm-007.png" alt="helm 007">
+</div>
+</div>
+<div class="paragraph">
+<p>これで、Argo CDを使用して、GitOpsに適した方法でHelmチャートをデプロイしました。
+注意すべき重要な点が1つあります。このHelmチャートを2回デプロイしましたが、argocd CLIを使用してこれを確認できます。次のコマンドを実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">argocd app list -o name</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>これにより、次の出力が得られるはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">quarkus-app
+quarkus-subchart</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>これは、ocコマンドでも確認できます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get applications -n openshift-gitops</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ocコマンドにより次のような出力が得られるはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">NAME               SYNC STATUS   HEALTH STATUS
+quarkus-app        Synced        Healthy
+quarkus-subchart   Synced        Healthy</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ただし、Helm CLIを使用してアプリケーションを一覧表示しようとしても、見ることができません。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">helm ls --all-namespaces</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のように、Helmリリースは表示されません。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>これは、Argo CDがHelmチャートをデプロイする方法のためです。Argo CDがHelmチャートをデプロイするとき、helm templateを実行し、それを kubectl apply -f にパイプで渡すことによってデプロイします。これは、Argo CDがhelm template（提供された値を含む） を "raw" のKubernetes YAMLに変換することを意味します。</p>
+</div>
+<div class="paragraph">
+<p>この演習は以上になります。</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

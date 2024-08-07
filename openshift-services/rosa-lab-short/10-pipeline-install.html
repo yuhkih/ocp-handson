@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>OpenShift Pipelines Lab - OpenShift Pipelines インストール :: OpenShift Handson</title>
+    <link rel="canonical" href="https://yuhkih.github.io/ocp-handson/openshift-services/rosa-lab-short/10-pipeline-install.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://yuhkih.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#50-rosa-info.adoc">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#51-rosa-hcp-create.adoc">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#52-rosa-app-deploy.adoc">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#53-rosa-ebs.adoc">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#54-1-rosa-web-terminal.adoc">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#54-2-rosa-dev-spaces.adoc">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#58-rosa-bedrock.adoc">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-1-rosa-log-01.adoc">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-1-rosa-log-02.adoc">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-2-rosa-monitoring.adoc">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-3-rosa-project-metrics.adoc">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-4-rosa-alert.adoc">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#56-rosa-nodes.adoc">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#57-rosa-upgrade.adoc">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">OpenShift Handson</a></li>
+    <li><a href="10-pipeline-install.html">OpenShift Pipelines Lab - OpenShift Pipelines インストール</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/rosa-lab-short/10-pipeline-install.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">OpenShift Pipelines Lab - OpenShift Pipelines インストール</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>このセクションでは、OpenShift Pipelines演習を行うためのOperatorとツール群のインストールを行います。</p>
+</div>
+<div class="paragraph">
+<p>各ツールの説明は、後続のラボにて行います。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_openshift_web_コンソールへの接続"><a class="anchor" href="#_openshift_web_コンソールへの接続"></a>OpenShift Web コンソールへの接続</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>OpenShift WebコンソールのアクセスURLをコマンドで確認し、Webコンソールへadmin権限のユーザで接続を行います。</p>
+</div>
+<div class="paragraph">
+<p>アクセス情報を把握している場合は、ログインを行い <a href="#_pipelines_operatorのインストール">Pipelines-Operatorのインストール</a> に進んでください。</p>
+</div>
+<div class="paragraph">
+<p>最初に、OpenShift Webコンソールのpodの準備が整っているか確認します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pods -n openshift-console | grep console</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のようにコンソールのpodが1つ、Running状態になっていることを確認してください。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">console-68d76dd66b-9s8j8     1/1     Running   0          90m</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>podの準備が整うまで、数分ほど待たなければならない場合があります。Pod の準備ができたら、次のコマンドを実行して、OpenShift Webコンソールへのルートを見つけます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get routes console -n openshift-console</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>出力例（値は環境ごとに異なります）</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">NAME      HOST/PORT                                                                   PATH   SERVICES   PORT    TERMINATION          WILDCARD
+console   console-openshift-console.crc-dzk9v-master-0.crc.n63fbx0mnicn.instruqt.io          console    https   reencrypt/Redirect   None</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>「HOST/PORT」列の下のリンクをコピーしWebブラウザーでアクセスを行います。</p>
+</div>
+<div class="paragraph">
+<p>OpenShiftのログイン画面が表示されるので、OpenShiftのAdminユーザ権限を持ったアカウントでログインします。</p>
+</div>
+<div class="paragraph">
+<p>ログイン後は、左側のメニューを確認してください。次の図のように、 Administrator パースペクティブになっています。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/gitops/gitops/gitops-004.png" alt="gitops 004">
+</div>
+</div>
+<div class="paragraph">
+<p>OpenShiftの Webコンソールは、既定ではブラウザの表示言語に合わせた言語での表示になります。
+言語を変更したい場合には、下記の手順で変更を行なってください（本ラボガイドは日本語UI準拠で記載しています）。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Webコンソール画面右上のユーザ名 (admin) をクリックして [ユーザー設定] のメニューを開きます。</p>
+</li>
+<li>
+<p>次に表示される画面で [言語] メニューを選択すると、「Use the default browser language setting.」のチェックボックスにチェックが入っています。</p>
+</li>
+<li>
+<p>このチェックボックスのチェックを外し、[言語の設定] のドロップダウンリストから、変更後の言語を選択します。</p>
+</li>
+<li>
+<p>最後にブラウザで再読み込みすると、Webコンソールの表示言語が変更されます。</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/gitops/gitops/gitops-005.png" alt="gitops 005">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/gitops/gitops/gitops-006.png" alt="gitops 006">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/gitops/gitops/gitops-007.png" alt="gitops 007">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/gitops/gitops/gitops-008.png" alt="gitops 008">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_pipelines_operatorのインストール"><a class="anchor" href="#_pipelines_operatorのインストール"></a>Pipelines-Operatorのインストール</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Administratorパースペクティブから OperatorHub をクリックし、"OpenShift Pipelines" operatorを検索し、見つかったカードをクリックします。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/pipelines/pipelines-install-1.png" alt="pipelines install 1">
+</div>
+</div>
+<div class="paragraph">
+<p>インストール用の画面が表示されるので[インストール]ボタンをクリックします。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/pipelines/pipelines-install-3.png" alt="pipelines install 3">
+</div>
+</div>
+<div class="paragraph">
+<p>インストールに関する設定が表示されるため、既定の設定のまま[インストール]ボタンをクリックしてインストールします。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/pipelines/pipelines-install-4.png" alt="pipelines install 4">
+</div>
+</div>
+<div class="paragraph">
+<p>インストール途中の遷移をWebコンソールで見ることができます。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>インストール中</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/pipelines/pipelines-install-6.png" alt="pipelines install 6">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>インストール完了</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/pipelines/pipelines-install-7.png" alt="pipelines install 7">
+</div>
+</div>
+<div class="paragraph">
+<p>インストールされると[インストール済みのOperator]に表示されます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/pipelines/pipelines-install-5.png" alt="pipelines install 5">
+</div>
+</div>
+<div class="paragraph">
+<p>また、GUIではなく、CLIを用いて、インストールされたものを確認するためには、以下のコマンドを実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get operators</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のような出力が得られます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">NAME                                                  AGE
+openshift-pipelines-operator-rh.openshift-operators   5m30s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のコマンドを実行して起動していることを確認します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pods -n openshift-pipelines</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のような出力が得られます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">NAME                                                 READY   STATUS    RESTARTS   AGE
+pipelines-as-code-controller-7bf4dc9647-nknhb        1/1     Running   0          8m42s
+pipelines-as-code-watcher-694d4c79b5-7gbvc           1/1     Running   0          8m42s
+pipelines-as-code-webhook-7b9754b557-nrvbc           1/1     Running   0          8m42s
+tekton-operator-proxy-webhook-6545b677df-wf949       1/1     Running   0          10m
+tekton-pipelines-controller-64f97cddd7-9964k         1/1     Running   0          10m
+tekton-pipelines-webhook-858c579c98-kkdsf            1/1     Running   0          10m
+tekton-triggers-controller-5b854f667b-tbs5b          1/1     Running   0          9m30s
+tekton-triggers-core-interceptors-844bf4fbc5-kj7l9   1/1     Running   0          9m30s
+tekton-triggers-webhook-7879595bb4-kvtcq             1/1     Running   0          9m30s
+tkn-cli-serve-848d54746-5cbl6                        1/1     Running   0          8m34s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>すべてのpodがRunningであれば、次に進みます。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tekton_cliのインストール"><a class="anchor" href="#_tekton_cliのインストール"></a>Tekton CLIのインストール</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>続けて、TektonのCLIツールのインストールを行います。以下のコマンドを実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl -LO https://github.com/tektoncd/cli/releases/download/v0.31.0/tkn_0.31.0_Linux_x86_64.tar.gz
+sudo tar xvzf tkn_0.31.0_Linux_x86_64.tar.gz -C /usr/local/bin/ tkn</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>インストール結果の確認には下記のコマンドを実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">tkn version</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>下記のようにバージョン情報が表示されればインストールは成功です。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">Client version: 0.31.0
+Pipeline version: v0.37.5
+Triggers version: v0.20.2
+Operator version: v0.60.1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以上で本演習は終了です。</p>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

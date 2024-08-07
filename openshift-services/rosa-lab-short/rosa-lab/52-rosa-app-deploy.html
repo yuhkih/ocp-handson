@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>サンプルアプリケーションのデプロイ :: OpenShift Handson</title>
+    <link rel="canonical" href="https://yuhkih.github.io/ocp-handson/openshift-services/rosa-lab-short/rosa-lab/52-rosa-app-deploy.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../../../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://yuhkih.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../../index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#50-rosa-info.adoc">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#51-rosa-hcp-create.adoc">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#52-rosa-app-deploy.adoc">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#53-rosa-ebs.adoc">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#54-1-rosa-web-terminal.adoc">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#54-2-rosa-dev-spaces.adoc">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#58-rosa-bedrock.adoc">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-1-rosa-log-01.adoc">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-1-rosa-log-02.adoc">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-2-rosa-monitoring.adoc">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-3-rosa-project-metrics.adoc">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-4-rosa-alert.adoc">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#56-rosa-nodes.adoc">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#57-rosa-upgrade.adoc">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../../69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../../index.html">OpenShift Handson</a></li>
+    <li><a href="52-rosa-app-deploy.html">サンプルアプリケーションのデプロイ</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/rosa-lab-short/rosa-lab/52-rosa-app-deploy.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">サンプルアプリケーションのデプロイ</h1>
+<div class="sect1">
+<h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このモジュールでは、Node.jsのサンプルアプリケーションのデプロイを実行します。</p>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="_プロジェクトの作成"><a class="anchor" href="#_プロジェクトの作成"></a>プロジェクトの作成</h3>
+<div class="paragraph">
+<p>アプリケーションの作成場所となる「プロジェクト」を、「新規プロジェクトを作成します」をクリックして作成します。この例では、「test-project20」を入力しています。1つのOpenShiftクラスター内に、同じ名前を持つプロジェクトを複数作成できませんので、プロジェクト名は適宜変更してください。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/rosa/app-deploy/project-create1.png" alt="project create1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/rosa/app-deploy/project-create2.png" alt="project create2">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_サンプルアプリケーションの作成"><a class="anchor" href="#_サンプルアプリケーションの作成"></a>サンプルアプリケーションの作成</h3>
+<div class="paragraph">
+<p>プロジェクトの作成が完了したら、「+追加」からサンプルアプリケーションを作成します。「すべてのサービス」を選択して、ビルダーイメージの「Node.js」を選択します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/rosa/app-deploy/add-console.png" alt="add console">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/rosa/app-deploy/nodejs-select.png" alt="nodejs select">
+</div>
+</div>
+<div class="paragraph">
+<p>「作成」を選択して、「サンプルを試す」をクリックしてアプリケーションのビルドに利用するGitリポジトリーのURLを指定します。最後に「作成」をクリックします。入力パラメータは全てデフォルトのままにします。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+このソースコード作成方法については、
+<a href="https://access.redhat.com/documentation/ja-jp/red_hat_build_of_node.js/20/html-single/node.js_runtime_guide/index#developing-and-deploying-a-nodejs-application_introduction-to-application-development-with-runtime">Node.js アプリケーションの開発およびデプロイ</a>を参考にしてください。
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/rosa/app-deploy/nodejs-create1.png" alt="nodejs create1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/rosa/app-deploy/nodejs-create2.png" alt="nodejs create2">
+</div>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>「作成」がクリックできない状態の場合、アプリケーションの「名前」の
+テキストフィールドに任意の名前を入力してください。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/rosa/app-deploy/app-name.png" alt="app name">
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Node.jsのサンプルアプリのデプロイが完了すると、「トポロジー」メニューからデプロイしたアプリのトポロジーや情報を確認できます。トポロジーにある、Node.jsアイコンの右上部にある「矢印」アイコンをクリックすると、デプロイしたNode.jsアプリにアクセスできます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/rosa/app-deploy/nodejs-app.png" alt="nodejs app">
+</div>
+</div>
+<div class="paragraph">
+<p>このアプリケーションに付けられる「名前」は、OpenShift上で作成されるリソースに付けられるラベルとして扱われます。
+この例だと「nodejs-ex-git-app」という名前が付けられており、関連するリソースに「app=nodejs-ex-git」というラベル(上記画像の青四角部分)が付けられていることを確認できます。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>アプリケーションの外部アクセス用のURLについては自動作成されますが、
+サンプルアプリケーション作成画面に表示される「詳細なルーティングオプションの表示」から任意の名前も指定できます。
+OpenShiftクラスターで利用されるドメイン名(OpenShiftクラスターのコンソールのURLから確認できる <code>apps.XXXXX.openshiftapps.com</code> )を末尾に付けたホスト名を指定することで、
+アプリケーション開発時のコンソールテストに利用できます。</p>
+</div>
+<div class="paragraph">
+<p>次の例では、<code>nodejs001-project20.apps.rosa.hcp-01.n7b6.p3.openshiftapps.com</code> というホスト名から、
+サンプルアプリケーションにアクセスできるように指定しています。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/rosa/app-deploy/nodejs-app-route.png" alt="nodejs app route">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_サンプルアプリケーションの削除"><a class="anchor" href="#_サンプルアプリケーションの削除"></a>サンプルアプリケーションの削除</h3>
+<div class="paragraph">
+<p>アプリケーションの削除(特定のラベルが付けられた全リソースの一括削除)は、「アプリケーションの削除」から実施できます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/rosa/app-deploy/nodejs-app-delete.png" alt="nodejs app delete">
+</div>
+</div>
+<div class="paragraph">
+<p>ただし、2024年6月時点ではバグのため、ローカルユーザーの権限ではコンソールから削除できません。
+そのため、作成したアプリケーションを削除したい場合、次のいずれかの方法を実行します。</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>OpenShiftクラスターの管理者アカウントで再ログインして、対象のアプリケーションを削除</p>
+</li>
+<li>
+<p><a href="https://rh-open.github.io/ocp-handson/openshift-services/54-1-rosa-web-terminal.html">Web Terminalの利用</a>で扱うOpenShift Web Terminalの端末から、OpenShiftのCLIであるocコマンドを実行</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ oc delete all -l app=nodejs-ex-git
+$ oc delete secrets -l app=nodejs-ex-git</code></pre>
+</div>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>OpenShiftは、
+<a href="https://access.redhat.com/documentation/ja-jp/openshift_container_platform/4.14/html/builds_using_buildconfig/builds-strategy-s2i-build_build-strategies-docker">Source-to-Image (S2I)</a> という機能を標準で備えています。これは、OpenShiftにある専用のコンテナビルダーイメージを利用して、アプリケーションのソースコードからのイメージビルドとコンテナ起動を実行する機能です。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/rosa/app-deploy/s2i-flow.png" alt="s2i flow">
+</div>
+</div>
+<div class="paragraph">
+<p>ビルダーイメージには、最低限、バイナリファイル作成のスクリプト(assemble)と、コンテナ起動時に実行されるスクリプト(run)が含まれます。OpenShift標準のビルダーイメージの他に、ユーザーが作成したカスタムイメージも利用できます。</p>
+</div>
+<div class="paragraph">
+<p>これらのS2I用スクリプトのイメージが下記となります。S2I用スクリプトは、ビルダーイメージ内で実行可能なスクリプトである必要があります。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../../_images/rosa/app-deploy/s2i-scripts.png" alt="s2i scripts">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../../_/js/vendor/clipboard.js"></script>
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
