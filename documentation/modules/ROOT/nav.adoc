@@ -26,14 +26,14 @@
 
 
 * 50. ROSA クラスタ Lab 
-** xref:50-rosa-info.adoc[0. はじめに]
+** xref:50-rosa-info-01.adoc[0. はじめに]
 ** xref:51-rosa-hcp-create.adoc[1. ROSA HCPクラスターの作成]
 ** xref:55-1-rosa-log-01.adoc[2. ロギング設定]
 ** xref:56-rosa-nodes.adoc[3. ワーカーノードの追加と削除]
 ** xref:57-rosa-upgrade.adoc[4. ROSA HCPクラスターの更新]
 
 * 51. ROSA ワークロード Lab Short
-** xref:50-rosa-info.adoc[0. はじめに]
+** xref:50-rosa-info-02.adoc[0. はじめに]
 ** xref:52-rosa-app-deploy.adoc[1. サンプルアプリケーションのデプロイ]
 ** xref:53-rosa-ebs.adoc[2. Amazon EBSの利用]
 ** xref:54-1-rosa-web-terminal.adoc[3. Web Terminalの利用]
@@ -43,7 +43,7 @@
 ** xref:55-4-rosa-alert.adoc[7. アラート設定]
 
 * 52. ROSA ワークロード Lab Long
-** xref:50-rosa-info.adoc[0. はじめに]
+** xref:50-rosa-info-02.adoc[0. はじめに]
 ** xref:52-rosa-app-deploy.adoc[1. サンプルアプリケーションのデプロイ]
 ** xref:53-rosa-ebs.adoc[2. Amazon EBSの利用]
 ** xref:54-1-rosa-web-terminal.adoc[3. Web Terminalの利用]

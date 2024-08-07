@@ -1,0 +1,54 @@
+= はじめに
+:navtitle: rosa-info
+include::_attributes.adoc[]
+
+Red Hat OpenShift Service on AWS (ROSA) Lab プロジェクトは、
+インストラクター主導のデモ紹介またはセルフペースの演習で、ROSAを効果的に紹介及び体感していただくことを目的としています。
+
+
+[Note]
+====
+ROSAの概要について学習する場合、
+AWSのマネージドなコンテナオーケストレーションサービスである、
+Amazon ECS/EKS, ROSAの特徴の違いや想定される用途をご紹介している資料を参考にしてください。
+
+この資料では、Kubernetesに興味のある人から特に聞かれることの多い、EKSとROSAについて、
+いくつかのサンプルユースケースと共に、両者の違いも合わせてご紹介しています。
+
+* https://rh-open.github.io/ocp-handson/openshift-services/_images/rosa/pdf/2023-rosa-hcp-infomation.pdf[ECS/EKS/ROSAの比較情報とROSAの紹介資料(PDFファイル)]
+
+* https://rh-open.github.io/ocp-handson/openshift-services/_images/rosa/pdf/2023-container-openshift-information.pdf[補足情報: コンテナ/OpenShiftの紹介資料(PDFファイル)]
+====
+
+
+---
+
+== 演習の前提要件
+
+* AWSにアクセス可能なネットワーク環境
+* ROSAクラスターにアクセス可能なWebブラウザ
+
+NOTE: https://access.redhat.com/articles/4763741[「Browsers and Client Tools」表]にある、
+最新版のOpenShiftに対応したWebブラウザ(Firefox/MS Edge/Chrome/Safari)のいずれかを利用します。
+
+
+== 演習の進め方
+
+
+[Note]
+====
+次のものを用意することで、このLabを自習できます。
+
+* 有償サービスを利用可能なAWSアカウント
+* 無料で作成可能な
+https://cloud.redhat.com/[Red Hatアカウント] ( `Create an account` から作成)
+====
+
+
+== 無償で実施可能なROSA Hands On Experience (HoE)
+
+ROSA HCP環境を利用したセルフサービスのハンズオンを、無償で実施いただくためのサービスを別途ご提供しています。
+詳細については、次の資料をご参照ください。
+
+* https://rh-open.github.io/ocp-handson/openshift-services/_images/rosa/pdf/202406-rosa-hoe.pdf[ROSAハンズオン無償体験(PDFファイル)]
+

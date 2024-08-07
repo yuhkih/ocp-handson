@@ -1,0 +1,29 @@
+= はじめに
+:navtitle: rosa-info
+include::_attributes.adoc[]
+
+Red Hat OpenShift Service on AWS (ROSA) Lab プロジェクトは、
+インストラクター主導のデモ紹介またはセルフペースの演習で、ROSAを効果的に紹介及び体感していただくことを目的としています。
+
+
+[Note]
+====
+ROSAの概要について学習する場合、
+AWSのマネージドなコンテナオーケストレーションサービスである、
+Amazon ECS/EKS, ROSAの特徴の違いや想定される用途をご紹介している資料を参考にしてください。
+
+この資料では、Kubernetesに興味のある人から特に聞かれることの多い、EKSとROSAについて、
+いくつかのサンプルユースケースと共に、両者の違いも合わせてご紹介しています。
+
+* https://rh-open.github.io/ocp-handson/openshift-services/_images/rosa/pdf/2023-rosa-hcp-infomation.pdf[ECS/EKS/ROSAの比較情報とROSAの紹介資料(PDFファイル)]
+
+* https://rh-open.github.io/ocp-handson/openshift-services/_images/rosa/pdf/2023-container-openshift-information.pdf[補足情報: コンテナ/OpenShiftの紹介資料(PDFファイル)]
+====
+
+
+---
+
+== 演習の前提要件
+
+この演習は ROSA Cluster が既に作成されている事が前提です。
+
