@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>OpenShift の Network Policy ベースの SDN :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/09_networking.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li><a href="09_networking.html">OpenShift の Network Policy ベースの SDN</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/09_networking.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">OpenShift の Network Policy ベースの SDN</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>本コンテンツは、<a href="https://github.com/team-ohc-jp-place/openshift-cns-testdrive">MAD Workshop Ops Track</a> の内容を利用しています。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>OpenShift Container Platform クラスターは、Pod ネットワークに仮想化ネットワークを使用します。</p>
+</div>
+<div class="paragraph">
+<p>Red Hat OpenShift Networking の一部である OVN-Kubernetes ネットワークプラグインは、OpenShift Container Platform のデフォルトのネットワークプロバイダーです。OVN-Kubernetes は Open Virtual Network (OVN) に基づいており、オーバーレイベースのネットワーキング実装を提供します。OVN-Kubernetes プラグインを使用するクラスターでは、各ノードで Open vSwitch (OVS) も実行されます。OVNは各ノード上でOVSを設定し、宣言されたネットワーク構成を実装します。</p>
+</div>
+<div class="paragraph">
+<p>OpenShift は プラットフォーム内部に Open vSwitch をベースにしたOpenShiftSDN（Software Defined Network）が以前デフォルトでした。OVN-Kubernetes は OpenShiftSDN に対し後方互換性を持っています。より詳しく知りたい場合、<a href="https://docs.openshift.com/container-platform/4.12/networking/ovn_kubernetes_network_provider/about-ovn-kubernetes.html">公式ドキュメント</a>を参照して下さい。</p>
+</div>
+<div class="paragraph">
+<p>これらは OpenShift 環境内のアプリケーションコンポーネント間の接続性を提供するために使用されます。
+ネットワークにはデフォルトのネットワーク範囲があらかじめ設定されていますが、既存のインフラストラクチャと競合する場合やその他の理由で変更することも可能です。</p>
+</div>
+<div class="paragraph">
+<p>Kubernetesの <code>NetworkPolicy</code> により、OpenShiftのSDN内でProject間のネットワークを分離することができます。ここまでOpenShiftのRBACを通してProject内のリソースを分離する方法を見てきましたが、NetworkPolicy SDNプラグインは Pod とNamespaceのラベルセレクタを使って、各ProjectのPodを分離することができます。</p>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="_project_の切り替え"><a class="anchor" href="#_project_の切り替え"></a>Project の切り替え</h3>
+<div class="paragraph">
+<p>続行する前に、クラスタ内に存在する<strong>Project</strong>を使用していることを確認してください。
+前の演習で最後に<strong>Project</strong>を削除した場合、この演習のスクリプトでエラーが発生します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc project default</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_生成スクリプトの実行"><a class="anchor" href="#_生成スクリプトの実行"></a>生成スクリプトの実行</h3>
+<div class="paragraph">
+<p><strong>Project</strong>またはクラスタ管理権限を持つユーザーのみが、<strong>Project</strong>のネットワークを操作できます。</p>
+</div>
+<div class="paragraph">
+<p>それでは、用意されているスクリプトを実行しましょう。
+2つの <strong>Project</strong> が作成され、 <strong>Deployment</strong> を使って、<strong>Pod</strong> が展開されます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">bash {{ HOME_PATH }}/support/create-net-projects.sh</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_作成されたリソースの確認"><a class="anchor" href="#_作成されたリソースの確認"></a>作成されたリソースの確認</h3>
+<div class="paragraph">
+<p><code>netproj-a</code> と <code>netproj-b</code> の 2 つの <strong>Project</strong> が作成されました。
+以下のコマンドを実行して、作成されたリソースを確認します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pods -n netproj-a</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>しばらくすると以下のようなものが表示されます。：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">NAME           READY   STATUS              RESTARTS   AGE
+ose-1-66dz2    0/1     ContainerCreating   0          7s
+ose-1-deploy   1/1     Running             0          16s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>同様に……:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pods -n netproj-b</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>しばらくすると、以下のようなものが表示されます。：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">NAME           READY   STATUS      RESTARTS   AGE
+ose-1-deploy   0/1     Completed   0          38s
+ose-1-vj2gn    1/1     Running     0          30s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>netproj-b</code> <strong>Project</strong>内の Pod の TCP ポート 5000 に接続するために、<code>netproj-a</code> <strong>Project</strong>内の Pod からコマンドを実行します。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_接続性のテスト_1_動作するはず"><a class="anchor" href="#_接続性のテスト_1_動作するはず"></a>接続性のテスト #1 (動作するはず)</h3>
+<div class="paragraph">
+<p>いくつかの<strong>Project</strong>と Pod ができたので、<code>netproj-a</code> <strong>Project</strong>の Pod と <code>netproj-b</code> <strong>Project</strong>の Pod の接続性をテストしてみましょう。</p>
+</div>
+<div class="paragraph">
+<p>2つの Pod 間の接続性をテストするには、次のコマンドを実行します。:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">bash {{ HOME_PATH }}/support/test-connectivity.sh</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のようなものが表示されます。:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Getting Pod B's IP... 10.129.0.180
+Getting Pod A's Name... ose-1-66dz2
+Checking connectivity between Pod A and Pod B... worked</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>最後の行に <code>worked</code> と書いてあることに注意してください。
+これは、<code>netproj-a</code> <strong>Project</strong>の Pod が　<code>netproj-b</code> <strong>Project</strong>の Pod に接続できたことを意味します。</p>
+</div>
+<div class="paragraph">
+<p>これは、デフォルトのネットワークポリシーでは、すべての<strong>Project</strong>のすべての Pod がお互いに接続できるようになっているためです。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_アクセスを制限する"><a class="anchor" href="#_アクセスを制限する"></a>アクセスを制限する</h3>
+<div class="paragraph">
+<p><strong>Project</strong>のアクセスを制限するには、<code>NetworkPolicy</code> カスタムリソース (CR) を作成します。</p>
+</div>
+<div class="paragraph">
+<p>例えば、以下は、この <code>NetworkPolicy</code> CR が適用された<strong>Project</strong>では、その他のすべての<strong>Project</strong>からのアクセスを制限します。
+これはファイアウォールにおける <code>DenyAll</code> のデフォルトルールに相当します。:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: deny-by-default
+spec:
+  podSelector:
+  ingress: []</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>podSelector</code> が空であることに注意してください。これは、このNetworkPolicyがプロジェクト内の全ての Pod に適用される事を意味しています。</p>
+</div>
+<div class="paragraph">
+<p>また、<code>ingress</code> リストが空である事に注意してください。これは、この <code>NetworkPolicy</code> CR において、許可された <code>ingress</code> ルールが存在しない事を意味しています。</p>
+</div>
+<div class="paragraph">
+<p><code>netproj-b</code> <strong>Project</strong>の Pod へのアクセスを制限するには、上記の NetworkPolicy CR を適用します。:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc create -n netproj-b -f {{ HOME_PATH }}/support/network-policy-block-all.yaml</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_接続性のテスト_2_失敗する"><a class="anchor" href="#_接続性のテスト_2_失敗する"></a>接続性のテスト #2 (失敗する)</h3>
+<div class="paragraph">
+<p>全ての接続を遮断する <code>NetworkPolicy</code> CR が適用されたため、<code>netproj-a</code> <strong>Project</strong> の <strong>Pod</strong> と`netproj-b` <strong>Project</strong>の Pod 間の接続がブロックされるようになりました。</p>
+</div>
+<div class="paragraph">
+<p>次のコマンドでテストを行います。:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">bash {{ HOME_PATH }}/support/test-connectivity.sh</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のようなものが表示されます。:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Getting Pod B's IP... 10.129.0.180
+Getting Pod A's Name... ose-1-66dz2
+Checking connectivity between Pod A and Pod B............ FAILED!</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>最後の行が、 <code>FAILED!</code> である事に注意してください。
+これは、<code>netproj-a</code> <strong>Project</strong>の Pod が <code>netproj-b</code> <strong>Project</strong>の　Pod に接続できなかったことを意味します (期待通りの動作です)。</p>
+</div>
+<div class="paragraph">
+<p>適用されている <code>NetworkPolicy</code> を表示には以下を実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get networkpolicy -n netproj-b</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下が表示されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">NAME              POD-SELECTOR   AGE
+deny-by-default   &lt;none&gt;         3m19s</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_アクセス許可"><a class="anchor" href="#_アクセス許可"></a>アクセス許可</h3>
+<div class="paragraph">
+<p>複数の <code>NetworkPolicy</code> CR を作成することで、<strong>Project</strong>内の個別の Pod や　Pod のグループへアクセスを許可することができます。</p>
+</div>
+<div class="paragraph">
+<p>以下は、<code>run: ose</code> というラベルを持つ <strong>Project</strong> 内のすべての Pod に対して、TCP 上の 5000 番ポートへのアクセスを許可します。
+<code>netproj-b</code> <strong>Project</strong>の Pod はこのラベルを持っています。</p>
+</div>
+<div class="paragraph">
+<p>ingressセクションでは、ラベル <code>name: netproj-a</code> を持つすべての<strong>Project</strong>からのアクセスを許可しています。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># allow access to TCP port 5000 for pods with the label "run: ose" specifically
+# from projects with the label "name: netproj-a".
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-tcp-5000-from-netproj-a-namespace
+spec:
+  podSelector:
+    matchLabels:
+      run: ose
+  ingress:
+  - ports:
+    - protocol: TCP
+      port: 5000
+    from:
+    - namespaceSelector:
+        matchLabels:
+          name: netproj-a</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>podSelector</code> は、ローカル<strong>Project</strong>の Pod を特定のラベルセレクタを使ってマッチさせる箇所であることに注意してください。</p>
+</div>
+<div class="paragraph">
+<p><strong>Project</strong>内に存在するすべての <code>NetworkPolicy</code> の条件を組み合わせて、<strong>Project</strong>内の Pod へのアクセス許可を作成しています。
+今回のケースでは、"deny all " ポリシーと "allow TCP 5000 " ポリシーが組み合わされています。</p>
+</div>
+<div class="paragraph">
+<p><code>netproj-b</code> <strong>Project</strong>内の Pod へのアクセスを <code>netproj-a</code> <strong>Project</strong>内のすべての Pod から許可するには、上記の NetworkPolicy を以下のコマンドで適用します。:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc create -n netproj-b -f {{ HOME_PATH }}/support/network-policy-allow-all-from-netproj-a.yaml</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_接続性のテスト_3_再び成功するはず"><a class="anchor" href="#_接続性のテスト_3_再び成功するはず"></a>接続性のテスト #3 (再び成功するはず)</h3>
+<div class="paragraph">
+<p>"5000番ポートの <code>netproj-a</code> からのアクセスを許可する" という NetworkPolicy が適用されているので、<code>netproj-a</code> <strong>Project</strong>内の Pod と、<code>netproj-b</code> <strong>Project</strong>内の Pod の接続性は再び許可されるはずです。</p>
+</div>
+<div class="paragraph">
+<p>次を実行する事でテストします。:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">bash {{ HOME_PATH }}/support/test-connectivity.sh</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のようなものが見えるはずです。：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Getting Pod B's IP... 10.129.0.180
+Getting Pod A's Name... ose-1-66dz2
+Checking connectivity between Pod A and Pod B... worked</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>最後の行が、 <code>worked</code> になっている事に注目してください。
+これは、<code>netproj-a</code> <strong>Project</strong>の Pod が <code>netproj-b</code> <strong>Project</strong>の Pod に接続できたことを意味します (期待通りの動作です)。</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

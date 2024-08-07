@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Untitled :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/34_Application_Lab.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/34_Application_Lab.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<div class="paragraph">
+<p>Unresolved include directive in modules/ROOT/pages/34_Application_Lab.adoc - include::../../include/00_0_Lab_Header.adoc[]</p>
+</div>
+<div class="sect1">
+<h2 id="_application_lab"><a class="anchor" href="#_application_lab"></a>Application Lab</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このラボでは、Red Hat<sup>&#174;</sup> Advanced Cluster Management for Kubernetes (RHACM) のアプリケーション ライフサイクル機能について学習します。</p>
+</div>
+<div class="ulist">
+<div class="title">Goals</div>
+<ul>
+<li>
+<p>RHACM のアプリケーション ライフサイクル機能を理解する</p>
+</li>
+<li>
+<p>アプリケーションを <em>managed</em> クラスターにデプロイする</p>
+</li>
+<li>
+<p>デプロイされたアプリケーションを <em>managed</em> クラスターから削除する</p>
+</li>
+<li>
+<p>デプロイされたアプリケーションを変更する (オプション)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="labexercises"><a class="anchor" href="#labexercises"></a>1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>前のラボでは、RHACM のクラスター ライフサイクル機能を調べました。
+これにより、OpenShift<sup>&#174;</sup> クラスターを RHACM に追加できるようになり、アプリケーションのデプロイに使用できるようになりました。</p>
+</div>
+<div class="sect2">
+<h3 id="_review_application_lifecycle_functionality"><a class="anchor" href="#_review_application_lifecycle_functionality"></a>1.1. Review Application Lifecycle Functionality</h3>
+<div class="paragraph">
+<p>RHACM のアプリケーション ライフサイクル機能は、<em>managed</em> クラスターでアプリケーション リソースを管理するために使用されるプロセスを提供します。
+これにより、Kubernetes 仕様を使用して単一クラスターまたは複数クラスターのアプリケーションを定義できますが、個々のクラスターへのリソースのデプロイとライフサイクル管理がさらに自動化されます。
+単一のクラスターで実行するように設計されたアプリケーションは単純であり、OpenShift の基礎を扱うことで慣れておく必要があります。
+マルチクラスター アプリケーションを使用すると、アプリケーション コンポーネントを実行するクラスターに対して定義した一連のルールに基づいて、これらの同じリソースの複数のクラスターへの展開を調整できます。</p>
+</div>
+<div class="paragraph">
+<p>この表では、RHACM のアプリケーション ライフサイクル モデルを構成するさまざまなコンポーネントについて説明します。</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Resource</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Channel</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">オブジェクト ストア、Kubernetes 名前空間、Helm リポジトリ、GitHub リポジトリなど、デプロイ可能なリソースが格納される場所を定義します。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Subscription</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ターゲット クラスタにデプロイされる「Channel」リソースで利用可能なデプロイ可能なリソースを識別する定義。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PlacementRule</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">サブスクリプションがアプリケーションをデプロイおよび維持するターゲット クラスターを定義します。
+<code>Subscription</code> リソースによって識別され、<code>Channel</code> リソースで定義された場所からプルされる Kubernetes リソースで構成されます。</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Application</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ここにあるコンポーネントを、より見やすい単一のリソースにグループ化する方法。
+通常、<code>Application</code> リソースは <code>Subscription</code> リソースを参照します。</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>これらはすべて、カスタム リソース定義 (CRD) によって定義された Kubernetes カスタム リソースであり、RHACM のインストール時に作成されます。
+これらを Kubernetes ネイティブ オブジェクトとして作成することで、Pod と同じように操作できます。
+たとえば、 <code>oc get application</code> を実行すると、デプロイされた RHACM アプリケーションのリストが取得されます。これは、 <code>oc get pods</code> がデプロイされた Pod のリストを取得するのと同じです。</p>
+</div>
+<div class="paragraph">
+<p>これは、アプリケーションを実際に構成するデプロイ可能なものに加えて、管理するための余分なリソースがたくさんあるように思えるかもしれません。
+ただし、多くのクラスターにデプロイする場合は、アプリケーションの構成、配置、および全体的な制御を自動化できます。
+単一のクラスターでは、ログインして <code>oc create -f&#8230;&#8203;</code> を実行するのは簡単です。
+多数のクラスターでこれを行う必要がある場合は、間違いを犯したり、クラスターを見逃したりしないようにする必要があり、アプリケーションの更新をスケジュールして調整する方法が必要です。
+RHACM のアプリケーション ライフサイクル機能を利用すると、マルチクラスター アプリケーションを簡単に管理できます。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_consider_personas"><a class="anchor" href="#_consider_personas"></a>1.2. Consider Personas</h3>
+<div class="paragraph">
+<p>アプリケーション ライフサイクル機能について考えるときは、次のペルソナとそのニーズについて考えてください。</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Persona</th>
+<th class="tableblock halign-left valign-top">Need and RHACM Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IT Operations</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>一連の既知の構成と必要なアプリケーションを使用して、新しいクラスターをデプロイしたいと考えています。</p>
+</li>
+<li>
+<p>クラスターの展開時にラベルを割り当てると、必要な構成とアプリケーションが自動的に展開され、追加の手動作業なしで実行されます。</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DevOps/SRE</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p>どこに問題があるのかを把握するために、リアルタイムのステータスでアプリケーションの関係をすばやく調査したい。</p>
+</li>
+<li>
+<p><strong>Application Topology</strong> ビューを使用すると、クラスターに接続して情報を収集することなく、アプリケーションのステータス ラベルと Pod ログを視覚的に調べて、アプリケーションの一部が実行されているかどうかを確認できます。</p>
+</li>
+</ul>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_application_in_rhacm"><a class="anchor" href="#_create_application_in_rhacm"></a>2. Create Application in RHACM</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>アプリケーション ライフサイクル機能が RHACM にどのようなものがあるかがわかったので、今度は単純なアプリケーションを <em>managed</em> クラスターにデプロイします。
+このラボでは 1 つのターゲット クラスターにのみデプロイしますが、学習した内容を多数のクラスターを含む環境に適応させることができます。</p>
+</div>
+<div class="paragraph">
+<p>このラボでデプロイするアプリケーションは <strong>Etherpad</strong> と呼ばれます。
+これは、フロントエンド コンポーネントとバックエンド コンポーネントを備えたシンプルなアプリケーションです。</p>
+</div>
+<div class="paragraph">
+<p>このラボを理解しやすくするために、<em>hub</em> クラスターの「bastion」VM で CLI を使用していくつかの作成手順を実行します。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>前のラボからまだログインしていない場合は、プロビジョニング E メールで提供された認証情報を使用して RHACM コンソールにログインします。
+これを行う方法の詳細が必要な場合は、前のラボを参照してください。</p>
+</li>
+<li>
+<p>左上のメニューを使用して、<strong>Applications</strong> に移動します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Cluster Lifecycle Lab</em> を開始したときと同様に、定義済みのアプリケーションが見つからないことを想定してください。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>ターミナルを開き、SSH を使用して <em>hub</em> OpenShift クラスターの <code>bastion</code> VM にアクセスします。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>接続情報と資格情報は、受信した <em>hub</em> クラスター用のプロビジョニング メールに記載されています。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>接続したら、次のコマンドを使用して <em>hub</em> OpenShift クラスターと対話できることを確認します。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh"> oc get projects</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">NAME                                               DISPLAY NAME   STATUS
+default                                                           Active
+hive                                                              Active
+kube-node-lease                                                   Active
+kube-public                                                       Active
+kube-system                                                       Active
+my-openshift-cluster                                              Active
+open-cluster-management                                           Active
+open-cluster-management-hub                                       Active
+openshift                                                         Active
+...</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<code>hive</code> 、<code>my-openshift-cluster</code> 、および <code>open-cluster-management</code> という名前のプロジェクトが表示されない場合は、間違った OpenShift クラスターにログインしているか、前のラボを完了していない可能性があります。
+ここで立ち止まって、何が間違っていたかを理解してください。
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>このラボを完了するために必要なリソースはすべて GitHub リポジトリにありますが、変更を加えるには、このリポジトリのForkが必要になります。
+次に示すリポジトリのForkを作成します。</p>
+<div class="paragraph">
+<p><a href="https://github.com/redhat-gpte-devopsautomation/rhacm-labs.git" class="bare" target="_blank" rel="noopener">https://github.com/redhat-gpte-devopsautomation/rhacm-labs.git</a></p>
+</div>
+<div class="paragraph">
+<p>次章のオプションのハンズオン手順(ソースコード変更からの構成変更)を実行される場合には、Forkが必要となりますが、このステップを実行されない場合には、不要です。Forkされない場合には、次のステップで、<code>export GITHUB_ID=redhat-gpte-devopsautomation</code> と設定して進めてください。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>フォークする方法のヒントについては、<a href="https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#fork-an-example-repository" target="_blank" rel="noopener">GitHub ドキュメント</a> のリンクにアクセスしてください。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>GitHub ID を環境変数として設定します。
+これにより、後続のコマンドが少し簡単になります。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh"> export GITHUB_ID=&lt;your-github-id&gt;</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>hub</em> クラスターの <code>bastion</code> でリポジトリのクローンを作成して、ローカルで使用できるようにします。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh"> cd $HOME
+ git clone https://github.com/${GITHUB_ID}/rhacm-labs.git</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Git リポジトリからファイルを直接参照することで、後続の手順ですべてを作成することもできますが、それらを複製すると、ローカルで分析および変更できるようになります。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>最初に必要なのは、最終的にアプリケーションを定義する、作成する予定のすべてのリソースを保持する名前空間です。
+<code>etherpad</code> という名前の新しい名前空間を作成します。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh"> oc create -f $HOME/rhacm-labs/apps/etherpad/namespace.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">namespace/etherpad created</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><code>Application</code> の一部のコンポーネントを記述したマニフェストを更新して、フォークされた GitHub リポジトリを指すようにします。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh"> sed -i "s/redhat-gpte-devopsautomation/${GITHUB_ID}/g" $HOME/rhacm-labs/apps/etherpad/application.yaml</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>アプリケーションのデプロイに必要な 3 つのリソース (<code>Channel</code> 、<code>Application</code> 、および <code>Subscription</code> ) を定義する YAML 定義を見てください。</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>便宜上、ここではリソースを 1 つのファイルで表示していますが、3 つの個別のマニフェストにすることもできます。
+また、これらのリソースを任意の順序で 1 つずつ作成することもできます。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh"> cat $HOME/rhacm-labs/apps/etherpad/application.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  name: etherpad-app-latest
+  namespace: etherpad <i class="conum" data-value="1"></i><b>(1)</b>
+spec:
+  type: GitHub
+  pathname: https://github.com/redhat-gpte-devopsautomation/rhacm-labs.git <i class="conum" data-value="2"></i><b>(2)</b>
+---
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: etherpad-app
+  namespace: etherpad <i class="conum" data-value="1"></i><b>(1)</b>
+spec:
+  componentKinds:
+  - group: apps.open-cluster-management.io
+    kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions: <i class="conum" data-value="3"></i><b>(3)</b>
+    - key: app
+      operator: In
+      values:
+      - etherpad-app
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  name: etherpad-app
+  namespace: etherpad <i class="conum" data-value="1"></i><b>(1)</b>
+  labels:
+    app: etherpad-app <i class="conum" data-value="4"></i><b>(4)</b>
+  annotations:
+    apps.open-cluster-management.io/github-path: resources/etherpad <i class="conum" data-value="5"></i><b>(5)</b>
+spec:
+  channel: etherpad/etherpad-app-latest <i class="conum" data-value="6"></i><b>(6)</b>
+  placement:
+    placementRef:
+      kind: PlacementRule
+      name: dev-clusters <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>このファイルで起こっているすべてのことに注意してください。</p>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>これらのリソースはすべて <code>etherpad</code> 名前空間に作成されます。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>Channel</code> は <code>GitHub</code> タイプを指し、アプリケーションのデプロイ可能なものが保存されているこのリポジトリを参照します。
+これがフォークされた GitHub リポジトリと一致するように更新されていることを確認してください。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>Application</code> は、<code>app: etherpad-app</code> に一致するラベルを持つ <code>Subscription</code> リソースを探しています。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>この <code>Subscription</code> リソースには、<code>Application</code> リソースが探している <code>etherpad-app</code> ラベルがあります。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td><code>github-path</code> アノテーションは <code>GitHub</code> のタイプを使用する場合、 <code>Channel</code> リソースで定義された <code>pathname</code> 仕様に結合されます。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>これは、<code>Subscription</code> リソースがターゲット クラスタでデプロイ可能なものを見つけるために使用する <code>Channel</code> リソースです。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td><code>Subscription</code> リソースは、まだ定義されていない <code>PlacementRule</code> リソースも参照します。
+<code>PlacementRule</code> リソースがなければ、このアプリケーションをデプロイするクラスターはありません。</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p><em>hub</em> クラスターで <code>bastion</code> VM を使用して 3 つのリソースすべてを作成します。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh"> oc create -f $HOME/rhacm-labs/apps/etherpad/application.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">channel.apps.open-cluster-management.io/etherpad-app-latest created
+application.app.k8s.io/etherpad-app created
+subscription.apps.open-cluster-management.io/etherpad-app created</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>RHACM コンソールで、新しく作成された <code>Application</code> リソースを探します。</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>RHACM コンソールが更新され、アプリケーションが表示されるまでに数分かかる場合があります。
+数分後にブラウザでページを更新します。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p><code>etherpad-app</code> アプリケーションをクリックして、トポロジ マップの概要を表示します。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/acm_app_lifecycle_topology_initial.png" alt="acm app lifecycle topology initial" width="100%">
+</div>
+</div>
+</li>
+<li>
+<p>数分待ち、トポロジの全体が表示されるのを待ちます。
+これで、<code>Subscription</code> リソースと <code>Channel</code> リソースが定義され、<code>Subscription</code> リソースは現在 <em>Failed</em> であることに注意してください。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/acm_app_lifecycle_topology_later.png" alt="acm app lifecycle topology later" width="100%">
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deploy_application"><a class="anchor" href="#_deploy_application"></a>3. Deploy Application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>アプリケーションとそれに関連するすべてのコンポーネントが作成されたので、ターゲット クラスターにデプロイする準備が整いました。
+ただし、RHACM にアプリケーション、より具体的には <code>Subscription</code> リソースをデプロイするように指示する必要があります。
+この指示がないことが、<code>Subscription</code> リソースが現在 <em>Failed</em> 状態になっている理由です。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>RHACM コンソールで、画面上部の右側にある <strong>+</strong> (<code>?</code> の左隣)をクリックし、プロジェクトとして <code>すべてのプロジェクト</code> を選択し、次の YAML コンテンツをエディターに貼り付けます。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: dev-clusters
+  namespace: etherpad
+spec:
+  clusterConditions:
+    - type: ManagedClusterConditionAvailable
+      status: "True"
+  clusterSelector:
+    matchLabels:
+      environment: dev</code></pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><code>clusterSelector</code> セクションのキーと値のペアでは、大文字と小文字が区別されます。
+前のラボでクラスターにラベルを付けた方法と一致していることを確認してください。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>RHACM コンソールで YAML エディターを使用することは、アプリケーションのライフサイクルに関連するリソースを作成する別の方法です。
+前のセクションで行ったように、 <code>oc create -f&#8230;&#8203;</code> コマンドを実行した場合と同じ結果が得られます。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>一つ前のステップで別のブラウザを開いている場合には、元の RHACMコンソールに移動してください。<code>etherpad-app</code> アプリケーションの <strong>Overview</strong> タブをクリックし、ターゲット クラスタへのデプロイ可能ファイルのロールアウトが開始された後、トポロジ ビューが更新されることを確認します。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/acm_app_lifecycle_topology_final.png" alt="acm app lifecycle topology final" width="100%">
+</div>
+</div>
+</li>
+<li>
+<p><em>managed</em> クラスター(<em>hub</em> クラスターには何も表示されません。)内のリソースをチェックして、アプリケーションがデプロイされていることを確認します。
+Importしたクラスタのログイン情報は、クラスタ情報を記載したメールを参照ください。</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>このラボで作成したクラスタのログイン情報は、ACMのコンソールで、<strong>Infrastructure &#8594; Clusters</strong> を開き、画面上のクラスタ名をクリックすることで <code>Console URL</code> や <code>Username &amp; password</code> を確認することができます。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>コマンドラインでアプリケーションのデプロイを確認するには、<em>managed</em> クラスターの <code>bastion</code> VM から次のコマンドを実行します。</p>
+</div>
+<div class="paragraph">
+<p>+</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh"> oc get pods -n etherpad</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>+
+.Sample Output</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">NAME                          READY   STATUS    RESTARTS   AGE
+etherpad-5ccc6bdc6d-xj2sg     1/1     Running   0          3m6s
+postgresql-7f499d7f94-wdlk9   1/1     Running   0          3m6s</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>アプリケーションの <code>route</code> を見つけ、それを使用して Web ブラウザ経由でアプリケーションにアクセスします。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh"> oc get route etherpad-route -n etherpad -o jsonpath='{.spec.host}'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">etherpad-route-etherpad.apps.cluster-acmm1.red.osp.opentlc.com</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_remove_application"><a class="anchor" href="#_remove_application"></a>4. Remove Application</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>ある時点で、クラスターからアプリケーションを削除する必要があります。
+これは、アプリケーションが廃止されたか、マルチクラスター展開で特定のクラスターに展開する必要がなくなったことが原因である可能性があります。
+幸いなことに、ターゲット クラスタからアプリケーションを削除するのは簡単です。
+選択肢は 2 つあります。</p>
+</div>
+<div class="paragraph">
+<p>最初のオプションは、<code>Subscription</code> リソースを削除することです。
+これを行うと、<code>Channel</code> リソースからプルされた <code>Subscription</code> リソースとアプリケーションのデプロイ可能オブジェクトが <em>hub</em> クラスターから削除されます。
+変更が <em>managed</em> クラスターに伝達されると、「サブスクリプション」リソースとそれに関連付けられたリソースが削除されます。
+ログインして <code>oc delete&#8230;&#8203;</code> コマンドを実行したかのように、Pod、Service、Deployment、およびその他のリソースが削除されていることを確認できます。
+<code>Subscription</code> リソースを削除すると、<code>PlacementRule</code> リソースに基づいてデプロイされているすべてのクラスターに影響することに注意してください。</p>
+</div>
+<div class="paragraph">
+<p>2 番目のオプションは、<code>Subscription</code> リソースがターゲット クラスタを決定するために使用している <code>PlacementRule</code> リソースを削除または変更することです。
+これを行うと、<code>Subscription</code> リソースがターゲット クラスターの新しいリストに更新されます。この場合は空であり、アプリケーションを実行する場所がありません。
+このオプションには注意してください。
+他の <code>Subscription</code> リソースが同じ <code>PlacementRule</code> リソースを使用している場合、誤って他のアプリケーションを削除する可能性があります。</p>
+</div>
+<div class="paragraph">
+<p>このラボでは、<code>Subscription</code> リソースを削除します。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><em>hub</em> クラスターの <code>bastion</code> VM で、<code>etherpad-app</code> アプリケーションの「Subscription」リソースが表示されていることを確認します。
+具体的には、<code>Subscription</code> リソースの <code>metadata/annotations/apps.open-cluster-management.io/deployables</code> および <code>spec</code> セクションを確認します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>deployables</code> リストには、<em>managed</em> クラスターにデプロイする、リポジトリで検出されたリソースが表示されます。</p>
+</li>
+<li>
+<p><code>spec</code> は、<code>PlacementRule</code> に基づいて、この <code>Subscription</code> がデプロイされる場所を示します。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh"> oc get subscription etherpad-app -n etherpad -o yaml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  annotations:
+    apps.open-cluster-management.io/deployables: etherpad/etherpad-app-resources-etherpad-etherpad-route-route,etherpad/etherpad-app-resources-etherpad-etherpad-service,etherpad/etherpad-app-resources-etherpad-postgresql-deployment,etherpad/etherpad-app-resources-etherpad-ether-secret,etherpad/etherpad-app-resources-etherpad-etherpad-settings-configmap,etherpad/etherpad-app-resources-etherpad-etherpad-deployment <i class="conum" data-value="1"></i><b>(1)</b>
+  labels:
+    app: etherpad-app
+    manager: multicluster-operators-subscription
+    operation: Update
+  name: etherpad-app
+  namespace: etherpad
+spec: <i class="conum" data-value="2"></i><b>(2)</b>
+  channel: etherpad/etherpad-app-latest
+  placement:
+    placementRef:
+      kind: PlacementRule
+      name: dev-clusters
+status:
+  phase: Propagated
+  statuses:
+    my-openshift-cluster:
+
+...&lt;output abridged&gt;...</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>この注釈は、 <code>Subscription</code> に関連付けられた Git リポジトリで見つかったすべての「デプロイ可能なもの」をリストします。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>Subscription</code> の <code>spec</code> には、以前に定義した <code>Channel</code> と <code>PlacementRules</code> が表示されます。</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>hub</em> クラスターで次のコマンドを実行して、 <code>Subscription</code> リソースを削除します。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh"> oc delete subscription etherpad-app -n etherpad</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">subscription.apps.open-cluster-management.io "etherpad-app" deleted</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><em>managed</em> クラスター内の <code>bastion</code> VM または RHACM コンソールから、デプロイされたすべてのリソースとともに <code>Subscription</code> リソースがなくなっていることを確認します。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh"> oc get all -n etherpad</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">No resources found in etherpad namespace.</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>RHACM コンソールで、<code>etherpad-app</code> アプリケーションの <strong>Overview</strong> タブに移動し、<code>Application</code> リソースだけが <strong>Resource topology</strong> セクションに残っていることを確認します。</p>
+</li>
+<li>
+<p>次章のOptionalなタスクの実行時にアプリケーションをデプロイする必要があるため(Optionalなタスクを実行しない方は不要です)、<code>Subscription</code> リソースを再作成します。まず、<em>managed</em> クラスターの <code>environment</code> ラベル(<span class="image unresolved"><img src="images/options_menu_icon.png" alt="options menu icon"></span> (<strong>Options</strong>) をクリックし、<strong>Edit labels</strong> を選択)を <code>production</code> と <code>dev</code> で入れ替えてください(my-imported-cluster: dev&#8594;production, my-openshift-cluster: production&#8594;dev)。
+次に、CLI ( <code>oc create -f source.yaml</code>) を使用するか、RHACM コンソールの画面上部の右側にある <strong>+</strong> (<code>?</code> の左隣)をクリックし、プロジェクトとして <code>全てのプロジェクト</code> を選択し、次の YAML コンテンツをエディターに貼り付け、<strong>作成</strong> をクリックします。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  name: etherpad-app
+  namespace: etherpad
+  labels:
+    app: etherpad-app
+  annotations:
+    apps.open-cluster-management.io/github-path: resources/etherpad
+spec:
+  channel: etherpad/etherpad-app-latest
+  placement:
+    placementRef:
+      kind: PlacementRule
+      name: dev-clusters</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>RHACM コンソールを使用する場合は、YAML エディターのすべてを上記の内容に置き換えます。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>数分後、アプリケーションがターゲット クラスタに再デプロイされることを期待します。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_summary"><a class="anchor" href="#_summary"></a>5. Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>これで、RHACM のアプリケーション ライフサイクル機能の概要が完了しました。</p>
+</div>
+<div class="paragraph">
+<p>RHACM を使用して、ターゲットクラスターにアプリケーションを正常にデプロイしました。
+このアプローチでは、アプリケーションを定義するすべてのマニフェストを格納する Git リポジトリを利用しました。
+RHACM はこれらのマニフェストを取得してデプロイ可能なものとして使用し、ターゲット クラスターにデプロイすることができました。</p>
+</div>
+<div class="paragraph">
+<p>デプロイされたアプリケーションも削除しました。</p>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/RH-OPEN/hands_on_acm/blob/main/modules/01_Hands_on_RHACM_Cluster_Lifecycle/05_PoolSet_Optional_And_Cleanup.adoc">５章へ</a></p>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>クラスタリソースのクォータ :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/07_clusterresourcequota.html">
+    <link rel="prev" href="06_template-quota-limits.html">
+    <link rel="next" href="10-pipeline-install.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li>01. OpenShift 基礎</li>
+    <li><a href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/07_clusterresourcequota.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">クラスタリソースのクォータ</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>本コンテンツは、<a href="https://github.com/team-ohc-jp-place/openshift-cns-testdrive">MAD Workshop Ops Track</a> の内容をベースに、一部変更しています。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>ユーザをclusteradminとは別に一つ用意してください。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>前の演習では、<strong>Project</strong> にクォータを適用する方法を見ました。デフォルトのクォータを設定したので、誰かが新しい <strong>Project</strong> をリクエストしたときにはいつでもデフォルトのクォータが割り当てられます。このような <strong>Project</strong> クォータは、クラスタ内のリソースを制御するのに最適です。</p>
+</div>
+<div class="paragraph">
+<p>しかし、クォータを個々の <strong>Project</strong> ではなく、<strong>Project</strong>を跨って適用したい場合には、別のやり方が必要です。それが、ClusterResourceQuota です。</p>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="_ユースケース"><a class="anchor" href="#_ユースケース"></a>ユースケース</h3>
+<div class="paragraph">
+<p><strong>Project</strong> ベースの <code>quota</code> の代わりに <code>clusterresourcequota</code> を使用する主なユースケースは2つあります。</p>
+</div>
+<div class="paragraph">
+<p>一つは、特定のユーザにクォータを設定したい場合です。これは、ユーザに必要なだけの <strong>Project</strong> を作成させ(これによりマルチテナンシーを実現します)、またそこで消費できるリソースの量を制限することができます。</p>
+</div>
+<div class="paragraph">
+<p>もう一つのユースケースは、アプリケーションごとにクォータを設定したい場合です。この場合、アプリケーションスタックは複数の <strong>Project</strong> にまたがっている可能性があります。</p>
+</div>
+<div class="paragraph">
+<p>この演習では、両方のユースケースを調査します。</p>
+</div>
+<div class="sect3">
+<h4 id="_ユーザーごとのクォータの設定"><a class="anchor" href="#_ユーザーごとのクォータの設定"></a>ユーザーごとのクォータの設定</h4>
+<div class="paragraph">
+<p><code>clusterresourcequota</code> をユーザに設定するには、clusteradmin権限を持つアカウントが必要です。（`admin`を使います。）</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u admin -p &lt;*** パスワード ***&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>では、<code>user1</code> にクォータを設定します。<code>openshift.io/requester=</code> の <code>annotation</code> キーを使用して、これらのクォータが適用される <strong>Project</strong> を指定します。この演習では、10個より多くの <strong>Pod</strong> を作成することを禁止するハードクォータを設定します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc create clusterquota for-user-user1 \
+    --project-annotation-selector openshift.io/requester=user1 \
+    --hard pods=10</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>clusterquota</code> は、 <code>clusterresourcequotas</code> の略です (<code>oc api-resources | grep clusterresourcequotas</code> のコマンドで確認できます)。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>設定を表示します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get clusterresourcequotas for-user-user1 -o yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>設定は以下のようになっているはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: quota.openshift.io/v1
+kind: ClusterResourceQuota
+metadata:
+  creationTimestamp: "2023-06-26T00:06:40Z"
+  generation: 1
+  name: for-user-user1
+  resourceVersion: "44857"
+  uid: 53217fca-8c3f-49a4-8a1c-bc6585447eb2
+spec:
+  quota:
+    hard:
+      pods: "10"
+  selector:
+    annotations:
+      openshift.io/requester: user1
+    labels: null</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ユーザ <code>user1</code> は、自身が作成したすべての <strong>Project</strong> で10個以下の <strong>Pod</strong> を作成することができます。これはこのユーザが作成した <strong>Project</strong> (<code>openshift.io/requester: user1</code> annotationに基づく) にのみ適用され、このユーザがアクセスできるその他の<strong>Project</strong>（他のユーザが作成したproject）には適用されません。これについては後ほど説明します。</p>
+</div>
+<div class="paragraph">
+<p>では <code>user1</code> でログインしてみましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u user1 -p &lt;*** パスワード ***&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>現在の <strong>Project</strong> をリストアップします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get projects</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>このユーザは <strong>Project</strong> を持っていないはずなので、このような出力が表示されるはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>No resources found.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>welcome1</code> と <code>welcome2</code> の2つの <strong>Project</strong> を作成します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc new-project welcome1
+oc new-project welcome2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次に二つのアプリケーションを作成します。1つは <code>welcome1</code> <strong>Project</strong> に作り、もう1つは <code>welcome2</code> <strong>Project</strong> に作ります.</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc new-app -n welcome1 --name=php1 quay.io/redhatworkshops/welcome-php:latest
+oc new-app -n welcome2 --name=php2 quay.io/redhatworkshops/welcome-php:latest</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>デプロイが終わると、それぞれのNamespaceに1つずつ、2つの実行中の <strong>Pod</strong> ができるはずです。<code>oc get pods</code> コマンドで確認してください。(出力が表示されるまでに時間がかかる場合、何度か実行してみて下さい)</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pods -n welcome1 -l deployment=php1
+oc get pods -n welcome2 -l deployment=php2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>出力は以下のようになっているはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[~] $ oc get pods -n welcome1 -l deployment=php1
+NAME           READY   STATUS    RESTARTS   AGE
+php1-1-nww4m   1/1     Running   0          4m20s
+[~] $ oc get pods -n welcome2 -l deployment=php2
+NAME           READY   STATUS    RESTARTS   AGE
+php2-1-ljw9w   1/1     Running   0          4m20s</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>admin</code> ユーザーに変更してクォータを確認してみましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u admin -p &lt;*** パスワード ***&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>oc describe clusterresourcequotas for-user-user1</code> を実行してクォータの状態を確認します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc describe clusterresourcequotas for-user-user1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のような出力が表示されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Name:		for-user-user1
+Created:	4 minutes ago
+Labels:		&lt;none&gt;
+Annotations:	&lt;none&gt;
+Namespace Selector: ["welcome1" "welcome2"]
+Label Selector:
+AnnotationSelector: map[openshift.io/requester:user1]
+Resource	Used	Hard
+--------	----	----
+pods		2	10</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>10個中2個の <strong>Pod</strong> が使用されていることと、クォータが適用されているNamespaceが確認できます。<code>welcome1</code> のNamespaceをチェックして、クォータが見張るannotationを確認してください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get ns welcome1 -o yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>出力は以下のようになるはずです。特にannotationに注意してください。<code>openshift.io/requester</code> が `user1`です。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    openshift.io/description: ""
+    openshift.io/display-name: ""
+    openshift.io/requester: user1
+    openshift.io/sa.scc.mcs: s0:c26,c20
+    openshift.io/sa.scc.supplemental-groups: 1000690000/10000
+    openshift.io/sa.scc.uid-range: 1000690000/10000
+  creationTimestamp: "2023-06-26T00:08:42Z"
+  labels:
+    kubernetes.io/metadata.name: welcome1
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/audit-version: v1.24
+    pod-security.kubernetes.io/warn: restricted
+    pod-security.kubernetes.io/warn-version: v1.24
+  name: welcome1
+  resourceVersion: "45450"
+  uid: 6f17c5ef-eeb9-4e4e-9cd4-9bb3ae32e132
+spec:
+  finalizers:
+  - kubernetes
+status:
+  phase: Active</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>それでは <code>user1</code> になって、10個を超える <strong>Pod</strong> にスケールしてみます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u user1 -p &lt;*** パスワード ***&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc scale deploy/php1 -n welcome1 --replicas=5
+oc scale deploy/php2 -n welcome2 --replicas=6</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>実行中の <strong>Pod</strong> の数に注意して見てみましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pods --no-headers -n welcome1 -l deployment=php1 | wc -l
+oc get pods --no-headers -n welcome2 -l deployment=php2 | wc -l</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>これらのコマンドはどちらも、合計で10個以上の <strong>Pod</strong> を返しません。イベントをチェックして、クオータが動作しているのを確認してください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get events -n welcome1 | grep "quota" | head -1
+oc get events -n welcome2 | grep "quota" | head -1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のようなメッセージが表示されるはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>3m24s       Warning   FailedCreate        replicaset/php1-89fcb8d8b    Error creating: pods "php1-89fcb8d8b-spdw2" is forbid
+den: exceeded quota: for-user-user1, requested: pods=1, used: pods=10, limited: pods=10</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ステータスを確認するには、<code>admin</code> になって先程の <code>describe</code> コマンドを実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u admin -p &lt;*** パスワード ***&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc describe clusterresourcequotas for-user-user1</code></pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>*Pod* のハードクォータの上限に達したことが確認できます。</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Name:           for-user-user1
+Created:        15 minutes ago
+Labels:         &lt;none&gt;
+Annotations:    &lt;none&gt;
+Namespace Selector: ["welcome1" "welcome2"]
+Label Selector:
+AnnotationSelector: map[openshift.io/requester:user1]
+Resource        Used    Hard
+--------        ----    ----
+pods            10      10</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_labelによるクォータ"><a class="anchor" href="#_labelによるクォータ"></a>Labelによるクォータ</h4>
+<div class="paragraph">
+<p>複数の <strong>Project</strong> にまたがる可能性のあるアプリケーションスタックでクォータを設定するには、Labelを使って <strong>Project</strong> を識別する必要があります。まず、<code>admin</code> でログインします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u admin -p &lt;*** パスワード ***&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Labelに基づいてクォータを設定します。この演習では <strong>Project</strong> を識別するために <code>appstack=pricelist</code> のLabelを使用します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc create clusterresourcequota for-pricelist \
+    --project-label-selector=appstack=pricelist \
+    --hard=pods=5</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ここで2つの <strong>Project</strong> を作成します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc adm new-project pricelist-frontend
+oc adm new-project pricelist-backend</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>2つの <strong>Project</strong> のユーザ <code>user1</code> に <code>edit</code> ロールを割り当てます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc adm policy add-role-to-user edit user1 -n pricelist-frontend
+oc adm policy add-role-to-user edit user1 -n pricelist-backend</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>これら2つの <strong>Project</strong> が <code>pricelist</code> アプリケーションスタックに属するものであることを識別するには、対応するNamespaceにLabelを付ける必要があります。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc label ns pricelist-frontend appstack=pricelist
+oc label ns pricelist-backend appstack=pricelist</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>oc describe clusterresourcequotas</code> で <code>for-pricelist</code> を指定します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc describe clusterresourcequotas for-pricelist</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>両方の <strong>Project</strong> がトラッキングされていることがわかるはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Name:           for-pricelist
+Created:        21 seconds ago
+Labels:         &lt;none&gt;
+Annotations:    &lt;none&gt;
+Namespace Selector: ["pricelist-frontend" "pricelist-backend"]
+Label Selector: appstack=pricelist
+AnnotationSelector: map[]
+Resource        Used    Hard
+--------        ----    ----
+pods            0       5</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>user1</code> でログインし、それぞれの <strong>Project</strong> にアプリケーションを作成します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u user1 -p &lt;*** パスワード ***&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc new-app -n pricelist-frontend --name frontend quay.io/redhatworkshops/pricelist:frontend
+oc new-app -n pricelist-backend --name backend quay.io/redhatworkshops/pricelist:backend</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>admin</code> でログインし、<code>describe</code> コマンドを実行して、クォータの状態を確認してください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u admin -p &lt;*** パスワード ***&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc describe clusterresourcequotas for-pricelist</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>5つの <strong>Pod</strong> クォータに対して2つが使用されていることを確認できます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Name:           for-pricelist
+Created:        About a minute ago
+Labels:         &lt;none&gt;
+Annotations:    &lt;none&gt;
+Namespace Selector: ["pricelist-frontend" "pricelist-backend"]
+Label Selector: appstack=pricelist
+AnnotationSelector: map[]
+Resource        Used    Hard
+--------        ----    ----
+pods            2       5</pre>
+</div>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p><code>user1</code> は、<code>admin</code> によって <code>pricelist-frontend</code> と <code>pricelist-backend</code> のユーザとして割り当てられているため、決められた数の <strong>Pod</strong> を作成することができます。<code>user1</code> は <strong>Project</strong> を作成していないので、<code>openshift.io/requester=user1</code> annotationはありません。仕様に合わせてQuota のポリシーを設定することができます。</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p><code>user1</code> でログインして、合計5つの <strong>Pod</strong> を超えてアプリケーションをスケールしてみてください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u user1 -p &lt;*** パスワード ***&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc scale -n pricelist-frontend deploy/frontend --replicas=3
+oc scale -n pricelist-backend deploy/backend --replicas=3</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>先ほどと同じように、スケールできないというエラーが表示されるはずです。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get events -n pricelist-frontend | grep "quota" | head -1
+oc get events -n pricelist-backend | grep "quota" | head -1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>出力は先の演習と同じようになっているはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>39s         Warning   FailedCreate        replicaset/backend-577cf89b68   Error creating: pods "backend-577cf89b68-l5svw" is
+ forbidden: exceeded quota: for-pricelist, requested: pods=1, used: pods=5, limited: pods=5</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_クリーンアップ"><a class="anchor" href="#_クリーンアップ"></a>クリーンアップ</h4>
+<div class="paragraph">
+<p><code>admin</code> で行った作業をクリーンアップします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u admin -p &lt;*** パスワード ***&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>これらのクォータは他の演習と干渉する可能性があるので、この演習で作成した <code>clusterresourcequota</code> の両方を削除してください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc delete clusterresourcequotas for-pricelist for-user-user1</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>また、この演習で作成した <strong>Project</strong> も削除してください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc delete projects pricelist-backend pricelist-frontend welcome1 welcome2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次の演習では必ず <code>admin</code> でログインしてください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc login -u admin -p &lt;*** パスワード ***&gt;
+oc project default</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="06_template-quota-limits.html">6. Project のクオータ/制限</a></span>
+  <span class="next"><a href="10-pipeline-install.html">インストール</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

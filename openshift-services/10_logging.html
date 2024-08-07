@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>OpenShift ログ集約 :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/10_logging.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li><a href="10_logging.html">OpenShift ログ集約</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/10_logging.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">OpenShift ログ集約</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>本コンテンツは、<a href="https://github.com/team-ohc-jp-place/openshift-cns-testdrive">MAD Workshop Ops Track</a> の内容を利用しています。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このラボでは、OpenShiftのログ集約機能を触ってみます。</p>
+</div>
+<div class="paragraph">
+<p>OpenShift の非常に重要な機能の一つに、実行中の環境とアプリケーションPodからログを収集して集約する機能があります。
+OpenShift には柔軟性のある <strong>EFK</strong> によるログ集約ソリューションが同梱されています。
+<strong>EFK</strong> は、それぞれのソリューションの頭文字を集めたものです。( <strong>E</strong> lasticSearch、<strong>F</strong> luentd、<strong>K</strong> ibana)</p>
+</div>
+<div class="paragraph">
+<p>クラスタの Logging コンポーネントは、Elasticsearch、Fluentd、Kibana（EFK）をベースにしています。
+コレクターである Fluentd は、OpenShift クラスタ内の各ノードにデプロイされています。
+これはすべてのノードとコンテナのログを収集し、Elasticsearch（ES）に書き込みます。
+Kibana は一元化された Web UI で、ユーザーや管理者は集約されたデータを使ってリッチなビジュアライゼーションやダッシュボードを作成することができます。
+管理者は、すべてのログを検索することができます。
+アプリケーションの所有者や開発者は、プロジェクトに属するログへのアクセスを許可することができます。
+EFK スタックは OpenShift の上で動作します。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>このラボでは、infra-nodes ラボを完了していることが必要です。
+Logging スタックはそのラボで作成された <code>infra</code> ノードにインストールされます。</p>
+</div>
+</div>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>詳細は、以下にあるOpenShiftの公式ドキュメントサイトに記載されています。:
+ <a href="https://docs.openshift.com/container-platform/4.10/logging/cluster-logging.html" class="bare">https://docs.openshift.com/container-platform/4.10/logging/cluster-logging.html</a></p>
+</div>
+</div>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>この演習は、ほぼすべて OpenShift の Web コンソールを使用して行われます。
+ウェブコンソールとのやりとりはすべて、事実上バックグラウンドで API オブジェクトを作成または操作しています。
+プロセスを完全に自動化したり、CLIや他のツールを使用して行うことも可能ですが、これらの方法は現時点では、この演習やドキュメントではカバーされていません。</p>
+</div>
+</div>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="_openshift_logging_をデプロイする"><a class="anchor" href="#_openshift_logging_をデプロイする"></a>OpenShift Logging をデプロイする</h3>
+<div class="paragraph">
+<p>OpenShift Container Platform Cluster Logging は、デフォルト構成で使用するように設計されており、中小規模の OpenShift Container Platform クラスタ向けに調整されています。
+以降のインストール手順には、サンプルの Cluster Logging Custom Resource（CR）が含まれており、これを使用して Cluster Logging インスタンスを作成し、Cluster Logging の導入を構成することができます。</p>
+</div>
+<div class="paragraph">
+<p>デフォルトの Cluster Logging インストールを使用する場合は、サンプルCRを直接使用できます。</p>
+</div>
+<div class="paragraph">
+<p>配置をカスタマイズしたい場合は、必要に応じてサンプル CR に変更を加えます。
+以下では、Cluster Logging インスタンスのインストール時に行うことができる構成、またはインストール後に変更することができる構成について説明します。
+Cluster Logging Custom Resource の外でできる変更を含め、各コンポーネントでの作業の詳細については、「構成」のセクションを参照してください。</p>
+</div>
+<div class="sect3">
+<h4 id="_openshift_logging_namespace_を作成する"><a class="anchor" href="#_openshift_logging_namespace_を作成する"></a><code>openshift-logging</code> namespace を作成する</h4>
+<div class="paragraph">
+<p>OpenShift Logging は、独自の名前空間 <code>openshift-logging</code> 内で実行されます。
+この名前空間はデフォルトでは存在せず、Logging をインストールする前に作成する必要があります。
+名前空間は yaml 形式で以下のように表されます。:</p>
+</div>
+<div class="listingblock">
+<div class="title">openshift_logging_namespace.yaml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
+kind: Namespace
+metadata:
+  name: openshift-logging
+  annotations:
+    openshift.io/node-selector: ""
+  labels:
+    openshift.io/cluster-logging: "true"
+    openshift.io/cluster-monitoring: "true"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ネームスペースを作成するには、以下のコマンドを実行します。:</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc create -f {{ HOME_PATH }}/support/openshift_logging_namespace.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ネームスペースが作成されたか確認します。</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get ns openshift-logging</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のような結果が表示されるはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">NAME                STATUS   AGE
+openshift-logging   Active   11s</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_elasticsearch_と_cluster_logging_operator_をクラスターにインストールする"><a class="anchor" href="#_elasticsearch_と_cluster_logging_operator_をクラスターにインストールする"></a><code>Elasticsearch</code> と <code>Cluster Logging</code> Operator をクラスターにインストールする</h4>
+<div class="paragraph">
+<p><code>EFK</code> スタックをクラスタにインストールして設定するには、追加の Operator をインストールする必要があります。
+これらは、クラスタ内から <code>Operator Hub</code> から GUI を介してインストールすることができます。</p>
+</div>
+<div class="paragraph">
+<p>OpenShift で Operator を使用する際には、Operator を構成するいくつかの基本的な原理を理解しておくことが重要です。
+<code>CustomResourceDefinion (CRD)</code> と <code>CustomResource (CR)</code> は、Kubernetes オブジェクトであり、簡単に説明すると以下の通りです。
+<code>CRD</code> は、ジェネリックな事前定義された、データの構造体です。
+Operator は、<code>CRD</code> で定義されたデータをどのように適用するかを理解します。
+プログラミング的には、<code>CRD</code> はクラスに似ていると考えることができます。
+<code>CustomResource (CR)</code> は、構造化されたデータが実際の値を持つ <code>CRD</code> の実際の実装です。
+これらの値は、Operator がサービスを設定するときに使用するものです。
+繰り返しになりますが、プログラミング用語では、<code>CR</code> はクラスのインスタンス化されたオブジェクトに似ています。</p>
+</div>
+<div class="paragraph">
+<p>Operator を使用するための一般的なパターンは、まず Operator をインストールし、必要な <code>CRD</code> を作成します。
+<code>CRD</code> が作成された後、どのように動作するか、何をインストールするか、何を設定するかを Operator に伝える <code>CR</code> を作成します。
+openshift-logging をインストールするには、このパターンに従います。</p>
+</div>
+<div class="paragraph">
+<p>まず、OpenShift ClusterのGUIにログインします。
+<code>{{ MASTER_URL }}</code></p>
+</div>
+<div class="paragraph">
+<p>その後、以下の手順に従ってください。:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Elasticsearch Operator のインストール:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>OpenShift コンソールから、 <code>Operators</code> → <code>OperatorHub</code> をクリックします。</p>
+</li>
+<li>
+<p>検索フィールドに <code>Elasticsearch Operator</code> と入力し、使用可能なオペレーターのリストから <code>OpenShift Elasticsearch Operator</code> を選択し、 <code>Install</code> をクリックします。</p>
+</li>
+<li>
+<p><code>Create Operator Subscription</code> ページで、Update Channelにて <strong>Stable</strong> を選択し、他のすべてのデフォルト設定をそのままに、<code>Subscribe</code> をクリックします。</p>
+<div class="paragraph">
+<p>これにより、この OpenShift Container Platform クラスタを使用するすべてのユーザーとプロジェクトがこの Operator を利用できるようになります。</p>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Cluster Logging Operator のインストール:</p>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p><code>Cluster Logging</code> Operator を  <code>openshift-logging</code> ネームスペースにインストールする必要があります。
+<code>openshift-logging</code> ネームスペースが前の手順で作成されたことを確認してください。</p>
+</div>
+</div>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>OpenShift コンソールで、<code>Operators</code> → <code>OperatorHub</code> をクリックします。</p>
+</li>
+<li>
+<p>検索フィールドに <code>OpenShift Logging</code> と入力し、使用可能なオペレーターのリストから <code>Red Hat OpenShift Logging</code> を選択し、 <code>Install</code> をクリックします。</p>
+</li>
+<li>
+<p><code>Create Operator Subscription</code> ページで、<code>Update Channel</code> にて <strong>Stable</strong> を選択します。また <code>Installation Mode</code> で、<strong>A specific namespace on the cluster</strong> が選択されていることを確認し、<code>Installed Namespace</code> にて <strong>openshift-logging</strong> が設定されていることを確認します。他のすべてのデフォルト設定をそのままに、<code>Subscribe</code> をクリックします。</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Operator のインストールを確認する。:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><code>Operators</code> → <code>Installed Operators</code> のページに切り替えます。</p>
+</li>
+<li>
+<p>画面上部のプロジェクト選択にて <code>Show default projects</code> のトグルをONにした後、 <code>openshift-logging</code> プロジェクトを選択します。</p>
+</li>
+<li>
+<p><em>Status</em> 列で、緑色のチェックで、 <code>InstallSucceeded</code> もしくは <code>Copied</code> そして <em>Up to date</em> のテキストが見えるはずです。</p>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>インストール中に Operator が <code>Failed</code> ステータスを表示することがあります。
+Operator が  <code>InstallSucceeded</code> メッセージを表示してインストールが完了した場合、<code>Failed</code> メッセージを無視しても問題ありません。</p>
+</div>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>トラブルシューティング (オプショナル)</p>
+<div class="paragraph">
+<p>どちらかの Operator がインストールされているように表示されない場合は、さらにトラブルシューティングを行います。:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Installed Operators</code> ページで該当のOperatorを選択し、<code>Subscription</code> のタブで、ステータスの下に障害やエラーがないかどうかを確認します。</p>
+</li>
+<li>
+<p><code>Workloads</code> → <code>Pods</code> のページに切り替えて、<code>openshift-logging</code> と <code>openshift-operators</code> プロジェクトで問題を報告している任意の <code>Pod</code> のログを確認します。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_logging_customresource_cr_インスタンスを作成する"><a class="anchor" href="#_logging_customresource_cr_インスタンスを作成する"></a>Logging <code>CustomResource (CR)</code> インスタンスを作成する</h4>
+<div class="paragraph">
+<p>Operator を <code>CRD</code> と一緒にインストールしたので、Logging <code>CR</code> を作成して、Logging のインストールを開始します。
+これは、Logging をインストールして設定する方法を定義します。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>OpenShift Consoleで、<code>Administration</code> → <code>Custom Resource Definitions</code> ページに切り替えます。</p>
+</li>
+<li>
+<p><code>Custom Resource Definitions</code> のページで、 <code>ClusterLogging</code> をクリックします。</p>
+</li>
+<li>
+<p><code>Custom Resource Definition Overview</code> ページで、<code>Actions</code> メニューから <code>View Instances</code> を選択する。</p>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p><code>404</code> のエラーが表示されても、慌てないでください。
+Operator のインストールは成功したものの、Operator 自体のインストールが完了しておらず、 <code>CustomResourceDefinition</code> がまだ作成されていない可能性があります。
+しばらく待ってからページを更新してください。</p>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p><code>Cluster Loggings</code> ページで、 <code>Create Cluster Logging</code> をクリックします。</p>
+</li>
+<li>
+<p><code>YAML</code> エディタで、コードを以下で置き換えます。:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="title">openshift_logging_cr.yaml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: "logging.openshift.io/v1"
+kind: "ClusterLogging"
+metadata:
+  name: "instance"
+  namespace: "openshift-logging"
+spec:
+  managementState: "Managed"
+  logStore:
+    type: "elasticsearch"
+    elasticsearch:
+      nodeCount: 3
+      storage:
+         storageClassName: gp2
+         size: 100Gi
+      redundancyPolicy: "SingleRedundancy"
+      nodeSelector:
+        node-role.kubernetes.io/infra: ""
+      resources:
+        request:
+          memory: 4G
+  visualization:
+    type: "kibana"
+    kibana:
+      replicas: 1
+      nodeSelector:
+        node-role.kubernetes.io/infra: ""
+  curation:
+    type: "curator"
+    curator:
+      schedule: "30 3 * * *"
+      nodeSelector:
+        node-role.kubernetes.io/infra: ""
+  collection:
+    logs:
+      type: "fluentd"
+      fluentd: {}
+      nodeSelector:
+        node-role.kubernetes.io/infra: ""</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>そして <code>Create</code> をクリックします。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_logging_インストールを確認する"><a class="anchor" href="#_logging_インストールを確認する"></a>Logging インストールを確認する</h4>
+<div class="paragraph">
+<p>Logging が作成されたので、動作しているかどうかを確認してみましょう。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>Workloads</code> → <code>Pods</code> ページに移動します。</p>
+</li>
+<li>
+<p><code>openshift-logging</code> プロジェクトを選択します。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>クラスタ Logging （Operator 自身）、Elasticsearch、Fluentd、Kibana のPodが表示されているはずです。</p>
+</div>
+<div class="paragraph">
+<p>または、次のコマンドを使用してコマンドラインから検証することもできます。:</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pods -n openshift-logging</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>最終的には、次のようなものが表示されるはずです。:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME                                            READY   STATUS    RESTARTS   AGE
+cluster-logging-operator-5d4b6f7b99-ksr5s       1/1     Running   0          113s
+collector-2p5fx                                 2/2     Running   0          26s
+collector-7lw5r                                 2/2     Running   0          42s
+collector-8stvf                                 2/2     Running   0          32s
+collector-b7qs8                                 2/2     Running   0          27s
+collector-clfsc                                 2/2     Running   0          16s
+collector-f2tzf                                 2/2     Running   0          31s
+collector-j6hxp                                 2/2     Running   0          10s
+collector-kdvj8                                 2/2     Running   0          30s
+collector-q6wck                                 2/2     Running   0          21s
+collector-sgndk                                 2/2     Running   0          17s
+collector-w5ds9                                 2/2     Running   0          29s
+collector-zswpb                                 2/2     Running   0          34s
+elasticsearch-cdm-mnc985r3-1-5c45b9bd9f-4nx56   2/2     Running   0          70s
+elasticsearch-cdm-mnc985r3-2-779989b7bb-z9dpp   1/2     Running   0          69s
+elasticsearch-cdm-mnc985r3-3-6d754c8cbf-fx8wd   1/2     Running   0          68s
+kibana-655877db88-njsqq                         2/2     Running   0          70s</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><em>collector</em> <strong>Pods</strong> は、 <strong>DaemonSet</strong> としてデプロイされます。<strong>DaemonSet</strong> は、特定の <strong>Pods</strong> が、クラスタ内の特定の <strong>Nodes</strong> で常に実行されるための仕組みです。:</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get daemonset -n openshift-logging</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のようなものを見ることができます。:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+collector   10        10        10      10           10          kubernetes.io/os=linux   2m55s</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>クラスタ内の <strong>Node</strong> ごとに1つの <code>collector</code> <strong>Pod</strong> が必要です。
+<strong>Master</strong> も <strong>Node</strong> であり、<code>collector</code> はそこでも様々なログを読み取るために実行されることを覚えておいてください。</p>
+</div>
+<div class="paragraph">
+<p>また、ElasticSearch 用のストレージが自動的にプロビジョニングされていることがわかります。
+このプロジェクトの <strong>PersistentVolumeClaim</strong> オブジェクトにクエリを実行すると、新しいストレージが表示されます。</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pvc -n openshift-logging</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のようなものが見えるはずです。:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME                                         STATUS   VOLUME                                     CAPACITY   ACCESS
+MODES   STORAGECLASS                  AGE
+elasticsearch-elasticsearch-cdm-ggzilasv-1   Bound    pvc-f3239564-389c-11ea-bab2-06ca7918708a   100Gi      RWO
+        ocs-storagecluster-ceph-rbd   15m
+elasticsearch-elasticsearch-cdm-ggzilasv-2   Bound    pvc-f324a252-389c-11ea-bab2-06ca7918708a   100Gi      RWO
+        ocs-storagecluster-ceph-rbd   15m
+elasticsearch-elasticsearch-cdm-ggzilasv-3   Bound    pvc-f326aa7d-389c-11ea-bab2-06ca7918708a   100Gi      RWO
+        ocs-storagecluster-ceph-rbd   15m</pre>
+</div>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Metrics ソリューションの場合と同様に、Logging 構成( <code>CR</code> )で適切な <code>NodeSelector</code> を定義して、Logging コンポーネントが infra ノードにしかデプロイされないようにしています。
+つまり、<code>DaemonSet</code> は FluentD が <strong>すべての</strong> ノードで実行されることを保証しています。
+そうでなければ、すべてのコンテナログをキャプチャすることはできません。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_kibana_にアクセスする"><a class="anchor" href="#_kibana_にアクセスする"></a><em>Kibana</em> にアクセスする</h4>
+<div class="paragraph">
+<p>前述の通り、<em>Kibana</em> はフロントエンドであり、ユーザーや管理者が OpenShift Logging スタックにアクセスするためのインターフェイスです。
+<em>Kibana</em> ユーザーインターフェースにアクセスするには、まず Kibana の <strong>Service</strong> を公開するために設定された <strong>Route</strong> を見て、そのパブリックアクセス URL を調べます。:</p>
+</div>
+<div class="paragraph">
+<p><em>Kibana</em> route を見つけてアクセスするには:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>OpenShift console から、 <code>Networking</code> → <code>Routes</code> ページをクリックします。</p>
+</li>
+<li>
+<p><code>openshift-logging</code> プロジェクトを選択します。</p>
+</li>
+<li>
+<p><code>Kibana</code> route をクリックします。</p>
+</li>
+<li>
+<p><code>Location</code> フィールドで、表示されている URL をクリックします。</p>
+</li>
+<li>
+<p>SSL 証明書をアクセプトします。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>あるいは、コマンドラインから取得することもできます。:</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get route -n openshift-logging</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のようなものが見えるはずです。:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME     HOST/PORT                                                           PATH   SERVICES   PORT    TERMINATION          WILDCARD
+kibana   kibana-openshift-logging.{{ ROUTE_SUBDOMAIN }}          kibana     &lt;all&gt;   reencrypt/Redirect   None</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>または、control+click  をクリックすることができます。:</p>
+</div>
+<div class="paragraph">
+<p><a href="https://kibana-openshift-logging.{{" class="bare">https://kibana-openshift-logging.{{</a> ROUTE_SUBDOMAIN }}</p>
+</div>
+<div class="paragraph">
+<p>EFK インストールの一部として設定されている特別な認証プロキシがあり、その結果、Kibana はアクセスに OpenShift の資格情報を必要とします。</p>
+</div>
+<div class="paragraph">
+<p>OpenShift Console に cluster-admin ユーザーとして認証済みのため、Kibana の管理画面が表示されます。</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_インデックスパターンの設定"><a class="anchor" href="#_インデックスパターンの設定"></a>インデックスパターンの設定</h4>
+<div class="paragraph">
+<p>Kibanaを開いたら、ログを表示する前に、 KibanaがElasticSearchにクエリを実行するために使用する <code>index pattern</code> を定義する必要があります。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>次の画面で、下図のようにインデックスパターンに <code>app*</code> と入力し、 <code>Next Step</code> をクリックします。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/logging-kibana-indexpattern.png" alt="logging kibana indexpattern">
+</div>
+</div>
+</li>
+<li>
+<p>次の画面で、以下に示すように、ドロップダウンボックスで <code>@timestamp</code> を選択します。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/logging-kibana-indexpattern-timestamp.png" alt="logging kibana indexpattern timestamp">
+</div>
+</div>
+</li>
+<li>
+<p><code>Create Index Pattern</code> をクリックします。</p>
+</li>
+<li>
+<p>以下の概要画面が表示されます。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/kibana-summary-ip.png" alt="kibana summary ip">
+</div>
+</div>
+</li>
+<li>
+<p>画面左上の <code>Discover</code> をクリックします</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_kibana_を使ってクエリを行う"><a class="anchor" href="#_kibana_を使ってクエリを行う"></a><em>Kibana</em> を使ってクエリを行う</h4>
+<div class="paragraph">
+<p><em>Kibana</em> の Web インターフェースが立ち上がったら、クエリを実行できるようになります。
+<em>Kibana</em> は、クラスタから送られてくるすべてのログを問い合わせるための強力なインターフェイスをユーザに提供します。</p>
+</div>
+<div class="paragraph">
+<p>デフォルトでは、<em>Kibana</em> は過去15分以内に受信したすべてのログを表示します。
+この時間間隔は右上で変更できます。
+ログメッセージはページの中央に表示されます。
+受信したすべてのログメッセージは、ログメッセージの内容に基づいてインデックス化されます。
+各メッセージには、そのログメッセージに関連付けられたフィールドがあります。
+個々のメッセージを構成するフィールドを見るには、ページの中央にある各メッセージの側面にある矢印をクリックします。
+これにより、含まれているメッセージ フィールドが表示されます。</p>
+</div>
+<div class="paragraph">
+<p>メッセージに表示するフィールドを選択するには、左側の <code>Available Fields</code> ラベルの手前を見てください。
+その下には選択可能なフィールドがあり、画面の中央に表示されます。
+利用可能なフィールド <code>Available Fields</code> の下にある <code>hostname</code> フィールドを見つけて、 <code>add</code> をクリックします。
+これで、メッセージペインに各メッセージのホスト名が表示されることに気づくでしょう。
+これ以外にもフィールドを追加することができます。 <code>kubernetes.pod_name</code> と <code>message</code> の <code>add</code> ボタンをクリックします。</p>
+</div>
+<div class="paragraph">
+<p>ログに対するクエリを作成するには、検索ボックスの右下にある <code>Add a filter +</code> リンクを使用することができます。
+これにより、メッセージのフィールドを使ってクエリを作成することができます。
+例えば、 <code>lab-ocp-cns</code> namespace のすべてのログメッセージを見たい場合、以下のようにします。:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>Add a filter +</code> をクリックします。</p>
+</li>
+<li>
+<p><code>Fields</code> インプットボックスで、 <code>kubernetes.namespace_name</code> とタイプします。
+クエリをビルドするための全ての可能なフィールドがある事に注目してください。</p>
+</li>
+<li>
+<p>次に、 <code>is</code> を選択します。</p>
+</li>
+<li>
+<p><code>Value</code> フィールドで、 <code>lab-ocp-cns</code> とタイプします。</p>
+</li>
+<li>
+<p>"Save" ボタンをクリックします。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>画面の中央には <code>lab-ocp-cns</code> namespace にあるすべてのPodからのログが表示されているはずです。</p>
+</div>
+<div class="paragraph">
+<p>もちろん、さらにフィルタを追加してクエリを絞り込むこともできます。</p>
+</div>
+<div class="paragraph">
+<p>Kibanaでは、クエリを保存して後で使えるようにすることができます。クエリを保存するには、以下のようにします。:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>画面上部の <code>Save</code> をクリックします。</p>
+</li>
+<li>
+<p>保存したい名前を入力します。ここでは、<code>lab-ocp-cns Namespace</code> と入力します。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>一度保存しておけば、後で <code>Open</code> ボタンを押してこのクエリを選択することで利用することができます。</p>
+</div>
+<div class="paragraph">
+<p>時間をかけて <em>Kibana</em> のページを探索し、より多くのクエリを追加したり実行したりして経験を積んでください。
+これは本番環境のクラスタを使用する際に役立つでしょう。
+探しているログをこのコンソールから取得することができるようになります。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ログを外部システムに転送する"><a class="anchor" href="#_ログを外部システムに転送する"></a>ログを外部システムに転送する</h3>
+<div class="paragraph">
+<p>このセクションでは、ログを外部ログシステムに転送する方法を示します。</p>
+</div>
+<div class="paragraph">
+<p><code>ClusterLogForwarder</code> によって指定された新しい <code>CustomResourceDefinition（CRD）</code> は、ログを外部（または内部）システムに転送するために内部のFluentd <code>configmas</code> を作成または変更するために使用されます。Cluster Logging Operatorクラスタに存在できる <code>ClusterLogForwarder</code> は1つだけであり、すべてのログ転送ルールが組み合わされています。</p>
+</div>
+<div class="paragraph">
+<p>外部のサードパーティシステムにクラスタログを転送するには、 <code>ClusterLogForwarder</code> カスタムリソース（CR）で指定された出力とパイプラインを組み合わせて、OpenShift Container Platformクラスタの内部および外部の特定のエンドポイントにログを送信することが必要です。また、 <code>inputs</code> を使用して、特定のプロジェクトに関連するアプリケーションログをエンドポイントに転送することができます。これらの概念について詳しく学びましょう。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>output</code> は、定義したログデータの宛先、またはログの送信先です。<code>output</code> の種類は以下の通りです。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>elasticsearch</code> : 外部のElasticsearch v5.xまたはv6.xインスタンス。Elasticsearchの出力はTLS接続を使用できます。</p>
+</li>
+<li>
+<p><code>fluentdForward</code> : Fluentdをサポートする外部のログアグリゲーションソリューションです。このオプションはFluentdの転送プロトコルを使用します。<code>fluentForward</code> outputはTCPまたはTLS接続を使用でき、秘密鍵のshared_keyフィールドを提供することで <strong>共有鍵認証</strong> をサポートします。共有鍵認証は、TLS の有無にかかわらず使用できます。</p>
+</li>
+<li>
+<p><code>syslog</code> : syslogRFC3164またはRFC5424プロトコルをサポートする外部ログ集約ソリューションです。syslog出力は、UDP、TCP、またはTLS接続を使用できます。</p>
+</li>
+<li>
+<p><code>kafka</code> : Kafkaブローカーです。<code>kafka</code> outputは、TCPまたはTLS接続を使用できます。</p>
+</li>
+<li>
+<p><code>default</code> : 内部の OpenShift Container Platform Elasticsearch インスタンスです。デフォルトのoutputを設定する必要はありません。デフォルトのoutputを設定した場合、デフォルトのoutputはクラスターロギングオペレーター用に予約されているため、エラーメッセージが表示されます。</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>output URL スキームが TLS (HTTPS、TLS、または UDPS) を必要とする場合、TLS サーバーサイド認証が有効になります。クライアント認証も有効にするには、output に <code>openshift-logging</code> プロジェクト内の secret を指定する必要があります。この secret には、それぞれの証明書を指す <strong>tls.crt</strong>、<strong>tls.key</strong>、および <strong>ca-bundle.crt</strong> というキーが必要です。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>pipeline</code> は、1つのログタイプから1つまたは複数の出力への単純なルーティング、またはどのログを送信するかを定義します。ログタイプは以下のいずれかです。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>application</code> : インフラストラクチャコンテナアプリケーションを除く、クラスタで実行されているユーザーアプリケーションによって生成されたコンテナログ。</p>
+</li>
+<li>
+<p><code>infrastructure</code> : openshift *、kube *、またはデフォルトのプロジェクトで実行されるPodからのコンテナーログと、ノードファイルシステムから供給されるジャーナルログ。</p>
+</li>
+<li>
+<p><code>audit</code> : ノードの監査システム（auditd）が生成するログと、Kubernetes APIサーバーおよびOpenShift APIサーバーの監査ログ。</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>パイプラインのキーと値のペアを使用して、送信ログメッセージにラベルを追加することができます。たとえば、他のデータセンターに転送されるメッセージにラベルを追加したり、タイプ別にログにラベルを付けることができます。オブジェクトに追加されたラベルは、ログメッセージと一緒に転送されます。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>inputは、特定のプロジェクトに関連付けられたアプリケーションログをパイプラインに転送します。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>詳細については、
+<a href="https://docs.openshift.com/container-platform/4.10/logging/cluster-logging-external.html">OpenShiftの公式ドキュメントサイト</a>をご覧ください。</p>
+</div>
+<div class="sect3">
+<h4 id="_外部syslogサーバーへのログの送信"><a class="anchor" href="#_外部syslogサーバーへのログの送信"></a>外部Syslogサーバーへのログの送信</h4>
+<div class="paragraph">
+<p>ここでは簡略化のため、コンテナ化したSyslogサーバーを <code>external-logs</code> という名前空間に配置し、外部のSyslogサーバーをエミュレートすることにします。</p>
+</div>
+<div class="paragraph">
+<p>アプリケーションログとインフラログを分離する方法も紹介したいので、2つの（コンテナ化した）外部Syslogをデプロイします。1つは転送されたアプリケーションログを受信するため、もう1つは転送されたインフラログを受信するためです。</p>
+</div>
+<div class="paragraph">
+<p>まず、<code>external-logs</code> というネームスペースを作成し、そこにSyslogサーバを配置します。</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc new-project external-logs</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>では、そのネームスペースに <code>Syslog</code> サーバをデプロイしてみましょう。そのために、必要なリソースをすべて含むYAMLファイルを使用します。</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc create -f /opt/app-root/src/support/extlogs-syslog.yaml -n external-logs</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>すべてが正常に機能していることを確認しましょう。外部レジストリ用にイメージがプルされるまで1分かかる場合があります。すべてがOKの場合、次のような出力が得られるはずです。</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pods -n external-logs</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次の出力が表示されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME                               READY   STATUS    RESTARTS   AGE
+syslog-ng-84c59fdc8-mdwrs          1/1     Running   0          81s
+syslog-ng-infra-697fc7597f-gwrxd   1/1     Running   0          81s</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>いずれかのPodが <code>CrashLoopBackOff</code> 状態になっている場合は、<code>oc delete pods --all -n external-logs</code> を実行してPodを再起動してください。</p>
+</div>
+<div class="paragraph">
+<p>外部 Syslog サーバが利用可能になったので、<code>ClusterLogForwarder</code> を作成してログ転送ルールを設定しましょう。まず、YAMLファイルを見てみましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>apiVersion: logging.openshift.io/v1
+kind: ClusterLogForwarder
+metadata:
+  name: instance
+  namespace: openshift-logging
+spec:
+  outputs: (1)
+  - name: rsyslog-app
+    syslog:
+      facility: user
+      payloadKey: message
+      rfc: RFC3164
+      severity: informational
+    type: syslog (2)
+    url: udp://syslog-ng.external-logs.svc:514 (3)
+  - name: rsyslog-infra
+    syslog:
+      facility: user
+      payloadKey: message
+      rfc: RFC3164
+      severity: informational
+    type: syslog
+    url: udp://syslog-ng-infra.external-logs.svc:514 (4)
+  pipelines: (5)
+  - inputRefs: (6)
+    - application (7)
+    labels:
+      syslog: app
+    name: syslog-app
+    outputRefs:
+    - rsyslog-app (8)
+    - default
+  - inputRefs:
+    - infrastructure (8)
+    labels:
+      syslog: infra
+    name: syslog-infra
+    outputRefs:
+    - rsyslog-infra (9)
+    - default</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>このYAMLファイルには、いくつかの注目すべきフィールドがあります。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>(1) <code>outputs</code> セクションは、すべてのリモートログシステムを定義します。この例では、2つの Syslog サーバーがあります。</p>
+</li>
+<li>
+<p>(2) 使用されているログアグリゲータの種類を定義します。</p>
+</li>
+<li>
+<p>(3) アプリケーション関連のログを保存するためのURLです。 <code>external-logs</code> ネームスペースにあるサービスを指しています。</p>
+</li>
+<li>
+<p>(4) インフラ関連のログを保存するためのURLです。<code>external-logs</code> ネームスペースにあるサービスを指しています。</p>
+</li>
+<li>
+<p>(5）<code>pipeline</code> は、先に定義したアウトプットに送るべきログのソースと性質を定義しています。</p>
+</li>
+<li>
+<p>(6) <code>inputRefs</code> は送信するログの性質を記述するためのもので、注意点として、アプリケーション、インフラ、OpenShift の監査ログ (API アクセスなど) のための監査のいずれかを指定できます。</p>
+</li>
+<li>
+<p>2つのinputRefがあり、(7)はアプリケーションログ用、(8)はインフラストラクチャログ用です。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>各 <code>inputRefs</code> セクションには、ログがどこに送られるかを示す <code>outRefs</code> が含まれており、<code>spec</code> セクションの最初に定義された <code>outputs</code> (1) を参照しています。</p>
+</div>
+<div class="paragraph">
+<p>では、YAML ファイルを使用して <code>ClusterLogForwarder</code> リソースを作成してみましょう。</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc create -f /opt/app-root/src/support/extlogs-clusterlogforwarder.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>CRが作成されると、Cluster Logging Operatorは <code>Collector</code> Podsをデプロイします。デプロイされるのを待ちます。</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc rollout status ds/collector -n openshift-logging</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Podが再展開されない場合は、 <code>Collector</code> Podを手動で削除して、強制的に再展開させることができます。</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc delete pod --selector logging-infra=collector -n openshift-logging</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>すべての <code>Collector</code> Podが Running 状態になったことを確認しましょう。</p>
+</div>
+<div class="listingblock execute">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc get pod --selector logging-infra=collector -n openshift-logging</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>このようなものが出力されるはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME              READY   STATUS    RESTARTS   AGE
+collector-2mk4h   2/2     Running   0          37s
+collector-4dfnc   2/2     Running   0          38s
+collector-99rh4   2/2     Running   0          37s
+collector-c7msc   2/2     Running   0          38s
+collector-gb7nh   2/2     Running   0          38s
+collector-k8khn   2/2     Running   0          37s
+collector-lt8j4   2/2     Running   0          38s
+collector-pzqxw   2/2     Running   0          37s
+collector-w54c5   2/2     Running   0          37s</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ここで、2台のSyslogサーバにログが転送されていることを確認しましょう。Syslogサーバーはコンテナ内の <code>/var/log/messages</code> ファイルにログを保存していますので、Webコンソールからコンテナに`oc exec` して内容を確認する必要があります。</p>
+</div>
+<div class="paragraph">
+<p>今回はOpenShift Console Terminalを使用してPodにアクセスし、 <code>/var/log/messages</code> の内容を確認します。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Administrator Viewを開き、 <code>workloads→Pods</code> と進みます。 <code>external-logs</code> Projectにいることを確認します。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/logging-syslog-pods.png" alt="Syslog Pods">
+</div>
+</div>
+</li>
+<li>
+<p><code>syslog-ng-infra-xyz</code> のような名前の <code>syslog-infra</code> Podをクリックし、<code>Terminal</code> タブに移動します (# プロンプトを表示するには、何度かエンターキーを押す必要があるかもしれません)。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/logging-syslog-terminal-infra.png" alt="Syslog Terminal">
+</div>
+</div>
+</li>
+<li>
+<p>ターミナルボックスに、<code>tail -f /var/log/messages</code> と入力します。すると、転送されたログがターミナルに表示されるはずです。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/logging-syslog-logs.png" alt="Syslog logs">
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>これで完了です！この手順をもう一方のPodで繰り返して、アプリケーション・ログも正しく転送されることを確認できます。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

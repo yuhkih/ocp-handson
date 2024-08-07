@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>永続ストレージ :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/02_app-storage-basics.html">
+    <link rel="prev" href="01_app-deployment.html">
+    <link rel="next" href="03_machinesets.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li>01. OpenShift 基礎</li>
+    <li><a href="02_app-storage-basics.html">3. 永続ストレージ</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/02_app-storage-basics.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">永続ストレージ</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>本コンテンツは、<a href="https://github.com/team-ohc-jp-place/openshift-cns-testdrive">MAD Workshop Ops Track</a> の内容をベースに、一部変更しています。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>OpenShiftの <strong>Pod</strong> がデータベースをホストするなど、信頼性の高いストレージを必要とする場合があります。<br>
+こういった場合は、<strong>Pod</strong> に <strong>永続的な(Persistent) Volume</strong> を供給する必要があります。なぜならば <strong>Pod</strong>(コンテナ) 内部に保存されるデータは、<strong>Pod</strong> が消えると失われてしまうためです。<br>
+<strong>Persistent Volume</strong> は一般的には、外部ストレージシステムから供給され、<strong>Pod</strong> が消えても存続するストレージです。したがってストレージ内に保存したデータは失われることはありません。</p>
+</div>
+<div class="paragraph">
+<p>この演習では、この <strong>Persistent Volume</strong> について学びます。</p>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="_persistent_volume_claims"><a class="anchor" href="#_persistent_volume_claims"></a>Persistent Volume Claims</h3>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>これらの演習を行うには、「コンテナデプロイと管理」の演習で紹介されているアプリケーションがすでにデプロイされている必要があります。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>mapit</code> アプリケーションは現在、永続的なストレージを利用していません。<strong>Pod</strong> が消えると、コンテナ内のすべてのコンテンツも消えてしまいます。<br>
+この概念については後で詳しく説明します。</p>
+</div>
+<div class="paragraph">
+<p>コンテナ内の <code>/app-storage</code> ディレクトリに使う <em>永続ストレージ(Persistent Storage)</em> を必要とする <code>mapit</code> アプリケーションを想像してみましょう。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>コンテナの内部ファイルシステムを構成するディレクトリは、コンテナイメージのread-onlyレイヤーと、イメージからコンテナインスタンスが起動されるとすぐに追加されるwritableな最上位レイヤーを重ね合わせたものです。<br>
+writableなレイヤーは、コンテナが削除されると破棄されます。これは動的なコンテナオーケストレーション環境では普通に起きることです。</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>前のラボで使用した <code>app-management</code> プロジェクトに入っているはずです。確認するために、次のコマンドを実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc project app-management</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>OpenShiftに外部の永続ストレージを表す <code>PersistentVolume</code> オブジェクトを作成し、それをコンテナのファイルシステム内に <strong>Mount</strong> するよう指示する方法を以下に示します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc set volume deploy/mapit --add --name=mapit-storage -t pvc --claim-mode=ReadWriteOnce --claim-size=1Gi --claim-name=mapit-storage --mount-path=/app-storage</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>出力は次のようになります。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>deployment.apps/mapit volume updated</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>最初のステップでは、<strong>PersistentVolumeClaim</strong> が作成されました。このオブジェクトは、ユーザーからOpenShiftへの一定の容量を持つ特定の種類のストレージのリクエストを表しています。
+次に、<code>mapit</code> の <code>Deployment</code> を更新して、このストレージを参照し、<strong>Pod</strong> 内の <code>/app-storage</code> ディレクトリで利用できるようにしています。</p>
+</div>
+<div class="paragraph">
+<p>このように新しい <code>Deployment</code> が表示されます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get deploy mapit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>出力を見ると、ストレージの更新によって新しいリビジョンが作成されたことがわかります。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+mapit   1/1     1            1           14m</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>タイミングによっては、新しい <strong>Pod</strong> が生成されていることがわかるかもしれません。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pod</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME                     READY   STATUS              RESTARTS   AGE
+mapit-649fd997c6-rvntj   0/1     ContainerCreating   0          13s
+mapit-79975ccb98-hpw6m   1/1     Running             0          76s</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>Deployment</code> を見てみましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc describe deploy mapit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>新しいストレージについて、<code>Mounts</code> と <code>Volumes</code> の両方の詳細が表示されているのがわかります。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>...
+    Mounts:
+      /app-storage from mapit-storage (rw)
+  Volumes:
+   mapit-storage:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  mapit-storage
+    ReadOnly:   false
+...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>しかし、この裏では何が起こっているのでしょうか?</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_storage_classes"><a class="anchor" href="#_storage_classes"></a>Storage Classes</h3>
+<div class="paragraph">
+<p>OpenShift 4を最初にインストールしたときに、AWS EBS用のダイナミックストレージプロバイダが設定されていました。この <code>StorageClass</code> を見てみましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get storageclass</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のように表示されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME                PROVISIONER       RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+gp2-csi             ebs.csi.aws.com   Delete          WaitForFirstConsumer   true                   3h36m
+gp3-csi (default)   ebs.csi.aws.com   Delete          WaitForFirstConsumer   true                   3h36m</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>StorageClass</code> を指定していない <code>PersistentVolumeClaim</code> では、デフォルトの <strong>StorageClass</strong> が使用されます。この場合では、デフォルトはEBS Provisionerで、リクエストされたサイズ(この例では1Gi)のEBS GP2 Volumeを作成します。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p><code>gp2-csi</code> もあることに注意してみましょう。これは <a href="https://github.com/container-storage-interface/spec">CSI</a> を実装した <strong>StorageClass</strong> です。これは "Container Storage Interface" の略です。
+CSIの仕様により、ストレージベンダはプラグインを一度開発すれば、様々なコンテナオーケストレーションシステムで動作させることができるようになります。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_persistent_volume_claims_2"><a class="anchor" href="#_persistent_volume_claims_2"></a>Persistent Volume (Claims)</h3>
+<div class="paragraph">
+<p>先ほど実行した <code>oc set volume</code> コマンドは、<code>claim</code> を参照しています。<br>
+Kubernetes環境のストレージは、Volume Claim と Volume のシステムを使用します。ユーザが <code>PersistentVolumeClaim</code> を作成し、Kubernetesはそれにマッチする`PersistentVolume` を見つけようとします。<br>
+<code>PersistentVolume</code> が存在しない場合は、要求を満たすことができるDynamic Provisionerがあれば、<code>PersistentVolume</code> が動的に作成されます。</p>
+</div>
+<div class="paragraph">
+<p>以下を実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get persistentvolume</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のように表示されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                          STORAGECLASS   REASON   AGE
+pvc-06b0184f-f4fe-4b7f-838b-33165d694f92   1Gi        RWO            Delete           Bound    app-management/mapit-storage   gp3-csi                 7m26s</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>これは、先ほどのClaimの結果として作成された <code>Persistent Volume</code> です。この <code>app-management</code> Project に存在するClaimにBindされている(<strong>Bound</strong>)ことに注意してください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get persistentvolumeclaim -n app-management</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のように表示されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME            STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+mapit-storage   Bound    pvc-06b0184f-f4fe-4b7f-838b-33165d694f92   1Gi        RWO            gp3-csi        7m53s</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_永続ストレージのテスト"><a class="anchor" href="#_永続ストレージのテスト"></a>永続ストレージのテスト</h3>
+<div class="paragraph">
+<p><code>oc get pods</code> を使って <strong>Pod</strong> の名前を取得してから、<code>oc</code> クライアントのリモートシェル機能で <strong>Pod</strong> にログインします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc rsh $(oc get pods -l deployment=mapit -o name)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>コンテナのシェルセッションにいる状態で</strong>、コンテナの名前空間でルートディレクトリの内容をリストアップします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">ls -ahl /</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>/app-storage</code> という名前のディレクトリがあります。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>total 20K
+dr-xr-xr-x.   1 root  root         81 Jun 19 06:51 .
+dr-xr-xr-x.   1 root  root         81 Jun 19 06:51 ..
+-rw-r--r--.   1 root  root        16K Dec 14  2016 anaconda-post.log
+drwxrwsr-x.   3 root  1000690000 4.0K Jun 19 06:50 app-storage
+lrwxrwxrwx.   1 root  root          7 Dec 14  2016 bin -&gt; usr/bin
+drwxrwxrwx.   1 jboss root         45 Aug  4  2017 deployments
+drwxr-xr-x.   5 root  root        360 Jun 19 06:51 dev
+drwxr-xr-x.   1 root  root         93 Jan 18  2017 etc
+drwxr-xr-x.   2 root  root          6 Nov  5  2016 home
+lrwxrwxrwx.   1 root  root          7 Dec 14  2016 lib -&gt; usr/lib
+lrwxrwxrwx.   1 root  root          9 Dec 14  2016 lib64 -&gt; usr/lib64
+drwx------.   2 root  root          6 Dec 14  2016 lost+found
+drwxr-xr-x.   2 root  root          6 Nov  5  2016 media
+drwxr-xr-x.   2 root  root          6 Nov  5  2016 mnt
+drwxr-xr-x.   1 root  root         19 Jan 18  2017 opt
+dr-xr-xr-x. 328 root  root          0 Jun 19 06:51 proc
+dr-xr-x---.   2 root  root        114 Dec 14  2016 root
+drwxr-xr-x.   1 root  root         42 Jun 19 06:51 run
+lrwxrwxrwx.   1 root  root          8 Dec 14  2016 sbin -&gt; usr/sbin
+drwxr-xr-x.   2 root  root          6 Nov  5  2016 srv
+dr-xr-xr-x.  13 root  root          0 Jun 19 03:29 sys
+drwxrwxrwt.   1 root  root        120 Jun 19 06:51 tmp
+drwxr-xr-x.   1 root  root         69 Dec 16  2016 usr
+drwxr-xr-x.   1 root  root         41 Dec 14  2016 var</pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>これはコンテナ内の永続ストレージが表示される場所です。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Amazon EBSのVolumeはRead-Write-Onceです。EBSはブロックストレージなので、一度に1つのEC2インスタンスにしかアタッチできません。これは一度に1つのコンテナでしかEBSベースの <code>PersistentVolume</code> を使用できないということを意味します。(この性質をRead-Write-Onceと呼びます)</p>
+</div>
+<div class="paragraph">
+<p>リモートシェルセッション内で以下を実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">echo "Hello World from OpenShift" &gt; /app-storage/hello.txt
+exit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次に、ファイルが存在することを確認します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc rsh $(oc get pods -l deployment=mapit -o name) cat /app-storage/hello.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ここで、永続ストレージが本当に動作するか確認するためにPodを削除してみます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc delete pods -l deployment=mapit &amp;&amp; oc get pod</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>しばらくすると、新しい <strong>Pod</strong> が準備され、実行できるようになります。その名前を探して、もう一度ファイルを確認してください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc rsh $(oc get pods -l deployment=mapit -o name) cat /app-storage/hello.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ファイルがあることが確認できるでしょう。<strong>Pod</strong> が消えてもストレージとそのデータは保存されていることが分かります。<br>
+新しい <strong>Pod</strong> は古い <strong>Pod</strong> と同じノードで実行されていない可能性もありますが、問題なく <code>Persistent Volume</code> は使えています。<br>
+これはユーザーが意識しない形で、KubernetesとOpenShiftが自動的に外部ストレージを適切なタイミングで適切な場所にアタッチしたことを意味します。</p>
+</div>
+<div class="paragraph">
+<p>また、Read-Write-Manyなストレージが必要な場合は、ファイルベースのストレージソリューションが利用できます。<br>
+OpenShift Data Foundationは、OpenShiftの内部で動作するハイパーコンバージドなストレージソリューションです。ローカルに接続されたストレージデバイスをストレージプールにして、そこからVolumeを作成することで、ファイル、ブロック、さらにはオブジェクトストレージを提供することができます。</p>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="01_app-deployment.html">2. Web コンソールの利用</a></span>
+  <span class="next"><a href="03_machinesets.html">4. ノードの動的管理</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

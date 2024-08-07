@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>[デモ] AROクラスターの更新 :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/69-aro-upgrade.html">
+    <link rel="prev" href="68-aro-nodes.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li>61. Azure Red Hat OpenShift (ARO) Lab</li>
+    <li><a href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/69-aro-upgrade.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">[デモ] AROクラスターの更新</h1>
+<div class="sect1">
+<h2 id="_デモの概要"><a class="anchor" href="#_デモの概要"></a>デモの概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このモジュールでは、インストラクターがAROクラスター更新方法の概要をご紹介します。</p>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="_前準備"><a class="anchor" href="#_前準備"></a>前準備</h3>
+<div class="paragraph">
+<p>AROクラスターは、セルフマネージド版のOpenShiftと同様に、
+WebコンソールやOpenShift CLIを使用したアップグレードが可能です。
+ここでは、OpenShiftのWebコンソールを利用した、AROクラスターのアップグレード方法をご紹介します。</p>
+</div>
+<div class="paragraph">
+<p>OpenShiftクラスターのrootユーザーであるkubeadminユーザー、または、
+クラスター管理権限となるcluster-adminロールが割り当てられたユーザーで、
+AROクラスターにログインして、「クラスター設定」画面に移動します。</p>
+</div>
+<div class="paragraph">
+<p>AROクラスターのデフォルトだと、更新チャネルが未設定の状態なので、チャネルを設定します。
+未設定の横の鉛筆マークをクリックして、チャネル名(この例では、stable-4.10)を入力して、
+「保存」をクリックします。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+AROでは、
+<a href="https://learn.microsoft.com/en-us/azure/openshift/support-lifecycle#upgrade-channels">「stable」チャネルのみがサポート対象のチャネル</a>
+となります。
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/upgrade/channel-config1.png" alt="channel config1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/upgrade/channel-config2.png" alt="channel config2">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/upgrade/channel-config3.png" alt="channel config3">
+</div>
+</div>
+<div class="paragraph">
+<p>一部のワーカノードを更新対象外にする(
+<a href="https://access.redhat.com/documentation/ja-jp/openshift_container_platform/4.14/html/updating_clusters/update-using-custom-machine-config-pools">カナリアロールアウト更新</a>)ことができます。
+その場合は、ラベルをつけた特定のノードのプール(Machine Config Pool, MCP)を作成する必要があります。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">$ : ↓AROクラスターにkubeadminユーザでログイン
+$ oc login --token=sha256~XXXXX --server=https://api.testmydomain01.japaneast.aroapp.io:6443
+
+
+$ : ↓AROクラスターのコンピュートノードのリスト表示
+$ oc get -l 'node-role.kubernetes.io/master!=' -o 'jsonpath={range .items[*]}{.metadata.name}{"\n"}{end}' nodes
+testmyaro01-jnlll-worker-japaneast1-t676g
+testmyaro01-jnlll-worker-japaneast2-8nbm2
+testmyaro01-jnlll-worker-japaneast3-6tqgr
+$ : ↓「oc label」コマンドによる「node-role.kubernetes.io/workerpool-canary=」ラベルの付与
+$ oc label node testmyaro01-jnlll-worker-japaneast3-6tqgr node-role.kubernetes.io/workerpool-canary=
+node/testmyaro01-jnlll-worker-japaneast3-6tqgr labeled
+
+
+$ : ↓「node-role.kubernetes.io/workerpool-canary=」ラベルが付与されたノードを対象とする
+$ :   OpenShiftのMachineConfigPoolリソースを作成
+$ cat &lt;&lt; EOF &gt; worker-canary.yaml
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfigPool
+metadata:
+  name: workerpool-canary
+spec:
+  machineConfigSelector:
+    matchExpressions:
+      - {
+         key: machineconfiguration.openshift.io/role,
+         operator: In,
+         values: [worker,workerpool-canary]
+        }
+  nodeSelector:
+    matchLabels:
+      node-role.kubernetes.io/workerpool-canary: ""
+EOF
+$ oc create -f worker-canary.yaml
+machineconfigpool.machineconfiguration.openshift.io/workerpool-canary created
+
+
+$ : ↓OpenShiftのMachineConfigPoolリソース一覧を表示
+$ oc get mcp
+NAME                CONFIG                                                        UPDATED   UPDATING   DEGRADED   MACHINECOUNT   READYMACHINECOUNT   UPDATEDMACHINECOUNT   DEGRADEDMACHINECOUNT   AGE
+master              rendered-master-b3a0f025835fde2aeb292b6344891769              True      False      False      3              3                   3                     0                      5h8m
+worker              rendered-worker-e3b5c7f3534a74ba469358659178d170              True      False      False      2              2                   2                     0                      5h8m
+workerpool-canary   rendered-workerpool-canary-e3b5c7f3534a74ba469358659178d170   True      False      False      1              1                   1                     0                      60s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ここで作成したMCP「workerpool-canary」を指定して、
+ワーカーノードのアップグレード対象外にすることが可能です。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_aroクラスターのアップグレード"><a class="anchor" href="#_aroクラスターのアップグレード"></a>AROクラスターのアップグレード</h3>
+<div class="paragraph">
+<p>「クラスター設定」画面から「Select a version」をクリックして、
+アップグレードするバージョン(リリース)を選択します。
+このとき、「Full cluster update」を選択すると、全てのコントローラ/ワーカーノードがアップグレードされます。</p>
+</div>
+<div class="paragraph">
+<p>「Partial cluster update」を選択すると、一部または全てのワーカーノードをアップグレードから除外できます。
+ここでは、前述したMCP「workerpool-canary」に含まれるワーカーノードを選択しています。
+そして「更新」をクリックして、AROクラスターのアップグレードを開始します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/upgrade/aro-upgrade-select1.png" alt="aro upgrade select1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/upgrade/aro-upgrade-select2.png" alt="aro upgrade select2">
+</div>
+</div>
+<div class="paragraph">
+<p>アップグレードを開始すると、次のような画面が表示されます。
+ここでは、「Partial cluster update」を選択して、
+1台のワーカーノードをアップグレード対象外としています。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/upgrade/aro-upgrade-status1.png" alt="aro upgrade status1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/upgrade/aro-upgrade-status2.png" alt="aro upgrade status2">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/upgrade/aro-upgrade-status3.png" alt="aro upgrade status3">
+</div>
+</div>
+<div class="paragraph">
+<p>アップグレードしたワーカーノードでアプリケーションが問題なく実行されることを確認したら、
+「Resume update」をクリックして、残り1台のワーカーノードのアップグレードを完了できます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/upgrade/aro-upgrade-status4.png" alt="aro upgrade status4">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/upgrade/aro-upgrade-status5.png" alt="aro upgrade status5">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_aroクラスターのマイナーリリース間のアップグレード"><a class="anchor" href="#_aroクラスターのマイナーリリース間のアップグレード"></a>AROクラスターのマイナーリリース間のアップグレード</h3>
+<div class="paragraph">
+<p>ARO/OpenShiftは、4.10から4.11など、マイナーリリース間のアップグレードも可能です。
+AROクラスターの更新情報と更新イメージを配布するサービスは、Red Hatによって管理されています。
+そのため、セルフマネージド版OpenShiftのマイナーリリース間のアップグレードパスが
+Red Hatによって提供開始されたタイミングで、AROクラスターでも当該アップグレードパスを利用できるようになります。</p>
+</div>
+<div class="paragraph">
+<p>AROクラスターで、マイナーリリース間のアップグレードが可能になった場合、
+次のような画面が表示されて、
+アップグレード対象のstableチャネルが利用可能であることが分かるようになっています。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/upgrade/aro-minor-upgrade-path.png" alt="aro minor upgrade path">
+</div>
+</div>
+<div class="paragraph">
+<p>このとき、前述と同様の手順で、更新チャネルを「stable-4.10」から「stable-4.11」に変更すると、
+4.11へのアップグレードを選択・実施できるようになります。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/upgrade/aro-stable-411.png" alt="aro stable 411">
+</div>
+</div>
+<div class="paragraph">
+<p>上記画像にある <code>+ その他</code> をクリックすることで、
+現在更新可能なリリースの一覧を確認できます。「stable-4.11」チャネルを設定しても、
+4.11系だけでなく4.10系にもアップグレードが可能です。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/upgrade/aro-upgrade-list.png" alt="aro upgrade list">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+AROの正式リリースとして提供開始される前に、
+ARO利用者がstableチャネルで利用可能な最新リリースにアップグレードすることは可能であり、
+かつ、サポート対象となります。
+ここで挙げてきた例のように、ARO v4.11がリリースされる前に、
+利用者が「stable-4.11」チャネルを設定して、
+ARO 4.10からARO 4.11にアップグレードできるため、
+アップグレードの先行テストなどに利用できます。
+こちらの情報については、
+<a href="https://learn.microsoft.com/en-us/azure/openshift/support-lifecycle#red-hat-openshift-container-platform-version-support-policy">Microsoftの公式ドキュメント</a>もご参照ください。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

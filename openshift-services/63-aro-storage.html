@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Azure DiskとAzure Filesの利用 :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/63-aro-storage.html">
+    <link rel="prev" href="62-aro-app-deploy.html">
+    <link rel="next" href="64-aro-web-terminal.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li>61. Azure Red Hat OpenShift (ARO) Lab</li>
+    <li><a href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/63-aro-storage.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Azure DiskとAzure Filesの利用</h1>
+<div class="sect1">
+<h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このモジュールでは、Azure DiskとAzure Filesを利用した、
+コンテナアプリのデータ保存を実行します。</p>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="_azure_disk用の永続ボリューム要求persistent_volume_claim_pvcの作成"><a class="anchor" href="#_azure_disk用の永続ボリューム要求persistent_volume_claim_pvcの作成"></a>Azure Disk用の永続ボリューム要求(Persistent Volume Claim, PVC)の作成</h3>
+<div class="paragraph">
+<p>AROには、Azure Diskを使用するストレージクラス(managed-csi)が、予めデフォルトとして設定されています。
+これにより、
+<a href="https://azure.microsoft.com/ja-jp/pricing/details/managed-disks/">Azure DiskのPremium SSD LRS</a>
+(Locally Redundant Storage. ローカル冗長ストレージ)オプションがすぐに使えるように設定されています。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/storage/storage-class.png" alt="storage class">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/storage/managed-csi.png" alt="managed csi">
+</div>
+</div>
+<div class="paragraph">
+<p>ここでmanaged-csiストレージクラスを利用するために、新しく永続ボリューム要求(PVC)を作成します。
+PVCの名前は任意の名前(下記画像の例では、test-pvc-20)を入力し、サイズは1GiBと指定します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/storage/pvc-create1.png" alt="pvc create1">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+PVCはプロジェクトという名前空間の中にあるリソースです。
+そのため、プロジェクトごとに同じ名前のPVCが存在できます。
+例えば、プロジェクト1の中にPVC1、プロジェクト2の中にPVC1を作ることができます。
+ただし、1つのプロジェクトの中のリソース名の重複は許可されていないため、
+この例の場合だと、プロジェクト1の中にPVC1を2つ作ることはできません。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>このmanaged-csiストレージクラスは、ボリュームバインディングモードが
+「WaitForFirstConsumer」と指定されており、 最初にPodから永続ボリューム要求が利用されるまで、
+永続ボリュームの割り当てが行われない(ステータスがPendingのまま)ようになっています。
+なお、ボリュームバインディングモードが「Immediate」となっている場合、
+PVC作成後すぐに永続ボリュームの割り当てが行われます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/storage/pvc-info1.png" alt="pvc info1">
+</div>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>PVCによって作成されたAzure Diskは、Azure Portalからも確認できます。
+Azureの <code>aro-infra-XXXXX-&lt;AROクラスター名&gt;</code> リソースグループに、
+<code>pvc-</code> という接頭辞が付いたAzure Diskが作成されていることを確認できます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/storage/azure-portal-disk.png" alt="azure portal disk">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_azure_disk用のpvcを利用するpodの作成"><a class="anchor" href="#_azure_disk用のpvcを利用するpodの作成"></a>Azure Disk用のPVCを利用するPodの作成</h3>
+<div class="paragraph">
+<p>Podを作成します。「Podの作成」から、次のYAMLファイルを入力してPodを作成します。
+下記の「claimName: test-pvc-20」となっているところは、作成したPVCの名前に応じて、適宜変更してください。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+PodはKubernetes/OpenShift上でのコンテナアプリの実行単位です。
+下記のYAMLファイルにあるとおり、コンテナ(この例ではCentOSコンテナの最新版を利用)や
+コンテナが利用する永続ボリュームの設定などをまとめたものになります。
+Podにはコンテナを複数まとめることもできますが、基本的には1つのPodには1つのコンテナを含むことを推奨しています。
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">apiVersion: v1
+kind: Pod
+metadata:
+ name: test-disk
+spec:
+ volumes:
+   - name: disk-storage-vol
+     persistentVolumeClaim:
+       claimName: test-pvc-20
+ containers:
+   - name: test-disk
+     image: centos:latest
+     command: [ "/bin/bash", "-c", "--" ]
+     args: [ "while true; do touch /mnt/disk-data/verify-disk &amp;&amp; echo 'hello disk' &amp;&amp; sleep 30; done;" ]
+     volumeMounts:
+       - mountPath: "/mnt/disk-data"
+         name: disk-storage-vol</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/storage/pod-create1.png" alt="pod create1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/storage/pod-create2.png" alt="pod create2">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/storage/pod-create3.png" alt="pod create3">
+</div>
+</div>
+<div class="paragraph">
+<p>test-diskという名前でPodが作成されて、Podにより「test-pvc-20」PVCが利用されて、
+永続ボリュームとして外部ストレージの利用が開始されます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/storage/pod-pvc.png" alt="pod pvc">
+</div>
+</div>
+<div class="paragraph">
+<p>このPodのログやターミナルから、永続ボリュームのマウント状況や動作状況を確認できます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/storage/pod-log1.png" alt="pod log1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/storage/pod-terminal1.png" alt="pod terminal1">
+</div>
+</div>
+<div class="paragraph">
+<p>ここで上記画像にあるように、Podのターミナルから、echoコマンドなどで永続ボリュームのマウントポイントである
+<code>/mnt/disk-data</code> ディレクトリに、適当なファイルを作成します。
+Podを削除(該当Podを選択して、「アクション」&#8594;「Podの削除」を選択)した後に、
+再度「test-pvc-20」PVCを指定してPodを作成すると、作成したテストファイルが残っていることを確認できます。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_azure_files用のpvcの作成"><a class="anchor" href="#_azure_files用のpvcの作成"></a>Azure Files用のPVCの作成</h3>
+<div class="paragraph">
+<p>Azure Diskと同様に、Azure Filesを利用するためのストレージクラス(azurefile-csi)が、
+デフォルトで作成されています。これはデフォルトのストレージクラスではありませんが、
+明示的に指定することで利用できるようになっています。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/storage/azurefile-csi.png" alt="azurefile csi">
+</div>
+</div>
+<div class="paragraph">
+<p>Azure Diskの時と同様に、azurefile-csiストレージクラスを利用した、
+PVCを作成します。このとき、アクセスモードに「共有アクセス(RWX)」を選択します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/storage/pvc-create2.png" alt="pvc create2">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/storage/pvc-info2.png" alt="pvc info2">
+</div>
+</div>
+<div class="paragraph">
+<p>RWXは複数台のワーカーノードから利用可能なアクセスモードです。
+RWXに対応したPVCを利用することで、
+複数ノード上でレプリケーション構成を取るアプリケーション(Azure Filesに保存したデータを共有)を
+ARO上で実行できるようになります。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>PVCによって作成されたAzure Filesは、Azure Portalからも確認できます。
+Azureの <code>aro-infra-XXXXX-&lt;AROクラスター名&gt;</code> リソースグループに、
+Azure Filesを利用するためのAzureストレージアカウントが自動作成され、
+その中の「ファイル共有」から <code>pvc-</code> という接頭辞が付いたAzure Filesが作成されていることを確認できます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/storage/azure-portal-files.png" alt="azure portal files">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_azure_files用のpvcを利用するpodの作成"><a class="anchor" href="#_azure_files用のpvcを利用するpodの作成"></a>Azure Files用のPVCを利用するPodの作成</h3>
+<div class="paragraph">
+<p>Azure Diskの時と同様に、次のYAMLファイルを入力して、
+作成した「test-pvc-21」PVCを利用したPodを実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">apiVersion: v1
+kind: Pod
+metadata:
+ name: test-files
+spec:
+ volumes:
+   - name: files-storage-vol
+     persistentVolumeClaim:
+       claimName: test-pvc-21
+ containers:
+   - name: test-files
+     image: centos:latest
+     command: [ "/bin/bash", "-c", "--" ]
+     args: [ "while true; do touch /mnt/files-data/verify-files &amp;&amp; echo 'hello files' &amp;&amp; sleep 30; done;" ]
+     volumeMounts:
+       - mountPath: "/mnt/files-data"
+         name: files-storage-vol</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>作成したPodのターミナルからAzure Filesのマウント状況を確認すると、
+CIFSプロトコルでマウントされていることを確認できます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/aro/storage/pod-terminal2.png" alt="pod terminal2">
+</div>
+</div>
+<div class="paragraph">
+<p>ここで作成したPodとは別のPodを新しく作成して、複数のPodから同じPVCを利用することで、
+1つのファイルシステムを共有できることを確認します。
+前述のPod作成に利用したYAMLファイルで、「name: test-files」を「name: test-files-new」などに
+変更することで、変更したPod名で新規Podを実行してみます。</p>
+</div>
+<div class="paragraph">
+<p>「test-files-new」Podでもマウント先のディレクトリへのファイル作成/削除や、
+「test-files」Podで作成したファイルの修正ができることを、
+当該Podの「ターミナル」タブから確認してみてください。</p>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a></span>
+  <span class="next"><a href="64-aro-web-terminal.html">4. Web Terminalの利用</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>OpenShift Pipelines Lab - Tekton Triggers :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/13-triggers.html">
+    <link rel="prev" href="12-add-task.html">
+    <link rel="next" href="20-GitOps-install.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li>20. OpenShift Pipeline Lab</li>
+    <li><a href="13-triggers.html">3. Tekton Triggers</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/13-triggers.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">OpenShift Pipelines Lab - Tekton Triggers</h1>
+<div class="sect1">
+<h2 id="_triggers_の追加"><a class="anchor" href="#_triggers_の追加"></a>Triggers の追加</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Tekton Trigger をパイプラインと組み合わせることで、パイプラインをフックして外部の github イベント（プッシュイベント、プルリクエストなど）に連動させることができます。</p>
+</div>
+<div class="paragraph">
+<p>プロジェクトに TriggerTemplate、TriggerBinding、EventListener を追加します。</p>
+</div>
+<div class="sect2">
+<h3 id="_trigger_template"><a class="anchor" href="#_trigger_template"></a>Trigger Template</h3>
+<div class="paragraph">
+<p><code>TriggerTemplate</code> は、テンプレートのリソース内の任意の場所に代入できるパラメータを持つリソースです。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>各マニフェストのプロジェクト名に注意してください。各マニュフェスト中のプロジェクト名 <code>pipelines-test</code> を、お使いのプロジェクト名に修正してください。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Pipelines</strong> &#8594; <strong>Trigger</strong> &#8594; <strong>作成</strong> &#8594; <strong>TrigerTemplate</strong> を選択します。</p>
+</li>
+<li>
+<p>以下の yaml を入力し、作成をクリックします</p>
+</li>
+</ul>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: vote-app
+spec:
+  params:
+  - name: git-repo-url
+    description: The git repository url
+  - name: git-revision
+    description: The git revision
+    default: master
+  - name: git-repo-name
+    description: The name of the deployment to be created / patched
+
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      generateName: build-deploy-$(tt.params.git-repo-name)-
+    spec:
+      serviceAccountName: pipeline
+      pipelineRef:
+        name: build-and-deploy
+      params:
+      - name: deployment-name
+        value: $(tt.params.git-repo-name)
+      - name: git-url
+        value: $(tt.params.git-repo-url)
+      - name: git-revision
+        value: $(tt.params.git-revision)
+      - name: IMAGE
+        value: image-registry.openshift-image-registry.svc:5000/pipelines-test/$(tt.params.git-repo-name)
+      workspaces:
+      - name: shared-workspace
+        volumeClaimTemplate:
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 500Mi</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_trigger_binding"><a class="anchor" href="#_trigger_binding"></a>Trigger Binding</h3>
+<div class="paragraph">
+<p>TriggerBindings は、イベントからフィールドを取得、パラメータとして保存することで、イベントが発生するたびに TriggerTemplate でそれらを置き換えることができます。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Pipelines</strong> &#8594; <strong>Trigger</strong> &#8594; <strong>作成</strong> &#8594; <strong>TriggerBinding</strong> を選択</p>
+</li>
+<li>
+<p>以下の yaml を入力し、作成をクリックします。</p>
+</li>
+</ul>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: vote-app
+spec:
+  params:
+  - name: git-repo-url
+    value: $(body.repository.url)
+  - name: git-repo-name
+    value: $(body.repository.name)
+  - name: git-revision
+    value: $(body.head_commit.id)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>マニフェスト内の必要なパラメータ値は、イベントのペイロード（例：GitHubのイベント）を調べることでわかります（後程実施）。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_webhook_secret_の作成"><a class="anchor" href="#_webhook_secret_の作成"></a>Webhook Secret の作成</h3>
+<div class="paragraph">
+<p>EventListner に設定する Webhook の認証情報を Secret で設定します。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>右上の [＋] (YAMLのインポート)を選択します。</p>
+</li>
+<li>
+<p>以下の yaml ファイルを貼り付けし <strong>作成</strong> を選択します。</p>
+</li>
+</ul>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
+kind: Secret
+metadata:
+  name: github-secret
+type: Opaque
+stringData:
+  secretToken: "1234567"</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_trigger_の作成"><a class="anchor" href="#_trigger_の作成"></a>Trigger の作成</h3>
+<div class="paragraph">
+<p><code>Trigger</code> は、TriggerTemplate、TriggerBindings、interceptors を結びつけたもので、EventListerner の部品です（Triggerに分けず、EventListerner にまとめて記載することもできます）。
+これらは EventListener の内部で参照先（triggerRef）として使用されます。
+今回の interceptors には、GitHub の Webhook 認証情報と Push のイベントフィルタを指定しておきます。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>右上の [＋] (YAMLのインポート)を選択します。</p>
+</li>
+<li>
+<p>以下の yaml ファイルを貼り付けし <strong>作成</strong> を選択します。</p>
+</li>
+</ul>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: triggers.tekton.dev/v1beta1
+kind: Trigger
+metadata:
+  name: vote-trigger
+spec:
+  serviceAccountName: pipeline
+  interceptors:
+    - ref:
+        name: "github"
+      params:
+        - name: "secretRef"
+          value:
+            secretName: github-secret
+            secretKey: secretToken
+        - name: "eventTypes"
+          value: ["push"]
+  bindings:
+    - ref: vote-app
+  template:
+    ref: vote-app</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_event_listenerの作成"><a class="anchor" href="#_event_listenerの作成"></a>Event Listenerの作成</h3>
+<div class="paragraph">
+<p><code>EventListner</code> は、Service を作成し、イベントを検知するエンドポイントの役割（event-sink）をします。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Pipelines</strong> &#8594; <strong>Trigger</strong> &#8594; <strong>作成</strong> &#8594; <strong>EventLister</strong> を選択します。</p>
+</li>
+<li>
+<p>以下の yaml を入力し、作成をクリックします。</p>
+</li>
+</ul>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: vote-app
+spec:
+  serviceAccountName: pipeline
+  triggers:
+    - triggerRef: vote-trigger</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>EventListenerは、Service をセットアップします。
+外部からアクセスするために、Serviceを OpenShift の Route として公開し、一般にアクセスできるようにする必要があります。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>EventListenerの作成完了まで待機します。"作成済み" 列が"x分前"の表示になれば完了です。</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/triggers/triggers-eventlistener.png" alt="triggers eventlistener">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>以下のコマンドを実行し、eventlistenerサービスをルートとして公開します。</p>
+</li>
+</ul>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc expose svc el-vote-app -n pipelines-test</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>出力例</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">route.route.openshift.io/el-vote-app exposed</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_github_webhook_設定"><a class="anchor" href="#_github_webhook_設定"></a>GitHub Webhook 設定</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>今回は <a href="https://github.com/openshift/pipelines-vote-api">バックエンド</a> のソースコードリポジトリを更新し、パイプラインを発火させるための webhook-url を設定する必要があります。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>以下のコマンドを実行し、webhook-urlを取得します。</p>
+</li>
+</ul>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">echo "URL: $(oc  get route el-vote-app -n pipelines-test --template='http://{{.spec.host}}')"</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>出力例</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">URL: http://el-vote-app-pipelines-test.apps.cluster-fmq8d.fmq8d.sandbox2725.opentlc.com</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_webhook_設定_github側"><a class="anchor" href="#_webhook_設定_github側"></a>Webhook 設定 （GitHub側）</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>GitHub の Webhook を設定するため、 <a href="https://github.com/openshift/pipelines-vote-ui">フロントエンド</a> のソースコードリポジトリをフォークします。</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/triggers/triggers-fork.png" alt="triggers fork">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>GitHub でフォークしたレポジトリへ移動し、Webhook を設定します。</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>フォークしたレポジトリをGithubで開く。</p>
+</li>
+<li>
+<p>Settings（右上） &#8594; Webhook（左ペイン） &#8594; Add Webhook（右上）</p>
+</li>
+<li>
+<p>Webhook設定画面で、以下を設定します。</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>URL:先ほど公開したroute のURLを設定します</p>
+</li>
+<li>
+<p>Content type： <code>application/json</code></p>
+</li>
+<li>
+<p>Secret：<code>1234567</code></p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><code>Add Webhook</code> をクリック</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/triggers/triggers-webhook-config-1.png" alt="triggers webhook config 1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/triggers/triggers-webhook-config-2.png" alt="triggers webhook config 2">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/triggers/triggers-webhook-config-3.png" alt="triggers webhook config 3">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/triggers/triggers-webhook-config-4.png" alt="triggers webhook config 4">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/triggers/triggers-webhook-config-5.png" alt="triggers webhook config 5">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/triggers/triggers-webhook-status.png" alt="triggers webhook status">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_trigger_pipeline_run"><a class="anchor" href="#_trigger_pipeline_run"></a>Trigger pipeline Run</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://github.com/openshift/pipelines-vote-ui">フロントエンド</a> で仮の Push イベントを実行し、Pipelines を発火させます。</p>
+</div>
+<div class="paragraph">
+<p>発火シーケンスは以下になります。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>pipelines-vote-ui GitHub リポジトリに Push されると、設定された webhook は、イベントのペイロードを Route (公開された EventListener ) にプッシュします。</p>
+</li>
+<li>
+<p>Event-Listener は、TriggerBinding と TriggerTemplate にイベントを渡します。</p>
+</li>
+<li>
+<p>TriggerBinding は、TriggerTemplate のレンダリングに必要なパラメータを抽出します。</p>
+</li>
+<li>
+<p>TriggerTemplateのレンダリングに成功すると、PipelineRun（build-deploy-vote-api）が作成されます。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>手順</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>vote-uiリポジトリに新規ファイルを作成することで、コミットをプッシュします。</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>ブラウザにてフォークしたvote-uiリポジトリを開きます。</p>
+</li>
+<li>
+<p>ページ上部の <strong>Add file</strong> をクリックし、ドロップダウンから <strong>Create new file</strong> を選択します。</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/triggers/add-git-file-1.png" alt="add git file 1">
+</div>
+</div>
+</li>
+<li>
+<p>上部のファイル名欄に任意のファイル名を入力し（画像例ではtest.txt)、 <strong>Commit changes&#8230;&#8203;</strong> をクリックします。</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/triggers/add-git-file-2.png" alt="add git file 2">
+</div>
+</div>
+</li>
+<li>
+<p>ポップアップが表示されるため、デフォルトの状態のまま <strong>Commit changes</strong> をクリックします。</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/triggers/add-git-file-3.png" alt="add git file 3">
+</div>
+</div>
+</li>
+<li>
+<p>作成したWebhookの画面にて <strong>Recent Deliveries</strong> タブを確認し、GitHub UIから Push イベント が作成されていることを確認します。</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/triggers/triggers-webhook-run-2.png" alt="triggers webhook run 2">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>OpenShift Web コンソールから PipelineRun が作成されていることを確認します。</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/triggers/triggers-webhook-run-1.png" alt="triggers webhook run 1">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>OpenShift Web コンソールから PipelineRun が無事完了していることを確認します。</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/triggers/triggers-webhook-run-3.png" alt="triggers webhook run 3">
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="12-add-task.html">2. Pipelines -2/2</a></span>
+  <span class="next"><a href="20-GitOps-install.html">インストール</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

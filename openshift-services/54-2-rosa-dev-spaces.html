@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Web IDEを利用した開発 :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/54-2-rosa-dev-spaces.html">
+    <link rel="prev" href="54-1-rosa-web-terminal.html">
+    <link rel="next" href="58-rosa-bedrock.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li>51. Red Hat OpenShift Service on AWS (ROSA) Lab</li>
+    <li><a href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/54-2-rosa-dev-spaces.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Web IDEを利用した開発</h1>
+<div class="sect1">
+<h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このモジュールでは、Red Hat OpenShift Dev Spacesでサンプルアプリケーションを開発します</p>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="_red_hat_openshift_dev_spaces"><a class="anchor" href="#_red_hat_openshift_dev_spaces"></a>Red Hat OpenShift Dev Spaces</h3>
+<div class="paragraph">
+<p>Red Hat OpenShift Dev Spaces (以降はDev Spacesと記載)は、OpenShift上で使える
+KubernetesネイティブなWeb IDEであり、オープンソースプロジェクトの
+<a href="https://eclipse.dev/che/">Eclipse Che</a>をベースとして開発・提供しています。
+Dev Spacesは、OpenShift Container Platformの標準機能の1つであるため、ROSA HCPクラスターの利用者は
+追加料金を支払う必要なく利用できます。</p>
+</div>
+<div class="paragraph">
+<p>Dev Spacesは、OpenShiftのOperatorとして提供されており、
+Operatorからインストールすることで、簡単に利用できるようになっています。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+本演習を自習している時以外、この丸四角で囲んでいる部分は実行しないで下さい。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+本演習をワークショップ形式で実施している場合、Dev Spacesは既にインストール済みです。
+本演習実施において、1ユーザーごとにメモリーを2GiBほど必要としますので、
+本演習環境を用意する場合は、これを考慮したワーカーノードのサイジングをして下さい。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Dev Spacesをインストールする場合、最初にOpenShiftの管理者アカウントで、OperatorHubから
+<code>Red Hat OpenShift Dev Spaces</code> をインストールします。Operatorインストール時の
+パラメーターは、全てデフォルト値を利用します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/operator.png" alt="operator">
+</div>
+</div>
+<div class="paragraph">
+<p>次に、Dev SpacesのOperatorのインストール完了後に、Dev Spacesによる開発用のWorkspace(IDE)を
+利用できるようにするために、専用のインスタンスを作成します。
+「インストール済みのOperator」からDev SpacesのOperatorを選択して、
+「インスタンスの作成」をクリックします。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/instance-create1.png" alt="instance create1">
+</div>
+</div>
+<div class="paragraph">
+<p>デフォルトで「YAMLビュー」が選択されていますが、一旦「フォームビュー」を選択して、
+再度「YAMLビュー」を選択することで、インスタンス作成時のパラメーターが表示されるようになります。
+ここで編集しておくと、便利なパラメーターをご紹介します。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>maxNumberOfRunningWorkspacesPerUser</code> : OpenShiftの各ユーザーアカウントで、同時に実行できる
+Workspaceの数。デフォルトの数は「1」となっています。「-1」とすると、無制限になります。</p>
+</li>
+<li>
+<p><code>secondsOfInactivityBeforeIdling</code> : Workspaceを操作しなかったときに、Workspaceが停止するまでの秒数。
+デフォルトは1800秒です。「-1」とすると、無制限になります。</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+これらの値を無制限として指定した場合、リソース(特にメモリー)を多く使う設定となりますので、注意してください。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>ワークショップ用の環境として、下記の画像のように設定変更して、「作成」をクリックします。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/instance-create2.png" alt="instance create2">
+</div>
+</div>
+<div class="paragraph">
+<p>およそ5分ほど待つと、このインスタンスに関するPodが <code>openshift-operators</code> プロジェクトに自動作成されて、
+OpenShiftのコンソール右上のメニューから、
+「Red Hat OpenShift Dev Spaces」が表示されるようになります。これで、Dev Spacesを使う準備は完了です。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/link.png" alt="link">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_red_hat_openshift_dev_spacesの利用"><a class="anchor" href="#_red_hat_openshift_dev_spacesの利用"></a>Red Hat OpenShift Dev Spacesの利用</h3>
+<div class="paragraph">
+<p>Dev Spacesはローカルユーザーでも使えますので、ローカルユーザー( <code>testuser20</code> など)でログインして使ってみます。
+上記画像にある「Red Hat OpenShift Dev Spaces」のリンクから、Dev Spacesにログインします。
+「Log in with OpenShift」ボタンをクリックして、ローカルユーザーと同じアカウントで
+Dev Spacesにログインします。</p>
+</div>
+<div class="paragraph">
+<p>すると、アカウントへのアクセス許可を求める画面が表示されますので、
+「Allow selected permissions」をクリックして、Dev Spacesの画面に移ります。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/permit.png" alt="permit">
+</div>
+</div>
+<div class="paragraph">
+<p>最初は何もWorkspaceが起動されていない状態です。
+「Java 11 with Quarkus」(無い場合はQuarkusのロゴがあるカタログ)をクリックして、
+JDK, Maven,
+<a href="https://www.redhat.com/ja/topics/cloud-native-apps/what-is-quarkus">Quarkus</a>の
+開発環境が一通り揃っているWorkspaceを起動します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/quarkus-select.png" alt="quarkus select">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Workspaceは、
+<a href="https://eclipse.dev/che/">Devfile</a>という、Web IDEを定義するフォーマット(YAML)で記載された
+テンプレートをもとに作成されます。このテンプレートでは、
+ベースとなるコンテナイメージやIDEで使えるカスタムコマンドが定義されます。
+Gitリポジトリに置いたDevfileをもとに、カスタムのWorkspaceも作成できます。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>クリックすると、Webブラウザの新しいタブが自動的に開かれて、しばらく待つと、
+IDEの画面が表示されます。ここに記載してあるメッセージのとおり、
+このIDEは、Visual Studio Codeのように利用することができます。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Workspaceがうまく起動しなくてWeb IDEを開けない場合は、以下を試してみてください。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Dev Spacesコンソールの左サイドメニューにある「Workspaces」から対象のWorkspaceを削除して、Workspaceを改めて作成</p>
+</li>
+<li>
+<p>1. で削除できない場合、一旦Dev Spacesのコンソールを閉じて、OpenShiftの管理者ユーザーで
+再ログインして、&lt;ユーザーアカウント名&gt;-devspacesプロジェクトを削除した後に、ローカルユーザーで再ログインしてWorkspaceを改めて作成</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/devspaces-project-delete.png" alt="devspaces project delete">
+</div>
+</div>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/ide-welcome.png" alt="ide welcome">
+</div>
+</div>
+<div class="paragraph">
+<p>サンプルソースコードが用意されているプロジェクトから、
+すぐにQuarkusのアプリケーションの開発を開始できるようになっています。
+左上の「-」が縦に3つ並んだアイコンをクリックして表示されるメニューから、
+「New Terminal」をクリックします。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/new-terminal-select.png" alt="new terminal select">
+</div>
+</div>
+<div class="paragraph">
+<p>すると下部にTerminalが開きますので、サンプルアプリのうちの1つが入っている
+<code>getting-started</code> ディレクトリに <code>cd</code> コマンドで移動します。
+Mavenの実行ファイルやソースコード一式が入っていますので、ここから、次の <code>mvn</code> コマンドを実行して、
+サンプルアプリを実行してみます。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+本演習では、Quarkusの解説は含みません。
+このサンプルアプリケーションの仕組みについて興味がありましたら、
+<a href="https://ja.quarkus.io/guides/getting-started">公式ドキュメント</a>をご参照ください。
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">quarkus-quickstarts $ cd getting-started
+getting-started $ mvn quarkus:dev -Dquarkus.http.port=8081</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/mvn-command.png" alt="mvn command">
+</div>
+</div>
+<div class="paragraph">
+<p>このコマンド実行によって、ビルドに必要なパッケージのダウンロード、jarファイルの作成後に、
+Quarkusのアプリケーションが実行されます。正常に実行されると、
+次のような表示になります。ここで、上のメッセージの方にある「yes」をクリックして、
+「Open in New Tab」→「Open」をクリックすることで、Quarkusアプリケーションにアクセスできます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/access1.png" alt="access1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/access2.png" alt="access2">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/access3.png" alt="access3">
+</div>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>「Open in New Tab」などが表示されるメニューが消えてしまった場合、
+下記のように、 「&#8230;&#8203; [h] for more options\&gt; 」 の所で半角「q」を入力することで、
+Quarkusアプリケーションを終了できますので、終了後にQuarkusアプリケーションを
+<code>mvn</code> コマンドで再実行してください。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">--
+Tests paused
+Press [r] to resume testing, [o] Toggle test output, [:] for the terminal, [h] for more options&gt; q
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:01 min
+[INFO] Finished at: 2023-12-16T10:08:27Z
+[INFO] ------------------------------------------------------------------------
+getting-started $</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>次のような画面が表示されれば、Quarkusアプリケーションが正常に実行されています。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/quarkus-welcome.png" alt="quarkus welcome">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_quarkusのライブコーディング"><a class="anchor" href="#_quarkusのライブコーディング"></a>Quarkusのライブコーディング</h3>
+<div class="paragraph">
+<p>Quarkusは
+<a href="https://ja.quarkus.io/get-started/">ライブコーディング</a>という機能を備えており、
+ソースコードの変更が実行中のアプリケーションに即座に反映できるという特徴を持っています。
+これを確認するために、先ほどのQuarkusアプリケーションを実行したままで、
+ソースコードを変更してみます。</p>
+</div>
+<div class="paragraph">
+<p>左サイドに表示されている <code>getting-started</code> ディレクトリの「src」→「main」→「java」と辿っていき、
+<code>GreetingResource.java</code> ファイルを開きます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/greeting-resource.png" alt="greeting resource">
+</div>
+</div>
+<div class="paragraph">
+<p>このコードでは、アプリケーションのURLの末尾に <code>/hello</code> を付与すると、
+<code>hello</code> メッセージが表示されるようになっています。
+実際に、これを確認してみてください。下記のように、先ほど開いたURLの末尾に <code>/hello</code> を加えて
+アクセスすることで、<code>hello</code> というメッセージだけが表示されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">https://testuser20-quarkus-quickstart-code-...-openshiftapps.com/hello</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>この表示されるメッセージを変更してみます。
+<code>return "hello";</code> の記載を、 <code>return "hello!! &lt;YOUR_NAME&gt;!!!!";</code>
+に変更して、「Control + s」キーなどで <code>GreetingResource.java</code> ファイルを上書き保存します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/return-change.png" alt="return change">
+</div>
+</div>
+<div class="paragraph">
+<p>この保存した変更が、即座に反映されていることを、上記URLに再度アクセスすることで確認できます。
+変更前に表示された <code>hello</code> メッセージが、コード変更後に <code>hello!! &lt;YOUR_NAME&gt;!!!!</code>
+になっていることを確認できます。</p>
+</div>
+<div class="paragraph">
+<p>メッセージ変更の確認後は、Terminalから半角「q」を入力して、
+Quarkusアプリケーションを終了します。終了しないままブラウザを閉じてしまうと、
+アプリケーションが実行したままとなりますので、ご注意ください。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Workspaceの停止や削除は、左サイドメニューの「Workspaces」から、対象のWorkspaceの
+「Stop Workspace」や「Delete Workspace」から実行できます。Workspace自身も、
+<code>&lt;ユーザーアカウント名&gt;-devspaces</code> といった自動作成されるプロジェクトにある
+Podとして実行されており、Workspaceの停止や削除を実行すると、それに対応したPodも削除されます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/workspace-menu.png" alt="workspace menu">
+</div>
+</div>
+<div class="paragraph">
+<p>Workspace内にある特定のディレクトリ(ソースコードがある <code>/projects</code> など)については、
+デフォルトの設定では永続ボリュームで外部保存されているため、停止したWorkspaceを再起動しても、
+利用者が加えた変更は残ったままとなっていることを確認できます。</p>
+</div>
+<div class="paragraph">
+<p>「Delete Workspace」からWorkspaceを削除すると、
+利用者が加えた変更は永続ボリュームも含めて完全に消去されます。</p>
+</div>
+</div>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p><code>&lt;ユーザーアカウント名&gt;-devspaces</code> という名前のプロジェクトが作成されるという設定は、
+openshift-operatorsプロジェクトにある「che」という設定情報(ConfigMap)に記載されています。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/configmap-che.png" alt="configmap che">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gitリポジトリのソースコードからのアプリケーションデプロイ"><a class="anchor" href="#_gitリポジトリのソースコードからのアプリケーションデプロイ"></a>Gitリポジトリのソースコードからのアプリケーションデプロイ</h3>
+<div class="paragraph">
+<p>Web IDEを使って開発したコードをGitリポジトリに置いておくことで、
+OpenShiftのS2I機能を利用した、アプリケーションデプロイを実行できます。
+前の手順で利用したWorkspaceのTerminalでは、
+OpenShift CLI(ocコマンド), kubectl, scp, ssh, wgetだけでなく、gitコマンドなども使えるため、
+開発したコードをそのままGitリポジトリに保存できます。</p>
+</div>
+<div class="paragraph">
+<p>本演習では受講者用のGitリポジトリは提供していないため、
+前までの手順で変更したコードをGitリポジトリに保存したという想定で、
+アプリケーションデプロイを実行します。</p>
+</div>
+<div class="paragraph">
+<p>OpenShiftコンソールに戻って、「開発者」→「+追加」メニューから、
+「Gitからのインポート」をクリックします。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/dev-console-menu.png" alt="dev console menu">
+</div>
+</div>
+<div class="paragraph">
+<p>「GitリポジトリーのURL」に、下記のURLをコピーして貼り付けます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">https://github.com/h-kojima/quarkus-getting-started/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>すると、次のような画面が表示されます。
+他は全てデフォルトのパラメーターのままで、「作成」をクリックします。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/git-import.png" alt="git import">
+</div>
+</div>
+<div class="paragraph">
+<p>しばらく待つと、アプリケーションのビルドとデプロイが自動的に完了しますので、
+前の演習の時と同様に、「トポロジー」メニューからデプロイしたQuarkusアプリケーションのURLにアクセスします。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/topology.png" alt="topology">
+</div>
+</div>
+<div class="paragraph">
+<p>アクセスすると、前の手順で確認した <code>Your new Cloud-Native application is ready!</code>
+というメッセージが表示される画面と同じ画面が表示されます。そして、アプリケーションURLの末尾に、
+<code>/hello</code> を付与してアクセスすると、 <code>hello!! &lt;YOUR_NAME&gt;!!!!</code>
+というメッセージが表示されることを確認できます。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Dev Spacesでは、Visual Studio Codeの拡張機能を使えます。
+そのため、
+<a href="https://aws.amazon.com/jp/codewhisperer/">Amazon CodeWhisperer</a>や
+<a href="https://github.com/features/copilot">GitHub Copilot</a>が使える状態だと、
+<a href="https://marketplace.visualstudio.com/items?itemName=AmazonWebServices.aws-toolkit-vscode&amp;ssr=false#version-history">AWS Toolkit拡張機能</a>や
+<a href="https://marketplace.visualstudio.com/items?itemName=GitHub.copilot&amp;ssr=false#version-history">GitHub Copilot拡張機能</a>
+のファイルをダウンロードして、Dev Spacesの各IDEに手動でインポートすることで、
+Amazon CodeWhispererやGitHub Copilotによるコード補完機能などが使えるようになります。
+こちらは本演習では扱いませんが、ご興味がありましたらお試し下さい。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/amazon-codewhisperer.png" alt="amazon codewhisperer">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a></span>
+  <span class="next"><a href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

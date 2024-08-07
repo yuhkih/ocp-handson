@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>OpenShift GitOps Lab - OpenShift GitOps :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/21-GitOps.html">
+    <link rel="prev" href="20-GitOps-install.html">
+    <link rel="next" href="22-Kustomize.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li>21. OpenShift GitOps Lab</li>
+    <li><a href="21-GitOps.html">1. OpenShift GitOps</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/21-GitOps.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">OpenShift GitOps Lab - OpenShift GitOps</h1>
+<div class="sect1">
+<h2 id="_openshift_gitops"><a class="anchor" href="#_openshift_gitops"></a>OpenShift GitOps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://www.openshift.com/learn/topics/gitops/">GitOps</a>は、Gitワークフローを活用してインフラストラクチャとアプリケーションの構成を管理する一連のプラクティスです。Gitリポジトリに置かれたコードをSingle Source of Truthとみなし、コードとインフラを常に同じ状態に保つ運用のベストプラクティスをGitOpsと呼びます。インフラストラクチャとアプリケーションの定義を「コード」として定義することで、インフラストラクチャとアプリケーションの構成変更を複数のクラスターに簡単に反映させます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/gitops/gitops-001.png" alt="gitops 001">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>クラスタの構成を定期的に確認します。</p>
+</li>
+<li>
+<p>クラスターを既知の状態から回復または再作成します。</p>
+</li>
+<li>
+<p>既知の状態でクラスターを作成します。</p>
+</li>
+<li>
+<p>構成の変更を複数のクラスターに適用または元に戻します。</p>
+</li>
+<li>
+<p>テンプレート化された構成をさまざまな環境に関連付けます。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><a href="https://argoproj.github.io/argo-cd/">ArgoCD</a> は、Kubernetes用のGitOps継続的デリバリーツールです。指定されたターゲット環境での望ましいアプリケーション状態を確認しデプロイを自動化します。アプリケーションのデプロイでは、ブランチ、タグ、または Gitコミットで特定のバージョンのマニフェストに固定された更新を追跡できます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/gitops/gitops-002.png" alt="gitops 002">
+</div>
+</div>
+<div class="paragraph">
+<p>このセクションでは、OpenShiftのGitOpsについて説明します。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_argo_cd_サーバーへの接続"><a class="anchor" href="#_argo_cd_サーバーへの接続"></a>Argo CD サーバーへの接続</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Argo CDインスタンスにCLIとGUIを用いて接続します。Argo CDのAPIサーバーのURLを見つけるためには、次のコマンドを実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">export ARGOCD_SERVER_URL=$(oc get routes -n openshift-gitops | grep openshift-gitops-server | awk '{print $2}')</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Argo CDサーバのURLが取得できたことを確認するために、次のコマンドを実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">echo $ARGOCD_SERVER_URL</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のように出力されます（値は環境ごとに異なるので、出力結果をコピーしてください）</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">openshift-gitops-server-openshift-gitops.crc-dzk9v-master-0.crc.ohwkzih58pxs.instruqt.io</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>adminアカウントのデフォルトのパスワードを出力します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のように出力されます（値は環境ごとに異なるので、出力結果をコピーしてください）</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh"># admin.password
+rfUb1WOyaLipTnkA8c93GNZtuJ5RBQlH</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ターミナルからログインするためには以下のコマンドを実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">argocd login $ARGOCD_SERVER_URL</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ログインアカウントは <code>admin</code> 、パスワードは先程 <code>oc extract</code> を実行して得られた値です。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Username: admin</p>
+</li>
+<li>
+<p>Password: oc extractの結果</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>自己署名証明書を利用しているため、ログイン処理を継続するか確認されますが <code>y</code> を選択して続けます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">WARNING: server certificate had error: x509: certificate is valid for openshift-gitops, openshift-gitops-grpc, openshift-gitops.openshift-gitops.svc.cluster.local, not openshift-gitops-server-openshift-gitops.crc-dzk9v-master-0.crc.ohwkzih58pxs.instruqt.io. Proceed insecurely (y/n)? y
+Username: admin
+Password:
+'admin:login' logged in successfully
+Context 'openshift-gitops-server-openshift-gitops.crc-dzk9v-master-0.crc.ohwkzih58pxs.instruqt.io' updated</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>OpenShift Web コンソールの Application Launcher タブからショートカットをクリックして Argo CD を見つけることもできます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/gitops/gitops-017.png" alt="gitops 017">
+</div>
+</div>
+<div class="paragraph">
+<p>アクセスすると「警告：将来の潜在的なセキュリティリスク（Firefoxの場合）」が表示されますが「詳細情報」をクリックして進みます。Argo CD のログイン画面が表示されます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/gitops/gitops-018.png" alt="gitops 018">
+</div>
+</div>
+<div class="paragraph">
+<p>GUIにログインする場合も、先程のユーザー名とパスワードを入力します。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+パスワードはプラットフォームに保存されます。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>一旦ターミナルに戻ります。Argo CD APIサーバーに接続していることを確認するために、次のコマンドを実行します</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">argocd cluster list</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のような出力が得られます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">SERVER                          NAME        VERSION  STATUS   MESSAGE
+https://kubernetes.default.svc  in-cluster           Unknown  Cluster has no applications and is not being monitored.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>この出力には Argo CDが管理するクラスター一覧が表示されます。この場合では、NAMEフィールドのin-clusterはArgo CDがインストール先のクラスターを管理していることを示しています。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+複数のクラスターに接続して、管理することができます。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>bashの補完を有効にするために、次のコマンドを実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">source &lt;(argocd completion bash)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>argocd CLI ツールは、デプロイされたアプリのデバッグやステータスを表示するのに役に立ちます。
+ログインすると次のようなページが表示されます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/gitops/gitops-019.png" alt="gitops 019">
+</div>
+</div>
+<div class="paragraph">
+<p>これはArgo CDのWeb UIです。次の演習のために、このタブを開いたままにしておいてください。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_サンプルアプリケーションのデプロイ"><a class="anchor" href="#_サンプルアプリケーションのデプロイ"></a>サンプルアプリケーションのデプロイ</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>この演習では、GitOpsサンプル用のレポジトリ <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples">sample GitOps repo</a>から取得したマニフェストを利用します。これらのマニフェストは次のものを含みます。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Namespace: bgd-ns.yaml</p>
+</li>
+<li>
+<p>Deployment: bgd-deployment.yaml</p>
+</li>
+<li>
+<p>Service: bgd-svc.yaml</p>
+</li>
+<li>
+<p>Route: bgd-route.yaml</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>これらはArgo CD内ではまとめてApplicationとなります。これらのマニフェストをクラスターに適用するには、そのように定義する必要があります。
+Argo CD のApplication マニフェス: <a href="https://raw.githubusercontent.com/redhat-developer-demos/openshift-gitops-examples/main/components/applications/bgd-app.yaml">bgd-app.yaml</a>を確認します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bgd-app
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: bgd
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: apps/bgd/overlays/bgd
+    repoURL: https://github.com/redhat-developer-demos/openshift-gitops-examples
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Argo CD の Project の概念はOpenShiftのプロジェクトとは異なります。</p>
+</li>
+<li>
+<p>Argo CD の default project (.spec.project).にアプリケーションをインストールします。 OpenShift のdefault projectではありません。</p>
+</li>
+<li>
+<p>宛先サーバーは、 Argo CD をインストールしたサーバーです。 (.spec.destination.serverと記されています)</p>
+</li>
+<li>
+<p>マニフェストレポジトリとYAMLを探すパスは.spec.sourceの下です。</p>
+</li>
+<li>
+<p>.spec.syncPolicyは　automatedで、自動的に同期します。selfHealは falseに設定されており、クラスターに加えられた変更は自動同期をトリガーしません。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Application CR (CustomResource) は次のコマンドを実行することで適用できます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc apply -f https://raw.githubusercontent.com/redhat-developer-demos/openshift-gitops-examples/main/components/applications/bgd-app.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>このコマンドによってArgo CD UIに bgd-appが作成されて表示されます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/gitops/gitops-020.png" alt="gitops 020">
+</div>
+</div>
+<div class="paragraph">
+<p>この "カード" をクリックすると概要ページに移動します。同期中または完全に同期してる状態です。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/gitops/gitops-021.png" alt="gitops 021">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+すべてを表示するためには show hidden resources をクリックする必要がある場合があります。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>この時点で、アプリケーションが稼働しているはずです。次のコマンドで、作成されたすべてのリソースを確認できます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pods,svc,route -n bgd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>出力は次のようになります。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">NAME                       READY   STATUS    RESTARTS   AGE
+pod/bgd-788cb756f7-kz448   1/1     Running   0          10m
+
+NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/bgd   ClusterIP   172.30.111.118   &lt;none&gt;        8080/TCP   10m
+
+NAME                           HOST/PORT                                PATH   SERVICES   PORT   TERMINATION   WILDCARD
+route.route.openshift.io/bgd   bgd-bgd.apps.example.com          bgd        8080                 None</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>まず、ロールアウトが完了するまで待ちます。以下のコマンドを実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc rollout status deploy/bgd -n bgd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のように出力されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">deployment "bgd" successfully rolled out</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次に、アプリのrouteを表示するコマンドで、routeを表示します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get route -n bgd</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">NAME   HOST/PORT                                                 PATH   SERVICES   PORT   TERMINATION   WILDCARD
+bgd    bgd-bgd.crc-dzk9v-master-0.crc.ohwkzih58pxs.instruqt.io          bgd        8080                 None</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>「HOST/PORT」列の下の URLをコピーしてブラウザでアプリケーションにアクセスします。
+本アプリケーションはHTTP接続のみとなるため、ブラウザへの貼り付け時には <strong><a href="http://bgd-bgd.~" class="bare">http://bgd-bgd.~</a></strong> でURLをご指定ください。</p>
+</div>
+<div class="paragraph">
+<p>アプリケーションは、次のような動く青い丸を表示するものです。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/gitops/gitops-022.png" alt="gitops 022">
+</div>
+</div>
+<div class="paragraph">
+<p>アプリケーションのマニュフェストを変更し、Gitリポジトリとは異なる状態としてみましょう。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>マニフェストにパッチを適用し、丸の色を青から緑に変更します。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc -n bgd patch deploy/bgd --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/env/0/value", "value":"green"}]'</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>ロールアウトが行われるまで待ちます。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc rollout status deploy/bgd -n bgd</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>次のように表示されます。</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>deployment "bgd" successfully rolled out</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>アプリケーションが実行されているブラウザのタブを更新すると、丸の色が緑になっているはずです。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/gitops/gitops-023.png" alt="gitops 023">
+</div>
+</div>
+<div class="paragraph">
+<p>デプロイされているアプリケーションの状態とGitリポジトリの状態に差異が生まれたため、Argo CD Web UIを見るとアプリケーションを"Out of Sync"（非同期）として検出していることがわかります。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/gitops/gitops-024.png" alt="gitops 024">
+</div>
+</div>
+<div class="paragraph">
+<p>次の方法で、Argo CDを介してアプリを同期できます。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>最初に SYNCをクリックします。</p>
+</li>
+<li>
+<p>次に SYNCHRONIZEをクリックします。</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/gitops/gitops-025.png" alt="gitops 025">
+</div>
+</div>
+<div class="paragraph">
+<p>GUIではなく、CLIによっても可能です。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">argocd app sync bgd-app</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">TIMESTAMP                  GROUP                     KIND   NAMESPACE   NAME    STATUS    HEALTH        HOOK  MESSAGE
+2022-09-14T02:50:21+00:00                       Namespace    bgd    Synced
+2022-09-14T02:50:21+00:00                         Service         bgd    bgd    Synced   Healthy
+2022-09-14T02:50:21+00:00   apps               Deployment         bgd    bgd  OutOfSync  Healthy
+2022-09-14T02:50:21+00:00  route.openshift.io       Route         bgd    bgd    Synced   Healthy
+2022-09-14T02:50:22+00:00                       Namespace         bgd    bgd   Running    Synced              namespace/bgd unchanged
+2022-09-14T02:50:22+00:00                         Service         bgd    bgd    Synced   Healthy              service/bgd unchanged
+2022-09-14T02:50:22+00:00   apps               Deployment         bgd    bgd  OutOfSync  Healthy              deployment.apps/bgd configured
+2022-09-14T02:50:22+00:00  route.openshift.io       Route         bgd    bgd    Synced   Healthy              route.route.openshift.io/bgd unchanged
+2022-09-14T02:50:22+00:00   apps  Deployment         bgd                   bgd    Synced  Progressing              deployment.apps/bgd configured
+
+Name:               bgd-app
+Project:            default
+Server:             https://kubernetes.default.svc
+Namespace:          bgd
+URL:                https://openshift-gitops-server-openshift-gitops.crc-dzk9v-master-0.crc.ohwkzih58pxs.instruqt.io/applications/bgd-app
+Repo:               https://github.com/redhat-developer-demos/openshift-gitops-examples
+Target:             main
+Path:               apps/bgd/overlays/bgd
+SyncWindow:         Sync Allowed
+Sync Policy:        Automated (Prune)
+Sync Status:        Synced to main (85d6cc5)
+Health Status:      Progressing
+
+Operation:          Sync
+Sync Revision:      85d6cc5540cd74514e447aa74c403dce98f8bbed
+Phase:              Succeeded
+Start:              2022-09-14 02:50:21 +0000 UTC
+Finished:           2022-09-14 02:50:22 +0000 UTC
+Duration:           1s
+Message:            successfully synced (all tasks run)
+
+GROUP               KIND        NAMESPACE  NAME  STATUS   HEALTH       HOOK  MESSAGE
+                    Namespace   bgd        bgd   Running  Synced             namespace/bgd unchanged
+                    Service     bgd        bgd   Synced   Healthy            service/bgd unchanged
+apps                Deployment  bgd        bgd   Synced   Progressing        deployment.apps/bgd configured
+route.openshift.io  Route       bgd        bgd   Synced   Healthy            route.route.openshift.io/bgd unchanged
+                    Namespace              bgd   Synced</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>同期プロセスが完了すると、Argo CD UI はアプリケーションを同期済としてマークします。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/gitops/gitops-026.png" alt="gitops 026">
+</div>
+</div>
+<div class="paragraph">
+<p>アプリケーションが実行されているブラウザのタブを更新すると、丸の色が緑から青に戻っているはずです。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/gitops/gitops-027.png" alt="gitops 027">
+</div>
+</div>
+<div class="paragraph">
+<p>ここでは実行しませんが、Application マニフェストを設定することで、クラスターの状態が Git で定義された状態から逸脱したときに自動的に修正するようにArgo CDを設定できます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">spec:
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のコマンドを実行することで、設定できます。（ここでは実行しません）</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc patch application/bgd-app -n openshift-gitops --type=merge -p='{"spec":{"syncPolicy":{"automated":{"prune":true,"selfHeal":true}}}}'</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_次のラボの準備"><a class="anchor" href="#_次のラボの準備"></a>次のラボの準備</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>次のKustomizeのラボでも <code>bgd-app</code> アプリのデプロイを行うため、一旦 <code>bgd-app</code> を削除しておきましょう。</p>
+</div>
+<div class="paragraph">
+<p>次のコマンドを入力します。削除確認が行われるので、 <code>y</code> で応答します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">argocd app delete bgd-app</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次の出力が得られれば、削除は成功です。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">application 'bgd-app' deleted</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以上で本演習は終了です。</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="20-GitOps-install.html">インストール</a></span>
+  <span class="next"><a href="22-Kustomize.html">2. Kustomizeインテグレーション</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

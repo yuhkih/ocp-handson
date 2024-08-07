@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Infra ノードの作成 :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/04_infra-nodes.html">
+    <link rel="prev" href="03_machinesets.html">
+    <link rel="next" href="06_template-quota-limits.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li>01. OpenShift 基礎</li>
+    <li><a href="04_infra-nodes.html">5. Infra ノードの作成</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/04_infra-nodes.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Infra ノードの作成</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>本コンテンツは、<a href="https://github.com/team-ohc-jp-place/openshift-cns-testdrive">MAD Workshop Ops Track</a> の内容をベースに、一部変更しています。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>OpenShiftのサブスクリプションモデルでは、顧客は追加料金なしで様々なコアインフラストラクチャコンポーネントをを実行できます。つまり、OpenShiftのコアインフラストラクチャコンポーネントのみを実行しているノードは、クラスター環境をカバーするために必要なサブスクリプションの総数にはカウントされません。</p>
+</div>
+<div class="paragraph">
+<p>インフラストラクチャのカテゴライズに該当するOpenShiftコンポーネントは以下が含まれます。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>kubernetesとOpenShiftのコントロールプレーンサービス（"masters"）。</p>
+</li>
+<li>
+<p>ルータ</p>
+</li>
+<li>
+<p>コンテナイメージレジストリ</p>
+</li>
+<li>
+<p>クラスタメトリクスの収集 ("monitoring")</p>
+</li>
+<li>
+<p>クラスタ集約型ロギング</p>
+</li>
+<li>
+<p>サービスブローカー</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>上記以外のコンテナ/Pod/コンポーネントを実行しているノードはすべてワーカーとみなされ、サブスクリプションでカバーされている必要があります。</p>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="_machineset_詳細"><a class="anchor" href="#_machineset_詳細"></a>MachineSet 詳細</h3>
+<div class="paragraph">
+<p><code>MachineSets</code> の演習では、<code>MachineSets</code> を使用して、レプリカ数を変更してクラスタをスケーリングすることを検討しました。インフラストラクチャノードの場合、特定のKubernetesラベルを持つ <code>Machine</code> を追加で作成したいと思います。そして、それらのラベルを持つノード上で特定の動作をするように様々なインフラストラクチャコンポーネントを設定することができます。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>現在、インフラストラクチャコンポーネントの制御に使用されているOperatorは、"taint" と "toleration" の使用をすべてサポートしているわけではありません。これは、インフラストラクチャのワークロードはインフラストラクチャノード上で実行されますが、他のワークロードがインフラストラクチャノード上で実行されることは特に禁止されていないことを意味します。言い換えれば、すべてのOperatorに taint/toleration が完全に実装されるまでは、ユーザワークロードとインフラストラクチャワークロードが混在する可能性があります。</p>
+</div>
+<div class="paragraph">
+<p>taint/tolerationの使用は、これらの演習ではカバーされていません。</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>これを実現するために、<code>MachineSets</code> を追加で作成します。</p>
+</div>
+<div class="paragraph">
+<p><code>MachineSets</code> がどのように動作するかを理解するために、手順を進めていきましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">CLUSTERNAME=$(oc get  infrastructures.config.openshift.io cluster  -o jsonpath='{.status.infrastructureName}')
+ZONENAME=$(oc get nodes -L topology.kubernetes.io/zone  --no-headers  | awk '{print $NF}' | tail -1)
+oc get machineset -n openshift-machine-api -o yaml ${CLUSTERNAME}-worker-${ZONENAME}</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_metadata"><a class="anchor" href="#_metadata"></a>Metadata</h4>
+<div class="paragraph">
+<p><code>MachineSet</code>  の <code>metadata</code> には、<code>MachineSet</code> の名前や、様々なラベルのような情報が含まれています。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-YAML hljs" data-lang="YAML">metadata:
+  annotations:
+    machine.openshift.io/GPU: "0"
+    machine.openshift.io/memoryMb: "65536"
+    machine.openshift.io/vCPU: "16"
+  creationTimestamp: "2023-06-19T03:17:34Z"
+  generation: 3
+  labels:
+    machine.openshift.io/cluster-api-cluster: cluster-zbwlg-cbgq7
+  name: cluster-zbwlg-cbgq7-worker-us-east-2a
+  namespace: openshift-machine-api
+  resourceVersion: "95996"
+  uid: 73341b44-0495-46c5-b6a2-90aa2650de3c</code></pre>
+</div>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p><code>MachineAutoScaler</code> が定義されている <code>MachineSet</code> をダンプした場合、<code>MachineSet</code> に <code>annotation</code> が表示されるかもしれません。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_selector"><a class="anchor" href="#_selector"></a>Selector</h4>
+<div class="paragraph">
+<p><code>MachineSet</code> は <code>Machine</code> の作成方法を定義し、<code>Selector</code> はどのマシンがそのセットに関連付けられているかをOperatorに指示します。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-YAML hljs" data-lang="YAML">spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      machine.openshift.io/cluster-api-cluster: cluster-zbwlg-cbgq7
+      machine.openshift.io/cluster-api-machineset: cluster-zbwlg-cbgq7-worker-us-east-2a</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>この場合、クラスタ名は <code>cluster-zbwlg-cbgq7</code> であり、セット全体のラベルが追加されています。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_template_metadata"><a class="anchor" href="#_template_metadata"></a>Template Metadata</h3>
+<div class="paragraph">
+<p><code>template</code> は、<code>MachineSet</code> の一部で、<code>Machine</code> をテンプレート化するものです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-YAML hljs" data-lang="YAML">  template:
+    metadata:
+      labels:
+        machine.openshift.io/cluster-api-cluster: cluster-zbwlg-cbgq7
+        machine.openshift.io/cluster-api-machine-role: worker
+        machine.openshift.io/cluster-api-machine-type: worker
+        machine.openshift.io/cluster-api-machineset: cluster-zbwlg-cbgq7-worker-us-east-2a</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_template_spec"><a class="anchor" href="#_template_spec"></a>Template Spec</h4>
+<div class="paragraph">
+<p><code>template</code> は、<code>Machine</code>/<code>Node</code> をどのように作成するかを指定する必要があります。
+<code>spec</code>、より具体的には、<code>providerSpec</code> には、<code>Machine</code> を正しく作成してブートストラップするための重要なAWSデータがすべて含まれていることに気づくでしょう。</p>
+</div>
+<div class="paragraph">
+<p>この例では、結果として得られるノードが1つ以上の特定のラベルを継承していることを確認したいと思います。上の例で見たように、ラベルは <code>metadata</code> セクションにあります。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-YAML hljs" data-lang="YAML">    spec:
+      lifecycleHooks: {}
+      metadata: {}
+      providerSpec:
+        value:
+          ami:
+            id: ami-01af87a6ecc18023d
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>デフォルトでは、インストーラが作成する <code>MachineSets</code> は、ノードに追加のラベルを適用していません。</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_カスタムmachinesetの定義"><a class="anchor" href="#_カスタムmachinesetの定義"></a>カスタムMachineSetの定義</h3>
+<div class="paragraph">
+<p>既存の <code>MachineSet</code> を分析したところで、次は Infra ノードの MachineSet のマニフェストを作成していきます。</p>
+</div>
+<div class="paragraph">
+<p>まずは必要なパラメータを取得します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">export AMI=$(oc get machineset -n openshift-machine-api -l 'machine.openshift.io/os-id!=Windows' -o jsonpath='{.items[0].spec.template.spec.providerSpec.value.ami.id}')
+export CLUSTERID=$(oc get infrastructures.config.openshift.io cluster -o jsonpath='{.status.infrastructureName}')
+export REGION=$(oc get infrastructures.config.openshift.io cluster -o jsonpath='{.status.platformStatus.aws.region}')
+echo $CLUSTERID
+echo $REGION
+echo $AMI</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のテンプレートを、上記で取得した値に置換して、マニフェストを完成させます。
+※Terapadなどテキストツールにコピー＆ペーストして、全て置換してください。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>cluster-zbwlg-cbgq7-private-us-east-2a</code> &#8594; subnet情報。既存の Worker 用 MachineSets から取得（下図参照。ここでは cluster-8trtb-rlgsx-private-us-east-2b）</p>
+</li>
+<li>
+<p><code>us-east-2a</code> &#8594; AZ情報。既存の Worker 用 MachineSets から取得（ここでは us-east-2b）</p>
+</li>
+<li>
+<p><code>us-east-2</code> &#8594; $REGION</p>
+</li>
+<li>
+<p><code>cluster-zbwlg-cbgq7</code> &#8594; $CLUSTERID</p>
+</li>
+<li>
+<p><code>us-east-2</code> &#8594; $REGION</p>
+</li>
+<li>
+<p><code>ami-01af87a6ecc18023d</code> &#8594; $AMI</p>
+</li>
+</ul>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="_images/basics/machinesets/machinesets-subnet.png" alt="machinesets subnet">
+</div>
+<div class="title">Figure 1. subnet情報</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="_images/basics/machinesets/machinesets-az.png" alt="machinesets az">
+</div>
+<div class="title">Figure 2. AZ情報</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">---
+apiVersion: machine.openshift.io/v1beta1
+kind: MachineSet
+metadata:
+  labels:
+    machine.openshift.io/cluster-api-cluster: cluster-zbwlg-cbgq7
+    machine.openshift.io/cluster-api-machine-role: infra
+    machine.openshift.io/cluster-api-machine-type: infra
+  name: cluster-zbwlg-cbgq7-infra-us-east-2a
+  namespace: openshift-machine-api
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      machine.openshift.io/cluster-api-cluster: cluster-zbwlg-cbgq7
+      machine.openshift.io/cluster-api-machineset: cluster-zbwlg-cbgq7-infra-us-east-2a
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        machine.openshift.io/cluster-api-cluster: cluster-zbwlg-cbgq7
+        machine.openshift.io/cluster-api-machine-role: infra
+        machine.openshift.io/cluster-api-machine-type: infra
+        machine.openshift.io/cluster-api-machineset: cluster-zbwlg-cbgq7-infra-us-east-2a
+    spec:
+      metadata:
+        creationTimestamp: null
+        labels:
+          role: storage-node
+          node-role.kubernetes.io/worker: ""
+      providerSpec:
+        value:
+          ami:
+            id: ami-01af87a6ecc18023d
+          apiVersion: awsproviderconfig.openshift.io/v1beta1
+          blockDevices:
+          - ebs:
+              iops: 0
+              volumeSize: 120
+              volumeType: gp3
+          credentialsSecret:
+            name: aws-cloud-credentials
+          deviceIndex: 0
+          iamInstanceProfile:
+            id: cluster-zbwlg-cbgq7-worker-profile
+          instanceType: m5.4xlarge
+          kind: AWSMachineProviderConfig
+          metadata:
+            creationTimestamp: null
+          placement:
+            availabilityZone: us-east-2a
+            region: us-east-2
+          publicIp: null
+          securityGroups:
+          - filters:
+            - name: tag:Name
+              values:
+              - cluster-zbwlg-cbgq7-worker-sg
+          subnet:
+            filters:
+            - name: tag:Name
+              values:
+              - cluster-zbwlg-cbgq7-private-us-east-2a
+          tags:
+          - name: kubernetes.io/cluster/cluster-zbwlg-cbgq7
+            value: owned
+          userDataSecret:
+            name: worker-user-data
+      versions:
+    kubelet: ""</code></pre>
+</div>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>今回のサンプルマニフェストは AWS 用のものです。環境に合わせたサンプルは link:https://docs.openshift.com/container-platform/4.12/machine_management/creating-infrastructure-machinesets.html
+[こちら]を参照しながら、適宜修正が必要です。</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>編集したマニフェストを作成し、<code>oc create</code>  を実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">vi machineset-infra.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc create -f machineset-infra.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Web コンソールから新しいMachinesetが作成されているか確認してみてください。</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="_images/basics/machinesets/machinesets-1.png" alt="machinesets 1">
+</div>
+<div class="title">Figure 3. MachineSetの確認</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">export MACHINESET=$(oc get machineset -n openshift-machine-api -l machine.openshift.io/cluster-api-machine-role=infra -o jsonpath='{.items[0].metadata.name}')
+
+oc patch machineset $MACHINESET -n openshift-machine-api --type='json' -p='[{"op": "add", "path": "/spec/template/spec/metadata/labels", "value":{"node-role.kubernetes.io/worker":"", "node-role.kubernetes.io/infra":""} }]'
+
+oc scale machineset $MACHINESET -n openshift-machine-api --replicas=2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のように実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get machineset -n openshift-machine-api</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>新しいインフラセットが以下例に似た名前で表示されているはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">NAME                                    DESIRED   CURRENT   READY   AVAILABLE   AGE
+cluster-zbwlg-cbgq7-infra-us-east-2a    2         2         2       2           49m
+cluster-zbwlg-cbgq7-worker-us-east-2a   3         3         3       3           3d6h</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>まだインスタンスが起動していてブートストラップを行っているため、セットの中には利用可能なマシンがありません。
+インスタンスがいつ実行されるかは <code>oc get machine -n openshift-machine-api</code> で確認することができます。
+次に <code>oc get node</code> を使って、実際のノードがいつ結合されて準備が整ったかを確認することができます。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p><code>Machine</code> が準備されて <code>Node</code> として追加されるまでには数分かかることがあります。</p>
+</div>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get nodes</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">NAME                                         STATUS   ROLES                  AGE     VERSION
+ip-10-0-136-135.us-east-2.compute.internal   Ready    worker                 18h     v1.25.7+eab9cc9
+ip-10-0-141-135.us-east-2.compute.internal   Ready    infra,worker           3m31s   v1.25.7+eab9cc9
+ip-10-0-171-195.us-east-2.compute.internal   Ready    control-plane,master   28h     v1.25.7+eab9cc9
+ip-10-0-175-87.us-east-2.compute.internal    Ready    infra,worker           3m32s   v1.25.7+eab9cc9
+ip-10-0-178-255.us-east-2.compute.internal   Ready    worker                 28h     v1.25.7+eab9cc9
+ip-10-0-209-191.us-east-2.compute.internal   Ready    worker                 28h     v1.25.7+eab9cc9</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>どのノードが新しいノードなのか分からなくて困っている場合は、<code>AGE</code> カラムを見てみてください。
+また、<code>ROLES</code> 列では、新しいノードが <code>worker</code> と <code>infra</code> の両方のロールを持っていることに気づくでしょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get nodes -l node-role.kubernetes.io/infra</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ラベルを確認する"><a class="anchor" href="#_ラベルを確認する"></a>ラベルを確認する</h3>
+<div class="paragraph">
+<p>この例では、一番若いノードは <code>ip-10-0-133-134.us-east-2.compute.internal</code> という名前でした。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">YOUNG_INFRA_NODE=$(oc get nodes -l node-role.kubernetes.io/infra  --sort-by=.metadata.creationTimestamp -o jsonpath='{.items[0].metadata.name}')
+oc get nodes ${YOUNG_INFRA_NODE} --show-labels | grep --color node-role</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>そして、<code>LABELS</code> の欄には、次のように書かれています。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">beta.kubernetes.io/arch=amd64,beta.kubernetes.io/instance-type=m5.2xlarge,beta.kubernetes.io/os=linux,failure-domain.beta.kubernetes.io/region=us-east-2,failure-domain.beta.kubernetes.io/zone=us-east-2a,kubernetes.io/arch=amd64,kubernetes.io/hostname=ip-10-0-140-3,kubernetes.io/os=linux,node-role.kubernetes.io/infra=,node-role.kubernetes.io/worker=,node.openshift.io/os_id=rhcos</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>node-role.kubernetes.io/infra</code> ラベルが確認できます。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_machinesetの追加スケール"><a class="anchor" href="#_machinesetの追加スケール"></a>MachineSetの追加(スケール)</h3>
+<div class="paragraph">
+<p>現実的な本番環境では、インフラストラクチャコンポーネントを保持するために、少なくとも3つの <code>MachineSets</code> が必要になります。ロギングアグリゲーションソリューションとサービスメッシュの両方がElasticSearchをデプロイするので、ElasticSearchは3つのノードに分散した3つのインスタンスを必要とします。なぜ3つの <code>MachineSets</code> が必要なのかですが、理論的には、異なるAZに複数の <code>MachineSets</code> を配置することで、AWSがAZを失った場合であっても完全にダウンすることを防ぐためです。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_machine_api_controllers_のログ"><a class="anchor" href="#_machine_api_controllers_のログ"></a>machine-api-controllers のログ</h3>
+<div class="paragraph">
+<p><code>openshift-machine-api</code> プロジェクトにはいくつかの <code>Pods</code> があります。そのうちの一つは <code>machine-api-controllers-56bdc6874f-86jnb</code> のような名前です。その <code>Pod</code> のコンテナ上で <code>oc log</code> を使うと、ノードを実際に生成するためのさまざまな演算子のビットを見ることができます。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_operator_について"><a class="anchor" href="#_operator_について"></a>Operator について</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Operatorはただの <code>Pods</code> です。しかし 彼らは特別な <code>Pods</code> であり、Kubernetes環境でアプリケーションをデプロイして管理する方法を理解しているソフトウェアです。Operatorのパワーは、<code>CustomResourceDefinitions</code> (<code>CRD</code>)と呼ばれるKubernetesの機能に依存しています。<code>CRD</code> はまさにその名の通りの機能です。これらはカスタムリソースを定義する方法であり、本質的にはKubernetes APIを新しいオブジェクトで拡張するものです。</p>
+</div>
+<div class="paragraph">
+<p>Kubernetesで <code>Foo</code> オブジェクトを作成/読み込み/更新/削除できるようにしたい場合、<code>Foo</code> リソースとは何か、どのように動作するのかを定義した <code>CRD</code> を作成します。そして、<code>CRD</code> のインスタンスである <code>CustomResources</code> (<code>CRs</code>) を作成することができます。</p>
+</div>
+<div class="paragraph">
+<p>Operator の場合、一般的なパターンとしては、Operator が <code>CRs</code> を見て設定を行い、Kubernetes 環境上で <em>operate</em> を行い、設定で指定されたことを実行するというものです。ここでは、OpenShiftのインフラストラクチャオペレータのいくつかがどのように動作するかを見てみましょう。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_インフラストラクチャコンポーネントの移動"><a class="anchor" href="#_インフラストラクチャコンポーネントの移動"></a>インフラストラクチャコンポーネントの移動</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>これで Infra ノードができたので、インフラストラクチャのコンポーネントをその上に移動させることができます。</p>
+</div>
+<div class="sect2">
+<h3 id="_レジストリ"><a class="anchor" href="#_レジストリ"></a>レジストリ</h3>
+<div class="paragraph">
+<p>レジストリは、オペレータが実際のレジストリPodをどのように展開するかを設定するために、同様の <code>CRD</code> メカニズムを使用します。
+このCRDは <code>configs.imageregistry.operator.openshift.io</code> です。
+このCRDに <code>nodeSelector</code> を追加するために <code>cluster</code> のCRDオブジェクトを編集します。まず、それを見てみましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get configs.imageregistry.operator.openshift.io/cluster -o yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のように確認できます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-YAML hljs" data-lang="YAML">apiVersion: imageregistry.operator.openshift.io/v1
+kind: Config
+metadata:
+  creationTimestamp: "2019-08-06T13:57:22Z"
+  finalizers:
+  - imageregistry.operator.openshift.io/finalizer
+  generation: 2
+  name: cluster
+  resourceVersion: "13218"
+  selfLink: /apis/imageregistry.operator.openshift.io/v1/configs/cluster
+  uid: 1cb6272a-b852-11e9-9a54-02fdf1f6ca7a
+spec:
+  defaultRoute: false
+  httpSecret: fff8bb0952d32e0aa56adf0ac6f6cf5267e0627f7b42e35c508050b5be426f8fd5e5108bea314f4291eeacc0b95a2ea9f842b54d7eb61522238f2a2dc471f131
+  logging: 2
+  managementState: Managed
+  proxy:
+    http: ""
+    https: ""
+    noProxy: ""
+  readOnly: false
+  replicas: 1
+  requests:
+    read:
+      maxInQueue: 0
+      maxRunning: 0
+      maxWaitInQueue: 0s
+    write:
+      maxInQueue: 0
+      maxRunning: 0
+      maxWaitInQueue: 0s
+  storage:
+    s3:
+      bucket: image-registry-us-east-2-0a598598fc1649d8b96ed91a902b982c-1cbd
+      encrypt: true
+      keyID: ""
+      region: us-east-2
+      regionEndpoint: ""
+status:
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のコマンドを実行します。<code>image-registry-xxxxxxxxx-xxxxx</code> が、レジストリを指す Pod でこの Pod をInfra ノードへ移動させます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pod -n openshift-image-registry -o wide</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>それでは、以下のコマンドによって、レジストリCRの <code>.spec</code> を修正し、<code>nodeSelector</code> を追加します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc patch configs.imageregistry.operator.openshift.io/cluster -p '{"spec":{"nodeSelector":{"node-role.kubernetes.io/infra": ""}}}' --type=merge</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+この時点では、イメージレジストリは演算子のために別のプロジェクトを使用していません。演算子とオペランドは両方とも <code>openshift-image-registry</code> プロジェクトの中にあります。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>パッチコマンドを実行すると、レジストリPodがinfraノードに移動しているのがわかるはずです。
+レジストリは <code>openshift-image-registry</code> プロジェクトにあります。</p>
+</div>
+<div class="paragraph">
+<p>以下をく実行してみてください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pod -n openshift-image-registry -o wide</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>レジストリはS3バケットによってバックアップされているので、新しいレジストリPodのインスタンスがどのノードにあるかは問題ではありません。
+これはAPI経由でオブジェクトストアと通信しているので、そこに保存されている既存のイメージはすべてアクセス可能なままです。</p>
+</div>
+<div class="paragraph">
+<p>また、デフォルトのレプリカ数は1であることにも注意してください。
+現実の環境では、可用性やネットワークのスループットなどの理由から、このレプリカ数を増やしたいと思うかもしれません。</p>
+</div>
+<div class="paragraph">
+<p>レジストリのPodが稼働しているノードを見てみると、それが現在infraワーカー上で実行されていることに気づくでしょう。</p>
+</div>
+<div class="paragraph">
+<p>最後に、イメージレジストリの設定のための <code>CRD</code> が名前空間ではなく、クラスタスコープになっていることに注目してください。
+OpenShiftクラスタごとに内部/統合レジストリは1つしかありません。</p>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="03_machinesets.html">4. ノードの動的管理</a></span>
+  <span class="next"><a href="06_template-quota-limits.html">6. Project のクオータ/制限</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

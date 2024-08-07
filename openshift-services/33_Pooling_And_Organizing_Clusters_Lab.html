@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Untitled :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/33_Pooling_And_Organizing_Clusters_Lab.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/33_Pooling_And_Organizing_Clusters_Lab.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<div class="paragraph">
+<p>Unresolved include directive in modules/ROOT/pages/33_Pooling_And_Organizing_Clusters_Lab.adoc - include::../../include/00_0_Lab_Header.adoc[]</p>
+</div>
+<div class="sect1">
+<h2 id="_pooling_and_organizing_clusters_lab"><a class="anchor" href="#_pooling_and_organizing_clusters_lab"></a>Pooling and Organizing Clusters Lab</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction_to_pooling_and_organizing_clusters"><a class="anchor" href="#_introduction_to_pooling_and_organizing_clusters"></a>1. Introduction to Pooling and Organizing Clusters</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Red Hat<sup>&#174;</sup> OpenShift<sup>&#174;</sup> Container Platform クラスターのフリートを管理するには、多くのクラスターのプロビジョニングと破棄が必要になることがよくあります。 ご覧のとおり、新しいクラスターが作成されるまでには長い時間がかかります。</p>
+</div>
+<div class="paragraph">
+<p>このラボでは、クラスター プールとクラスター セットの使用方法を学習します。</p>
+</div>
+<div class="paragraph">
+<p><em>Cluster pools</em> は、OpenShift クラスターをプロビジョニングするために使用されます。このクラスターは休止状態になり、要求されるのを待ちます。 クラスターの要求は、休止状態のクラスターをクラスター プールから再開するのと同じくらい迅速です。 クラスタープール内のクラスターが要求されると、Red Hat Advanced Cluster Management for Kubernetes (RHACM) は新しいクラスターを自動的にデプロイしてプールを補充します。</p>
+</div>
+<div class="paragraph">
+<p><em>クラスター セット</em> は、クラスターを整理するのに役立ちます。たとえば、ロールベースのアクセス制御 (RBAC) を管理して、運用クラスターに監査者のアクセス許可を設定します。</p>
+</div>
+<div class="ulist">
+<div class="title">Goals</div>
+<ul>
+<li>
+<p>クラスター プールを作成し、要求されるクラスターを準備する</p>
+</li>
+<li>
+<p>異なるクラスター セットでクラスターを編成する</p>
+</li>
+<li>
+<p>RBAC 権限を管理する</p>
+</li>
+<li>
+<p>OpenShift のバージョンを管理する</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_explore_cluster_pools"><a class="anchor" href="#_explore_cluster_pools"></a>2. Explore Cluster Pools</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このセクションでは、クラスター プールを使用してクラスターを管理します。</p>
+</div>
+<div class="sect2">
+<h3 id="_create_cluster_set"><a class="anchor" href="#_create_cluster_set"></a>2.1. Create Cluster Set</h3>
+<div class="paragraph">
+<p>クラスタ プールを作成する前に、プールで使用する「ClusterSet」を作成する必要があります。</p>
+</div>
+<div class="olist arabic">
+<div class="title">手順</div>
+<ol class="arabic">
+<li>
+<p>現在 RHACM コンソールにログインしていない場合は、再度ログインします。</p>
+</li>
+<li>
+<p><strong>Infrastructure &#8594; Clusters</strong> に移動します。</p>
+</li>
+<li>
+<p><strong>Cluster sets</strong> タブを選択します。</p>
+</li>
+<li>
+<p><strong>Create cluster set</strong> をクリックします。</p>
+</li>
+<li>
+<p><strong>Cluster set name</strong> として <code>production</code> (小文字に注意) を使用し、<strong>Create</strong> をクリックします。</p>
+</li>
+<li>
+<p>表示されるダイアログ ボックスで、<strong>Close</strong> をクリックします。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_create_production_cluster_pool"><a class="anchor" href="#_create_production_cluster_pool"></a>2.2. Create <code>production</code> Cluster Pool</h3>
+<div class="paragraph">
+<p>クラスタ セットが利用可能になったので、クラスタ プールを作成できます。</p>
+</div>
+<div class="paragraph">
+<p>クラスター プールの作成プロセスは、スタンドアロン クラスターの作成と非常によく似ています。 2 つの異なる地理的リージョンに単一ノードの OpenShift クラスターのプールを作成します。</p>
+</div>
+<div class="olist arabic">
+<div class="title">手順</div>
+<ol class="arabic">
+<li>
+<p><strong>Infrastructure &#8594; Clusters</strong> に移動します。</p>
+</li>
+<li>
+<p><strong>Cluster pools</strong> タブを選択します。</p>
+</li>
+<li>
+<p><strong>Create cluster pool</strong> をクリックします (ボタンを表示するには、下にスクロールする必要がある場合があります)。</p>
+</li>
+<li>
+<p>次のように、最初のクラスター プールのプロパティを入力します。</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><strong>Infrastructure provider</strong> 画面で以下のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Infrastructure provider</strong>: <code>Amazon Web Services</code></p>
+</li>
+<li>
+<p>リストから <code>aws-sandbox</code> 資格情報を選択します。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Next</strong> をクリックします。</p>
+</li>
+<li>
+<p><strong>Cluster pool details</strong> 画面で以下のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Cluster pool name</strong>: <code>production-uk</code></p>
+</li>
+<li>
+<p><strong>Cluster pool namespace</strong>: <code>cluster-pool-production-uk</code></p>
+</li>
+<li>
+<p><strong>Cluster pool size</strong>: <code>1</code></p>
+</li>
+<li>
+<p><strong>Cluster set</strong>: <code>production</code></p>
+</li>
+<li>
+<p><strong>Release image</strong>: 利用可能な OpenShift 4.9 イメージを選択します (例: <code>4.9.23</code>)。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Next</strong> をクリックします。</p>
+</li>
+<li>
+<p><strong>Node pools</strong> 画面で以下のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Region</strong>: <code>eu-west-2</code></p>
+</li>
+<li>
+<p><strong>Control plane pool</strong>: セクションを展開し、<strong>Instance type</strong> を <code>m5.2xlarge</code> に設定します。</p>
+</li>
+<li>
+<p><strong>Worker pool 1</strong>: セクションを展開し、<strong>Node count</strong> を <code>0</code> に設定します。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Next</strong> をクリックします。</p>
+</li>
+<li>
+<p><strong>Networking</strong> 画面で以下のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Cluster network CIDR</strong>: <code>10.132.0.0/14</code> (変更前のDefault表示: 10.128.0.0/14)</p>
+</li>
+<li>
+<p><strong>Service network CIDR</strong>: <code>172.31.0.0/16</code> (変更前のDefault表示: 172.30.0.0/16)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Review</strong> 画面が表示されるまで <strong>Next</strong> をクリックします。</p>
+</li>
+<li>
+<p><strong>Review</strong> 画面で以下のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>YAML</strong> を <code>On</code> に設定します。</p>
+</li>
+<li>
+<p><strong>Cluster YAML</strong> ペインの <strong>ClusterPool</strong> タブを選択し(初期状態で選択されています)、<strong>kind: ClusterPool</strong> を見つけて、数行下の <strong>spec:</strong> の次の行に <strong>"  skipMachinePools: true"</strong> (行頭に空白２個あるのでご注意ください)フィールドを加えます。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/create_clusterpool_skipmachinepool.png" alt="create clusterpool skipmachinepool" width="100%">
+</div>
+</div>
+</li>
+<li>
+<p><strong>install-config</strong> タブに切り替えて <strong>controlPlane</strong> を見つけ、その下の <strong>replicas</strong> フィールドを <code>1</code> に変更します。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Create</strong> をクリックします。</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>最初のクラスター プールの作成中に、<strong>Create cluster pool</strong> をクリックして 2 つ目のクラスター プールを作成します。</p>
+</li>
+<li>
+<p>次のように、2 番目のクラスター プールのプロパティを入力します。</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><strong>Infrastructure provider</strong> 画面で以下のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Infrastructure provider</strong>: <code>Amazon Web Services</code></p>
+</li>
+<li>
+<p>リストから <code>aws-sandbox</code> 資格情報を選択します。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Next</strong> をクリックします。</p>
+</li>
+<li>
+<p><strong>Cluster pool details</strong> 画面で以下のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Cluster pool name</strong>: <code>production-ireland</code></p>
+</li>
+<li>
+<p><strong>Cluster pool namespace</strong>: <code>cluster-pool-production-ireland</code></p>
+</li>
+<li>
+<p><strong>Cluster pool size</strong>: <code>1</code></p>
+</li>
+<li>
+<p><strong>Cluster set</strong>: <code>production</code></p>
+</li>
+<li>
+<p><strong>Release image</strong>: 利用可能な OpenShift 4.9 イメージを選択します (例: <code>4.9.23</code>)。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Next</strong> をクリックします。</p>
+</li>
+<li>
+<p><strong>Node pools</strong> 画面で以下のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Region</strong>: <code>eu-west-1</code></p>
+</li>
+<li>
+<p><strong>Control plane pool</strong>: セクションを展開し、 <strong>Instance type</strong> を <code>m5.2xlarge</code> に設定します。</p>
+</li>
+<li>
+<p><strong>Worker pool 1</strong>: セクションを展開し、<strong>Node count</strong> を <code>0</code> に設定します。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Next</strong> をクリックします。</p>
+</li>
+<li>
+<p><strong>Networking</strong> 画面で以下のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Cluster network CIDR</strong>: <code>10.132.0.0/14</code> (変更前のDefault表示: 10.128.0.0/14)</p>
+</li>
+<li>
+<p><strong>Service network CIDR</strong>: <code>172.31.0.0/16</code> (変更前のDefault表示: 172.30.0.0/16)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Review</strong> 画面が表示されるまで <strong>Next</strong> をクリックします。</p>
+</li>
+<li>
+<p><strong>Review</strong> 画面で以下のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>YAML</strong> を <code>On</code> に設定します。</p>
+</li>
+<li>
+<p><strong>Cluster YAML</strong> ペインの <strong>ClusterPool</strong> タブを選択し(初期状態で選択されています)、<strong>kind: ClusterPool</strong> を見つけて、数行下の <strong>spec:</strong> の次の行に <strong>"  skipMachinePools: true"</strong> (行頭に空白２個あるのでご注意ください)フィールドを加えます。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/create_clusterpool_skipmachinepool.png" alt="create clusterpool skipmachinepool" width="100%">
+</div>
+</div>
+</li>
+<li>
+<p><strong>install-config</strong> タブに切り替えて <strong>controlPlane</strong> を見つけ、その下の <strong>replicas</strong> フィールドを <code>1</code> に変更します。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Create</strong> をクリックします。</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_scale_cluster_pool"><a class="anchor" href="#_scale_cluster_pool"></a>2.3. Scale Cluster Pool</h3>
+<div class="paragraph">
+<p>ロンドン (リージョン <code>eu-west-2</code> ) のクラスター プールがアイルランドのクラスター プールよりも頻繁に使用されることが予想されるため、クラスター プールを 2 つのレプリカにスケーリングします。</p>
+</div>
+<div class="olist arabic">
+<div class="title">手順</div>
+<ol class="arabic">
+<li>
+<p><strong>Infrastructure &#8594; Clusters</strong> に移動します。</p>
+</li>
+<li>
+<p><strong>Cluster pools</strong> タブを選択します。</p>
+</li>
+<li>
+<p>2 つのクラスター プールを展開します。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/clusterpool-overview.png" alt="clusterpool overview" width="80%">
+</div>
+</div>
+</li>
+<li>
+<p><span class="image unresolved"><img src="images/options_menu_icon.png" alt="options menu icon"></span> (<strong>Options</strong>) をクリックし、<strong>Scale cluster pool</strong> を選択して、<code>production-uk</code> クラスター プールをスケールします。</p>
+</li>
+<li>
+<p><strong>Desired pool size</strong> を <code>2</code> に設定し、<strong>Scale</strong> をクリックします。</p>
+</li>
+<li>
+<p>すべてのクラスターがプロビジョニングされるまで待ちます。</p>
+<div class="paragraph">
+<p>クラスターのプロビジョニングには、約 30 ～ 40 分かかります。 クラスターがプロビジョニングされると、休止状態(Hybernate)になります。</p>
+</div>
+</li>
+<li>
+<p>プールされた各クラスターの横にある <strong>Creating</strong> をクリックし、<strong>View logs</strong> を選択してクラスター作成ログを追跡します。</p>
+<div class="paragraph">
+<p>プール内のすべてのクラスターは、クラスター プールの作成時に選択したクラスター セットに属しています。このシナリオでは、すべてのクラスターは <code>production</code> クラスター セットに属しています。</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_summary"><a class="anchor" href="#_summary"></a>3. Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このラボでは、クラスタ セットを使用してクラスタをプールし、クラスタをグループ化する機能について学習しました。</p>
+</div>
+<div class="paragraph">
+<p>クラスター プールを使用すると、休止状態のクラスターのプールから新しいクラスターを要求するのに必要な時間が短縮され、要求されるスタンバイ クラスターのホスティング コストも削減されることを学びました。</p>
+</div>
+<div class="paragraph">
+<p>クラスター セットを使用して OpenShift クラスターの同一のセットをデプロイし、バージョン、ノード数などのさまざまな OpenShift 構成をより簡単に管理できるようにしました。</p>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/RH-OPEN/hands_on_acm/blob/main/modules/01_Hands_on_RHACM_Cluster_Lifecycle/04_Application_Lab.adoc">4章へ</a></p>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

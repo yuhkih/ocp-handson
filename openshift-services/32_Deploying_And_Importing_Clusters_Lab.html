@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Untitled :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/32_Deploying_And_Importing_Clusters_Lab.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/32_Deploying_And_Importing_Clusters_Lab.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<div class="paragraph">
+<p>Unresolved include directive in modules/ROOT/pages/32_Deploying_And_Importing_Clusters_Lab.adoc - include::../../include/00_0_Lab_Header.adoc[]</p>
+</div>
+<div class="sect1">
+<h2 id="_deploying_and_importing_clusters_lab"><a class="anchor" href="#_deploying_and_importing_clusters_lab"></a>Deploying and Importing Clusters Lab</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction_to_deploying_and_importing_clusters"><a class="anchor" href="#_introduction_to_deploying_and_importing_clusters"></a>1. Introduction to Deploying and Importing Clusters</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Red Hat<sup>&#174;</sup> Advanced Cluster Management for Kubernetes (RHACM) の主な機能の 1 つは、クラスターのライフサイクル管理です。これにより、新しいクラスターをさまざまなクラウド プロバイダーにデプロイしたり、既存のクラスターをインポートして RHACM で管理したりできます。</p>
+</div>
+<div class="paragraph">
+<p>複数のクラスター (さらに複数のクラウド プロバイダー上のクラスター) の管理は、さまざまな資格情報、さまざまなクラウド環境にデプロイされているクラスター、さまざまなクラウド環境からインポートされているマネージド クラスターを管理する必要があることを考えると、非常に複雑になる可能性があります。 管理目的でクラスターにラベルを使用します。
+RHACM を使用すると、1 つのコンソールからすべてのクラスターを管理できるため、新しいデプロイメントを管理し、既存のクラスターをインポートできます。</p>
+</div>
+<div class="ulist">
+<div class="title">Goals</div>
+<ul>
+<li>
+<p>クラウド認証情報を作成する</p>
+</li>
+<li>
+<p>新しい単一ノードの OpenShift<sup>&#174;</sup> クラスターを作成する</p>
+</li>
+<li>
+<p>クラスタ プロパティの管理</p>
+</li>
+<li>
+<p>既存のクラスターをインポートする方法を学ぶ</p>
+</li>
+<li>
+<p>インフラ環境を特定する</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="labexercises"><a class="anchor" href="#labexercises"></a>2. Create Cloud Credentials</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Red Hat Advanced Cluster Management にクラウド資格情報を提供して、異なるクラウドで OpenShift クラスターをデプロイおよび管理できます。 この演習では、Amazon Web Services に新しい SNO クラスターをデプロイします。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><code>AWS_ACCESS_KEY_ID</code> と <code>AWS_SECRET_ACCESS_KEY</code> の AWS 認証情報は、プロビジョニング E メールで入手できます。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>マルチクラウド環境として、Red Hat Advanced Cluster Management はクラスターを複数のクラウドおよびベアメタル インフラストラクチャにデプロイできます。 この演習では、認証情報を使用して AWS のリソースを処理します。</p>
+</div>
+<div class="olist arabic">
+<div class="title">手順</div>
+<ol class="arabic">
+<li>
+<p>認証情報は、RHACM ハブ クラスターの独自の名前空間にある必要があります。 bastionホストで、新しい名前空間を作成します。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc create namespace aws-sandbox</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>RHACM Web コンソールから、<strong>Credentials</strong> に移動し、<strong>Add credential</strong> をクリックします。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/add_credentials.png" alt="add credentials">
+</div>
+</div>
+</li>
+<li>
+<p>次のプロパティを使用して AWS 資格情報を作成します。</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><strong>Basic Information</strong> 画面で次のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Credential type</strong>: <code>Amazon Web Services</code></p>
+</li>
+<li>
+<p><strong>Credential name</strong>: <code>aws-sandbox</code></p>
+</li>
+<li>
+<p><strong>Namespace</strong>: <code>aws-sandbox</code></p>
+</li>
+<li>
+<p><strong>Base DNS domain</strong>: <code>sandboxNNNN.opentlc.com</code> (トップ レベル ドメインのプロビジョニング メールを確認してください。先頭のピリオドは除外してください。)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Next</strong> をクリックします。</p>
+</li>
+<li>
+<p><strong>Amazon Web Services</strong> 画面で次のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Access key ID</strong>: (OpenTLCのカスタム属性表中"Environment Info 011"、もしくはプロビジョニング メールに記載)</p>
+</li>
+<li>
+<p><strong>Secret access key</strong>: (OpenTLCのカスタム属性表中"Environment Info 012"、プロビジョニング メールで提供)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Next</strong> をクリックします。</p>
+</li>
+<li>
+<p><strong>Pull secret and SSH</strong> 画面で次のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Pull secret</strong>: (プル シークレット未入手の場合は、無料の Red Hat 開発者アカウントに登録して、<code><a href="https://console.redhat.com" class="bare">https://console.redhat.com</a></code> から <strong>OpenShift &#8594; Downloads</strong> と開き、最下部までスクロールダウンして表示される <code>Pull secret</code> の右の <code>Copy</code> をクリックすることで入手できます。)</p>
+</li>
+<li>
+<p><strong>SSH private key</strong>: bastionホストから、<code>$HOME/.ssh/${GUID}key.pem</code> ファイルの内容を取得して、ここに貼り付けます。この秘密鍵は、マネージド クラスター インスタンスとの接続に使用されます。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cat $HOME/.ssh/${GUID}key.pem</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>SSH public key</strong>: bastionホストから、<code>$HOME/.ssh/${GUID}key.pub</code> ファイルの内容を取得します。</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+この時、単にファイルの内容を参照すると、末尾に改行がないためシェルプロンプトとの文字列の境界がわかりにくことに注意してください。
+以下のコマンド実行例では、<code>echo</code> コマンドを追加することで、この点を考慮しています。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>この公開鍵は、マネージド インスタンスの「authorized_keys」に挿入されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cat $HOME/.ssh/${GUID}key.pub ; echo</code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Next</strong> をクリックします。</p>
+</li>
+<li>
+<p>画面が次のようになっていることを確認します。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/credentials.png" alt="credentials" width="50%">
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><strong>Add</strong> をクリックします。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deploy_single_node_openshift_cluster"><a class="anchor" href="#_deploy_single_node_openshift_cluster"></a>3. Deploy Single-Node OpenShift Cluster</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>認証情報を作成したら、新しいクラスターをデプロイできます。</p>
+</div>
+<div class="olist arabic">
+<div class="title">手順</div>
+<ol class="arabic">
+<li>
+<p>RHACM コンソールで、<strong>Infrastructure &#8594; Clusters</strong> に移動し、<strong>Create cluster</strong> をクリックします。
+.新しいクラスターを作成するときは、次のプロパティを使用します。</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><strong>インフラストラクチャ プロバイダー</strong> 画面で次のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Provider</strong>: Amazon Web Services</p>
+</li>
+<li>
+<p><strong>Infrastructure provider credential</strong>: メニューを使用して、以前に作成した資格情報を選択します。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Next</strong> をクリックします。</p>
+</li>
+<li>
+<p><strong>Cluster details</strong> 画面で次のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Cluster name</strong>: <code>my-openshift-cluster</code></p>
+</li>
+<li>
+<p><strong>Cluster set</strong>: <code>空</code></p>
+</li>
+<li>
+<p><strong>Base DNS Domain</strong>: このフィールドは、使用される資格情報から自動的に設定されます</p>
+</li>
+<li>
+<p><strong>Release name (or Release image)</strong>: 利用可能な最新の 4.9 リリースを使用します (例: <code>OpenShift 4.9.23</code>)。</p>
+</li>
+<li>
+<p><strong>Additional Label</strong> (","を入力時にラベルが登録されるので、コピー＆ペーストせずに、キーボードから文字列入力してください): <code>sno=true, environment=production, guid=&lt;5桁の任意のID&gt;</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Next</strong> をクリックします。</p>
+</li>
+<li>
+<p><strong>Node pools</strong> 画面で次のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Region</strong>: お好みで、<code>eu-central-1</code>、<code>ap-northeast-1</code>、<code>ap-southeast-1</code>、<code>sa-east-1</code> のいずれかを選択します。</p>
+</li>
+<li>
+<p><strong>Control plane</strong>: セクションを展開し、<strong>Instance type</strong> を <code>m5.2xlarge</code> に設定します。</p>
+</li>
+<li>
+<p><strong>Worker pool 1</strong>: セクションを展開し、<strong>Node count</strong> を <code>0</code> に設定します。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Next</strong> をクリックします。</p>
+</li>
+<li>
+<p><strong>Networking</strong> 画面で次のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Cluster network CIDR</strong>: <code>10.132.0.0/14</code> (変更前のDefault表示: 10.128.0.0/14)</p>
+</li>
+<li>
+<p><strong>Service network CIDR</strong>: <code>172.31.0.0/16</code> (変更前のDefault表示: 172.30.0.0/16)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Review</strong> 画面が表示されるまで <strong>Next</strong> をクリックし、次のように設定します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p>画面上部の <strong>YAML</strong>: <code>On</code></p>
+</li>
+<li>
+<p><strong>Cluster YAML</strong> ペインの <strong>cluster</strong> タブを選択し(初期状態で選択されています)、<strong>kind: MachinePool</strong> を見つけて、数行下の <strong>spec:</strong> の次の行に <strong>"  skipMachinePools: true"</strong> (行頭に空白２個あるのでご注意ください)フィールドを加えます。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/create_cluster_skipmachinepool.png" alt="create cluster skipmachinepool" width="100%">
+</div>
+</div>
+</li>
+<li>
+<p><strong>Cluster YAML</strong> ペインの <strong>install-config</strong> タブを選択し、<strong>controlPlane</strong> を見つけて、その下の <strong>replicas</strong> フィールドを <code>1</code> に変更します。</p>
+</li>
+<li>
+<p><strong>compute</strong> セクションの <strong>replicas</strong> フィールドが <code>0</code> に設定されていることを確認します。</p>
+</li>
+<li>
+<p><strong>install-config</strong> タブの内容が次のようになっていることを確認します。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
+metadata:
+  name: 'my-openshift-cluster'
+baseDomain: sandboxNNNN.opentlc.com
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  replicas: 1               <i class="conum" data-value="1"></i><b>(1)</b>
+  platform:
+    aws:
+      rootVolume:
+        iops: 4000
+        size: 100
+        type: io1
+      type: m5.2xlarge
+compute:
+- hyperthreading: Enabled
+  name: 'worker'
+  replicas: 0               <i class="conum" data-value="2"></i><b>(2)</b>
+  platform:
+    aws:
+      rootVolume:
+        iops: 2000
+        size: 100
+        type: io1
+      type: m5.xlarge
+[... OUTPUT OMITTED ...]</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Controlノード数 (3 &#8594; 1 に変更)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Workerノード数 (0となっていることを確認)</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><strong>Create</strong> をクリックして(YAML書き換え後にSaveなどは不要です)クラスターをデプロイします。(ProxyとAutomationは設定不要です。)</p>
+<div class="paragraph">
+<p>Red Hat Advanced Cluster Management は新しいクラスターの作成を監視し、デプロイが完了するとクラスターをインポートします。</p>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/cluster_deployment.png" alt="cluster deployment" width="100%">
+</div>
+</div>
+</li>
+<li>
+<p><strong>Cluster Install</strong> の下の <strong>View logs</strong> をクリックして、<code>hive</code> (OpenShift インストーラー) のログを追跡します。 Web ブラウザがポップアップ ウィンドウをブロックしていないことを確認してください。</p>
+</li>
+<li>
+<p>OpenShift CLI を使用して <code>hive</code> ログにアクセスします。</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><em>hub</em> クラスタのBastion ホストで、インストーラー Pod を見つけます。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pods -n my-openshift-cluster</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre>NAME                                   READY   STATUS     RESTARTS   AGE
+my-openshift-cluster-0-8x28c-provision--1-2z2wk   1/3     NotReady   0          2m40s</pre>
+</div>
+</div>
+</li>
+<li>
+<p>この Pod は <code>NotReady</code> と表示されることに注意してください。 このポッドには 3 つのコンテナーがあり、次々と実行されるため、このポッドは <code>Running</code> として表示されません。 とにかく、Hive コンテナーのログを追跡できます。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc logs -f my-openshift-cluster-0-8x28c-provision--1-2z2wk -c hive -n my-openshift-cluster</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre class="nowrap">[...]
+time="2021-12-13T02:48:29Z" level=debug msg="module.vpc.aws_route.to_nat_gw[1]: Creation complete after 0s [id=r-rtb-083b15b8931cce7051080289494]"
+time="2021-12-13T02:48:29Z" level=debug msg="module.vpc.aws_route.to_nat_gw[0]: Creation complete after 0s [id=r-rtb-0ee45fd6cd658e5831080289494]"
+time="2021-12-13T02:48:29Z" level=debug msg="module.vpc.aws_route.to_nat_gw[2]: Creation complete after 1s [id=r-rtb-0249ceb167cb3359f1080289494]"
+time="2021-12-13T02:48:33Z" level=debug msg="module.vpc.aws_lb.api_internal: Still creating... [2m0s elapsed]"
+time="2021-12-13T02:48:33Z" level=debug msg="Bootstrap complete!"
+[...]</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>正常に完了するまで、新しいクラスターのデプロイに従います。 これには 20 ～ 40 分かかります。 クラスターのプロビジョニングを進めつつ(時折上記の方法でログを確認してみてください)、次のステップへ進めてください。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_import_clusters"><a class="anchor" href="#_import_clusters"></a>4. Import Clusters</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Red Hat Advanced Cluster Management はすでに構築されたクラスターをImportすることができます。</p>
+</div>
+<div class="olist arabic">
+<div class="title">手順</div>
+<ol class="arabic">
+<li>
+<p>Import対象のクラスタのOpenShift Webコンソールをブラウザで開き、一度adminアカウントでログインしたのち右上のユーザ名をクリックします。<strong>ログインコマンドをコピー</strong> を選択し、ログイン画面で再度ログインした後に表示される <strong>Display Token</strong> リンクをクリックし、トークンとURLを表示します。</p>
+</li>
+<li>
+<p>RHACM コンソールで、<strong>Infrastructure &#8594; Clusters</strong> に移動します。</p>
+</li>
+<li>
+<p><strong>Mnaged clusters</strong> タブ画面から、スクロールダウンして <strong>Import cluster</strong> ボタンをクリックします。</p>
+</li>
+<li>
+<p>次の値を使用して Import情報を作成します。</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><strong>Import an existing cluster</strong> 画面で次のように入力します。</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Name</strong>: <code>my-imported-cluster</code></p>
+</li>
+<li>
+<p><strong>Cluster set</strong>: 空</p>
+</li>
+<li>
+<p><strong>Additional labels</strong>: <code>sno=true, environment=dev, guid=&lt;クラスタに割り当てられたGUID&gt;, region=&lt;クラスタのregion&gt;</code> (クラスタのGUIDとregion情報はOpenTLCの構成情報から入手可能です)</p>
+</li>
+<li>
+<p><strong>Import mode</strong>: <code>Enter your server URL and API token for the existing cluster</code></p>
+</li>
+<li>
+<p><strong>Server URL</strong>:  Import対象クラスタのポート番号を含めたAPI URL(例: <a href="https://api.cluster-abcd5.abcd5.sandbox5555.opentlc.com:6443/" class="bare">https://api.cluster-abcd5.abcd5.sandbox5555.opentlc.com:6443/</a> ) &#8592; 手順1で表示した画面の <code>Log in with this token</code> のコマンドラインの <code>--server=</code> からコピーする。</p>
+</li>
+<li>
+<p><strong>API Token</strong>:  Import対象クラスタのトークン &#8592; 手順1で表示した画面の <code>Your API token is</code> (shaから始まる文字列全体)からコピーする。</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><strong>Import</strong> をクリックします。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_explore_cluster_properties"><a class="anchor" href="#_explore_cluster_properties"></a>5. Explore Cluster Properties</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Red Hat Advanced Cluster Management によって管理されるすべてのクラスターはカスタマイズ可能です。 このセクションでは、RHACM を介して変更できるクラスターのプロパティーを調べます。</p>
+</div>
+<div class="paragraph">
+<p>次のクラスター プロパティを調べます。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Labels</p>
+</li>
+<li>
+<p>Cluster channels</p>
+</li>
+<li>
+<p>Managed Cluster object</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_explore_labels"><a class="anchor" href="#_explore_labels"></a>5.1. Explore Labels</h3>
+<div class="paragraph">
+<p>クラスター ラベルは、アプリケーションとポリシーをデプロイするクラスターを選択するために使用されます。</p>
+</div>
+<div class="olist arabic">
+<div class="title">手順</div>
+<ol class="arabic">
+<li>
+<p>RHACM コンソールで、<strong>Infrastructure &#8594; Clusters</strong> に移動します。</p>
+</li>
+<li>
+<p>前のセクションで作成した、もしくはImportしたクラスターを選択します。</p>
+</li>
+<li>
+<p><strong>Actions</strong> をクリックし、<strong>Edit Labels</strong> を選択して、そのクラスターのラベルを表示します。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/edit_labels.png" alt="edit labels" width="80%">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+指定したラベル (<code>sno=true</code>) に加えて、RHACM によって追加されたラベル (このクラスターがデプロイされているクラウドまたはリージョンなど) がいくつかあります。
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>クラスターにラベルを追加および削除でき、加えた変更はすぐに有効になります。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_explore_cluster_channels"><a class="anchor" href="#_explore_cluster_channels"></a>5.2. Explore Cluster Channels</h3>
+<div class="paragraph">
+<p>チャネルは、クラスターの更新の送信元を表します。 RHACM を使用して、管理するクラスターのチャネルを変更できます。 たとえば、あるメジャー リリース (OpenShift 4.9) から次のメジャー リリース (OpenShift 4.10) にクラスターをアップグレードするときに、チャネルを変更します。ここでは、実際のUpgradeは実施しません。チャネルの設定を変更するのみである点をご留意ください。</p>
+</div>
+<div class="paragraph">
+<p>OpenShift のメジャー リリースごとに、<code>candidate</code> (新しいバージョンの初期リリース)、<code>fast</code> (1 週間後)、<code>stable</code> (<code>candidate</code> でのリリース以降問題が表面化していない場合はさらに 1 週間後) の 3 つのチャネルを利用できます。 または <code>fast</code> チャンネル）。</p>
+</div>
+<div class="paragraph">
+<p>RHACM で OpenShift クラスター リリース イメージに使用されるデフォルトのチャネルは <code>fast</code> チャネルです。 これは、前のラボ セクションでデプロイしたクラスターが、RHACM が実行されているクラスターよりも新しい可能性が高いことを意味します。</p>
+</div>
+<div class="olist arabic">
+<div class="title">手順</div>
+<ol class="arabic">
+<li>
+<p>RHACM コンソールで、<strong>Infrastructure &#8594; Clusters</strong> に移動します。 新しいクラスターがまだデプロイされている間に、RHACM をホストしているハブ クラスターである <code>local-cluster</code> を選択します。 このクラスタのチャネルが <code>stable-4.9</code> に設定されていることを確認してください。</p>
+</li>
+<li>
+<p><strong>Actions</strong> をクリックし、<strong>Select channels</strong> をクリックします。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/channels.png" alt="channels" width="100%">
+</div>
+</div>
+</li>
+<li>
+<p>リストから他のチャネルが選択できることを確認し、Cancelを押してください。</p>
+</li>
+<li>
+<p><strong>Managed Clusters</strong> ビューに戻ります。(本来ならば、<code>fast</code> チャネルを選択し、 <code>local-cluster</code> ハブ クラスターのアップグレードが利用可能になっている手順ですが、2022/12/14現在当該チャネルが適用できないため、設定の確認のみとしています)</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_manage_clusters_via_openshift_cli"><a class="anchor" href="#_manage_clusters_via_openshift_cli"></a>5.3. Manage Clusters via OpenShift CLI</h3>
+<div class="paragraph">
+<p><code>ManagedCluster</code> カスタム Kubernetes リソースを使用して、マネージド クラスターを調べることができます。</p>
+</div>
+<div class="olist arabic">
+<div class="title">手順</div>
+<ol class="arabic">
+<li>
+<p><em>hub</em> クラスタのBastion ホストで、現在利用可能なマネージド クラスターを取得します (SNO クラスターの状態によっては、まだ表示されない場合があります)。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get managedclusters</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre class="nowrap">NAME            HUB ACCEPTED   MANAGED CLUSTER URLS                                           JOINED   AVAILABLE   AGE
+local-cluster   true           https://api.cluster-jrwm6.jrwm6.sandbox1857.opentlc.com:6443   True     True        23h
+my-imported-cluster       true           https://api.sno-jrwm6.sandbox1857.opentlc.com:6443             True     True        33m</pre>
+</div>
+</div>
+</li>
+<li>
+<p><code>local-cluster</code> のプロパティを取得します。</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get managedcluster local-cluster -o yaml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Output</div>
+<div class="content">
+<pre>apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  annotations:
+    open-cluster-management/created-via: other
+  creationTimestamp: "2022-03-07T17:27:51Z"
+  finalizers:
+  - managedcluster-import-controller.open-cluster-management.io/cleanup
+  - agent.open-cluster-management.io/klusterletaddonconfig-cleanup
+  - cluster.open-cluster-management.io/api-resource-cleanup
+  - managedcluster-import-controller.open-cluster-management.io/manifestwork-cleanup
+  - managedclusterinfo.finalizers.open-cluster-management.io
+  - open-cluster-management.io/managedclusterrole
+  generation: 2
+  labels:
+    cloud: Amazon
+    clusterID: 319ddfa6-2fdf-4541-bcd2-d4ba1dcaf941
+    feature.open-cluster-management.io/addon-application-manager: available
+    feature.open-cluster-management.io/addon-cert-policy-controller: available
+    feature.open-cluster-management.io/addon-iam-policy-controller: available
+    feature.open-cluster-management.io/addon-policy-controller: available
+    feature.open-cluster-management.io/addon-work-manager: available
+    installer.name: multiclusterhub
+    installer.namespace: open-cluster-management
+    local-cluster: "true"
+    name: local-cluster
+    openshiftVersion: 4.9.7
+    vendor: OpenShift
+  name: local-cluster
+  resourceVersion: "631309"
+  uid: e41dc084-1922-40cd-902c-7da4b4522473
+spec:
+
+[... OUTPUT OMITTED ...]</pre>
+</div>
+</div>
+</li>
+<li>
+<p>YAML 出力を調べて、コンソールに表示される内容と一致することを確認します。 たとえば、このクラスターのラベルと、使用されている OpenShift のバージョンを確認できます。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_summary"><a class="anchor" href="#_summary"></a>6. Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このラボでは、クラウド認証情報を設定する方法を調べ、単一ノードの OpenShift クラスターをアマゾン ウェブ サービスにデプロイしました。 次に、クラスターのラベルとチャネル、およびコマンド ラインからクラスターに関する情報を取得する方法を調べました。</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>次のラボに進む前に、SNO クラスターが正常に進められていることを確認してください。クラスターの構築の完了を待つ必要はないので、先の章にお進みください。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/RH-OPEN/hands_on_acm/blob/main/modules/01_Hands_on_RHACM_Cluster_Lifecycle/03_Pooling_And_Organizing_Clusters_Lab.adoc">3章へ</a></p>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

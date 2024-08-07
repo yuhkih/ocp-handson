@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>OpenShift Pipelines Lab - Pipeline 2/2 :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/12-add-task.html">
+    <link rel="prev" href="11-pipelines.html">
+    <link rel="next" href="13-triggers.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li>20. OpenShift Pipeline Lab</li>
+    <li><a href="12-add-task.html">2. Pipelines -2/2</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/12-add-task.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">OpenShift Pipelines Lab - Pipeline 2/2</h1>
+<div class="sect1">
+<h2 id="_はじめに"><a class="anchor" href="#_はじめに"></a>はじめに</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このハンズオンでは、<a href="11-pipelines.html">前のラボ</a>で作成した <code>Pipelines[build-and-deploy]</code> に脆弱性を識別する作業を追加します。</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="_images/pipelines/add-task-prep-1.png" alt="add task prep 1">
+</div>
+<div class="title">Figure 1. 作業前の Pipeline イメージ</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="_images/pipelines/add-task-prep-2.png" alt="add task prep 2">
+</div>
+<div class="title">Figure 2. 作業後の Pipeline イメージ</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_trivy_コマンドチェック"><a class="anchor" href="#_trivy_コマンドチェック"></a>trivy コマンドチェック</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>まずはクライアント端末や踏み台サーバなどで実装する trivy コマンドを明確にします。
+今回の脆弱性チェックを行う本タスクでは、以下の二つのステップを作成します。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>trivy によるセキュリティ脆弱性評価レポートの作成</p>
+</li>
+<li>
+<p>trivy による CRITICAL な脆弱性の有無</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>まず、タスクで実装するtrivyによる脆弱性チェックを手動で実行してみましょう。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>OpenShiftのadmin user でログインし、image registry の default-route を取得します。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># OpenShift APIへログイン
+oc login -u admin -p &lt;パスワード&gt; &lt;OpenShift API URL:6443&gt;
+# OpenShift Image RegistryのdefaultRouteを有効化
+oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
+# Image Registryのrouteを取得
+export APISERVER=`oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}'`</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>trivy コマンドに引き渡す Token を取得します。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc whoami --show-token</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>trivy コマンドの引数を環境変数に設定します。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">export TEKTON_TRIVY_IMAGE='aquasec/trivy:0.41.0'
+export OCP_USER=admin
+export OCP_TOKEN=`oc whoami --show-token`</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>それぞれのステップとなるコマンドを作成・実行し、Task に設定するコマンドを確定させます。
+今回は以下のように確認をします。</p>
+</div>
+</li>
+<li>
+<p>trivy によるセキュリティ脆弱性評価レポートの作成</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl run -it trivy --image=${TEKTON_TRIVY_IMAGE} --rm --restart=Never --env=TRIVY_USERNAME=${OCP_USER} --env=TRIVY_PASSWORD=${OCP_TOKEN}  --command -- trivy --cache-dir=trivy image --timeout 10m --exit-code=0 --severity=HIGH,CRITICAL ${APISERVER}/pipelines-test/pipelines-vote-ui</code></pre>
+</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="_images/pipelines/add-task-command-1.png" alt="add task command 1">
+</div>
+</div>
+</li>
+<li>
+<p>trivy による CRITICAL な脆弱性の有無</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kubectl run -it trivy --image=${TEKTON_TRIVY_IMAGE} --rm --restart=Never --env=TRIVY_USERNAME=${OCP_USER} --env=TRIVY_PASSWORD=${OCP_TOKEN}  --command -- trivy --cache-dir=trivy image --exit-code=1 --no-progress --severity=CRITICAL ${APISERVER}/pipelines-test/pipelines-vote-ui</code></pre>
+</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="_images/pipelines/add-task-command-2.png" alt="add task command 2">
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_task_作成"><a class="anchor" href="#_task_作成"></a>Task 作成</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>trivy コマンドを埋め込んだ Task を作成します。
+Tekton Hub には <a href="https://hub.tekton.dev/tekton/task/trivy-scanner">trivy scanner</a> といったタスクもありますので必要に応じて活用してください。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>左のナビゲーションバーから <strong>Pipelines</strong> &#8594; <strong>Tasks</strong> をクリックします</p>
+</li>
+<li>
+<p>右上の <strong>作成</strong> をクリックし、ドロップダウンから <strong>Task</strong> を選択します</p>
+</li>
+<li>
+<p>表示されたデフォルトの YAML 定義を次のように置き換えます</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: trivy
+  labels:
+    app.kubernetes.io/version: "0.1"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.21.0"
+    tekton.dev/categories: Security
+    tekton.dev/tags: Security
+spec:
+  description: &gt;-
+    Vulnerability scanner with Trivy:
+    This will scan vulnerability in Containers.
+  params:
+  - name: IMAGE
+    description: Reference of the image Trivy will scan.
+  - name: IMAGE_DIGEST
+    description: Reference of the image digest Trivy will scan.
+    default: ""
+  - name: TRIVY_IMAGE
+    description: The location of the Trivy scan image.
+    default: aquasec/trivy:0.41.0
+  - name: TRIVY_USERNAME
+    description: Authentication user name to get the target scan image.
+    default: ""
+  - name: TRIVY_PASSWORD
+    description: Authentication password to get the target scan image.
+    default: ""
+  workspaces:
+  - name: cache
+  stepTemplate:
+    env:
+    - name: TRIVY_USERNAME
+      value: $(params.TRIVY_USERNAME)
+    - name: TRIVY_PASSWORD
+      value: $(params.TRIVY_PASSWORD)
+  steps:
+  - name: build-report
+    image: $(params.TRIVY_IMAGE)
+    script: |
+      SCAN_CONTAINER_IMAGE=$(params.IMAGE)
+      trivy --cache-dir=$(workspaces.cache.path)/trivy \
+        image --timeout 10m --exit-code=0 --severity=HIGH,CRITICAL \
+        ${SCAN_CONTAINER_IMAGE}
+  - name: severe-vulnerabilities
+    image: $(params.TRIVY_IMAGE)
+    script: |
+      SCAN_CONTAINER_IMAGE=$(params.IMAGE)
+      trivy --cache-dir=$(workspaces.cache.path)/trivy \
+        image --exit-code=1 --no-progress --severity=CRITICAL \
+        ${SCAN_CONTAINER_IMAGE}</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_taskrun_作成"><a class="anchor" href="#_taskrun_作成"></a>TaskRun 作成</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Pipeline に追加する前に、Task[trivy] を検証するための TaskRun を作成します。</p>
+</div>
+<div class="paragraph">
+<p>Nationalparksバックエンド用のTektonパイプラインを作成します。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>左のナビゲーションバーから <strong>Pipelines</strong> &#8594; <strong>Tasks</strong> をクリックします</p>
+</li>
+<li>
+<p>右上の <strong>作成</strong> をクリックし、ドロップダウンから <strong>TaskRun</strong> を選択します</p>
+</li>
+<li>
+<p>表示されたデフォルトの YAML 定義を次のように置き換え実行します</p>
+</li>
+</ol>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: trivy-scanning-reviews-run-
+spec:
+  serviceAccountName: pipeline
+  taskRef:
+    name: trivy
+  params:
+    - name: IMAGE
+      value: image-registry.openshift-image-registry.svc:5000/pipelines-test/pipelines-vote-ui
+  workspaces:
+    - name: cache
+      emptyDir: {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>"ログ"タブを確認し、画像例のように脆弱性チェックが実施できていることを確認します。</p>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="_images/pipelines/add-task-taskrun.png" alt="add task taskrun">
+</div>
+</div>
+<div class="paragraph">
+<p>これで Task の検証ができたので Pipeline から <code>Task[trivy]</code> を呼び出すよう修正を行なっていきます。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_pipeline_修正"><a class="anchor" href="#_pipeline_修正"></a>Pipeline 修正</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>前回作成した <code>Pipeline[build-and-deply]</code> に、新しく作成した <code>Task[trivy]</code> を追加します。
+今回は修正ではなく、新しい <code>Pipeline[build-scan-deploy]</code> を作成します。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>左のナビゲーションバーから <strong>Pipelines</strong> &#8594; <strong>Pipelines</strong> をクリックします</p>
+</li>
+<li>
+<p>右上の <strong>作成</strong> をクリックし、ドロップダウンから <strong>Pipeline</strong> を選択します</p>
+</li>
+<li>
+<p>表示されたデフォルトの YAML 定義を次のように置き換えます</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-scan-deploy
+spec:
+  workspaces:
+  - name: shared-workspace
+    description: Save code-related information
+############# Newly Added #############
+  - name: vul-cache
+    description: Cache vulnerabilities infomation
+#######################################
+  params:
+  - name: deployment-name
+    type: string
+    description: name of the deployment to be patched
+  - name: git-url
+    type: string
+    description: url of the git repo for the code of deployment
+  - name: git-revision
+    type: string
+    description: revision to be used from repo of the code for deployment
+    default: "master"
+  - name: IMAGE
+    type: string
+    description: image to be build from the code
+  tasks:
+  - name: fetch-repository
+    taskRef:
+      name: git-clone
+      kind: ClusterTask
+    workspaces:
+    - name: output
+      workspace: shared-workspace
+    params:
+    - name: url
+      value: $(params.git-url)
+    - name: subdirectory
+      value: ""
+    - name: deleteExisting
+      value: "true"
+    - name: revision
+      value: $(params.git-revision)
+  - name: build-image
+    taskRef:
+      name: buildah
+      kind: ClusterTask
+    params:
+    - name: IMAGE
+      value: $(params.IMAGE)
+    - name: BUILDER_IMAGE
+      value: &gt;-
+        registry.redhat.io/rhel8/buildah@sha256:99cae35f40c7ec050fed3765b2b27e0b8bbea2aa2da7c16408e2ca13c60ff8ee
+    workspaces:
+    - name: source
+      workspace: shared-workspace
+    runAfter:
+    - fetch-repository
+############# Newly Added #############
+  - name: trivy-scan
+    taskRef:
+      name: trivy
+      kind: Task
+    params:
+    - name: IMAGE
+      value: $(params.IMAGE)
+    workspaces:
+    - name: cache
+      workspace: vul-cache
+    runAfter:
+    - build-image
+#######################################
+  - name: apply-manifests
+    taskRef:
+      name: apply-manifests
+    workspaces:
+    - name: source
+      workspace: shared-workspace
+    runAfter:
+    - trivy-scan
+  - name: update-deployment
+    taskRef:
+      name: update-deployment
+    workspaces:
+    - name: source
+      workspace: shared-workspace
+    params:
+    - name: deployment
+      value: $(params.deployment-name)
+    - name: IMAGE
+      value: $(params.IMAGE)
+    runAfter:
+    - apply-manifests</code></pre>
+</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="_images/pipelines/add-task-pipeline.png" alt="add task pipeline">
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_pipeline_実行"><a class="anchor" href="#_pipeline_実行"></a>Pipeline 実行</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>パイプラインを実行します。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>左のナビゲーションバーから <strong>Pipelines</strong> &#8594; <strong>Pipelines</strong> をクリックします</p>
+</li>
+<li>
+<p>右上の <strong>作成</strong> をクリックし、ドロップダウンから <strong>PipelineRun</strong> を選択します</p>
+</li>
+<li>
+<p>表示されたデフォルトの YAML 定義を次のように置き換えます</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: build-scan-deploy-run-frontendapp-
+  labels:
+    tekton.dev/pipeline: build-scan-deploy
+
+spec:
+  params:
+  - name: IMAGE
+    # !必要に応じてプロジェクト名を修正してください
+    value: image-registry.openshift-image-registry.svc:5000/pipelines-test/pipelines-vote-ui
+  - name: deployment-name
+    value: pipelines-vote-ui
+  - name: git-url
+    value: https://github.com/openshift/pipelines-vote-ui.git
+  pipelineRef:
+    name: build-scan-deploy
+  serviceAccountName: pipeline
+  timeout: 1h0m0s
+  workspaces:
+  - name: shared-workspace
+    persistentVolumeClaim:
+      claimName: source-pvc
+  - name: vul-cache
+    emptyDir: {}</code></pre>
+</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="_images/pipelines/add-task-pipelinerun-1.png" alt="add task pipelinerun 1">
+</div>
+</div>
+</li>
+<li>
+<p>パイプラインが全て成功していることを確認します。</p>
+<div class="imageblock text-center">
+<div class="content">
+<img src="_images/pipelines/add-task-pipelinerun-2.png" alt="add task pipelinerun 2">
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>[参考] TknツールによりCLIからパイプラインを実行する場合は、下記のような指定になります。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>指定のファイルを作成していないため、このままでは動作しません</p>
+</li>
+</ul>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tkn pipeline start build-scan-deploy \
+    -w name=shared-workspace,volumeClaimTemplateFile=01_pipeline/03_persistent_volume_claim.yaml \
+    -w name=vul-cache,emptyDir="" \
+    -p deployment-name=pipelines-vote-api \
+    -p git-url=https://github.com/redhat-gpte/pipelines-vote-api.git \
+    -p IMAGE=image-registry.openshift-image-registry.svc:5000/pipelines-test/pipelines-vote-api \
+    --use-param-defaults \
+    -n pipelines-test</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>trivy コマンドを使って、Pipeline の実行を CLI からも実行できます。trivy コマンドは rpm や repository を使ってインストールできます(<a href="https://aquasecurity.github.io/trivy/v0.41/getting-started/installation/">Trivy documentation</a>)。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="11-pipelines.html">1. Pipelines -1/2</a></span>
+  <span class="next"><a href="13-triggers.html">3. Tekton Triggers</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Amazon Bedrockアプリケーションの実行 :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/58-rosa-bedrock.html">
+    <link rel="prev" href="54-2-rosa-dev-spaces.html">
+    <link rel="next" href="55-1-rosa-log-01.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li>51. Red Hat OpenShift Service on AWS (ROSA) Lab</li>
+    <li><a href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/58-rosa-bedrock.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Amazon Bedrockアプリケーションの実行</h1>
+<div class="sect1">
+<h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このモジュールでは、Amazon Bedrockを利用するためのサンプルアプリケーションを実行します。</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>このモジュールは、次の2つのAWSブログを元ネタにしています。
+これらのブログを参照しつつ、ROSA HCPクラスターで動かすための差分となる情報を紹介していきます。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://aws.amazon.com/jp/blogs/news/eks-pod-identity-iam-roles-for-applications/">Amazon EKS Pod Identity を利用した Amazon Bedrock アプリケーションの実行</a></p>
+</li>
+<li>
+<p><a href="https://aws.amazon.com/jp/blogs/news/fine-grained-iam-roles-for-red-hat-openshift-service-on-aws-rosa-workloads-with-sts/">STS を用いた ROSA ワークロードのためのきめ細かい IAM ロール</a></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_デモ_amazon_bedrockを利用するためのサンプルアプリケーション"><a class="anchor" href="#_デモ_amazon_bedrockを利用するためのサンプルアプリケーション"></a>[デモ] Amazon Bedrockを利用するためのサンプルアプリケーション</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+このコンテンツを実行する必要はありません。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>上記の1つめのブログで紹介されているアプリケーションを変更します。
+このブログでは、Amazon BedrockのClaude 1モデルを利用するためのサンプルコード(app.py)を
+紹介していますが、最新の
+<a href="https://aws.amazon.com/jp/bedrock/claude/">Claude 3モデル</a>を利用するためのコードに変更してみます。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Amazon BedrockのClaude 3 Haikuモデルを利用するアプリケーションのコードの例 (app.py)</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">import streamlit as st
+import boto3
+import json
+
+st.title("Bedrock Chat Application using Claude 3 model on ROSA HCP")
+
+# Bedrock Runtimeサービス用のクライアント
+bedrock = boto3.client(
+    service_name='bedrock-runtime',
+    region_name='us-west-2')
+
+def format_chat_history(messages):
+    formatted_history = ""
+    for message in messages:
+        # ユーザーかアシスタントかに応じてロールを設定
+        role = "Human:" if message["role"] == "user" else "Assistant:"
+        # メッセージを整形して追加
+        formatted_history += f"{role} {message['content']}\n"
+    return formatted_history
+
+# チャット履歴の初期化
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# アプリ再実行時にチャットメッセージを表示
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+# ユーザー入力の受け取り
+if prompt := st.chat_input("このテキストボックスに文章を入力して下さい"):
+    # ユーザーメッセージをチャットメッセージコンテナに表示
+    with st.chat_message("user"):
+        st.markdown(prompt)
+    # ユーザーメッセージをチャット履歴に追加
+    st.session_state.messages.append({"role": "user", "content": prompt})
+
+    # 対話履歴を整形してモデルの入力用に準備
+    chat_history = format_chat_history(st.session_state.messages)
+
+    # アシスタントの応答をチャットメッセージコンテナに表示
+    with st.chat_message("assistant"):
+        message_placeholder = st.empty()
+        full_response = ""
+
+        # 整形された対話履歴と新しいユーザー入力をモデルに送信
+        body = json.dumps({
+            'max_tokens': 4000,
+            "messages": [{"role": "user", "content": prompt}],
+            "anthropic_version": "bedrock-2023-05-31"
+        })
+        accept = 'application/json'
+        contentType = 'application/json'
+        model_id = 'anthropic.claude-3-haiku-20240307-v1:0'
+        #model_id = 'anthropic.claude-3-opus-20240229-v1:0'
+        #model_id = 'anthropic.claude-3-sonnet-20240229-v1:0'
+
+        response = bedrock.invoke_model_with_response_stream(
+            body=body, modelId=model_id, accept=accept, contentType=contentType)
+        stream = response.get('body')
+
+        for event in stream:
+            chunk = event.get('chunk')
+            if chunk:
+                # 取得したチャンクを追加し、Streamlitに表示
+                chunk_json = json.loads(chunk.get("bytes").decode())
+                if chunk_json["type"]=="content_block_delta":
+                    full_response += str(chunk_json["delta"]["text"])
+            message_placeholder.markdown(full_response + "▌")
+        message_placeholder.markdown(full_response)
+        # アシスタントの応答をチャット履歴に追加
+        st.session_state.messages.append(
+            {"role": "assistant", "content": full_response})</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>元のブログで紹介していたコードとの差分は下記です。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">--- app.py.org	2024-05-28 22:18:03.753138711 +0000
++++ app.py	2024-05-27 09:12:09.273515044 +0000
+@@ -2,12 +2,12 @@
+ import boto3
+ import json
+
+-st.title("Bedrock Chat")
++st.title("Bedrock Chat Application using Claude 3 model on ROSA HCP")
+
+ # Bedrock Runtimeサービス用のクライアント
+ bedrock = boto3.client(
+     service_name='bedrock-runtime',
+-    region_name='ap-northeast-1')
++    region_name='us-west-2')
+
+ def format_chat_history(messages):
+     formatted_history = ""
+@@ -28,7 +28,7 @@
+         st.markdown(message["content"])
+
+ # ユーザー入力の受け取り
+-if prompt := st.chat_input("What is up?"):
++if prompt := st.chat_input("このテキストボックスに文章を入力して下さい"):
+     # ユーザーメッセージをチャットメッセージコンテナに表示
+     with st.chat_message("user"):
+         st.markdown(prompt)
+@@ -45,14 +45,15 @@
+
+         # 整形された対話履歴と新しいユーザー入力をモデルに送信
+         body = json.dumps({
+-            'prompt': chat_history + 'Human: ' + prompt + '\n\nAssistant:',
+-            'max_tokens_to_sample': 1000,
+-            "stop_sequences": ["\n\nHuman:"],
++            'max_tokens': 4000,
++            "messages": [{"role": "user", "content": prompt}],
+             "anthropic_version": "bedrock-2023-05-31"
+         })
+         accept = 'application/json'
+         contentType = 'application/json'
+-        model_id = 'anthropic.claude-instant-v1'
++        model_id = 'anthropic.claude-3-haiku-20240307-v1:0'
++        #model_id = 'anthropic.claude-3-opus-20240229-v1:0'
++        #model_id = 'anthropic.claude-3-sonnet-20240229-v1:0'
+
+         response = bedrock.invoke_model_with_response_stream(
+             body=body, modelId=model_id, accept=accept, contentType=contentType)
+@@ -62,8 +63,9 @@
+             chunk = event.get('chunk')
+             if chunk:
+                 # 取得したチャンクを追加し、Streamlitに表示
+-                full_response += json.loads(chunk.get('bytes').decode()
+-                                            )["completion"]
++                chunk_json = json.loads(chunk.get("bytes").decode())
++                if chunk_json["type"]=="content_block_delta":
++                    full_response += str(chunk_json["delta"]["text"])
+             message_placeholder.markdown(full_response + "▌")
+         message_placeholder.markdown(full_response)
+         # アシスタントの応答をチャット履歴に追加</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>上記の差分を解説します。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>サンプルアプリケーションのタイトルを変更</p>
+</li>
+<li>
+<p>Claude 3モデルを利用するために、リージョンを米国西部(オレゴン, us-west-2)に変更</p>
+</li>
+<li>
+<p>ユーザー入力を受け取るテキストボックスに表示される文字を変更</p>
+</li>
+<li>
+<p>モデルIDをClaude 3 Haikuに変更 (他のClaude 3のモデルIDも参考として記載)</p>
+</li>
+<li>
+<p>Claude 3の
+<a href="https://docs.aws.amazon.com/ja_jp/bedrock/latest/userguide/model-parameters-anthropic-claude-messages.html">Message API</a>
+を利用するように変更</p>
+</li>
+<li>
+<p>Claude 3の出力をJSON形式にデコードした情報からメッセージを抽出するように変更</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Dockerfileとrequirements.txtは、元のブログに記載されていたものと同じです。
+これらのソースコードを、下記のGitHubリポジトリにアップロードしています。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/h-kojima/sample-llm-aws/">Claude 3モデルを実行するためのサンプルアプリケーションのコード</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_サンプルコードからアプリケーションをデプロイ"><a class="anchor" href="#_サンプルコードからアプリケーションをデプロイ"></a>サンプルコードからアプリケーションをデプロイ</h3>
+<div class="paragraph">
+<p>上記の変更を適用したサンプルコードを、ROSA HCPクラスターにデプロイします。
+OpenShiftコンソールにログインして、「開発者」→「+追加」メニューから
+「Gitからのインポート」をクリックします。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+本演習をワークショップ形式で実施している場合、
+サンプルアプリケーションをデプロイするプロジェクトには
+「test」から始まる名前を付けてください。
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/dev-spaces/dev-console-menu.png" alt="dev console menu">
+</div>
+</div>
+<div class="paragraph">
+<p>「GitリポジトリーのURL」に、下記のURLをコピーして貼り付けます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">https://github.com/h-kojima/sample-llm-aws/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>すると、次のような画面が表示されます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/bedrock/git-import.png" alt="git import">
+</div>
+</div>
+<div class="paragraph">
+<p>この画面を下にスクロールしていき、アプリケーション名に「sample-llm-aws-app」、名前に「sample-llm-aws」
+ターゲットポートに「8501」を入力します。
+このターゲットポートは、前述したコードのDockerfileでアプリケーション起動時に指定されています。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/bedrock/port.png" alt="port">
+</div>
+</div>
+<div class="paragraph">
+<p>その他のパラメータは全てデフォルトのままで「作成」をクリックします。
+これによって、Dockerfileの内容に従ってコンテナイメージの自動ビルドと、
+ビルドされたコンテナイメージをベースにしたコンテナの自動デプロイが実行されます。</p>
+</div>
+<div class="paragraph">
+<p>数分待つと、「開発者」→「トポロジー」メニューから、
+サンプルアプリケーションのPodが「Running」状態になっていて、
+正常に実行されたことを確認できるようになります。
+赤四角で囲んである所をクリックして、サンプルアプリケーションのURLにアクセスします。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/bedrock/topology.png" alt="topology">
+</div>
+</div>
+<div class="paragraph">
+<p>すると、次のようなサンプルアプリケーションの画面が表示されます。
+この段階では、Bedrockを利用するための認証情報が無いため、テキストボックスに何か入力しても、
+画面のように <code>NoCredentialsError: Unable to locate credentials</code> などが表示されるはずです。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/bedrock/error.png" alt="error">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_デモ_amazon_bedrockを利用するためのiamロールの作成"><a class="anchor" href="#_デモ_amazon_bedrockを利用するためのiamロールの作成"></a>[デモ] Amazon Bedrockを利用するためのIAMロールの作成</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+本演習を自習している時以外、この項目は実行しないで下さい。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>デプロイしたアプリケーションがAmazon Bedrockを利用するための認証情報を追加します。
+<a href="https://aws.amazon.com/jp/blogs/news/fine-grained-iam-roles-for-red-hat-openshift-service-on-aws-rosa-workloads-with-sts/">STS を用いた ROSA ワークロードのためのきめ細かい IAM ロール</a>
+に記載してあるステップ1, 2, 4, 5を順番に実行して、次の「サービスアカウントの作成」で利用するIAMロールを作成します。これらのステップ実行時の注意点を記載します。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ステップ1で設定してある変数は、ご自身の利用している環境に応じて、適宜変更します。
+<code>APP_NAMESPACE</code> 変数は、前述の手順でデプロイしたアプリケーションのプロジェクト名(例: <code>test-llm-project20</code> など)を指定します。
+また <code>AWS_REGION</code> 変数は必要ありません。</p>
+</li>
+<li>
+<p>ステップ2で実行する <code>oc</code> CLIは、ROSA HCPクラスターの管理者アカウント( <code>cluster-admin</code> など)で実行します。</p>
+</li>
+<li>
+<p>ステップ3を実行する必要はありません。</p>
+</li>
+<li>
+<p>ステップ5にあるIAMポリシーについて、元のブログではAmazon S3にアクセスするための
+IAMポリシーをアタッチしていますが、ここではAmazon BedrockにアクセスするためのIAMポリシーとして、
+<code>AmazonBedrockFullAccess</code> を指定するようにします。</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_サービスアカウントの作成"><a class="anchor" href="#_サービスアカウントの作成"></a>サービスアカウントの作成</h3>
+<div class="paragraph">
+<p>アプリケーションをデプロイしているプロジェクトにサービスアカウントを作成します。
+OpenShiftのコンソールに戻って、「管理者向け表示」→「ユーザー管理」→「ServiceAccounts」から、
+「ServiceAccount の作成」をクリックします。</p>
+</div>
+<div class="paragraph">
+<p>下記をコピペして貼り付けます。「XXXXX」となっているところは、
+AWSアカウントIDに置き換えて「作成」をクリックします。
+これで、Amazon Bedrockの認証情報として利用するための、
+「bedrock-sa」という名前のサービスアカウントが作成されます。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+本演習をワークショップ形式で実施している場合、
+インストラクターがAWSのARNをご案内します。
+本演習を自習している場合、前の手順で作成したIAMロールのARNに置き換えてください。
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bedrock-sa
+  annotations:
+    eks.amazonaws.com/role-arn: 'arn:aws:iam::XXXXXXXXXXXXXX:role/iam-app-bedrock-role-YYYYYYYYY'</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/bedrock/serviceaccount.png" alt="serviceaccount">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deploymentにサービスアカウントの追加"><a class="anchor" href="#_deploymentにサービスアカウントの追加"></a>Deploymentにサービスアカウントの追加</h3>
+<div class="paragraph">
+<p>OpenShiftのDeploymentリソースに、作成したサービスアカウントを追加します。
+これで、既存のサンプルアプリケーションが、Amazon Bedrockの認証情報を利用できるようになります。</p>
+</div>
+<div class="paragraph">
+<p>「Deployments」メニューから「sample-llm-aws」デプロイメントを選択して、
+「YAML」タブから下記を「spec:」と「containers:」の間に挿入して「保存」をクリックします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">serviceAccount: bedrock-sa</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/bedrock/deployment.png" alt="deployment">
+</div>
+</div>
+<div class="paragraph">
+<p>すると、Podが自動的に再デプロイされて、
+Amazon Bedrockにアクセスするためのサービスアカウントを利用するための設定が追加されます。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_amazon_bedrockのテスト"><a class="anchor" href="#_amazon_bedrockのテスト"></a>Amazon Bedrockのテスト</h3>
+<div class="paragraph">
+<p>ここまでの手順によって、チャットアプリケーション経由でAmazon Bedrockを利用できるようになっています。
+色々な質問を入力してみてください。Claude 3 Haikuの標準モデルによる回答が返されます。
+もし日本語の回答が微妙だと思う場合は、英語で同じ質問をすると、より精度が高い回答が返ってくる場合があります。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/rosa/bedrock/bedrock.png" alt="bedrock">
+</div>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a></span>
+  <span class="next"><a href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

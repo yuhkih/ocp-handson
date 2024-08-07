@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Project のクオータ/制限 :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/06_template-quota-limits.html">
+    <link rel="prev" href="04_infra-nodes.html">
+    <link rel="next" href="07_clusterresourcequota.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li>01. OpenShift 基礎</li>
+    <li><a href="06_template-quota-limits.html">6. Project のクオータ/制限</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/06_template-quota-limits.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Project のクオータ/制限</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>本コンテンツは、<a href="https://github.com/team-ohc-jp-place/openshift-cns-testdrive">MAD Workshop Ops Track</a> の内容を利用しています。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>OpenShiftでは、1つの <strong>プロジェクト</strong> 内で使用できるオブジェクトの数やリソース（CPU、メモリなど）を制限しません。
+さらに、ユーザーは無制限に <strong>プロジェクト</strong> を作成することができます。しかし、現実的には少し制約をつける必要があります。</p>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="_プロジェクトリクエストテンプレート"><a class="anchor" href="#_プロジェクトリクエストテンプレート"></a>プロジェクト・リクエスト・テンプレート</h3>
+<div class="paragraph">
+<p>ユーザーが <code>oc new-project</code> コマンドを呼び出すと、新しいプロジェクトのリクエストフローが開始されます。
+このワークフローの中で、新たに要求されたプロジェクトを作成するためにデフォルトのプロジェクト・リクエスト・ <strong>テンプレート</strong> が処理されます。</p>
+</div>
+<div class="sect3">
+<h4 id="_デフォルトの_プロジェクトリクエストテンプレート"><a class="anchor" href="#_デフォルトの_プロジェクトリクエストテンプレート"></a>デフォルトの プロジェクト・リクエスト・テンプレート</h4>
+<div class="paragraph">
+<p>新しいプロジェクトのテンプレートを作成します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get template -n openshift-config</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>組み込みのデフォルトの <strong>プロジェクト・リクエスト・テンプレート</strong> を表示するには、以下のコマンドを実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc adm create-bootstrap-project-template -o yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>このコマンドのYAML出力を調べると、下の方に表示されているこの <strong>テンプレート</strong> に関連した様々なパラメータがあることに気づくでしょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">...
+parameters:
+- name: PROJECT_NAME
+- name: PROJECT_DISPLAYNAME
+- name: PROJECT_DESCRIPTION
+- name: PROJECT_ADMIN_USER
+- name: PROJECT_REQUESTING_USER
+...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次に、 <code>oc new-project</code> コマンドのヘルプ出力を見てみましょう:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc new-project -h</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>oc new-project</code> に <code>--display-name</code> ディレクティブがあることに注意してください。
+このオプションはデフォルトの <strong>テンプレート</strong> の出力で見た <code>PROJECT_DISPLAYNAME</code> パラメータに対応します。</p>
+</div>
+<div class="paragraph">
+<p><strong>テンプレート</strong> で定義されているオブジェクトを見てみると、クォータや制限についての記載がまだありません。
+こちらを変更していきます。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<strong>テンプレート</strong> は、ユーザーがパラメーターと共にOpenShift のオブジェクト群を繰り返し作成可能とする強力なツールです。
+これらはより複雑で関連性の高いコンポーネントを OpenShift に素早くデプロイする事に使う事ができ、
+ソフトウェアの開発ライフサイクルにおいても有用です。詳細な情報は次のリンク先で確認できます。
+<a href="https://docs.openshift.com/container-platform/4.12/openshift_images/using-templates.html" target="_blank" rel="noopener">template
+documentation</a>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_プロジェクトリクエストテンプレート_を編集する"><a class="anchor" href="#_プロジェクトリクエストテンプレート_を編集する"></a>プロジェクト・リクエスト・テンプレート を編集する</h4>
+<div class="paragraph">
+<p>このラボでは実際にテンプレートの変更を行う必要はありません。変更したものを既に作成済みです。</p>
+</div>
+<div class="paragraph">
+<p><strong>プロジェクト・リクエスト・テンプレート</strong> :</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">vi project_request_template.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: project-request-new
+objects:
+- apiVersion: v1
+  kind: Project
+  metadata:
+    annotations:
+      openshift.io/description: ${PROJECT_DESCRIPTION}
+      openshift.io/display-name: ${PROJECT_DISPLAYNAME}
+      openshift.io/requester: ${PROJECT_REQUESTING_USER}
+    creationTimestamp: null
+    name: ${PROJECT_NAME}
+  spec: {}
+  status: {}
+- apiVersion: v1
+  kind: ResourceQuota
+  metadata:
+    name: ${PROJECT_NAME}-quota
+  spec:
+    hard:
+      pods: 10
+      requests.cpu: 4000m
+      requests.memory: 8Gi
+      resourcequotas: 1
+      requests.storage: 50Gi
+      persistentvolumeclaims: 5
+- apiVersion: v1
+  kind: LimitRange
+  metadata:
+    name: ${PROJECT_NAME}-limits
+    creationTimestamp: null
+  spec:
+    limits:
+      -
+        type: Container
+        max:
+          cpu: 4000m
+          memory: 1024Mi
+        min:
+          cpu: 10m
+          memory: 5Mi
+        default:
+          cpu: 4000m
+          memory: 1024Mi
+        defaultRequest:
+          cpu: 100m
+          memory: 512Mi
+- apiVersion: v1
+  groupNames:
+  - system:serviceaccounts:${PROJECT_NAME}
+  kind: RoleBinding
+  metadata:
+    creationTimestamp: null
+    name: system:image-pullers
+    namespace: ${PROJECT_NAME}
+  roleRef:
+    name: system:image-puller
+  subjects:
+  - kind: SystemGroup
+    name: system:serviceaccounts:${PROJECT_NAME}
+  userNames: null
+- apiVersion: v1
+  groupNames: null
+  kind: RoleBinding
+  metadata:
+    creationTimestamp: null
+    name: system:image-builders
+    namespace: ${PROJECT_NAME}
+  roleRef:
+    name: system:image-builder
+  subjects:
+  - kind: ServiceAccount
+    name: builder
+  userNames:
+  - system:serviceaccount:${PROJECT_NAME}:builder
+- apiVersion: v1
+  groupNames: null
+  kind: RoleBinding
+  metadata:
+    creationTimestamp: null
+    name: system:deployers
+    namespace: ${PROJECT_NAME}
+  roleRef:
+    name: system:deployer
+  subjects:
+  - kind: ServiceAccount
+    name: deployer
+  userNames:
+  - system:serviceaccount:${PROJECT_NAME}:deployer
+- apiVersion: v1
+  groupNames: null
+  kind: RoleBinding
+  metadata:
+    creationTimestamp: null
+    name: admin
+    namespace: ${PROJECT_NAME}
+  roleRef:
+    name: admin
+  subjects:
+  - kind: User
+    name: ${PROJECT_ADMIN_USER}
+  userNames:
+  - ${PROJECT_ADMIN_USER}
+parameters:
+- name: PROJECT_NAME
+- name: PROJECT_DISPLAYNAME
+- name: PROJECT_DESCRIPTION
+- name: PROJECT_ADMIN_USER
+- name: PROJECT_REQUESTING_USER</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_resourcequota"><a class="anchor" href="#_resourcequota"></a>ResourceQuota</h3>
+<div class="paragraph">
+<p><a href="https://docs.openshift.com/container-platform/4.12/applications/quotas/quotas-setting-per-project.html" target="_blank" rel="noopener">quota
+documentation</a> のリンク先に <strong>ResourceQuota</strong> についての詳細があります。:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>リソースクォータは、ResourceQuotaオブジェクトによって定義され、プロジェクトごとの総リソース消費量を制限する制約を提供します。
+これは、プロジェクト内で作成できるオブジェクトの数をタイプ別に制限したり、そのプロジェクト内のリソースが消費するCPU/メモリなどの計算リソースとストレージの総量を制限したりすることができます。</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>今回は、CPU, memory, storage, persistentvolumeclaims と Pods に特定のクォータを設定しています。
+<code>project_request_template.yaml</code> ファイルの <code>ResourceQuota</code> セクションを見てみましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- apiVersion: v1
+  kind: ResourceQuota
+  metadata:
+    name: ${PROJECT_NAME}-quota <i class="conum" data-value="1"></i><b>(1)</b>
+  spec:
+    hard:
+      pods: 10 <i class="conum" data-value="2"></i><b>(2)</b>
+      requests.cpu: 4000m <i class="conum" data-value="3"></i><b>(3)</b>
+      requests.memory: 8Gi <i class="conum" data-value="4"></i><b>(4)</b>
+      resourcequotas: 1
+      requests.storage: 50Gi <i class="conum" data-value="5"></i><b>(5)</b>
+      persistentvolumeclaims: 5 <i class="conum" data-value="6"></i><b>(6)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><strong>プロジェクト</strong> には1つのクォータしか定義できませんが、そのクォータには一意の名前が必要です。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>プロジェクト内に作成可能な Podの数です。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>CPUは「ミリコア」で計測されます。どのように Kubernetes/OpenShift がコアを計算するかは次のリンクで確認できます。
+<a href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/" target="_blank" rel="noopener">Kubernetes公式ドキュメント</a>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>limits</code> と <code>requests</code> の両方がありますが、これについては <strong>LimitRange</strong> オブジェクトを見てから詳しく説明します。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>プロジェクト内のすべてのpersistentvolumeclaimsにおいて、要求されたストレージ容量の合計がこの値を超えることはできません。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>プロジェクト内の persistentvolumeclaim の総数。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>利用可能なクォータオプションの詳細については、
+<a href="https://docs.openshift.com/container-platform/4.9/applications/quotas/quotas-setting-per-project.html" target="_blank" rel="noopener">quota
+documentation</a> を参照してください。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_limitrange"><a class="anchor" href="#_limitrange"></a>LimitRange</h3>
+<div class="paragraph">
+<p>LimitRangeの概要については
+<a href="https://docs.openshift.com/container-platform/4.9/nodes/clusters/nodes-cluster-limit-ranges.html" target="_blank" rel="noopener">limit
+range documentation</a> のリンクに情報があります。:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>リミットレンジは、LimitRangeオブジェクトで定義され、プロジェクト内の、 pod、 container、 image、 image stream、persistentvolumeclaim 毎に消費可能な計算リソースを指定します。</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ResourceQuota はプロジェクト内の総リソース消費量の上限を設定しますが、<code>LimitRange</code> は個々のリソースに適用されます。
+例えば、個々の Pod やコンテナがどれだけの CPU を使用できるかを設定することができます。</p>
+</div>
+<div class="paragraph">
+<p>サンプルの <code>LimitRange</code> 定義を見てみましょう。</p>
+</div>
+<div class="paragraph">
+<p><code>project_request_template.yaml</code> ファイル:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- apiVersion: v1
+  kind: LimitRange
+  metadata:
+    name: ${PROJECT_NAME}-limits
+    creationTimestamp: null
+  spec:
+    limits:
+      -
+        type: Container
+        max: <i class="conum" data-value="1"></i><b>(1)</b>
+          cpu: 4000m
+          memory: 1024Mi
+        min: <i class="conum" data-value="2"></i><b>(2)</b>
+          cpu: 10m
+          memory: 5Mi
+        default: <i class="conum" data-value="3"></i><b>(3)</b>
+          cpu: 4000m
+          memory: 1024Mi
+        defaultRequest: <i class="conum" data-value="4"></i><b>(4)</b>
+          cpu: 100m
+          memory: 512Mi</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Request と Limit の違いは重要で、それについては次のリンク中で説明しています。</p>
+</div>
+<div class="paragraph">
+<p>上記のyamlの例では:</p>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>max</code> は limits や requests に指定できる最高の値です。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>min</code> は limits や requests に指定できる最低の値です。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>default</code> は、何も指定されていない場合に、コンテナが消費できる最大量（制限）です。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>defaultRequest</code> は何も指定されてない場合に、コンテナが消費する最小量です。</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>詳しくは、<a href="https://docs.openshift.com/container-platform/4.12/nodes/clusters/nodes-cluster-limit-ranges.html" target="_blank" rel="noopener">limit
+range documentation</a>を参考してください.</p>
+</div>
+<div class="paragraph">
+<p>以下のようにプロジェクトを制限することができます。：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>合計の CPU が4 core (<code>4000m</code>) のクォータで</p>
+<div class="ulist">
+<ul>
+<li>
+<p>個々のコンテナーは、</p>
+<div class="ulist">
+<ul>
+<li>
+<p>4 core 以下でないといけない</p>
+</li>
+<li>
+<p>10 milicore 未満の定義は持つ事ができない</p>
+</li>
+<li>
+<p>100 milicore のリクエストがデフォルト(もし指定されなければ)</p>
+</li>
+<li>
+<p>4 core までバーストが可能 (もし指定されなければ)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>合計メモリが 8 Gibibyte (8192 Megabytes)で</p>
+<div class="ulist">
+<ul>
+<li>
+<p>個々のコンテナーは</p>
+<div class="ulist">
+<ul>
+<li>
+<p>1 Gi かそれ未満の使用量でなければならない</p>
+</li>
+<li>
+<p>5 Mi 未満の定義は持つ事ができない</p>
+</li>
+<li>
+<p>デフォルトで 512 Mi をリクエストする</p>
+</li>
+<li>
+<p>1024 Mi までバーストが可能</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>合計のストレージのクレームが、25 Gi かそれ未満</p>
+</li>
+<li>
+<p>合計で 5 つの volume のクレームまで。</p>
+</li>
+<li>
+<p>10 以下の <strong>Pods</strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>ResourceQuotaと組み合わせることで、ユーザーが OpenShift の様々なリソースを要求し、利用する方法について、非常に細かいコントロールを作成することができます。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Quota と Limits は、<strong>プロジェクト</strong> レベルで適用されます。
+<strong>ユーザー</strong> は複数の <strong>プロジェクト</strong> にアクセスすることができますが、Quota と Limits は <strong>ユーザー</strong> には直接適用されません。
+複数の <strong>プロジェクト</strong> に1つの Quota を適用したい場合は、ClusterReqoureQuotaの記載のある
+<a href="https://docs.openshift.com/container-platform/4.12/applications/quotas/quotas-setting-across-multiple-projects.html" target="_blank" rel="noopener">multi-project
+quota</a> を参照して下さい。
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_プロジェクトリクエストテンプレートをインストールする"><a class="anchor" href="#_プロジェクトリクエストテンプレートをインストールする"></a>プロジェクト・リクエスト・テンプレートをインストールする</h3>
+<div class="paragraph">
+<p>この背景を踏まえて、実際に OpenShift にこの新しい <strong>プロジェクト・リクエスト・テンプレート</strong> を使用するように変更をしていきます。</p>
+</div>
+<div class="sect3">
+<h4 id="_template_を作成する"><a class="anchor" href="#_template_を作成する"></a>Template を作成する</h4>
+<div class="paragraph">
+<p>先ほど説明したように、 <strong>テンプレート</strong> はOpenShiftオブジェクトの一つのタイプにすぎません。
+<code>oc</code> コマンドは <code>create</code> を提供し、YAML/JSON を入力として受け取り、提供されたオブジェクトをインスタンス化します。</p>
+</div>
+<div class="paragraph">
+<p>次に以下を実行します。:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc create -f project_request_template.yaml -n openshift-config</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>これで、<code>openshift-config</code> <strong>プロジェクト</strong> 内に <strong>テンプレート</strong> オブジェクトが作成されました。:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get template -n openshift-config</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>上記のコマンドを実行すると以下のようなが表示されます。:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME                  DESCRIPTION   PARAMETERS    OBJECTS
+project-request                     5 (5 blank)   8
+project-request-new                 5 (5 blank)   7</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_デフォルトのプロジェクトリクエストテンプレートの設定"><a class="anchor" href="#_デフォルトのプロジェクトリクエストテンプレートの設定"></a>デフォルトのプロジェクト・リクエスト・テンプレートの設定</h4>
+<div class="paragraph">
+<p>デフォルトの <strong>projectRequestTemplate</strong> は OpenShift API Server の設定の一部です。
+この設定は最終的に <code>openshift-apiserver</code> プロジェクト内の <strong>ConfigMap</strong> に格納されます。
+API Server の構成は、以下のコマンドで表示できます。:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get cm config -n openshift-apiserver -o jsonpath --template="{.data.config\.yaml}" | jq</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>様々な <strong>CustomResource</strong> （CR）インスタンスを見て、定義したコンフィグレーションがクラスタに適用されていることを保証するための OpenShift の Operator があります。</p>
+</div>
+<div class="paragraph">
+<p>言い換えれば、 その OpenShift Operator は <strong>ConfigMap</strong> の作成/変更に最終的な責任を持っています。</p>
+</div>
+<div class="paragraph">
+<p><code>jq</code> の出力を見ると、 <code>projectRequestMessage</code> はありますが、<code>projectRequestTemplate</code> は "project-request" が定義されています。</p>
+</div>
+<div class="paragraph">
+<p>デフォルトのプロジェクト・リクエスト・テンプレートの設定を追加するには、CR を作成する必要があります。 <strong>CustomResource</strong> は次のようになります。:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: "config.openshift.io/v1"
+kind: "Project"
+metadata:
+  name: "cluster"
+  namespace: ""
+spec:
+  projectRequestMessage: ""
+  projectRequestTemplate:
+    name: "project-request-new"</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次にこの <strong>CustomResource</strong> を作成します。
+この <strong>CR</strong> が作成されると、OpenShift のオペレータは <strong>CR</strong> に気付き、構成の変更を適用します。
+この <strong>CustomResource</strong> を作成するには、次のコマンドを発行します。:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">vi cr_project_request.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">apiVersion: "config.openshift.io/v1"
+kind: "Project"
+metadata:
+  name: "cluster"
+  namespace: ""
+spec:
+  projectRequestMessage: ""
+  projectRequestTemplate:
+    name: "project-request-new"</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc apply -f cr_project_request.yaml -n openshift-config</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>このコマンドを実行すると、OpenShift API Server の設定が Operator によって更新されます。
+この更新には数分かかります。 <code>apiserver</code> のDeploymentの状況を見ることで更新状況を確認することができます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">sleep 30
+oc rollout status deploy apiserver -n openshift-apiserver</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ConfigMapを見ることで設定の更新を確認できます。:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get cm config -n openshift-apiserver -o jsonpath --template="{.data.config\.yaml}" | jq</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>新しい <strong>projectConfig</strong> セクションに注目してください。:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">...
+  "kind": "OpenShiftAPIServerConfig",
+  "projectConfig": {
+    "projectRequestMessage": "",
+    "projectRequestTemplate": "openshift-config/project-request-new"
+  },
+...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_新しいプロジェクトを作成する"><a class="anchor" href="#_新しいプロジェクトを作成する"></a>新しいプロジェクトを作成する</h4>
+<div class="paragraph">
+<p>新しいプロジェクトを作成すると、 <strong>Quota</strong> と <strong>LimitRange</strong> が一緒に作成されているのがわかるはずです。
+<code>template-test</code> という新しいプロジェクトを作成します。:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc new-project template-test</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>そして、 <code>describe</code> を使って、この <strong>プロジェクトの</strong> 詳細を見てください:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc describe project template-test</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>出力は以下のような感じになります。:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Name:           template-test
+Created:        22 seconds ago
+Labels:         &lt;none&gt;
+Annotations:    openshift.io/description=
+                openshift.io/display-name=
+                openshift.io/requester=system:serviceaccount:lab-ocp-cns:dashboard-user
+                openshift.io/sa.scc.mcs=s0:c24,c19
+                openshift.io/sa.scc.supplemental-groups=1000590000/10000
+                openshift.io/sa.scc.uid-range=1000590000/10000
+Display Name:   &lt;none&gt;
+Description:    &lt;none&gt;
+Status:         Active
+Node Selector:  &lt;none&gt;
+Quota:
+        Name:                   template-test-quota
+        Resource                Used    Hard
+        --------                ----    ----
+        persistentvolumeclaims  0       5
+        pods                    0       10
+        requests.cpu            0       4
+        requests.memory         0       8Gi
+        requests.storage        0       50Gi
+        resourcequotas          1       1
+Resource limits:
+        Name:           template-test-limits
+        Type            Resource        Min     Max     Default Request Default Limit   Max Limit/Request Ratio
+        ----            --------        ---     ---     --------------- -------------   -----------------------
+        Container       cpu             10m     4       100m        4       -
+        Container       memory          5Mi     1Gi     512Mi       1Gi     -</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Quota と Resource limits のセクションが表示されていない場合は、コマンド実行が早すぎた可能性があります。
+オペレータは必要なことをすべて実行するのに多少の時間がかかることを覚えておいてください。
+マスターが新しい設定を読み込む前にプロジェクトを作成した可能性があります。
+その場合 <code>oc delete project template-test</code> を削除して、しばらくしてから再作成してください。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>また、 <strong>Quota</strong> と <strong>LimitRange</strong> オブジェクトが作成されたことがわかります。：</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc describe quota -n template-test</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のようなものが見えるはずです。:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Name:                   template-test-quota
+Namespace:              template-test
+Resource                Used  Hard
+--------                ----  ----
+persistentvolumeclaims  0     5
+pods                    0     10
+requests.cpu            0     4
+requests.memory         0     8Gi
+requests.storage        0     50Gi
+resourcequotas          1     1</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>そして:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get limitrange -n template-test</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のようなものが見えるはずです。:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME                   CREATED AT
+template-test-limits   2023-06-26T00:02:47Z</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>project-request-new</code> テンプレートが <code>openshift-config</code> プロジェクト内に作成されていることを確認してください。
+テンプレートを作成せずに OpenShift API サーバー設定で定義すると、新規プロジェクトの作成に失敗します。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_クリーンナップ"><a class="anchor" href="#_クリーンナップ"></a>クリーンナップ</h3>
+<div class="paragraph">
+<p>他のラボに移る前に、先ほど作成した <strong>プロジェクト</strong> を削除してください:</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc delete project template-test</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="04_infra-nodes.html">5. Infra ノードの作成</a></span>
+  <span class="next"><a href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

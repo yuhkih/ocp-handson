@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>OpenShift Monitoring :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/11_monitoring-basics.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li><a href="11_monitoring-basics.html">OpenShift Monitoring</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/11_monitoring-basics.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">OpenShift Monitoring</h1>
+<div class="sect1">
+<h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このラボでは、OpenShift Monitoring 機能のさまざまな側面を探ります。
+これには、OpenShift Alertmanager UI の概要、Prometheus ウェブコンソールへのアクセス、PromQL (Prometheuses Query Language) クエリの実行によるクラスタの検査、最後に Grafana ダッシュボードを確認することが含まれます。</p>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="_openshift_monitoring"><a class="anchor" href="#_openshift_monitoring"></a>OpenShift Monitoring</h3>
+<div class="paragraph">
+<p>OpenShift Container Platformには、Prometheusオープンソースプロジェクトとその広範なエコシステムをベースにした、設定済み、プリインストール済み、自己更新型の監視スタックが含まれています。
+これはクラスタコンポーネントの監視を提供し、発生した問題をクラスタ管理者に即座に通知する一連のアラートと一連の Grafana ダッシュボードが含まれています。
+クラスタ監視スタックは、OpenShift Container Platform クラスタの監視にのみサポートされています。</p>
+</div>
+<div class="sect3">
+<h4 id="_alerting_の構成を見てみる"><a class="anchor" href="#_alerting_の構成を見てみる"></a>Alerting の構成を見てみる</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><a href="{{MASTER_URL}}">OpenShift Web Console</a> にkubeadminの資格情報でログインします。</p>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">kubeadmin</code></pre>
+</div>
+</div>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">{{ KUBEADMIN_PASSWORD }}</code></pre>
+</div>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>OpenShift の Web コンソールに最初にアクセスすると、ブラウザに自己署名証明書のエラーが表示されます。
+OpenShift をインストールすると、デフォルトでは、Web コンソールを含む OpenShift 内のすべてのコンポーネント間通信に対して CA 証明書と SSL 証明書が生成されます。</p>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>左側の「Observe」ドロップダウンをクリックします。</p>
+</li>
+<li>
+<p>「Alerting」をクリックします。OpenShift コンソールのアラート設定の表示です。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>「Alerting」タブには、現在設定されているアラートおよび/またはアクティブなアラートに関する情報が表示されます。
+を見たり、いくつかのことをすることができます。:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>アラートを名前でフィルタリングします。</p>
+</li>
+<li>
+<p>状態によってアラートをフィルタリングします。発火するためには、いくつかのアラートはタイムアウトの間、特定の条件が true である必要があります。アラートの条件が現在 true であるが、タイムアウトに達していない場合、そのようなアラートは保留状態になります。</p>
+</li>
+<li>
+<p>アラート名。</p>
+</li>
+<li>
+<p>アラートの内容。</p>
+</li>
+<li>
+<p>現在のアラートの状態とアラートがいつこの状態になったか。</p>
+</li>
+<li>
+<p>アラートの深刻度ラベルの値。</p>
+</li>
+<li>
+<p>アラートでできるアクション。</p>
+</li>
+</ol>
+</div>
+<div class="sect4">
+<h5 id="_metrics_ui_prometheus_コンソール"><a class="anchor" href="#_metrics_ui_prometheus_コンソール"></a>Metrics UI (Prometheus コンソール)</h5>
+<div class="paragraph">
+<p>アラート画面に加えて、OpenShift のビルトインモニタリングでは、Prometheus が収集したメトリクスにアクセスするためのインターフェイスを提供しています。詳しくは次のリンクを参照下さい。<a href="https://prometheus.io/docs/prometheus/latest/querying/basics/">Prometheus クエリ言語（PromQL）</a>.</p>
+</div>
+<div class="paragraph">
+<p>1.OpenShift Console の左側の「Observe」セクションで、「Metrics」のリンクをクリックします。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_prometheus_クエリーを実行する"><a class="anchor" href="#_prometheus_クエリーを実行する"></a>Prometheus クエリーを実行する</h5>
+<div class="paragraph">
+<p>クエリを実行して、各ノードのメモリの余剰を確認してみましょう。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>次のクエリをコピーして、式のテキストボックスに貼り付けます。:</p>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">node_memory_MemAvailable_bytes</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>「Run Queries」をクリックします。</p>
+</li>
+<li>
+<p>これで、リストの中に値を持つ時系列が表示されるはずです。この値は、このクエリで定義された時系列の最新の値です。
+また、過去の期間の値を示すグラフも表示されます（デフォルトは30m）。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>それでは、クラスタ全体の CPU 使用量を確認するためのクエリを実行してみましょう。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>「Add Query」をクリックします。</p>
+</li>
+<li>
+<p>次のクエリをコピーして、クエリテキストボックスに貼り付けます。:</p>
+<div class="listingblock copypaste">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">cluster:cpu_usage_cores:sum</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>「Run Queries」をクリックします。</p>
+</li>
+<li>
+<p>これで、リストの中に値を持つ時系列が表示されるはずです。
+この値は、このクエリで定義された時系列の最新の値です。
+また、新しいクエリが同じグラフにプロットされていることがわかります。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Metrics UI を使用すると、クラスタについて収集した情報に対して、強力なクエリを実行することができます。</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_dashboards_ui_grafana"><a class="anchor" href="#_dashboards_ui_grafana"></a>Dashboards UI (Grafana)</h5>
+<div class="paragraph">
+<p>Metrics UI 加えて、OpenShift モニタリングにはあらかじめ設定された「Dashboards」UIが用意されています。
+これらのダッシュボードの目的は、複数のメトリクスを経時的にグラフ化して見やすい形で表示することです。</p>
+</div>
+<div class="paragraph">
+<p>左側の「Observe」セクションの下にある「Dashboards」リンクをクリックします。</p>
+</div>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/ocp-grafana-replacement.png" alt="ocp grafana replacement">
+</div>
+<div class="title">Figure 1. Dashboards UI</div>
+</div>
+<div class="paragraph">
+<p>ここで、「Dashboard」プルダウンをクリックして、視覚化するさまざまなメトリックを選択できます。さあ、このビューで遊んでください。これは、Prometheusによって提供される情報を視覚化したものであることに注意してください。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

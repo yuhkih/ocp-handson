@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ノードの動的管理 :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/03_machinesets.html">
+    <link rel="prev" href="02_app-storage-basics.html">
+    <link rel="next" href="04_infra-nodes.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li>01. OpenShift 基礎</li>
+    <li><a href="03_machinesets.html">4. ノードの動的管理</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/03_machinesets.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">ノードの動的管理</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>本コンテンツは、<a href="https://github.com/team-ohc-jp-place/openshift-cns-testdrive">MAD Workshop Ops Track</a> の内容をベースに、一部変更しています。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Kubernetes <code>Node</code> はコンテナがオーケストレーションされ、<code>Pod</code> として実行される場所です。OpenShift 4は、<code>Operator</code> を使った自動化に重点を置いている点で、OpenShift 3とは根本的に異なります。<code>Node</code> に関しては、<code>Node</code> の作成と破壊を含め、クラスタサイズの状態を維持することに重点を置いた <code>Operator</code> とコントローラのセットがあります。</p>
+</div>
+<div class="paragraph">
+<p>この演習では、クラスタサイズを保つために利用される <code>Machineset</code> と <code>Machine</code> について学びます。</p>
+</div>
+<div class="paragraph">
+<p>オペレーションはコマンドラインからですが、Web コンソールから、Node の増減を見てみてください。</p>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="_machinesets_と_machines"><a class="anchor" href="#_machinesets_と_machines"></a>MachineSets と Machines</h3>
+<div class="paragraph">
+<p>アプリケーション管理の演習で見たように、<code>ReplicaSet</code>/<code>ReplicationController</code> とそれが作成する <code>Pod</code> の間には基本的な関係があります。同様に、<code>MachineSet</code> と`Machine` の間にも関係があります。</p>
+</div>
+<div class="paragraph">
+<p><code>MachineSet</code> は、<code>Machine</code> オブジェクトのセットに対して希望する状態を定義します。IPIインストールを使用する場合、<code>Operator</code> の仕事は、各 <code>Machine</code> の基礎となるインスタンスが実際に存在することを確認し、最終的に各 <code>Machine</code> が <code>Node</code> になることを確認することです。</p>
+</div>
+<div class="paragraph">
+<p>以下を実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get machineset -n openshift-machine-api</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のように表示されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME                                    DESIRED   CURRENT   READY   AVAILABLE   AGE
+cluster-8trtb-rlgsx-worker-us-east-2b   3         3         3       3           19h</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>OpenShiftがインストールされると、インストーラはクラウドプロバイダーに問い合わせて、利用可能なAZを得ます(この環境はAWS上にあるため)。そして、最終的に各AZの <code>MachineSet</code> を作成し、希望する <code>Machine</code> の数に達するまで、それらのセットを順番にスケーリングします。
+デフォルトのインストールには3つのWorkerが一つのAZにいることを指しています。
+（つまり、本番環境としてはやや冗長性に欠ける設計です。）</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get machine -n openshift-machine-api</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のように表示されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME                                          PHASE     TYPE           REGION      ZONE         AGE
+cluster-8trtb-rlgsx-master-0                  Running   c6in.2xlarge   us-east-2   us-east-2b   19h
+cluster-8trtb-rlgsx-worker-us-east-2b-6cms8   Running   m5a.4xlarge    us-east-2   us-east-2b   19h
+cluster-8trtb-rlgsx-worker-us-east-2b-sx78t   Running   m5a.4xlarge    us-east-2   us-east-2b   19h
+cluster-8trtb-rlgsx-worker-us-east-2b-w64fw   Running   m5a.4xlarge    us-east-2   us-east-2b   19h</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>各 <code>Machine</code> には対応する <code>INSTANCE</code> があります。このIDに見覚えはないでしょうか?これはAWS EC2のインスタンスIDです。また、OpenShiftのMasterの <code>Machine</code> も表示されています。これらはある程度ステートフルであり、管理は別のOperatorが別のプロセスを介して処理するため、<code>MachineSet</code> の一部ではありません</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>現在、Masterの <code>Machines</code> は保護されていません。クラスタを壊す可能性があるので、誤って、または意図的に削除しないでください。</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>最後に以下を実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get nodes</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以下のように表示されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>NAME                                         STATUS   ROLES                  AGE     VERSION
+ip-10-0-148-190.us-east-2.compute.internal   Ready    control-plane,master   4h25m   v1.25.7+eab9cc9
+ip-10-0-190-107.us-east-2.compute.internal   Ready    worker                 4h9m    v1.25.7+eab9cc9
+ip-10-0-199-105.us-east-2.compute.internal   Ready    worker                 4h9m    v1.25.7+eab9cc9
+ip-10-0-210-82.us-east-2.compute.internal    Ready    worker                 4h9m    v1.25.7+eab9cc9</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>各 <code>Machine</code> は、それぞれ <code>Node</code> に対応しています。
+<code>oc describe</code> で様々な <code>Machine</code> オブジェクト、<code>Node</code> オブジェクトを調べれば、どれがどれと相関しているのかが分かるでしょう。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_クラスタのスケーリング"><a class="anchor" href="#_クラスタのスケーリング"></a>クラスタのスケーリング</h3>
+<div class="paragraph">
+<p><code>Operator</code> による管理と、それを使った <code>Machine</code> と <code>Node</code> の管理のおかげで、OpenShift 4でのクラスタのスケーリングは非常に簡単に行えます。</p>
+</div>
+<div class="paragraph">
+<p>もう一度、<code>MachineSet</code> のリストを見てみましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get machineset -n openshift-machine-api</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>そのリストの中で。<code>MachineSet`のひとつを  oc scaleコマンドでスケールしてみましょう。あなたの `MachineSet</code> の名前はラボガイドの名前とは異なる可能性があるので、特に注意してください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">CLUSTERNAME=$(oc get  infrastructures.config.openshift.io cluster  -o jsonpath='{.status.infrastructureName}')
+ZONENAME=$(oc get nodes -L topology.kubernetes.io/zone  --no-headers  | awk '{print $NF}' | tail -1)
+oc scale machineset ${CLUSTERNAME}-worker-${ZONENAME} -n openshift-machine-api --replicas=4</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>MachineSet</code> が正常にスケーリングされたというメモが表示されているはずです。次に、<code>Machine</code> のリストを見てみましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get machines -n openshift-machine-api</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>おそらく、<code>STATE</code> が <code>Pending</code> となっている <code>Machine</code> の新しいエントリがすでに存在していると思います。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>cluster-zbwlg-cbgq7-worker-us-east-2a-s7l7s   Provisioning   m5a.4xlarge    us-east-2   us-east-2a   7s</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>しばらくすると、対応するEC2インスタンスIDが表示され、以下のように表示されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>cluster-f4a3-lpxbs-worker-us-east-2c-h7gdt   i-0b9208ec47f0e206b   running   m5.2xlarge     us-east-2   us-east-2c   47s</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>この時点では、バックグラウンドでは自動的にbootstrap 処理が行われています。数分後(最大で5分程度)の出力を見てみましょう。また Web コンソールを除いて、ノードの作成状況なども見ても良いでしょう。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/basics/machinesets/machinesets-1.png" alt="machinesets 1">
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get nodes</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>age</code> が非常に若いノードが見つかるはずです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>ip-10-0-210-82.us-east-2.compute.internal    Ready    worker                 4h37m   v1.25.7+eab9cc9</pre>
+</div>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p><code>Machine</code> が準備され、<code>Node</code> として追加されるまでには数分かかることがあります。</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>続ける前に、先程スケールアップした <code>MachineSet</code> を2から1にスケールダウンしてください。</p>
+</div>
+<div class="paragraph">
+<p>${CLUSTERNAME}と${ZONENAME}変数が、数ステップ前のスケールアップ時に設定されていることを確認してください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc scale machineset ${CLUSTERNAME}-worker-${ZONENAME} -n openshift-machine-api --replicas=3</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="02_app-storage-basics.html">3. 永続ストレージ</a></span>
+  <span class="next"><a href="04_infra-nodes.html">5. Infra ノードの作成</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

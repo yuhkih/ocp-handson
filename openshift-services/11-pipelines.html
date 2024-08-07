@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>OpenShift Pipelines Lab - Pipeline 1/2 :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/11-pipelines.html">
+    <link rel="prev" href="10-pipeline-install.html">
+    <link rel="next" href="12-add-task.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li>20. OpenShift Pipeline Lab</li>
+    <li><a href="11-pipelines.html">1. Pipelines -1/2</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/11-pipelines.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">OpenShift Pipelines Lab - Pipeline 1/2</h1>
+<div class="sect1">
+<h2 id="_はじめに"><a class="anchor" href="#_はじめに"></a>はじめに</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Red Hat OpenShift Pipelinesは、Kubernetesリソースに基づくクラウドネイティブの継続的インテグレーションおよび継続的デリバリー（CI / CD）ソリューションです。</p>
+</div>
+<div class="paragraph">
+<p>Tektonビルディングブロックを使用して、基盤となる実装の詳細を抽象化することにより、複数のプラットフォームにわたる展開を自動化します。</p>
+</div>
+<div class="paragraph">
+<p>Tektonは、Kubernetesディストリビューション間で移植可能なCI / CDパイプラインを定義するためのいくつかの標準カスタムリソース定義（CRD）を導入しています。</p>
+</div>
+<div class="sect2">
+<h3 id="_ラボ概要"><a class="anchor" href="#_ラボ概要"></a>ラボ概要</h3>
+<div class="paragraph">
+<p>このラボでは、</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>新しいプロジェクトを作成し、1つのパイプラインで "helloworld" という簡単なタスクをデプロイします</p>
+</li>
+<li>
+<p>2層の Golang のアプリケーションを構築およびデプロイするために必要なさまざまなリソースをデプロイします</p>
+</li>
+</ol>
+</div>
+<div class="ulist">
+<div class="title">ゴール</div>
+<ul>
+<li>
+<p>簡単なパイプラインのデプロイ</p>
+</li>
+<li>
+<p>ビルドパイプラインのデプロイ</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tkn_コマンドの使用_補足"><a class="anchor" href="#_tkn_コマンドの使用_補足"></a>tkn コマンドの使用 (補足)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>今回のLabでは tkn コマンドは使いませんが、利用イメージをご紹介します。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Taskの一覧を表示</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tkn task list</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>出力例（実環境とは異なる可能性があります）</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">No Tasks found</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Taskが登録されていないことがわかります。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>ClusterTaskの一覧を表示</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tkn clustertask list</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>出力例（実環境とは異なる可能性があります）</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">NAME                        DESCRIPTION              AGE
+argocd-task-sync-and-wait   This task syncs (de...   3 hours ago
+buildah                     Buildah task builds...   3 hours ago
+buildah-1-8-0               Buildah task builds...   3 hours ago
+git-cli                     This task can be us...   3 hours ago
+git-clone                   These Tasks are Git...   3 hours ago
+git-clone-1-8-0             These Tasks are Git...   3 hours ago
+helm-upgrade-from-repo      These tasks will in...   3 hours ago
+helm-upgrade-from-source    These tasks will in...   3 hours ago
+jib-maven                   This Task builds Ja...   3 hours ago
+kn                          This Task performs ...   3 hours ago
+kn-1-8-0                    This Task performs ...   3 hours ago
+kn-apply                    This task deploys a...   3 hours ago
+kn-apply-1-8-0              This task deploys a...   3 hours ago
+kubeconfig-creator          This Task do a simi...   3 hours ago
+maven                       This Task can be us...   3 hours ago
+maven-1-8-0                 This Task can be us...   3 hours ago
+openshift-client            This task runs comm...   3 hours ago
+openshift-client-1-8-0      This task runs comm...   3 hours ago
+pull-request                This Task allows a ...   3 hours ago
+s2i-dotnet                  s2i-dotnet task fet...   3 hours ago
+s2i-dotnet-1-8-0            s2i-dotnet task fet...   3 hours ago
+s2i-go                      s2i-go task clones ...   3 hours ago
+s2i-go-1-8-0                s2i-go task clones ...   3 hours ago
+s2i-java                    s2i-java task clone...   3 hours ago
+s2i-java-1-8-0              s2i-java task clone...   3 hours ago
+s2i-nodejs                  s2i-nodejs task clo...   3 hours ago
+s2i-nodejs-1-8-0            s2i-nodejs task clo...   3 hours ago
+s2i-perl                    s2i-perl task clone...   3 hours ago
+s2i-perl-1-8-0              s2i-perl task clone...   3 hours ago
+s2i-php                     s2i-php task clones...   3 hours ago
+s2i-php-1-8-0               s2i-php task clones...   3 hours ago
+s2i-python                  s2i-python task clo...   3 hours ago
+s2i-python-1-8-0            s2i-python task clo...   3 hours ago
+s2i-ruby                    s2i-ruby task clone...   3 hours ago
+s2i-ruby-1-8-0              s2i-ruby task clone...   3 hours ago
+skopeo-copy                 Skopeo is a command...   3 hours ago
+skopeo-copy-1-8-0           Skopeo is a command...   3 hours ago
+tkn                         This task performs ...   3 hours ago
+tkn-1-8-0                   This task performs ...   3 hours ago
+trigger-jenkins-job         The following task ...   3 hours ago</code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>ClusterTaskは、Tekton Catalogの一部がデフォルトで登録されていることがわかります。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_task_と_taskrun"><a class="anchor" href="#_task_と_taskrun"></a>Task と TaskRun</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_プロジェクトの作成"><a class="anchor" href="#_プロジェクトの作成"></a>プロジェクトの作成</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>OpenShift web コンソールで <strong>Administrator</strong> パースペクティブを選択します</p>
+</li>
+<li>
+<p>左のナビゲーションバーで <strong>ホーム</strong> &#8594; <strong>プロジェクト</strong> を選択し、画面右上の <strong>プロジェクトの作成</strong> ボタンをクリックし、 <strong>名前</strong> に <code>trivial-pipeline</code> を入力し作成します</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_タスクの作成"><a class="anchor" href="#_タスクの作成"></a>タスクの作成</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>以下の YAML をインポートして、次の方法で新しいタスクを作成します</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>左のナビゲーションバーから <strong>Pipelines</strong> &#8594; <strong>Tasks</strong> をクリックします</p>
+</li>
+<li>
+<p>右上の <strong>作成</strong> ボタンをクリックし、ドロップダウンから <strong>Task</strong> を選択します</p>
+</li>
+<li>
+<p>表示されたデフォルトの YAML 定義を次のように置き換えます</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: hello
+  namespace: trivial-pipeline
+spec:
+  steps:
+    - name: say-hello
+      image: registry.access.redhat.com/ubi8/ubi
+      command:
+        - /bin/bash
+      args: ['-c', 'echo Hello World']</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><strong>作成</strong> ボタンをクリックします</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_タスクの実行taskrun"><a class="anchor" href="#_タスクの実行taskrun"></a>タスクの実行（TaskRun）</h3>
+<div class="paragraph">
+<p>タスクを実行するには、TaskRunオブジェクトを作成する必要があります。
+コマンドラインの <code>tkn</code> ユーティリティを使用するか、次の yaml をインポートできます。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>左のナビゲーションバーでもう一度 <strong>Tasks</strong> をクリックします</p>
+</li>
+<li>
+<p><strong>作成</strong> ボタンをクリックしドロップダウンメニューから <strong>TaskRun</strong> を選択します</p>
+</li>
+<li>
+<p>デフォルトの YAML を以下のように変更し、 <strong>作成</strong> をクリックします</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  namespace: trivial-pipeline
+  generateName: hello-run-
+  labels:
+    app.kubernetes.io/managed-by: tekton-pipelines
+    tekton.dev/task: hello
+spec:
+  resources:
+  serviceAccountName: pipeline
+  taskRef:
+    kind: Task
+    name: hello</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>ログ</strong> タブをクリックし実行したタスクを確認します。"Hello World" が表示されていると思います。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_2_tier_アプリケーションのデプロイ"><a class="anchor" href="#_2_tier_アプリケーションのデプロイ"></a>2 Tier アプリケーションのデプロイ</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_task_作成_12"><a class="anchor" href="#_task_作成_12"></a>Task 作成 -1/2</h3>
+<div class="paragraph">
+<p>いくつかのTask、ClusterTasks、およびカスタムタスクを使用してアプリケーションをビルドおよびデプロイをします。</p>
+</div>
+<div class="paragraph">
+<p>まず、この作業用の名前空間/プロジェクトを作成します。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>プロジェクト:</strong> のドロップダウンボックスから、<strong>プロジェクトの作成</strong> を選び、<strong>名前</strong> に <code>pipelines-test</code> を入力し新しいプロジェクトを作成します。</p>
+</li>
+<li>
+<p>ナビゲーションバーから <strong>Pipelines</strong> &#8594; <strong>Tasks</strong> &#8594; <strong>作成</strong> をクリックし、 <strong>Task</strong> を選択します。</p>
+</li>
+<li>
+<p>デフォルトの YAML を以下のように変更します。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># task
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: apply-manifests
+spec:
+  workspaces:
+  # ----- &lt;a&gt; -----
+  - name: source
+  # ----- &lt;b&gt; -----
+  params:
+    - name: manifest_dir
+      description: The directory in source that contains yaml manifests
+      type: string
+      default: "k8s"
+  # ----- &lt;c&gt; -----
+  steps:
+    - name: apply
+      image: quay.io/openshift/origin-cli:latest
+      workingDir: /workspace/source
+      command: ["/bin/bash", "-c"]
+      # ----- &lt;d&gt; -----
+      args:
+        - |-
+          echo Applying manifests in $(inputs.params.manifest_dir) directory
+          oc apply -f $(inputs.params.manifest_dir)
+          echo -----------------------------------</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>備考：</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;a&gt; <code>workspaces</code> とはパラメータやタスクの出力が格納されるPVCを示しています。これに "source" と名前を付与しています。</p>
+</li>
+<li>
+<p>&lt;b&gt; このタスクが受け付ける1つのパラメータです。ここでは、アプリケーションをデプロイするためのyamlマニフェストが存在するディレクトリの入力を求めています。</p>
+</li>
+<li>
+<p>&lt;c&gt; このタスクの1つのステップです。このタスクは、パラメータで定義された <code>manifest_dir</code> 内のすべてのファイルに対して <code>oc apply -f</code> を実行することで、実際に OpenShift のオブジェクトを作成します。</p>
+</li>
+<li>
+<p>&lt;d&gt; ステップの中でパラメータが <code>$(inputs.params.)</code> という構文で参照されていることに注意してください。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>作成</strong> をクリックします。</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>パラメータを使用するタスクに送信される前に、パラメータはどこで定義されているでしょうか？
+それは <strong>TaskRuns</strong> の中です。上記のtrivial-pipelineで行ったように、個々のTaskRunを作成することもできますし、以下で説明するように、<strong>PipelineRun</strong> にこれらの値を与えることもできます。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_task_作成_22"><a class="anchor" href="#_task_作成_22"></a>Task 作成 -2/2</h3>
+<div class="paragraph">
+<p>Deployment リソースで展開されたイメージの名前を更新するタスクを作成します。
+パイプラインでは、アプリケーションを新たにビルドするたびに新しいコンテナイメージを構築しているため、新しいコンテナイメージには異なるタグやハッシュ値が設定されます。</p>
+</div>
+<div class="paragraph">
+<p>Podの再デプロイ時に適切なコンテナイメージが使用されていることを確認するために、パイプラインにタスクが必要です。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Pipeline</strong> &#8594; <strong>Tasks</strong> &#8594; <strong>作成</strong> をクリックし、 <strong>Task</strong> を選択します.</p>
+</li>
+<li>
+<p>デフォルトの YAML を以下のように変更します。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: update-deployment
+
+spec:
+  workspaces:
+  # ----- &lt;a&gt; -----
+  - name: source
+  params:
+  # ----- &lt;a&gt; -----
+  - description: The name of the deployment patch the image
+    name: deployment
+    type: string
+  # ----- &lt;a&gt; -----
+  - description: Location of image to be patched with
+    name: IMAGE
+    type: string
+  steps:
+  - args:
+    - |-
+      oc patch deployment $(inputs.params.deployment) --patch='{"spec":{"template":{"spec":{
+        "containers":[{
+          "name": "$(inputs.params.deployment)",
+          "image":"$(inputs.params.IMAGE)"
+        }]
+      }}}}'
+    command:
+    - /bin/bash
+    - -c
+    # ----- &lt;b&gt; -----
+    image: quay.io/openshift/origin-cli:latest
+    name: patch
+    resources: {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>備考：</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;a&gt; これらは <strong>Task</strong> リソースが、<strong>TaskRun</strong> リソースから受け取ろうとしているパラメータです。</p>
+</li>
+<li>
+<p>&lt;b&gt; この <strong>Task</strong> は、OpenShiftのコマンドラインツールである <code>oc</code> 専用のコンテナを使用します。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>作成</strong> をクリックします。</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_persistent_volume_claim_リソースの作成"><a class="anchor" href="#_persistent_volume_claim_リソースの作成"></a>Persistent Volume Claim リソースの作成</h3>
+<div class="paragraph">
+<p>Workspace のデータを保存するための PVC を作成します。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Task</strong> のパラメータと結果の出力は、Tektonによって専用のPVCに自動的に保存されます。</p>
+</li>
+<li>
+<p>これら <strong>Workspaces</strong> は、<strong>PipelineRun</strong> によってタスクに関連付けられており、任意の数のワークスペースを持つことができます。</p>
+</li>
+<li>
+<p>さらに、<strong>Workspaces</strong> は1つまたは複数のタスクにまたがることができ、 <strong>Task</strong> がお互いのデータにアクセスできる共有領域を証明することができます。これらは通常のPVCです。</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>OpenShiftのWebコンソールの右上の "+" ボタン（YAMLのインポート）をクリックし、以下のYAMLを貼り付けて、<strong>Workspace</strong> をサポートするPVCを作成します。</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>本手順では、定義を適用してPVCリソースを作成するために、右上の "+" ボタン（YAMLのインポート）を使用しています。
+GUIから実施する場合は、 <strong>ストレージ</strong> &#8594; <strong>PersistentVolumeClaims</strong> &#8594; <strong>PersistentVolumeClaims の作成</strong> を選択することでPVCを作成することができます。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: source-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ビルドデプロイを行うパイプラインの作成"><a class="anchor" href="#_ビルドデプロイを行うパイプラインの作成"></a>ビルド/デプロイを行うパイプラインの作成</h3>
+<div class="paragraph">
+<p>今作成中のパイプラインは３つの大きいセクションと、４つの <strong>Task</strong> で構成されています。
+セクションは以下です。</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Workspaces</dt>
+<dd>
+<p><strong>Workspace</strong> を使用する <strong>Task</strong> リソースにコンテキストを提供するために定義されています</p>
+</dd>
+<dt class="hdlist1">Params</dt>
+<dd>
+<p>パイプラインが <strong>PipelineRun</strong> から期待され、<strong>Task</strong> リソースで利用できる入力が定義されています</p>
+</dd>
+<dt class="hdlist1">Tasks</dt>
+<dd>
+<p>実行されるタスクが定義されるタスクの配列です。 <strong>Workspace</strong> は <strong>Tasks</strong> が利用可能なように作成され、渡されるパラメータを定義しています。</p>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>パイプラインの定義にあるようなタスクの順序は適用されません。いくつかのステップには <code>runAfter</code> という値があり、現在のステップが後に実行すべき特定のタスクを示しています。Tektonのデフォルトでは、すべてのステップを並行して実行するため、この値が必要になります。
+これは、他の継続的統合システムとの重要な差別化要因として覚えておいてください。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ナビゲーションバーより <strong>Pipelines</strong> を選択し、表示されたメニューから <strong>Pipelines</strong> &#8594; <strong>作成</strong> &#8594; <strong>Pipeline</strong> を選択します。</p>
+</li>
+<li>
+<p><strong>&#128280; YAML ビュー</strong> のラジオボタンをクリックし、定義を貼り付けるためのテキストエリアを表示します。</p>
+</li>
+<li>
+<p>デフォルトの YAML を以下のように変更します。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-and-deploy
+spec:
+  # ----- &lt;a&gt; -----
+  workspaces:
+  - name: shared-workspace
+  # ----- &lt;b&gt; -----
+  params:
+  - name: deployment-name
+    type: string
+    description: name of the deployment to be patched
+  - name: git-url
+    type: string
+    description: url of the git repo for the code of deployment
+  - name: git-revision
+    type: string
+    description: revision to be used from repo of the code for deployment
+    default: "master"
+  - name: IMAGE
+    type: string
+    description: image to be build from the code
+  # ----- &lt;c&gt; -----
+  tasks:
+  - name: fetch-repository
+    taskRef:
+      name: git-clone
+      kind: ClusterTask
+    workspaces:
+    # ----- &lt;d&gt; -----
+    - name: output
+      workspace: shared-workspace
+    params:
+    - name: url
+      value: $(params.git-url)
+    - name: subdirectory
+      value: ""
+    - name: deleteExisting
+      value: "true"
+    - name: revision
+      value: $(params.git-revision)
+  - name: build-image
+    taskRef:
+      name: buildah
+      kind: ClusterTask
+    params:
+    - name: TLSVERIFY
+      value: "false"
+    - name: IMAGE
+      value: $(params.IMAGE)
+    workspaces:
+    #  ----- &lt;d&gt; -----
+    - name: source
+      workspace: shared-workspace
+    #  ----- &lt;e&gt; -----
+    runAfter:
+    - fetch-repository
+  - name: apply-manifests
+    taskRef:
+      name: apply-manifests
+    workspaces:
+    - name: source
+      workspace: shared-workspace
+    runAfter:
+    - build-image
+  - name: update-deployment
+    taskRef:
+      name: update-deployment
+    workspaces:
+    - name: source
+      workspace: shared-workspace
+    params:
+    - name: deployment
+      value: $(params.deployment-name)
+    - name: IMAGE
+      value: $(params.IMAGE)
+    runAfter:
+    - apply-manifests</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>備考：</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;a&gt; ここのタスクと共有されるPVCを定義します。</p>
+</li>
+<li>
+<p>&lt;b&gt; パイプラインが <strong>PipelineRun</strong> リソースから期待するパラメータが定義されています。</p>
+</li>
+<li>
+<p>&lt;c&gt; <strong>Task</strong> リソースの配列です。このリストの表示順に実行されるわけではありません。</p>
+</li>
+<li>
+<p>&lt;d&gt; <strong>Workplace</strong> の詳細: これらの#4の設定はいずれも、ワークスペースのファイルシステム内の異なるサブディレクトリ ( <code>output</code> and <code>source</code> ) を示しています。Tektonはこれらを自動的に整理し、必要に応じて、先ほど見たように、 <code>$(input.)</code> を介して、<strong>お互いのデータにアクセスすることができます</strong>。</p>
+</li>
+<li>
+<p>&lt;e&gt; <code>runAfter:</code> は <strong>Task</strong> の中で設定され、このパイプライン内のタスクの実行順序を定義します。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>作成</strong> をクリックします。</p>
+</li>
+</ol>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_バックエンドapiのパイプラインを実行"><a class="anchor" href="#_バックエンドapiのパイプラインを実行"></a>バックエンドAPIのパイプラインを実行</h3>
+<div class="paragraph">
+<p>Votingアプリのバックエンド部分のパイプラインを実行してみましょう。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ナビゲーションバーより <strong>Pipelines</strong> を選択し、表示されたメニューから <strong>Pipelines</strong> &#8594; <strong>作成</strong> &#8594; <strong>PipelineRun</strong> を選択します。</p>
+</li>
+<li>
+<p>デフォルトの YAML を以下のように変更します。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  labels:
+    tekton.dev/pipeline: build-and-deploy
+  generateName: build-and-deploy-run-backendapp-
+
+spec:
+  # ----- &lt;a&gt; ----- !必要に応じてプロジェクト名を修正してください
+  params:
+  - name: IMAGE
+    value: image-registry.openshift-image-registry.svc:5000/pipelines-test/pipelines-vote-api
+  - name: deployment-name
+    value: pipelines-vote-api
+  - name: git-url
+    value: https://github.com/openshift/pipelines-vote-api.git
+  # ----- &lt;b&gt; -----
+  pipelineRef:
+    name: build-and-deploy
+  serviceAccountName: pipeline
+  timeout: 1h0m0s
+  # ----- &lt;c&gt; -----
+  workspaces:
+  - name: shared-workspace
+    persistentVolumeClaim:
+      claimName: source-pvc</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>備考：</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;a&gt; この <strong>PipelineRun</strong> が作成する <strong>TaskRuns</strong> によって、<strong>Task</strong> リソースに渡す実際の文字列の値です。</p>
+</li>
+<li>
+<p>&lt;b&gt; 前のセクションで作成したPipelineへの参照です。</p>
+</li>
+<li>
+<p>&lt;c&gt; 最後に <strong>Workspace</strong> の定義です。ここで、PVC と <strong>Workspace</strong> がひもづけられています。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>作成</strong> をクリックし、パイプラインを実行します。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>これで、アプリケーションの一部分がデプロイされました。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_フロントエンドapi用uiのパイプラインを実行"><a class="anchor" href="#_フロントエンドapi用uiのパイプラインを実行"></a>フロントエンドAPI用(ui)のパイプラインを実行</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>バックエンドのときと同様に、以下の <strong>PipelineRun</strong> 定義を使用してビルドを実行し、アプリケーションをデプロイします。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: build-and-deploy-run-frontendapp-
+  labels:
+    tekton.dev/pipeline: build-and-deploy
+
+spec:
+  params:
+  - name: IMAGE
+    #&lt;1&gt; !必要に応じてプロジェクト名を修正してください
+    value: image-registry.openshift-image-registry.svc:5000/pipelines-test/pipelines-vote-ui
+  - name: deployment-name
+    value: pipelines-vote-ui
+  - name: git-url
+    <i class="conum" data-value="2"></i><b>(2)</b>
+    value: https://github.com/openshift/pipelines-vote-ui.git
+  pipelineRef:
+    name: build-and-deploy
+  serviceAccountName: pipeline
+  timeout: 1h0m0s
+  workspaces:
+  - name: shared-workspace
+    persistentVolumeClaim:
+      claimName: source-pvc</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>備考：</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;a&gt; ビルドが書き込まれるイメージ名と、<strong>Pod</strong> がデプロイされるイメージ名が異なることに注意してください。</p>
+</li>
+<li>
+<p>&lt;b&gt; アプリケーションのフロントエンド用に異なるリポジトリを使用しています。</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>作成</strong> をクリックし、パイプラインの実行を見てみましょう！</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_アプリケーションへアクセス"><a class="anchor" href="#_アプリケーションへアクセス"></a>アプリケーションへアクセス</h3>
+<div class="paragraph">
+<p>ビルドが完了すると、Vote アプリケーション UIのURLを取得することができます。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Developer Percepective に移動します。</p>
+</li>
+<li>
+<p>Topologyビューから、pipeline-vote-ui の右上の矢印 をクリックすると、UIへのルートが記載されています。</p>
+</li>
+<li>
+<p>クリックして、投票してみてください。(クリック後、選択したパネルの色が変わります。)</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/pipelines/pipeline-successful-1.png" alt="pipeline successful 1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/pipelines/pipeline-successful-2.png" alt="pipeline successful 2">
+</div>
+</div>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="10-pipeline-install.html">インストール</a></span>
+  <span class="next"><a href="12-add-task.html">2. Pipelines -2/2</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

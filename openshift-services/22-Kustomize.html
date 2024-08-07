@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>OpenShift GitOps Lab - Kustomizeインテグレーション :: OpenShift Handson</title>
+    <link rel="canonical" href="https://rh-open.github.io/ocp-handson/openshift-services/22-Kustomize.html">
+    <link rel="prev" href="21-GitOps.html">
+    <link rel="next" href="23-Helm.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://rh-open.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="50-rosa-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="51-rosa-hcp-create.html">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="52-rosa-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="53-rosa-ebs.html">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-1-rosa-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="54-2-rosa-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="58-rosa-bedrock.html">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-01.html">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-1-rosa-log-02.html">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-2-rosa-monitoring.html">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="55-4-rosa-alert.html">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="56-rosa-nodes.html">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li>21. OpenShift GitOps Lab</li>
+    <li><a href="22-Kustomize.html">2. Kustomizeインテグレーション</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/22-Kustomize.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">OpenShift GitOps Lab - Kustomizeインテグレーション</h1>
+<div class="sect1">
+<h2 id="_kustomize"><a class="anchor" href="#_kustomize"></a>Kustomize</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://kustomize.io/">Kustomize</a>はKubernetesのマニフェスト管理ツールです。
+Kubernetesマニフェストをフォークせずに、構成にオプションを追加、削除、更新します。
+スタンドアロンでも、kubectl (または oc)のネイティブ機能としても利用できます。</p>
+</div>
+<div class="paragraph">
+<p>kustomizeの基本</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>configurationのカスタマイズに対する宣言的なアプローチ</p>
+</li>
+<li>
+<p>任意の数の、個別にカスタマイズされたKubernetes configurationを管理</p>
+</li>
+<li>
+<p>kustomizeが使用するすべてのアーティファクトはプレーンなYAML</p>
+</li>
+<li>
+<p>"templateless" なテンプレートシステム; レポジトリをフォークせずにYAMLを使用する</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/kustomize/kustomize-001.png" alt="kustomize 001">
+</div>
+</div>
+<div class="paragraph">
+<p>この演習では、Kustomizeの構文について調べて、Kustomizeを利用するアプリケーションをデプロイします。
+まず最初に、kustomize CLIとkubectlコマンドに組み込まれた機能について説明します。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_kustomize_cli"><a class="anchor" href="#_kustomize_cli"></a>Kustomize CLI</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Kustomizeは元のYAMLをそのまま残しながら、YAMLに基づいてネイティブのKubernetesマニフェストを構築することができます。
+これは <code>templateless</code> テンプレートシステムで実現され、kustomization.yamlファイルを提供することによって行われます。</p>
+</div>
+<div class="paragraph">
+<p>buildコマンドとeditコマンドのふたつのサブコマンドに焦点を当てます。
+buildコマンドは、YAMLソース(pathまたはURLを介して) を受け取り、kubectl createに渡すことができる新しいYAMLを作成します。</p>
+</div>
+<div class="paragraph">
+<p>演習を進めるにあたり、この演習用のgitリポジトリをユーザのホームディレクトリにクローンします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ~
+sudo git clone https://github.com/redhat-developer-demos/openshift-gitops-examples.git
+cd openshift-gitops-examples</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>components/kustomize-build/ディレクトリで作業します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd components/kustomize-build/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ここにkustomization.yamlとwelcome.yamlのふたつのファイルがあるはずです。lsコマンドを実行します、</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">ls -l</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>該当のファイルが確認できます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">total 8
+-rw-r--r--. 1 root root 298 Nov 11 08:18 kustomization.yaml
+-rw-r--r--. 1 root root 384 Nov 11 08:18 welcome.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>rootユーザ以外にも編集できるように、ファイルのパーミッションを変更しておきましょう。下記のコマンドを実行します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">sudo chmod 666 kustomization.yaml welcome.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a href="https://raw.githubusercontent.com/redhat-developer-demos/openshift-gitops-examples/main/components/kustomize-build/welcome.yaml">welcome.yaml</a> を見てみましょう。特別なファイルではなくwelcome-phpという名前のアプリケーションをデプロイするKubernetesのマニフェストです。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: welcome-php
+  name: welcome-php
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: welcome-php
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: welcome-php
+    spec:
+      containers:
+      - image: quay.io/redhatworkshops/welcome-php:latest
+        name: welcome-php
+        resources: {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>例えば、このマニフェストを編集せずにlabelを追加したい場合はどうでしょうか?
+ここで <a href="https://raw.githubusercontent.com/redhat-developer-demos/openshift-gitops-examples/main/components/kustomize-build/kustomization.yaml">kustomization.yaml</a> ファイルの出番です。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ./welcome.yaml
+patchesJson6902:
+  - target:
+      version: v1
+      group: apps
+      kind: Deployment
+      name: welcome-php
+    patch: |-
+      - op: add
+        path: /metadata/labels/testkey
+        value: testvalue</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ファイルを見てわかるように内容はそれほど多くはありません。 主に、resourcesセクションと patchesJson6902セクションです。
+resourcesは他のマニフェストが保存されているファイル、ディレクトリおよび、またはURLの配列を指します。この例ではwelcome.yamlを指定しています。 patchesJson6902 は、RFC6902に沿ったkustomizeがサポートするパッチです。patchesJson6902パッチは、welcome.yamlマニフェストにtestkey: testvalueというlabelを追加するものです。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<a href="https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/">公式ドキュメントサイト</a>で、パッチ適用に使用できるオプションについて読むことができます。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>次を実行し、このマニフェストをビルドします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">kustomize build .</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>結果が出力され、新しいラベルtestkey: testvalueがマニフェストに追加されたことがわかります。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: welcome-php
+    testkey: testvalue
+  name: welcome-php
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: welcome-php
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: welcome-php
+    spec:
+      containers:
+      - image: quay.io/redhatworkshops/welcome-php:latest
+        name: welcome-php
+        resources: {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>YAMLに記述する代わりにkustomize editコマンドを使用することもできます。たとえば、次のコマンドを実行すると、Deploymentが使用するイメージタグをlatestからffcd15に変更できます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">kustomize edit set image quay.io/redhatworkshops/welcome-php:ffcd15</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>これにより、components/kustomize-build/kustomization.yamlファイルのイメージセクションが更新されます。
+この状態で <code>kustomize build .</code> を実行すると、新しいラベルだけでなく新しい ffcd15 イメージタグも表示されます。
+このように、元のYAMLをコピーまたは編集することなく、既存のYAMLを特定の環境に合わせて変更できます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cat kustomization.yaml</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ./welcome.yaml
+patchesJson6902:
+- patch: |-
+    - op: add
+      path: /metadata/labels/testkey
+      value: testvalue
+  target:
+    group: apps
+    kind: Deployment
+    name: welcome-php
+    version: v1
+images:
+- name: quay.io/redhatworkshops/welcome-php
+  newTag: ffcd15</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Kustomizeを使用して、新しいYAMLファイルを作成したり、ocコマンドにパイプで渡すことができます。</p>
+</div>
+<div class="paragraph">
+<p>まずはアプリケーションデプロイ用のプロジェクトを作成します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc new-project welcome-php</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次に、以下のコマンドを実行し、kustomizeからocコマンドにパイプで渡してみましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">kustomize build . | oc apply -f -</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>コマンド実行の結果、welcome-phpアプリがクラスターにデプロイされました。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">deployment.apps/welcome-php created</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_ocコマンドとkustomize"><a class="anchor" href="#_ocコマンドとkustomize"></a>ocコマンドとKustomize</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Kubernetes 1.14 以降、kubectl (およびoc) は、組み込みのKustomizeをサポートしています。
+<code>kustomize build</code> コマンドの代わりに <code>oc kustomize</code> を実行することでも可能です。
+先程は、<code>kustomize build</code> コマンドの結果を、パイプで <code>oc apply</code> コマンドに渡して実行しましたが、
+<code>oc apply</code> コマンドを使うとその必要がなくなります。
+<code>oc apply</code> には、マニフェストをapplyする前にbuildを実行する -k オプションがあります。
+これをテストするために、まずプロジェクトを作成します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc new-project kustomize-test</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>プロジェクトが作られたことが出力されます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">Now using project "kustomize-test" on server "https://api.crc.testing:6443".
+
+You can add applications to this project with the 'new-app' command. For example, try:
+
+    oc new-app rails-postgresql-example
+
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=k8s.gcr.io/serve_hostname</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次に、作成したプロジェクトにいることを確認します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc project kustomize-test</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のメッセージが表示されば正常です（URLの値は環境ごとに異なります）。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">Already on project "kustomize-test" on server "https://api.cluster-56bgl.56bgl.sandbox704.opentlc.com:6443".</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>oc applyコマンドを実行してマニフェストをbuildおよびapplyします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc apply -k ./</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>welcome-phpアプリケーションがクラスターにデプロイされました。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">deployment.apps/welcome-php created</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+ディレクトリだけでなくURLも渡すことができます。唯一の要件は、-k が指定するパスにkustomization.yamlファイルがあることです。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>これによりデプロイメントが作成されネームスペースで実行されているpodが表示されます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get pods -n kustomize-test</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">NAME                           READY   STATUS    RESTARTS   AGE
+welcome-php-7f9c4fdf94-knx2j   1/1     Running   0          11s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のコマンド出力を確認すると、追加のラベルを使用してデプロイメントが作成されたことがわかります。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get deployment welcome-php -o jsonpath='{.metadata.labels}' | jq -r</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">{
+  "app": "welcome-php",
+  "testkey": "testvalue"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>また、次のコマンドの出力を確認すると、行われたカスタマイズに基づいてイメージタグがffcd15に更新されているのがわかります。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get deploy welcome-php  -o jsonpath='{.spec.template.spec.containers[].image}{"\n"}'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">quay.io/redhatworkshops/welcome-php:ffcd15</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>このように、kustomizeは強力なツールになり得るものです。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deploying_kustomized_applicaton"><a class="anchor" href="#_deploying_kustomized_applicaton"></a>Deploying Kustomized Applicaton</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>別の演習で、GitOpsワークフローでは、アプリケーションスタック全体 (インフラストラクチャを含む) がgitリポジトリに反映されることを学びました。 この演習の課題はYAMLを複製せずにこれを行う方法です。
+前のトピックでkustomizeについて学んだので、それがArgoCDとどのように適合し、GitOpsワークフローでどのように使用できるかを見てみましょう。</p>
+</div>
+<div class="paragraph">
+<p>まずマニフェストがあるルートディレクトリに移動します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cd ~/openshift-gitops-examples/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>この時点で、openshift-gitops-examplesにいるはずです。
+以前の演習では、青色の丸が表示されるアプリケーションをデプロイしました。これは、次のコマンドを実行することでデプロイされます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc apply -f components/applications/bgd-app.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ターミナルに次のメッセージが表示され、Argo CD UIを確認するとApplicationが作成されています。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">application.argoproj.io/bgd-app created</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/kustomize/kustomize-002.png" alt="kustomize 002">
+</div>
+</div>
+<div class="paragraph">
+<p>アプリケーションのロールアウトを待ちます。次のコマンドでスタータスを確認します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc rollout status deploy/bgd -n bgd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のような出力結果が得られます。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">deployment "bgd" successfully rolled out</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ロールアウトが完了したら、次のコマンドを実行してbgdアプリケーションのURLを確認します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get route -n bgd</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>次のように出力されます（URLの値は環境ごとに異なります）。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">NAME   HOST/PORT                                                 PATH   SERVICES   PORT   TERMINATION   WILDCARD
+bgd    bgd-bgd.crc-dzk9v-master-0.crc.ohwkzih58pxs.instruqt.io          bgd        8080                 None</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>「HOST/PORT」列の下の URLをコピーしてブラウザでアプリケーションにアクセスします。すると、次のような画面が表示されます。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>以前のラボ同様、HTTP接続のアプリケーションであることに注意してください。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/kustomize/kustomize-003.png" alt="kustomize 003">
+</div>
+</div>
+<div class="paragraph">
+<p>ArgoCDの演習を履修済であれば、これはおなじみのはずです。では、このアプリケーションを変更してデプロイしたい場合はどうすればよいでしょうか?</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_kustomized_アプリケーション"><a class="anchor" href="#_kustomized_アプリケーション"></a>Kustomized アプリケーション</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Argo CDはKustomizeをネイティブでサポートしています。これを使用して、デプロイメントごとにYAMLが重複するのを避けることができます。例えば本番環境と検証環境などデプロイ先の環境やクラスターが異なる場合に特に便利です。
+<a href="https://raw.githubusercontent.com/redhat-developer-demos/openshift-gitops-examples/main/components/applications/bgdk-app.yaml">bgdk-app.yaml</a>アプリケ−ションの定義を見てみましょう。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bgdk-app
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: bgdk
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: apps/bgd/overlays/bgdk
+    repoURL: https://github.com/redhat-developer-demos/openshift-gitops-examples
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>bgdとbgdkは <a href="https://github.com/redhat-developer-demos/openshift-gitops-examples">同じレポジトリ</a> を利用していますが異なるディレクトリをソースとしています。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>アプリケーションbgd - bgd-app.yaml：apps/bgd/overlays/bgd</p>
+</li>
+<li>
+<p>アプリケーションbgdk - bgdk-app.yaml：apps/bgd/overlays/bgdk</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>以下は、ディレクトリ構成と、その中に存在するファイルの抜粋です。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">./openshift-gitops-examples/
+├── README.md
+├── apps
+│   ├── bgd
+│   │   ├── base
+│   │   │   ├── bgd-deployment.yaml
+│   │   │   ├── bgd-route.yaml
+│   │   │   ├── bgd-svc.yaml
+│   │   │   └── kustomization.yaml
+│   │   └── overlays
+│   │       ├── bgd
+│   │       │   ├── bgd-deployment.yaml
+│   │       │   ├── bgd-ns.yaml
+│   │       │   ├── bgd-route.yaml
+│   │       │   └── bgd-svc.yaml
+│   │       └── bgdk
+│   │           ├── bgdk-ns.yaml
+│   │           └── kustomization.yaml
+(略)
+└── components
+    ├── applications
+    │   ├── bgd-app.yaml
+    │   ├── bgdk-app.yaml
+    │   ├── quarkus-app.yaml
+    │   ├── quarkus-subchart.yaml
+    │   ├── welcome-hooks.yaml
+    │   ├── welcome-syncwaves-and-hooks.yaml
+    │   └── welcome-syncwaves.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>マニフェストの共通設定である"base"セットがあり、差分などのカスタマイズをオーバーレイする"overlay"の概念を使用しています。
+ファイル <code>apps/bgd/overlays/bgdk/kustomization.yaml</code> を見てください。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: bgdk
+resources:
+- ../../base
+- bgdk-ns.yaml
+patchesJson6902:
+  - target:
+      version: v1
+      group: apps
+      kind: Deployment
+      name: bgd
+      namespace: bgdk
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/0/value
+        value: yellow</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>このkustomization.yamlはベースアプリケーションを取得し、マニフェストにパッチを適用して、青色の丸ではなく黄色の正方形を表示します。
+ また、アプリケーションを bgdkネームスペース (ファイルの namespace: セクションで示されます) にデプロイします。
+このアプリケーションをデプロイします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc apply -f components/applications/bgdk-app.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Argo CDのUIにふたつのアプリケーションが表示されます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/kustomize/kustomize-004.png" alt="kustomize 004">
+</div>
+</div>
+<div class="paragraph">
+<p>先程同様bgdkアプリケーションのrouteを取得し、ブラウザでアクセスします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get route -n bgdk</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">NAME   HOST/PORT                                                 PATH   SERVICES   PORT   TERMINATION   WILDCARD
+bgd    bgd-bgd.crc-dzk9v-master-0.crc.ohwkzih58pxs.instruqt.io          bgd        8080                 None</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>「HOST/PORT」列の下の URLをコピーしてブラウザでアプリケーションにアクセスします。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/gitops/kustomize/kustomize-005.png" alt="kustomize 005">
+</div>
+</div>
+<div class="paragraph">
+<p>アプリケーションがカスタマイズされてデプロイされたことがわかります。
+今行ったことを確認します。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>青色の丸を表示するbgdというアプリケーションをデプロイしました</p>
+</li>
+<li>
+<p>bgdkと呼ばれるbgdに基づく別のアプリケーションをデプロイしました</p>
+</li>
+<li>
+<p>アプリケーションbgdk は、独自のネームスペースにデプロイされ、デプロイのカスタマイズが行われました</p>
+</li>
+<li>
+<p>YAMLの複製は行っていません</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>このように、"base"と"overlay"の仕組みを利用して差分を管理することができます。</p>
+</div>
+<div class="paragraph">
+<p>以上で本演習は終了です。</p>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="21-GitOps.html">1. OpenShift GitOps</a></span>
+  <span class="next"><a href="23-Helm.html">3. Helmインテグレーション</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
