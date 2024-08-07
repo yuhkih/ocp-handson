@@ -6,7 +6,7 @@
     <title>Amazon Bedrockアプリケーションの実行 :: OpenShift Handson</title>
     <link rel="canonical" href="https://yuhkih.github.io/ocp-handson/openshift-services/58-rosa-bedrock.html">
     <link rel="prev" href="54-2-rosa-dev-spaces.html">
-    <link rel="next" href="55-1-rosa-log-02.html">
+    <link rel="next" href="55-2-rosa-monitoring.html">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
@@ -128,10 +128,13 @@
     <a class="nav-link" href="55-1-rosa-log-01.html">2. ロギング設定</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="56-rosa-nodes.html">3. ワーカーノードの追加と削除</a>
+    <a class="nav-link" href="55-1-rosa-log-02.html">3. Amazon CloudWatchでのログ確認</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="57-rosa-upgrade.html">4. ROSA HCPクラスターの更新</a>
+    <a class="nav-link" href="56-rosa-nodes.html">4. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="57-rosa-upgrade.html">5. ROSA HCPクラスターの更新</a>
   </li>
 </ul>
   </li>
@@ -188,16 +191,13 @@
     <a class="nav-link" href="58-rosa-bedrock.html">5. Amazon Bedrockアプリケーションの実行</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="55-1-rosa-log-02.html">6. Amazon CloudWatchでのログ確認</a>
+    <a class="nav-link" href="55-2-rosa-monitoring.html">6. モニタリング</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="55-2-rosa-monitoring.html">7. モニタリング</a>
+    <a class="nav-link" href="55-3-rosa-project-metrics.html">7. プロジェクトのメトリクスデータの確認</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="55-3-rosa-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="55-4-rosa-alert.html">9. アラート設定</a>
+    <a class="nav-link" href="55-4-rosa-alert.html">8. アラート設定</a>
   </li>
 </ul>
   </li>
@@ -700,7 +700,7 @@ Amazon Bedrockにアクセスするためのサービスアカウントを利用
 </div>
 <nav class="pagination">
   <span class="prev"><a href="54-2-rosa-dev-spaces.html">4. Web IDEを利用した開発</a></span>
-  <span class="next"><a href="55-1-rosa-log-02.html">6. Amazon CloudWatchでのログ確認</a></span>
+  <span class="next"><a href="55-2-rosa-monitoring.html">6. モニタリング</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
