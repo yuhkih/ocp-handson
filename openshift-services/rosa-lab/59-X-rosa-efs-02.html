@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Amazon EFSの利用 :: OpenShift Handson</title>
+    <link rel="canonical" href="https://yuhkih.github.io/ocp-handson/openshift-services/rosa-lab/59-X-rosa-efs-02.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://yuhkih.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#50-rosa-info.adoc">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#51-rosa-hcp-create.adoc">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#52-rosa-app-deploy.adoc">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#53-rosa-ebs.adoc">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#54-1-rosa-web-terminal.adoc">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#54-2-rosa-dev-spaces.adoc">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#58-rosa-bedrock.adoc">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-1-rosa-log-01.adoc">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-1-rosa-log-02.adoc">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-2-rosa-monitoring.adoc">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-3-rosa-project-metrics.adoc">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-4-rosa-alert.adoc">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#56-rosa-nodes.adoc">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#57-rosa-upgrade.adoc">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">OpenShift Handson</a></li>
+    <li><a href="59-X-rosa-efs-02.html">Amazon EFSの利用</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/rosa-lab/59-X-rosa-efs-02.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Amazon EFSの利用</h1>
+<div class="sect1">
+<h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このモジュールでは、Amazon EFSを利用した、コンテナアプリのデータ保存を実行します。</p>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="_aws_efs_operatorを利用したpvcの作成"><a class="anchor" href="#_aws_efs_operatorを利用したpvcの作成"></a>AWS EFS Operatorを利用したPVCの作成</h3>
+<div class="paragraph">
+<p>前の手順で用意したAmazon EFS上のファイルシステムを、Podが利用する永続ボリュームとして利用してみます。
+「AWS EFS Operator」を選択して、「インスタンスの作成」をクリックします。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/efs-02/sv-create1.png" alt="sv create1">
+</div>
+</div>
+<div class="paragraph">
+<p>「名前」には、任意の名前(この例では、sv20)を入力し、
+前の手順で作成したAmazon EFSのファイルシステムの「Access Point ID」と「File System ID」を入力します。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+本演習をワークショップ形式で実施している場合、
+インストラクターが案内する「Access Point ID」と「File System ID」を入力します。
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/efs-02/sv-create2.png" alt="sv create2">
+</div>
+</div>
+<div class="paragraph">
+<p>最後に「作成」をクリックすると、SharedVolume(この例では、sv20)が作成されます。
+SharedVolumeが表示されない場合、「現在のnamespaceのみ」を選択してください。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/efs-02/sv-create3.png" alt="sv create3">
+</div>
+</div>
+<div class="paragraph">
+<p>それに対応した永続ボリューム要求であるPVC
+(この例では、pvc-sv20. <code>pvc-&lt;SharedVolumeの名前&gt;</code> という名前が自動付与)が自動的に作成されます。
+なお、容量が1GiBと表示されていますが、実容量はこれより大きいものとなっています。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/efs-02/sv-pvc-confirm.png" alt="sv pvc confirm">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pvcを利用するpodの作成"><a class="anchor" href="#_pvcを利用するpodの作成"></a>PVCを利用するPodの作成</h3>
+<div class="paragraph">
+<p>作成したPVCをもとに、Amazon EBSをPodから利用する時と同様の手順で、Podを作成します。
+Podを作成するためのYAMLファイルは、次のものを利用してください。
+このとき、受講者が作成したPVCの名前に応じて、「pvc-sv20」となっている所を適宜修正してください。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">apiVersion: v1
+kind: Pod
+metadata:
+ name: test-efs1
+spec:
+ volumes:
+   - name: efs-storage-vol
+     persistentVolumeClaim:
+       claimName: pvc-sv20
+ containers:
+   - name: test-efs
+     image: centos:latest
+     command: [ "/bin/bash", "-c", "--" ]
+     args: [ "while true; do echo 'hello efs' &amp;&amp; sleep 30; done;" ]
+     volumeMounts:
+       - mountPath: "/mnt/efs-data"
+         name: efs-storage-vol</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Podの作成が完了したら、当該Podの「ターミナル」タブから、
+EFS上に作成したファイルシステムのマウント状況(NFS v4プロトコルを利用)と、
+マウントポイント先となるディレクトリに対してファイルが作成できることを確認します。</p>
+</div>
+<div class="paragraph">
+<p>下記画像では、2GiBのファイルを作成して、PVCの画面で確認した見せかけの容量(1GiB)より大きな容量を利用できることを確認しています。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/efs-02/sv-pvc-confirm.png" alt="sv pvc confirm">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/efs-02/pod-efs-test.png" alt="pod efs test">
+</div>
+</div>
+<div class="paragraph">
+<p>この画像で実行しているコマンドは、下記からコピーできます。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">df -h |grep efs
+mount |grep efs
+ls -lhd /mnt/efs-data/
+cd /mnt/efs-data/
+dd if=/dev/zero of=zero20.img bs=1M count=2048
+ls -lh /mnt/efs-data/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>ここで作成したPodとは別のPodを新しく作成して、複数のPodから同じPVCを利用することで、1つのファイルシステムを共有できることを確認します。
+前述のPod作成に利用したYAMLファイルで、「name: test-efs1」を、「name: test-efs2」などに変更することで、
+変更したPod名で新規Podを実行します。</p>
+</div>
+<div class="paragraph">
+<p>「test-efs2」Podでもマウント先のディレクトリへのファイル作成/削除や、
+「test-efs1」Podで作成したファイルの修正ができることを、当該Podの「ターミナル」タブから確認してみてください。</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>本演習環境では、Amazon EFS上に作成した1つのアクセスポイントを受講者全員で共有する設定にしていますが、
+他の受講者が作成したファイルと同じ名前を持つファイルを作成したり、
+他の受講者が作成したファイルを削除することができないようになっています。</p>
+</div>
+<div class="paragraph">
+<p>これは、Podに含まれるコンテナを実行するユーザ権限が、OpenShiftのプロジェクトごとに異なるようになっており(OpenShiftのデフォルト設定)、
+かつ、前の手順で設定したスティッキービットが共有ディレクトリに設定されていることで、
+所有者以外は、ファイル/ディレクトリの変更や削除ができないようになっているためです。</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>AWS EFS Operatorによって作成された「pvc-sv20」を見てみると、
+アクセスモードが「ReadWriteMany(RWX. 複数台のコンピュートノードから利用可能)」となっています。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/efs-02/pvc-sv-info.png" alt="pvc sv info">
+</div>
+</div>
+<div class="paragraph">
+<p>デフォルトのストレージクラス(gp3タイプのEBS)を利用して作成したPVCは、
+アクセスモードが「ReadWriteOnce(RWO. 1台のコンピュートノードからのみ利用可能)」となります。
+EFSによって利用可能になる、RWXのアクセスモードに対応したPVCを利用することで、
+複数ノード上でレプリケーション構成を取るアプリケーション(Amazon EFSに保存したデータを共有)をROSAクラスター上で実行できるようになります。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_efs利用のためのpvcを削除"><a class="anchor" href="#_efs利用のためのpvcを削除"></a>EFS利用のためのPVCを削除</h3>
+<div class="paragraph">
+<p>Pod削除などによって、不要になったPVCを削除したい場合、
+AWS EFS Operatorによって作成した、SharedVolumeを削除します。これによりSharedVolumeに対応したPVCが自動削除されます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/efs-02/sv-delete.png" alt="sv delete">
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>[デモ] ロギング設定 :: OpenShift Handson</title>
+    <link rel="canonical" href="https://yuhkih.github.io/ocp-handson/openshift-services/rosa-lab/55-1-rosa-log-01.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://yuhkih.github.io/ocp-handson">OpenShift Handson</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="openshift-services" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">01. OpenShift 基礎</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../01_app-deployment.html">2. Web コンソールの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../02_app-storage-basics.html">3. 永続ストレージ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../03_machinesets.html">4. ノードの動的管理</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../04_infra-nodes.html">5. Infra ノードの作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../06_template-quota-limits.html">6. Project のクオータ/制限</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">20. OpenShift Pipeline Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../10-pipeline-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../11-pipelines.html">1. Pipelines -1/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../12-add-task.html">2. Pipelines -2/2</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../13-triggers.html">3. Tekton Triggers</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">21. OpenShift GitOps Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../20-GitOps-install.html">インストール</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../21-GitOps.html">1. OpenShift GitOps</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../22-Kustomize.html">2. Kustomizeインテグレーション</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../23-Helm.html">3. Helmインテグレーション</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">51. Red Hat OpenShift Service on AWS (ROSA) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#50-rosa-info.adoc">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#51-rosa-hcp-create.adoc">1. ROSA HCPクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#52-rosa-app-deploy.adoc">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#53-rosa-ebs.adoc">3. Amazon EBSの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#54-1-rosa-web-terminal.adoc">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#54-2-rosa-dev-spaces.adoc">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#58-rosa-bedrock.adoc">6. Amazon Bedrockアプリケーションの実行</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-1-rosa-log-01.adoc">7. ロギング設定 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-1-rosa-log-02.adoc">8. Amazon CloudWatchでのログ確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-2-rosa-monitoring.adoc">9. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-3-rosa-project-metrics.adoc">10. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#55-4-rosa-alert.adoc">11. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#56-rosa-nodes.adoc">12. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#57-rosa-upgrade.adoc">13. ROSA HCPクラスターの更新</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../60-aro-info.html">0. はじめに</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../64-aro-web-terminal.html">4. Web Terminalの利用</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../66-aro-logging.html">6. ロギング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-1-aro-monitoring.html">7. モニタリング</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../67-3-aro-alert.html">9. アラート設定</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">OpenShift Handson</a></li>
+    <li><a href="55-1-rosa-log-01.html">[デモ] ロギング設定</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/rosa-lab/55-1-rosa-log-01.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">[デモ] ロギング設定</h1>
+<div class="sect1">
+<h2 id="_デモの概要"><a class="anchor" href="#_デモの概要"></a>デモの概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このモジュールでは、インストラクターがROSAクラスターのロギング設定方法をご紹介します</p>
+</div>
+<hr>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+本演習を自習している時以外、ROSAクラスターのロギング設定を実行しないで下さい。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>ROSAのロギングについては、Amazon CloudWatchをベースとするログ転送ソリューションの利用を推奨しています。
+転送設定の概要は次のとおりです。STSの利用有無に関わらず、以下の手順を実施することができます。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Amazon CloudWatchのログ参照/書き込み権限を持つAWS IAMユーザーを作成して、
+このユーザーのアクセスキーとシークレットアクセスキーを取得します。</p>
+</li>
+<li>
+<p>ROSAのOpenShiftコンソールから、OpenShift Logging Operatorをインストールして、
+ロギングとログ転送用のインスタンスを作成します。
+このとき、上記手順で作成したAWS IAMユーザーの認証情報(アクセスキー/シークレットアクセスキー)を利用するように設定します。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>これらを順番に見ていきましょう。</p>
+</div>
+<div class="sect2">
+<h3 id="_cloudwatch用のaws_iamユーザーの作成"><a class="anchor" href="#_cloudwatch用のaws_iamユーザーの作成"></a>CloudWatch用のAWS IAMユーザーの作成</h3>
+<div class="paragraph">
+<p>AWSのコンソールまたはAWS CLIで、CloudWatchのログ参照/書き込み権限を持つAWS IAMユーザーを作成します。
+IAMユーザー作成手順は、
+<a href="https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/id_users_create.html">AWS アカウントでの IAM ユーザーの作成</a>を
+ご参照ください。</p>
+</div>
+<div class="paragraph">
+<p>例として、下記画像のような権限を持つユーザーを作成します。この画像の例では、ログ参照/書き込み権限として
+「CloudWatchLogsFullAccess」を「rosauser01」ユーザーに付与しています。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/log-01/iam-user-create.png" alt="iam user create">
+</div>
+</div>
+<div class="paragraph">
+<p>この時に作成した、AWS IAMユーザーのアクセスキーとシークレットアクセスキーをメモします。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_openshift_logging_operatorのインストール"><a class="anchor" href="#_openshift_logging_operatorのインストール"></a>OpenShift Logging Operatorのインストール</h3>
+<div class="paragraph">
+<p>OpenShiftには「Red Hat OpenShift Logging Operator」というOperatorがあり、
+OpenShiftのロギングスタックを運用するために利用されます。
+このOperatorによって、CloudWatchへのログ転送設定が可能になります。</p>
+</div>
+<div class="paragraph">
+<p>OperatorHubから、「Red Hat OpenShift Logging Operator」をインストールします。
+これは <code>cluster-admin</code> ユーザーで実行します。
+インストールには、インストールモードで「クラスターの特定のnamespace」を選択すること以外、
+全てデフォルトのパラメータを利用します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/log-01/logging-operator-install1.png" alt="logging operator install1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/log-01/logging-operator-install2.png" alt="logging operator install2">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ロギングの設定"><a class="anchor" href="#_ロギングの設定"></a>ロギングの設定</h3>
+<div class="paragraph">
+<p>vectorによるクラスターロギングを設定します。
+「インストール済みのOperator」の「Red Hat OpenShift Logging」Operatorを選択して、
+「Cluster Logging」の下にある「インスタンスの作成」から、次のYAMLを入力して「作成」をクリックします。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">apiVersion: logging.openshift.io/v1
+kind: ClusterLogging
+metadata:
+  name: instance
+  namespace: openshift-logging
+spec:
+  collection:
+    type: vector
+  managementState: Managed</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/log-01/logging-instance-create1.png" alt="logging instance create1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/log-01/logging-instance-create2.png" alt="logging instance create2">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/log-01/logging-instance-create3.png" alt="logging instance create3">
+</div>
+</div>
+<div class="paragraph">
+<p>この段階では、logstore or logforward destination(ログ保存先またはログ転送先)の設定が無いために、
+ログ収集/転送に利用するvectorを実行するPodが起動されません。</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ログ転送の設定"><a class="anchor" href="#_ログ転送の設定"></a>ログ転送の設定</h3>
+<div class="paragraph">
+<p>ログ転送設定を行います。
+「CloudWatch用のAWS IAMユーザーの作成」で作成したアクセスキーとシークレットアクセスキーを、
+AWS認証情報としてOpenShiftのシークレットリソースに保存します。</p>
+</div>
+<div class="paragraph">
+<p>「OpenShift Logging Operator」をインストールした「openshift-logging」プロジェクトを選択して、
+左サイドメニューの「管理者向け表示」→「Workloads」→「シークレット」に移動します。
+そして、「作成」から「キーと値のシークレット」をクリックして、次の値を入力して作成します。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>シークレット名: AWS認証情報として保存するOpenShiftリソースの任意の名前。この例では「cw-secret」を指定。</p>
+</li>
+<li>
+<p>キー/値: 「CloudWatch用のAWS IAMユーザーの作成」で作成した、
+AWSアクセスキー(aws_access_key_id)とシークレットアクセスキー(aws_secret_access_key)を入力。</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/log-01/secret-create.png" alt="secret create">
+</div>
+</div>
+<div class="paragraph">
+<p>作成したシークレットリソース「cw-secret」を利用した、ログ転送設定のためのインスタンスを作成します。
+「OpenShift Logging Operator」を選択して、「Cluster Log Forwarder」の下にある「インスタンスの作成」から、
+次のYAMLを入力して「作成」をクリックします。</p>
+</div>
+<div class="paragraph">
+<p>ここでは、 <code>region: ap-northeast-1</code> を指定して、東京リージョンのCloudWatchへのログ転送を指定しています。
+また、前述の手順で作成した「cw-secret」シークレットも指定します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">apiVersion: "logging.openshift.io/v1"
+kind: ClusterLogForwarder
+metadata:
+  name: instance
+  namespace: openshift-logging
+spec:
+  outputs:
+   - name: cw
+     type: cloudwatch
+     cloudwatch:
+       groupPrefix: hcp-01
+       region: ap-northeast-1
+     secret:
+        name: cw-secret
+  pipelines:
+    - name: all-logs
+      inputRefs:
+        - application
+        - infrastructure
+        - audit
+      outputRefs:
+        - cw</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/log-01/loggingforwarder-instance-create1.png" alt="loggingforwarder instance create1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/log-01/loggingforwarder-instance-create2.png" alt="loggingforwarder instance create2">
+</div>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>どの種類のログを転送するかについては、前述したYAMLの <code>inputRefs:</code> の項目で指定できます。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>application</code> : アプリケーションログの収集。利用者が作成したプロジェクトにデプロイされるアプリケーションのログ(stdoutとstderrに出力されるログ)を収集します。後述のインフラストラクチャー関連のログは除きます。</p>
+</li>
+<li>
+<p><code>infrastructure</code> : インフラストラクチャーログの収集。ROSAクラスター作成時にデフォルトで作成される <code>openshift-*</code> , <code>kube-*</code> などのプロジェクトにある、インフラストラクチャー関連のログを収集します。</p>
+</li>
+<li>
+<p><code>audit</code> : セキュリティ監査に関連するログの収集。ワーカーノードのノード監査システム(auditd)で
+生成される監査ログ(/var/log/audit/audit.log)を収集します。監査ログは、OpenShift Logging Operatorとは別の仕組みで外部転送されており、
+<a href="https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition/rosa-policy-responsibility-matrix.html#rosa-policy-platform-monitoring_rosa-policy-responsibility-matrix">Red HatのSREチームによって1年間保存</a>されます。
+そのため、ROSAの利用者は監査ログを保存しなくても、Red Hatのサポートケース経由で監査ログを取得することもできます。</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>これでログ転送の設定が完了したため、先ほど作成したLoggingインスタンスによって、
+自動的に <code>collector-*</code> という名前のPod(内部ではvectorが実行)が、「openshift-logging」プロジェクトに作成されます。
+この <code>collector-*</code> Podは、全てのワーカーノードで自動的に実行されて、
+ワーカーノード上のログをAmazon CloudWatchに転送します。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/log-01/logging-pods.png" alt="logging pods">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+AWSアカウントでのIAMユーザー作成が許可されていない場合、ROSAクラスターインストールの時と同様に、
+AWS STSを利用したログ転送の設定が可能です。この場合、AWS IAMの一時的な認証情報として利用される、
+専用のAWS IAMロール(CloudWatchへのログ転送に必要)を作成する必要があります。
+この設定方法については、
+<a href="https://access.redhat.com/documentation/ja-jp/red_hat_openshift_service_on_aws/4/html-single/logging/index#rosa-cluster-logging-collector-log-forward-sts-cloudwatch_configuring-log-forwarding">公式ドキュメント</a>をご参照ください。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

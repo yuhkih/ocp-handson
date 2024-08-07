@@ -4,17 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>モニタリング :: OpenShift Handson</title>
-    <link rel="canonical" href="https://yuhkih.github.io/ocp-handson/openshift-services/67-1-aro-monitoring.html">
-    <link rel="prev" href="66-aro-logging.html">
-    <link rel="next" href="67-2-aro-project-metrics.html">
+    <link rel="canonical" href="https://yuhkih.github.io/ocp-handson/openshift-services/rosa-lab/55-2-rosa-monitoring.html">
     <meta name="generator" content="Antora 3.0.0">
-    <link rel="stylesheet" href="../_/css/site.css">
+    <link rel="stylesheet" href="../../_/css/site.css">
   </head>
   <body class="article">
 <header class="header">
   <nav class="navbar">
     <div class="navbar-brand">
-      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
       <a class="navbar-item" style="font-size: 24px; color: white" href="https://yuhkih.github.io/ocp-handson">OpenShift Handson</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
@@ -47,7 +45,7 @@
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html"></a></h3>
+    <h3 class="title"><a href="../index.html"></a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
@@ -56,25 +54,25 @@
     <span class="nav-text">01. OpenShift 基礎</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
+    <a class="nav-link" href="../01_app-mgmt-basics.html">1. コンテナデプロイと管理</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="01_app-deployment.html">2. Web コンソールの利用</a>
+    <a class="nav-link" href="../01_app-deployment.html">2. Web コンソールの利用</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
+    <a class="nav-link" href="../02_app-storage-basics.html">3. 永続ストレージ</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
+    <a class="nav-link" href="../03_machinesets.html">4. ノードの動的管理</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="04_infra-nodes.html">5. Infra ノードの作成</a>
+    <a class="nav-link" href="../04_infra-nodes.html">5. Infra ノードの作成</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="06_template-quota-limits.html">6. Project のクオータ/制限</a>
+    <a class="nav-link" href="../06_template-quota-limits.html">6. Project のクオータ/制限</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
+    <a class="nav-link" href="../07_clusterresourcequota.html">7. クラスタのクオータ設定</a>
   </li>
 </ul>
   </li>
@@ -83,16 +81,16 @@
     <span class="nav-text">20. OpenShift Pipeline Lab</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="10-pipeline-install.html">インストール</a>
+    <a class="nav-link" href="../10-pipeline-install.html">インストール</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="11-pipelines.html">1. Pipelines -1/2</a>
+    <a class="nav-link" href="../11-pipelines.html">1. Pipelines -1/2</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="12-add-task.html">2. Pipelines -2/2</a>
+    <a class="nav-link" href="../12-add-task.html">2. Pipelines -2/2</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="13-triggers.html">3. Tekton Triggers</a>
+    <a class="nav-link" href="../13-triggers.html">3. Tekton Triggers</a>
   </li>
 </ul>
   </li>
@@ -101,16 +99,16 @@
     <span class="nav-text">21. OpenShift GitOps Lab</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="20-GitOps-install.html">インストール</a>
+    <a class="nav-link" href="../20-GitOps-install.html">インストール</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="21-GitOps.html">1. OpenShift GitOps</a>
+    <a class="nav-link" href="../21-GitOps.html">1. OpenShift GitOps</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="22-Kustomize.html">2. Kustomizeインテグレーション</a>
+    <a class="nav-link" href="../22-Kustomize.html">2. Kustomizeインテグレーション</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="23-Helm.html">3. Helmインテグレーション</a>
+    <a class="nav-link" href="../23-Helm.html">3. Helmインテグレーション</a>
   </li>
 </ul>
   </li>
@@ -167,40 +165,40 @@
     <span class="nav-text">61. Azure Red Hat OpenShift (ARO) Lab</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="60-aro-info.html">0. はじめに</a>
+    <a class="nav-link" href="../60-aro-info.html">0. はじめに</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
+    <a class="nav-link" href="../61-aro-create.html">1. AROクラスターの作成 [デモ]</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
+    <a class="nav-link" href="../62-aro-app-deploy.html">2. サンプルアプリケーションのデプロイ</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
+    <a class="nav-link" href="../63-aro-storage.html">3. Azure DiskとAzure Filesの利用</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="64-aro-web-terminal.html">4. Web Terminalの利用</a>
+    <a class="nav-link" href="../64-aro-web-terminal.html">4. Web Terminalの利用</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
+    <a class="nav-link" href="../65-aro-dev-spaces.html">5. Web IDEを利用した開発</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="66-aro-logging.html">6. ロギング</a>
-  </li>
-  <li class="nav-item is-current-page" data-depth="2">
-    <a class="nav-link" href="67-1-aro-monitoring.html">7. モニタリング</a>
+    <a class="nav-link" href="../66-aro-logging.html">6. ロギング</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
+    <a class="nav-link" href="../67-1-aro-monitoring.html">7. モニタリング</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="67-3-aro-alert.html">9. アラート設定</a>
+    <a class="nav-link" href="../67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+    <a class="nav-link" href="../67-3-aro-alert.html">9. アラート設定</a>
   </li>
   <li class="nav-item" data-depth="2">
-    <a class="nav-link" href="69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
+    <a class="nav-link" href="../68-aro-nodes.html">10. ワーカーノードの追加と削除</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../69-aro-upgrade.html">11. AROクラスターの更新[デモ]</a>
   </li>
 </ul>
   </li>
@@ -215,15 +213,14 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
-  <a href="index.html" class="home-link"></a>
+  <a href="../index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="index.html">OpenShift Handson</a></li>
-    <li>61. Azure Red Hat OpenShift (ARO) Lab</li>
-    <li><a href="67-1-aro-monitoring.html">7. モニタリング</a></li>
+    <li><a href="../index.html">OpenShift Handson</a></li>
+    <li><a href="55-2-rosa-monitoring.html">モニタリング</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/67-1-aro-monitoring.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/rosa-lab/55-2-rosa-monitoring.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
@@ -232,17 +229,17 @@
 <h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>このモジュールでは、Prometheusによるモニタリングを学習します。</p>
+<p>このモジュールでは、Prometheusによるモニタリングに関する情報を確認します。</p>
 </div>
 <hr>
 <div class="paragraph">
-<p>AROクラスターは、デフォルトでPrometheusをベースとしたモニタリング機能が有効になっており、
-下記の2つのユースケースで利用できるようになっています。</p>
+<p>ROSAクラスターは、デフォルトでPrometheusをベースとしたモニタリング機能が有効になっており、
+下記の2つのユースケースで利用されています。</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>AROクラスター全体のモニタリング (Platform monitoring)</p>
+<p>ROSAクラスター全体のモニタリング (Platform monitoring)</p>
 </li>
 <li>
 <p>利用者が作成したプロジェクトのモニタリング (User-defined projects monitoring)</p>
@@ -250,7 +247,7 @@
 </ul>
 </div>
 <div class="paragraph">
-<p>この2つについて、どのようにAROクラスターで利用されているかを確認していきます。</p>
+<p>この2つについて、どのようにROSAクラスターで利用されているかを確認していきます。</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -267,28 +264,23 @@
 <div class="sect2">
 <h3 id="_クラスター全体のモニタリング"><a class="anchor" href="#_クラスター全体のモニタリング"></a>クラスター全体のモニタリング</h3>
 <div class="paragraph">
-<p>AROクラスター全体のリソース利用状況のモニタリング、
-いわゆる「プラットフォームモニタリング」と公式ドキュメントで定義しているものについては、
-MicrosoftとRed HatのSREチームによって利用されています。
-<a href="https://learn.microsoft.com/ja-jp/azure/openshift/responsibility-matrix">AROの責任分担マトリクス</a>によって、
-プラットフォームモニタリングについては、MicrosoftとRed Hatに責任があると定義しているため、
-AROの利用者は、ワーカーノードにおけるユーザーアプリの利用状況の監視に集中できるようになっています。</p>
+<p>ROSAクラスター全体のリソース利用状況のモニタリング、
+いわゆる「プラットフォームモニタリング」とRed Hatの公式ドキュメントで定義しているものについては、
+Red HatのSREチームによって利用されています。
+<a href="https://docs.openshift.com/rosa/rosa_architecture/rosa_policy_service_definition/rosa-policy-responsibility-matrix.html#rosa-policy-responsibilities_rosa-policy-responsibility-matrix">ROSAの責任分担マトリクス</a>によって、
+プラットフォームモニタリングについては、Red Hatに責任があると定義しているため、
+ROSAの利用者は、ワーカーノードにおけるユーザーアプリの利用状況の監視に集中できるようになっています。</p>
 </div>
 <div class="paragraph">
-<p>AROクラスターでは、プラットフォームモニタリング機能を提供するPodが、
-「openshift-monitoring」というプロジェクトで実行されています。
-これらのモニタリングで監視対象となっている項目については、
-OpenShiftのコンソールの「モニタリング」メニューのメトリクスターゲットなどから確認できるようになっています。
-こうした項目やワーカーノードなどが、SREチームによって監視されています。</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/aro/monitoring/metrics-targets.png" alt="metrics targets">
-</div>
+<p>ROSAクラスターでは、モニタリング機能を提供するPodが、
+「openshift-monitoring」と「openshift-user-workload-monitoring」という2つのプロジェクトで実行されています。
+プラットフォームモニタリング機能を提供するPodが「openshift-monitoring」プロジェクトで実行されます。
+Red Hat SREチームの監視対象のリストは、
+<a href="https://docs.openshift.com/rosa/monitoring/monitoring-overview.html#default-monitoring-targets_monitoring-overview">公式ドキュメント</a>をご参照ください。
+これらの一部はワーカーノード上で実行されており、ワーカーノードも含めてSREチームにより監視されています。</p>
 </div>
 <div class="paragraph">
-<p>これらの情報は、AROクラスターの管理者アカウント( <code>kubeadmin</code> など)でログインすることで確認できます。
-ログインすると、「openshift-monitoring」プロジェクトで実行されているPodのリストも見ることができます。</p>
+<p>これらの情報は、ROSAクラスターの管理者アカウント( <code>cluster-admin</code> など)でログインすることで確認できます。</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -304,13 +296,12 @@ OpenShiftのコンソールの「モニタリング」メニューのメトリ�
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/aro/monitoring/projects.png" alt="projects">
+<img src="../_images/rosa/monitoring/monitoring-projects.png" alt="monitoring projects">
 </div>
 </div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/aro/monitoring/monitoring-pods.png" alt="monitoring pods">
-</div>
+<div class="paragraph">
+<p>利用者は「openshift-monitoring」プロジェクトで実行されているPodのリストを見ることができます。
+これらのPodがワーカーノードで常に動くことを考慮して、ROSAクラスターのサイジングをする必要があります。</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -320,82 +311,36 @@ OpenShiftのコンソールの「モニタリング」メニューのメトリ�
 </td>
 <td class="content">
 「openshift-monitoring」プロジェクトのコンポーネントは、
-MicrosoftとRed Hat SREチームの管理下に置かれており、
-<a href="https://learn.microsoft.com/ja-jp/azure/openshift/support-policies-v4#logging-and-monitoring">利用者が設定を変更することを、基本的にサポートしていません</a>。
+Red Hat SREチームの管理下に置かれており、
+<a href="https://docs.openshift.com/rosa/monitoring/configuring-the-monitoring-stack.html#support-considerations_configuring-the-monitoring-stack">利用者が設定を変更することを、基本的にサポートしていません</a>。
 </td>
 </tr>
 </table>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/monitoring/openshift-monitoring-pods.png" alt="openshift monitoring pods">
+</div>
+</div>
 <div class="paragraph">
-<p>なお、プラットフォームモニタリングによって監視されているメトリクスデータは、
-PVによる永続化はされていません。
-そのため、AROのユーザーが利用するプロジェクトのメトリクスデータだけでも永続化したい場合、
-後述するカスタム設定によって、データ永続化の設定を適用します。</p>
+<p>ROSAクラスターのPrometheusでは、
+Red HatのSREチームによって、ROSAクラスターのコアコンポーネントのメトリクスデータが
+永続ボリュームに一定期間保存されるように設定されています。
+これは、「openshift-monitoring」プロジェクトのPVCの項目を見ることで確認できます。</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/monitoring/openshift-monitoring-pvc.png" alt="openshift monitoring pvc">
+</div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_利用者が作成したプロジェクトのモニタリング"><a class="anchor" href="#_利用者が作成したプロジェクトのモニタリング"></a>利用者が作成したプロジェクトのモニタリング</h3>
 <div class="paragraph">
-<p>利用者が作成したプロジェクトのモニタリングに関するカスタム設定を適用することもできます。
-この機能を「User-defined projects monitoring」と定義しており、
-プロジェクトのメトリクスデータの永続化や、アラート設定などが可能になります。</p>
-</div>
-<div class="paragraph">
-<p>これらの機能を提供するPodは、「openshift-user-workload-monitoring」プロジェクトで実行されますが、
-AROのデフォルトだと、この機能は無効化されています。
-そのため、この機能を使う場合、「openshift-monitoring」プロジェクトの <code>cluster-monitoring-config</code>
-という名前の設定情報(ConfigMap)の末尾を、次のように置き換えて有効化する必要があります。</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Kubernetesの
-<a href="https://kubernetes.io/docs/concepts/configuration/configmap/">ConfigMap</a>は、
-アプリケーションで利用される構成データを保存します。
-OpenShiftでは、コンソールの「管理者向け表示」→「Workloads」→「ConfigMaps」から作成、
-または、既存のConfigMapを編集できます。
-</td>
-</tr>
-</table>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-本演習を自習している時以外、この設定を適用する必要はありません。
-</td>
-</tr>
-</table>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">...
-data:
-  config.yaml: |
-    enableUserWorkload: true</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>この設定を <code>cluster-monitoring-config</code> ConfigMapに適用すると、
-モニタリングに関するカスタム設定を適用するためのPodが、「openshift-user-workload-monitoring」
-プロジェクトで実行されます。</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/aro/monitoring/user-workload-monitoring-pods.png" alt="user workload monitoring pods">
-</div>
-</div>
-<div class="paragraph">
-<p>この「openshift-user-workload-monitoring」プロジェクトにあるPodは、
- KubernetesのnodeSelctorを利用して、
-<a href="https://access.redhat.com/documentation/ja-jp/openshift_container_platform/4.14/html/nodes/nodes-scheduler-node-selectors">任意のラベルを付けたワーカーノードに移動</a>することができます。</p>
+<p>利用者が作成したプロジェクトのモニタリングに関するカスタム設定が適用できるPodが
+「openshift-user-workload-monitoring」プロジェクトで実行されます。
+これらのPodは、 KubernetesのnodeSelctorを利用して、
+<a href="https://docs.openshift.com/rosa/monitoring/configuring-the-monitoring-stack.html#using-node-selectors-to-move-monitoring-components_configuring-the-monitoring-stack">任意のラベルを付けたワーカーノードに移動</a>することができます。</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -411,17 +356,56 @@ Kubernetesの
 </tr>
 </table>
 </div>
+<div class="imageblock">
+<div class="content">
+<img src="../_images/rosa/monitoring/openshift-user-workload-monitoring-pods.png" alt="openshift user workload monitoring pods">
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+ROSA HCPクラスターでは、 <code>rosa create cluster</code> でHCPクラスター作成時に、
+<code>disable-workload-monitoring</code> オプションで、利用者のプロジェクトの
+モニタリングを無効化できます。
+</td>
+</tr>
+</table>
+</div>
+<div class="exampleblock">
+<div class="content">
 <div class="paragraph">
-<p>なお、利用者のプロジェクトに関するメトリクスデータは、
-デフォルトでは永続ボリュームに保存される設定にはなっていません。
+<p>利用者のプロジェクトに関するメトリクスデータは、デフォルトでは永続ボリュームに保存される設定にはなっていません。
 このため、Podの再起動や再作成に伴い、利用者のメトリクスデータが失われる可能性があります。</p>
 </div>
 <div class="paragraph">
 <p>利用者のメトリクスデータを、200GiBの永続ボリュームを利用して30日間保存するような設定をしたい場合、
 「openshift-user-workload-monitoring」プロジェクトの <code>user-workload-monitoring-config</code> という名前の
-設定情報(ConfigMap)を次のYAMLファイルで作成することで、
-自動的にデフォルトのストレージクラス(managed-csi)を用いたPVCが作成されて、
-メトリクスデータが保存されるようになります。</p>
+設定情報(ConfigMap)を次のYAMLファイルで置き換えることで、
+自動的にデフォルトのストレージクラス(gp3)を用いたPVCが作成されて、メトリクスデータが保存されるようになります。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Kubernetesの
+<a href="https://kubernetes.io/docs/concepts/configuration/configmap/">ConfigMap</a>は、
+アプリケーションで利用される構成データを保存します。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>OpenShiftでのConfigMapは、コンソールの「管理者向け表示」→「Workloads」→「ConfigMaps」から作成、
+または、既存のConfigMapを編集できます。
+OpenShift CLI(ocコマンド)を用いた設定方法については、
+<a href="https://docs.openshift.com/rosa/monitoring/configuring-the-monitoring-stack.html#configuring_persistent_storage_configuring-the-monitoring-stack">公式ドキュメント</a>をご参照ください。</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -456,10 +440,8 @@ data:
 </div>
 </div>
 </div>
-<nav class="pagination">
-  <span class="prev"><a href="66-aro-logging.html">6. ロギング</a></span>
-  <span class="next"><a href="67-2-aro-project-metrics.html">8. プロジェクトのメトリクスデータの確認</a></span>
-</nav>
+</div>
+</div>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
@@ -470,8 +452,8 @@ data:
 <footer class="footer">
   <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
 </footer>
-<script src="../_/js/vendor/clipboard.js"></script>
-<script src="../_/js/site.js"></script>
-<script async src="../_/js/vendor/highlight.js"></script>
+<script src="../../_/js/vendor/clipboard.js"></script>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
   </body>
 </html>
