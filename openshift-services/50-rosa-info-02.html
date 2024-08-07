@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>ノードの動的管理 :: OpenShift Handson</title>
-    <link rel="canonical" href="https://yuhkih.github.io/ocp-handson/openshift-services/03_machinesets.html">
-    <link rel="prev" href="02_app-storage-basics.html">
-    <link rel="next" href="04_infra-nodes.html">
+    <title>はじめに :: OpenShift Handson</title>
+    <link rel="canonical" href="https://yuhkih.github.io/ocp-handson/openshift-services/50-rosa-info-02.html">
+    <link rel="prev" href="57-rosa-upgrade.html">
+    <link rel="next" href="52-rosa-app-deploy.html">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
   </head>
@@ -64,7 +64,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="02_app-storage-basics.html">3. 永続ストレージ</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="2">
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="03_machinesets.html">4. ノードの動的管理</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -139,7 +139,7 @@
     <button class="nav-item-toggle"></button>
     <span class="nav-text">51. ROSA ワークロード Lab Short</span>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="50-rosa-info-02.html">0. はじめに</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -169,7 +169,7 @@
     <button class="nav-item-toggle"></button>
     <span class="nav-text">52. ROSA ワークロード Lab Long</span>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="2">
+  <li class="nav-item is-current-page" data-depth="2">
     <a class="nav-link" href="50-rosa-info-02.html">0. はじめに</a>
   </li>
   <li class="nav-item" data-depth="2">
@@ -258,209 +258,58 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">OpenShift Handson</a></li>
-    <li>01. OpenShift 基礎</li>
-    <li><a href="03_machinesets.html">4. ノードの動的管理</a></li>
+    <li>51. ROSA ワークロード Lab Short</li>
+    <li><a href="50-rosa-info-02.html">0. はじめに</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/03_machinesets.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/yuhkih/ocp-handson/edit/master/documentation/modules/ROOT/pages/50-rosa-info-02.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">ノードの動的管理</h1>
+<h1 class="page">はじめに</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>本コンテンツは、<a href="https://github.com/team-ohc-jp-place/openshift-cns-testdrive">MAD Workshop Ops Track</a> の内容をベースに、一部変更しています。</p>
+<p>Red Hat OpenShift Service on AWS (ROSA) Lab プロジェクトは、
+インストラクター主導のデモ紹介またはセルフペースの演習で、ROSAを効果的に紹介及び体感していただくことを目的としています。</p>
 </div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>ROSAの概要について学習する場合、
+AWSのマネージドなコンテナオーケストレーションサービスである、
+Amazon ECS/EKS, ROSAの特徴の違いや想定される用途をご紹介している資料を参考にしてください。</p>
+</div>
+<div class="paragraph">
+<p>この資料では、Kubernetesに興味のある人から特に聞かれることの多い、EKSとROSAについて、
+いくつかのサンプルユースケースと共に、両者の違いも合わせてご紹介しています。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://rh-open.github.io/ocp-handson/openshift-services/_images/rosa/pdf/2023-rosa-hcp-infomation.pdf">ECS/EKS/ROSAの比較情報とROSAの紹介資料(PDFファイル)</a></p>
+</li>
+<li>
+<p><a href="https://rh-open.github.io/ocp-handson/openshift-services/_images/rosa/pdf/2023-container-openshift-information.pdf">補足情報: コンテナ/OpenShiftの紹介資料(PDFファイル)</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<hr>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_演習の概要"><a class="anchor" href="#_演習の概要"></a>演習の概要</h2>
+<h2 id="_演習の前提要件"><a class="anchor" href="#_演習の前提要件"></a>演習の前提要件</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Kubernetes <code>Node</code> はコンテナがオーケストレーションされ、<code>Pod</code> として実行される場所です。OpenShift 4は、<code>Operator</code> を使った自動化に重点を置いている点で、OpenShift 3とは根本的に異なります。<code>Node</code> に関しては、<code>Node</code> の作成と破壊を含め、クラスタサイズの状態を維持することに重点を置いた <code>Operator</code> とコントローラのセットがあります。</p>
-</div>
-<div class="paragraph">
-<p>この演習では、クラスタサイズを保つために利用される <code>Machineset</code> と <code>Machine</code> について学びます。</p>
-</div>
-<div class="paragraph">
-<p>オペレーションはコマンドラインからですが、Web コンソールから、Node の増減を見てみてください。</p>
-</div>
-<hr>
-<div class="sect2">
-<h3 id="_machinesets_と_machines"><a class="anchor" href="#_machinesets_と_machines"></a>MachineSets と Machines</h3>
-<div class="paragraph">
-<p>アプリケーション管理の演習で見たように、<code>ReplicaSet</code>/<code>ReplicationController</code> とそれが作成する <code>Pod</code> の間には基本的な関係があります。同様に、<code>MachineSet</code> と`Machine` の間にも関係があります。</p>
-</div>
-<div class="paragraph">
-<p><code>MachineSet</code> は、<code>Machine</code> オブジェクトのセットに対して希望する状態を定義します。IPIインストールを使用する場合、<code>Operator</code> の仕事は、各 <code>Machine</code> の基礎となるインスタンスが実際に存在することを確認し、最終的に各 <code>Machine</code> が <code>Node</code> になることを確認することです。</p>
-</div>
-<div class="paragraph">
-<p>以下を実行します。</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get machineset -n openshift-machine-api</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>以下のように表示されます。</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>NAME                                    DESIRED   CURRENT   READY   AVAILABLE   AGE
-cluster-8trtb-rlgsx-worker-us-east-2b   3         3         3       3           19h</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>OpenShiftがインストールされると、インストーラはクラウドプロバイダーに問い合わせて、利用可能なAZを得ます(この環境はAWS上にあるため)。そして、最終的に各AZの <code>MachineSet</code> を作成し、希望する <code>Machine</code> の数に達するまで、それらのセットを順番にスケーリングします。
-デフォルトのインストールには3つのWorkerが一つのAZにいることを指しています。
-（つまり、本番環境としてはやや冗長性に欠ける設計です。）</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get machine -n openshift-machine-api</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>以下のように表示されます。</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>NAME                                          PHASE     TYPE           REGION      ZONE         AGE
-cluster-8trtb-rlgsx-master-0                  Running   c6in.2xlarge   us-east-2   us-east-2b   19h
-cluster-8trtb-rlgsx-worker-us-east-2b-6cms8   Running   m5a.4xlarge    us-east-2   us-east-2b   19h
-cluster-8trtb-rlgsx-worker-us-east-2b-sx78t   Running   m5a.4xlarge    us-east-2   us-east-2b   19h
-cluster-8trtb-rlgsx-worker-us-east-2b-w64fw   Running   m5a.4xlarge    us-east-2   us-east-2b   19h</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>各 <code>Machine</code> には対応する <code>INSTANCE</code> があります。このIDに見覚えはないでしょうか?これはAWS EC2のインスタンスIDです。また、OpenShiftのMasterの <code>Machine</code> も表示されています。これらはある程度ステートフルであり、管理は別のOperatorが別のプロセスを介して処理するため、<code>MachineSet</code> の一部ではありません</p>
-</div>
-<div class="exampleblock">
-<div class="content">
-<div class="paragraph">
-<p>現在、Masterの <code>Machines</code> は保護されていません。クラスタを壊す可能性があるので、誤って、または意図的に削除しないでください。</p>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>最後に以下を実行します。</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get nodes</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>以下のように表示されます。</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>NAME                                         STATUS   ROLES                  AGE     VERSION
-ip-10-0-148-190.us-east-2.compute.internal   Ready    control-plane,master   4h25m   v1.25.7+eab9cc9
-ip-10-0-190-107.us-east-2.compute.internal   Ready    worker                 4h9m    v1.25.7+eab9cc9
-ip-10-0-199-105.us-east-2.compute.internal   Ready    worker                 4h9m    v1.25.7+eab9cc9
-ip-10-0-210-82.us-east-2.compute.internal    Ready    worker                 4h9m    v1.25.7+eab9cc9</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>各 <code>Machine</code> は、それぞれ <code>Node</code> に対応しています。
-<code>oc describe</code> で様々な <code>Machine</code> オブジェクト、<code>Node</code> オブジェクトを調べれば、どれがどれと相関しているのかが分かるでしょう。</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_クラスタのスケーリング"><a class="anchor" href="#_クラスタのスケーリング"></a>クラスタのスケーリング</h3>
-<div class="paragraph">
-<p><code>Operator</code> による管理と、それを使った <code>Machine</code> と <code>Node</code> の管理のおかげで、OpenShift 4でのクラスタのスケーリングは非常に簡単に行えます。</p>
-</div>
-<div class="paragraph">
-<p>もう一度、<code>MachineSet</code> のリストを見てみましょう。</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get machineset -n openshift-machine-api</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>そのリストの中で。<code>MachineSet`のひとつを  oc scaleコマンドでスケールしてみましょう。あなたの `MachineSet</code> の名前はラボガイドの名前とは異なる可能性があるので、特に注意してください。</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">CLUSTERNAME=$(oc get  infrastructures.config.openshift.io cluster  -o jsonpath='{.status.infrastructureName}')
-ZONENAME=$(oc get nodes -L topology.kubernetes.io/zone  --no-headers  | awk '{print $NF}' | tail -1)
-oc scale machineset ${CLUSTERNAME}-worker-${ZONENAME} -n openshift-machine-api --replicas=4</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>MachineSet</code> が正常にスケーリングされたというメモが表示されているはずです。次に、<code>Machine</code> のリストを見てみましょう。</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get machines -n openshift-machine-api</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>おそらく、<code>STATE</code> が <code>Pending</code> となっている <code>Machine</code> の新しいエントリがすでに存在していると思います。</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>cluster-zbwlg-cbgq7-worker-us-east-2a-s7l7s   Provisioning   m5a.4xlarge    us-east-2   us-east-2a   7s</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>しばらくすると、対応するEC2インスタンスIDが表示され、以下のように表示されます。</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>cluster-f4a3-lpxbs-worker-us-east-2c-h7gdt   i-0b9208ec47f0e206b   running   m5.2xlarge     us-east-2   us-east-2c   47s</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>この時点では、バックグラウンドでは自動的にbootstrap 処理が行われています。数分後(最大で5分程度)の出力を見てみましょう。また Web コンソールを除いて、ノードの作成状況なども見ても良いでしょう。</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/basics/machinesets/machinesets-1.png" alt="machinesets 1">
-</div>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc get nodes</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>age</code> が非常に若いノードが見つかるはずです。</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>ip-10-0-210-82.us-east-2.compute.internal    Ready    worker                 4h37m   v1.25.7+eab9cc9</pre>
-</div>
-</div>
-<div class="exampleblock">
-<div class="content">
-<div class="paragraph">
-<p><code>Machine</code> が準備され、<code>Node</code> として追加されるまでには数分かかることがあります。</p>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>続ける前に、先程スケールアップした <code>MachineSet</code> を2から1にスケールダウンしてください。</p>
-</div>
-<div class="paragraph">
-<p>${CLUSTERNAME}と${ZONENAME}変数が、数ステップ前のスケールアップ時に設定されていることを確認してください。</p>
-</div>
-<div class="listingblock console-input">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">oc scale machineset ${CLUSTERNAME}-worker-${ZONENAME} -n openshift-machine-api --replicas=3</code></pre>
-</div>
-</div>
+<p>この演習は ROSA Cluster が既に作成されている事が前提です。</p>
 </div>
 </div>
 </div>
 <nav class="pagination">
-  <span class="prev"><a href="02_app-storage-basics.html">3. 永続ストレージ</a></span>
-  <span class="next"><a href="04_infra-nodes.html">5. Infra ノードの作成</a></span>
+  <span class="prev"><a href="57-rosa-upgrade.html">4. ROSA HCPクラスターの更新</a></span>
+  <span class="next"><a href="52-rosa-app-deploy.html">1. サンプルアプリケーションのデプロイ</a></span>
 </nav>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
