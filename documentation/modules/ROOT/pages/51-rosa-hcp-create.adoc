@@ -1,4 +1,4 @@
-= [デモ] ROSA HCPクラスターの作成
+= ROSA HCPクラスターの作成
 :navtitle: rosa-hcp-create
 include::_attributes.adoc[]
 
